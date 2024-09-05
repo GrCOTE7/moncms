@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
 			UserSeeder::class,
 			CategorySeeder::class,
 			PostSeeder::class,
+			PageSeeder::class,
 		]);
 
 		printf('%s%s', str_repeat(' ', 2), "Data tables properly filled.\n\n");

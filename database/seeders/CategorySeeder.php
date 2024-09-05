@@ -39,7 +39,7 @@ class CategorySeeder extends Seeder
 		$nbCategories = 3;
 
 		for ($i = 1; $i <= $nbCategories; ++$i) {
-			$title = 'Catégorie ' . $i;
+			$title = "Catégorie $i";
 			$slug  = Str::slug($title);
 
 			Category::create(['title' => $title, 'slug' => $slug]);
