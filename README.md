@@ -12,20 +12,6 @@
 
 # Laravel
 
-## Install
-
-
-#### MaryUI
-
-- *composer require robsontenorio/mary*
-- *php artisan mary:install*
-  - Doc MaryUI<!-- markmap: fold -->
-    - https://mary-ui.com/
-
-php artisan mary:install
-→ 0 (livewire/Volt)
-→ npm install --save-dev (npm)
-
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
