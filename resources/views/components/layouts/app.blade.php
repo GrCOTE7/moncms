@@ -11,6 +11,7 @@
 </head>
 
 <body class="min-h-screen font-sans antialiased bg-base-200/50 dark:bg-base-200">
+
     {{-- HERO --}}
     <div class="min-h-[10vw] hero" style="background-image: url({{ asset('storage/hero.jpg') }});">
         <div class="bg-opacity-60 hero-overlay"></div>
@@ -27,5 +28,23 @@
             </div>
         </a>
     </div>
+
+    {{-- NAVBAR --}}
+    <livewire:navigation.navbar />
+
+    <x-main full-width>
+
+        {{-- SIDEBAR --}}
+        <x-slot:sidebar drawer="main-drawer" collapsible class="bg-base-100 lg:bg-inherit lg:hidden">
+            <livewire:navigation.sidebar />
+        </x-slot:sidebar>
+
+        <x-slot:content>
+            {{ $slot }}
+        </x-slot:content>
+
+    </x-main>
+
+    <x-toast />
 
 </html>
