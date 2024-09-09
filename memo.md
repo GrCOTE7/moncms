@@ -63,7 +63,7 @@ markmap:
 ### Réf.: **<https://laravel.sillo.org/posts/mon-cms-les-donnees>**
 
 
-## FrontEnd
+## Technos FrontEnd
 
 ### MaryUI <!-- markmap: fold -->
 
@@ -88,3 +88,11 @@ php artisan mary:install
 (En pensant aussi à faire les routes correspondantes)
 
 ### Référence: **<https://laravel.sillo.org/posts/mon-cms-lauthentification>**
+
+## FrontEnd
+
+### index (HomePage)
+
+### Image
+- *php artisan storage:link*
+  (Lien symbolique de public/storage vers storage/app/public)
