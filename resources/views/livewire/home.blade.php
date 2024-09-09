@@ -1,54 +1,56 @@
 <?php
 
-use Livewire\Volt\Component;
-use Livewire\Attributes\Title;
 use App\Models\Category;
+use Livewire\Volt\Component;
 use Livewire\WithPagination;
 use App\Repositories\PostRepository;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-new #[Title('Accueil')] class extends Component {
+new class extends Component {
     use WithPagination;
 
     public ?Category $category = null;
-    public string $param = '';
+    public string $param       = '';
 
     public function mount(string $slug = '', string $param = ''): void
-    {
+	{
         $this->param = $param;
 
-        if (request()->is('category/*')) {
-            $this->category = $this->getCategoryBySlug($slug);
-        }
-    }
+		if (request()->is('category/*')) {
+			$this->category = $this->getCategoryBySlug($slug);
+		}
+	}
 
-    public function getPosts(): LengthAwarePaginator
-    {
-        $postRepository = new PostRepository();
+	public function getPosts(): LengthAwarePaginator
+	{
+		$postRepository = new PostRepository();
 
         if (!empty($this->param)) {
-            return $postRepository->search($this->param);
-        }
+			return $postRepository->search($this->param);
+		}
 
-        return $postRepository->getPostsPaginate($this->category);
-    }
+		return $postRepository->getPostsPaginate($this->category);
+	}
 
     protected function getCategoryBySlug(string $slug): ?Category
-    {
-        return 'category' === request()->segment(1) ? Category::whereSlug($slug)->firstOrFail() : null;
-    }
+	{
+		return 'category' === request()->segment(1) ? Category::whereSlug($slug)->firstOrFail() : null;
+	}
+
 
     public function with(): array
-    {
-        return ['posts' => $this->getPosts()];
+	{
+		return ['posts' => $this->getPosts()];
     }
+
 }; ?>
 
 <div class="relative grid items-center w-full py-5 mx-auto md:px-12 max-w-7xl">
 
     @if ($category)
-        <x-header title="{{ __('Posts for category ') }} {{ $category->title }}"
-            size="text-2xl sm:text-3xl md:text-4xl" />
+        <x-header title="{{ __('Posts for category ') }} {{ $category->title }}" size="text-2xl sm:text-3xl md:text-4xl" />
+    @elseif($param !== '')
+        <x-header title="{{ __('Posts for search ') }} '{{ $param }}'" size="text-2xl sm:text-3xl md:text-4xl" />
     @endif
 
     <div class="mb-4 mary-table-pagination">
@@ -70,11 +72,10 @@ new #[Title('Accueil')] class extends Component {
                         <p wire:click="" class="text-left cursor-pointer">{{ $post->user->name }}</p>
                         <p class="text-right"><em>{{ $post->created_at->isoFormat('LL') }}</em></p>
                     </div>
-                    @if ($post->image)
+                    @if($post->image)
                         <x-slot:figure>
                             <a href="{{ url('/posts/' . $post->slug) }}">
-                                <img src="{{ asset('storage/photos/' . $post->image) }}"
-                                    alt="{{ $post->title }}" />
+                                <img src="{{ asset('storage/photos/' . $post->image) }}" alt="{{ $post->title }}" />
                             </a>
                         </x-slot:figure>
                     @endif
@@ -86,13 +87,11 @@ new #[Title('Accueil')] class extends Component {
                     </x-slot:menu>
 
                     <x-slot:actions>
-                        <div
-                            class="flex flex-col items-end space-y-2 sm:items-start sm:flex-row sm:space-y-0 sm:space-x-2">
+                        <div class="flex flex-col items-end space-y-2 sm:items-start sm:flex-row sm:space-y-0 sm:space-x-2">
                             <x-popover>
                                 <x-slot:trigger>
                                     <x-button label="{{ $post->category->title }}"
-                                        link="{{ url('/category/' . $post->category->slug) }}"
-                                        class="mt-1 btn-outline btn-sm" />
+                                        link="{{ url('/category/' . $post->category->slug) }}" class="mt-1 btn-outline btn-sm" />
                                 </x-slot:trigger>
                                 <x-slot:content class="pop-small">
                                     @lang('Show this category')
@@ -101,8 +100,7 @@ new #[Title('Accueil')] class extends Component {
 
                             <x-popover>
                                 <x-slot:trigger>
-                                    <x-button label="{{ __('Read') }}"
-                                        link="{{ url('/posts/' . $post->slug) }}"
+                                    <x-button label="{{ __('Read') }}" link="{{ url('/posts/' . $post->slug) }}"
                                         class="mt-1 btn-outline btn-sm" />
                                 </x-slot:trigger>
                                 <x-slot:content class="pop-small">

@@ -126,5 +126,6 @@ return [
 		'store'  => env('APP_MAINTENANCE_STORE', 'database'),
 	],
 
-	'pagination' => 6,
+	'pagination'  => 6,
+	'excerptSize' => 30,
 ];
