@@ -93,6 +93,15 @@ php artisan mary:install
 
 ### index (HomePage)
 
-### Image
+#### Image
 - *php artisan storage:link*
   (Lien symbolique de public/storage vers storage/app/public)
+
+#### Référence: **<https://laravel.sillo.org/posts/mon-cms-la-page-daccueil>**
+
+### Les articles
+
+#### posts/show
+
+#### Référence: **<https://laravel.sillo.org/posts/mon-cms-les-articles>**
+

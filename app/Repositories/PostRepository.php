@@ -12,6 +12,11 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class PostRepository
 {
+    public function getPostBySlug(string $slug): Post
+	{
+		return Post::with('user:id,name', 'category')->whereSlug($slug)->firstOrFail();
+	}
+
 	public function getPostsPaginate(?Category $category): LengthAwarePaginator
 	{
 		$query = $this->getBaseQuery()->orderBy('pinned', 'desc')->latest();
