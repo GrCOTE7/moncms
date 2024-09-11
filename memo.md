@@ -103,5 +103,14 @@ php artisan mary:install
 
 #### posts/show
 
+#### Plugin prose de Tailwind
+- *npm install -D @tailwindcss/typography*
+- exports default {
+   ...
+  plugins: [
+    plugins: [require("@tailwindcss/typography"), require("daisyui")],
+  ],
+}
+
 #### Référence: **<https://laravel.sillo.org/posts/mon-cms-les-articles>**
 
