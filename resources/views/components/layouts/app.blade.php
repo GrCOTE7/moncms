@@ -39,13 +39,13 @@
     </div>
 
     {{-- NAVBAR --}}
-    <livewire:navigation.navbar />
+    <livewire:navigation.navbar :$menus />
 
     <x-main full-width>
 
         {{-- SIDEBAR --}}
         <x-slot:sidebar drawer="main-drawer" collapsible class="bg-base-100 lg:bg-inherit lg:hidden">
-            <livewire:navigation.sidebar />
+            <livewire:navigation.sidebar :$menus />
         </x-slot:sidebar>
 
         <x-slot:content>
@@ -53,6 +53,10 @@
         </x-slot:content>
 
     </x-main>
+
+    <hr><br>
+    <livewire:navigation.footer />
+    <br>
 
     <x-toast />
 

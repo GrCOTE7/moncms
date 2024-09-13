@@ -24,6 +24,8 @@ class DatabaseSeeder extends Seeder
 			CategorySeeder::class,
 			PostSeeder::class,
 			PageSeeder::class,
+			MenusSeeder::class,
+			FootermenusSeeder::class,
 		]);
 
 		printf('%s%s', str_repeat(' ', 2), "Data tables properly filled.\n\n");
