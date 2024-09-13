@@ -38,5 +38,6 @@ new class extends Component {
             @endif
         </span>
         <x-theme-toggle title="{{ __('Toggle theme') }}" class="w-4 h-8" />
+        <livewire:search />
     </x-slot:actions>
 </x-nav>

@@ -12,7 +12,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class PostRepository
 {
-    public function getPostBySlug(string $slug): Post
+	public function getPostBySlug(string $slug): Post
 	{
 		return Post::with('user:id,name', 'category')->whereSlug($slug)->firstOrFail();
 	}
@@ -26,6 +26,17 @@ class PostRepository
 		}
 
 		return $query->paginate(config('app.pagination'));
+	}
+
+	public function search(string $search): LengthAwarePaginator
+	{
+		return $this->getBaseQuery()
+			->latest()
+			->where(function ($query) use ($search) {
+				$query->where('title', 'like', "%{$search}%")
+					->orWhere('body', 'like', "%{$search}%");
+			})
+			->paginate(config('app.pagination'));
 	}
 
 	protected function getBaseQuery(): Builder
