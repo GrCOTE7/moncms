@@ -58,9 +58,9 @@ markmap:
     "files": [
     "app/helpers.php"
     ],...},*
-- composer dumpautoload
+- *composer dumpautoload*
 
-### Réf.: **<https://laravel.sillo.org/posts/mon-cms-les-donnees>**
+### Réf.: ***<https://laravel.sillo.org/posts/mon-cms-les-donnees>***
 
 ## Technos FrontEnd
 
@@ -85,7 +85,7 @@ php artisan mary:install
 - À utiliser pour faire register / login / forgot-password
 (En pensant aussi à faire les routes correspondantes)
 
-### Référence: **<https://laravel.sillo.org/posts/mon-cms-lauthentification>**
+### Référence: ***<https://laravel.sillo.org/posts/mon-cms-lauthentification>***
 
 ## FrontEnd
 
@@ -96,7 +96,7 @@ php artisan mary:install
 - *php artisan storage:link*
   (Lien symbolique de public/storage vers storage/app/public)
 
-#### Référence: **<https://laravel.sillo.org/posts/mon-cms-la-page-daccueil>**
+#### Référence: ***<https://laravel.sillo.org/posts/mon-cms-la-page-daccueil>***
 
 ### Les articles <!-- markmap: fold -->
 
@@ -146,7 +146,7 @@ Et :
 &nbsp;&nbsp;***\<script src="{{ asset('storage/scripts/prism.js') }}"></script>***
 \</body>
 
-#### Mode clair/sombre <!-- markmap: fold -->
+#### Mode clair/sombre (MaryIU) <!-- markmap: fold -->
 
 - tailwind.config.js :
 *export default {
@@ -159,7 +159,7 @@ Et :
 &nbsp;&nbsp;</x-slot:actions>
 \</x-nav>
 
-- Doc MaryUI <https://mary-ui.com/docs/components/theme-toggle>
+- Doc MaryUI ***<https://mary-ui.com/docs/components/theme-toggle>***
 
 #### Search bar <!-- markmap: fold -->
 
@@ -262,7 +262,7 @@ if (!empty($this->param)) {
 </x-nav>
 ```
 
-#### Référence: **<https://laravel.sillo.org/posts/mon-cms-les-articles>**
+#### Référence: ***<https://laravel.sillo.org/posts/mon-cms-les-articles>***
 
 ### Les menus (Gérés par Backoffice) <!-- markmap: fold -->
 
@@ -453,4 +453,8 @@ new class() extends Component {
     <x-toast />
 ```
 
-#### Référence: **<https://laravel.sillo.org/posts/mon-cms-les-menus>**
+#### Référence: ***<https://laravel.sillo.org/posts/mon-cms-les-menus>***
+
+## 2do Les commentaires
+
+#### Réf.: ***<https://laravel.sillo.org/posts/mon-cms-les-commentaires-1-2>***
