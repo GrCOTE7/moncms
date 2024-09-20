@@ -457,4 +457,11 @@ new class() extends Component {
 
 ## 2do Les commentaires
 
-#### Réf.: ***<https://laravel.sillo.org/posts/mon-cms-les-commentaires-1-2>***
+### Model & Migration et factory & seeder
+```php
+php artisan make:model Comment --migration
+php artisan make:factory CommentFactory
+php artisan make:seeder CommentSeeder
+```
+
+### Réf.: ***<https://laravel.sillo.org/posts/mon-cms-les-commentaires-1-2>***
