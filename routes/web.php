@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
 Volt::route('/', 'index');
+Volt::route('/test', 'test')->name('test');
 
 Volt::route('/category/{slug}', 'index');
 Volt::route('/posts/{slug}', 'posts.show')->name('posts.show');
