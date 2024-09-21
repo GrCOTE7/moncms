@@ -6,8 +6,8 @@
 
 namespace Database\Seeders;
 
-use Carbon\Carbon;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
@@ -38,6 +38,13 @@ class UserSeeder extends Seeder
 				'role'       => 'user',
 				'created_at' => Carbon::now()->subYears(2),
 				'updated_at' => Carbon::now()->subYears(2),
+			],
+			[
+				'name'       => env('MAIL_FROM_USER', 'Moi'),
+				'email'      => env('MAIL_FROM_ADDRESS', 'moi@example.com'),
+				'role'       => 'admin',
+				'created_at' => Carbon::now()->subYears(3),
+				'updated_at' => Carbon::now()->subYears(3),
 			],
 		];
 

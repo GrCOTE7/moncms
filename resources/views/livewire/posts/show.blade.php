@@ -3,15 +3,44 @@
 use App\Models\Post;
 use Livewire\Volt\Component;
 use Livewire\Attributes\Title;
+use Illuminate\Support\Collection;
 use App\Repositories\PostRepository;
 
 new class extends Component {
     public Post $post;
+    public int $commentsCount;
+    public Collection $comments;
+    public bool $listComments = false;
 
     public function mount($slug): void
     {
         $postRepository = new PostRepository();
         $this->post = $postRepository->getPostBySlug($slug);
+        $this->commentsCount = $this->post->valid_comments_count;
+    }
+
+    public function showComments(): void
+    {
+        $this->listComments = true;
+
+        $this->comments = $this->post
+            ->validComments()
+            ->where('parent_id', null)
+            ->withCount([
+                'children' => function ($query) {
+                    $query->whereHas('user', function ($q) {
+                        $q->where('valid', true);
+                    });
+                },
+            ])
+            ->with([
+                'user' => function ($query) {
+                    $query->select('id', 'name', 'email', 'role')->withCount('comments');
+                },
+            ])
+            ->latest()
+            ->get();
+        // dd ($this->comments);
     }
 }; ?>
 
@@ -45,5 +74,42 @@ new class extends Component {
     </div>
     <br>
     <hr>
-    <p>@lang('By') {{ $post->user->name }}</p>
+
+    <div class="flex justify-between">
+        <p>@lang('By') {{ $post->user->name }}</p>
+        <em>
+            @if ($commentsCount > 0)
+                @lang('Number of comments: ') {{ $commentsCount }}
+            @else
+                @lang('No comments')
+            @endif
+        </em>
+    </div>
+
+    <div id="bottom" class="relative items-center w-full py-5 mx-auto md:px-12 max-w-7xl">
+        @if ($listComments)
+            <x-card title="{{ __('Comments') }}" shadow separator>
+                @foreach ($comments as $comment)
+                    @if (!$comment->parent_id)
+                        <livewire:posts.comment :$comment :depth="0" :key="$comment->id" />
+                    @endif
+                @endforeach
+                @auth
+                    <livewire:posts.commentBase :postId="$post->id" />
+                @endauth
+            </x-card>
+        @else
+            @if ($commentsCount > 0)
+                <div class="flex justify-center">
+                    <x-button label="{{ $commentsCount > 1 ? __('View comments') : __('View comment') }}"
+                        wire:click="showComments" class="btn-outline" spinner />
+                </div>
+            @else
+                @auth
+                    <livewire:posts.commentBase :postId="$post->id" />
+                @endauth
+            @endif
+        @endif
+    </div>
+    {{-- 2do fond couleur verdatre dans login à supprimer --}}
 </div>

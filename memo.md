@@ -455,13 +455,75 @@ new class() extends Component {
 
 #### Référence: ***<https://laravel.sillo.org/posts/mon-cms-les-menus>***
 
-## 2do Les commentaires
+## Les commentaires
 
-### Model & Migration et factory & seeder
+### Model & Migration et factory & seeder <!-- markmap: fold -->
 ```php
 php artisan make:model Comment --migration
 php artisan make:factory CommentFactory
 php artisan make:seeder CommentSeeder
 ```
 
+### PostRepository <!-- markmap: fold -->
+
+```php
+public function getPostBySlug(string $slug): Post
+{
+	return Post::with('user:id,name', 'category')
+			->withCount('validComments')
+			->whereSlug($slug)->firstOrFail();
+}
+```
+
 ### Réf.: ***<https://laravel.sillo.org/posts/mon-cms-les-commentaires-1-2>***
+
+### Le formulaire <!-- markmap: fold -->
+
+```php
+php artisan make:volt posts/comment-form --class
+```
+
+### Gravatar <!-- markmap: fold -->
+
+```php
+composer require creativeorange/gravatar ~1.0
+---
+Gravatar::get('email@example.com');
+```
+
+### Notification <!-- markmap: fold -->
+
+```php
+php artisan make:notification CommentCreated
+php artisan make:notification CommentAnswerCreated
+```
+
+### Affichage des commentaires <!-- markmap: fold -->
+
+```php
+php artisan make:volt posts/commentBase --class
+php artisan make:volt posts/comment --class
+```
+
+### Sécurité // {!! $uneVariabledansDuCodeBladeQuiContient DuCodeDestinéÀLaVue !!} <!-- markmap: fold --> 
+
+```php
+composer require mews/purifier
+---
+use Mews\Purifier\Casts\CleanHtmlInput;
+
+class Comment extends Model
+{
+    ...
+
+	protected $casts = [
+		'body' => CleanHtmlInput::class,
+	];
+```
+
+
+### Réf.: ***<https://laravel.sillo.org/posts/mon-cms-les-commentaires-2-2>***
+
+## Le Profil
+
+### Réf.: ***<https://laravel.sillo.org/posts/mon-cms-le-profil>***
