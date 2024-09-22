@@ -526,4 +526,27 @@ class Comment extends Model
 
 ## Le Profil
 
+### Composant
+
+```php	
+php artisan make:volt auth/profile --class
+```
+
+#### Y coder
+
+- La logique (Bloc PHP)
+- Le rendu (Bloc HTML)
+
+### Ajouter les traductions
+
+### Faire la route de ce composant
+
+- (Pensez que c'est que pour les "authorisés"
+→ Middleware('auth')) et comme il y aura d'autre route pour "eux", en faire un group()
+
+### Enfin, ajouter les liens dans les vues adhoc
+
+- Pour les petits écrans, dans **navigation.navbar**
+- Pour les plus grands, dans **navigation.sidebar**
+
 ### Réf.: ***<https://laravel.sillo.org/posts/mon-cms-le-profil>***
