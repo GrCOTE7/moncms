@@ -541,33 +541,38 @@ php artisan make:volt auth/profile --class
 
 ### Faire la route de ce composant <!-- markmap: fold -->
 
-- (Pensez que c'est que pour les "authorisés"
-→ Middleware('auth')) et comme il y aura d'autre route pour "eux", en faire un group()
+- (Pensez que c'est que pour les "autorisés"
+→ **Middleware('auth')**) et comme il y aura d'autre route pour "eux", en faire un **group()**
 
 ### Enfin, ajouter les liens dans les vues adhoc <!-- markmap: fold -->
 
-- Pour les petits écrans, dans **navigation.navbar**
-- Pour les plus grands, dans **navigation.sidebar**
+- Pour les grands écrans, dans **navigation.navbar**
+- Pour les plus petits, dans **navigation.sidebar**
 
 ### Réf.: ***<https://laravel.sillo.org/posts/mon-cms-le-profil>***
 
 ## Les favoris
 
-### php artisan make:migration create_favorites_table
+### Fonctionnalité des Favoris <!-- markmap: fold -->
 
-### Relation n:n (User & Post)
+#### php artisan make:migration create_favorites_table
+
+#### Relation n:n (User & Post) <!-- markmap: fold -->
 
     Comme convention de nommage de la table pivot pas respectée (Devrait être posts_users mais est favorites), on doit préciser ce nom dans les relations BelongsToMany
 
-### getPostBySlug: Vérifie en plus si l'user a mis le post en favori
+#### getPostBySlug: Vérifie en plus si l'user a mis le post en favori
 
-### Dans show.post, on affiche l'icône étoile pour favori ou pas (Le bloc PHP gère favoritePost() et unfavoritePost())
+#### Dans show.post, on affiche l'icône étoile pour favori ou pas (Le bloc PHP gère favoritePost() et unfavoritePost())
 
-### Dans index, affichage de l'icône étoile si post favori
+#### Dans index, affichage de l'icône étoile si post favori
 
-### Après PostRepository, ajout de getFavoritePosts(), on pose dans la navigation.navbar, le code pour afficher l'icône des favoris (Déjà sélectionné par l'utilisateur en cours)
+#### Ajout de getFavoritePosts() dans PostRepository
 
-### Enfin, pour afficher cette page
+#### Dans la navigation.navbar, code pour afficher l'icône des favoris (Déjà sélectionné par l'utilisateur en cours)
+
+#### Enfin, pour afficher cette page <!-- markmap: fold -->
+
 - Ajout de la route dans **routes/web.php**
 - Ajout du bouton dans **navigation/navbar**
 - Dans le composant index:
@@ -577,6 +582,54 @@ php artisan make:volt auth/profile --class
   -Pour le HTML, on adapte le titre de la page
 - On renseigne fr.json pour ce titre
 
-### Boutons pour scroller
+### Boutons pour Aller en bas et en haut <!-- markmap: fold -->
+
+- Règle CSS
+- HTML des boutons
 
 ### Réf.: ***<https://laravel.sillo.org/posts/mon-cms-les-favoris>***
+
+
+## L'administration
+
+### Gestion des rôles
+
+#### Admin ou Redac
+
+##### Model User
+
+```php
+public function isAdmin(): bool
+{
+    return 'admin' === $this->role;
+}
+
+public function isRedac(): bool
+{
+    return 'redac' === $this->role;
+}
+```
+
+
+#### Middleware
+
+##### Commande CLI :
+
+```php
+php artisan make:middleware IsAdminOrRedac
+```
+
+##### Code :
+
+```php
+public function handle(Request $request, Closure $next): Response
+{
+    if (!auth()->user()->isAdmin() && !auth()->user()->isRedac()) {
+        abort(403);
+    }
+    
+    return $next($request);
+}
+```
+
+### Réf.: ***<https://laravel.sillo.org/posts/mon-cms-ladministration>***

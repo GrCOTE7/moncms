@@ -87,6 +87,16 @@ new class extends Component {
                 </x-slot:content>
             </x-popover>
         @endauth
+
+        <x-popover>
+            <x-slot:trigger>
+                <a href="#bottom"><x-icon name="c-arrow-long-down" /></a>
+            </x-slot:trigger>
+            <x-slot:content class="pop-small">
+                @lang('To bottom')
+            </x-slot:content>
+        </x-popover>
+
         <x-popover>
             <x-slot:trigger>
                 <x-button class="btn-sm"><a
@@ -149,5 +159,17 @@ new class extends Component {
             @endif
         @endif
     </div>
+
+    <div id="bottom" class="relative flex justify-end w-full py-5 mx-auto md:px-12 max-w-7xl">
+        <x-popover>
+            <x-slot:trigger>
+                <a href="#top"><x-icon name="c-arrow-long-up" />
+            </x-slot:trigger>
+            <x-slot:content class="pop-small">
+                @lang('To up')
+            </x-slot:content>
+        </x-popover>
+    </div>
+
     {{-- 2do fond couleur verdatre dans login à supprimer --}}
 </div>
