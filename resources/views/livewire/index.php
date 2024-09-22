@@ -5,11 +5,11 @@
  */
 
 use App\Models\Category;
-use Livewire\Volt\Component;
-use Livewire\WithPagination;
-use Livewire\Attributes\Title;
 use App\Repositories\PostRepository;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Livewire\Attributes\Title;
+use Livewire\Volt\Component;
+use Livewire\WithPagination;
 
 new
 #[Title('Accueil')]
@@ -18,6 +18,7 @@ class extends Component {
 
 	public ?Category $category = null;
 	public string $param       = '';
+	public bool $favorites     = false;
 
 	public function mount(string $slug = '', string $param = ''): void
 	{
@@ -25,6 +26,8 @@ class extends Component {
 
 		if (request()->is('category/*')) {
 			$this->category = $this->getCategoryBySlug($slug);
+		} elseif (request()->is('favorites')) {
+			$this->favorites = true;
 		}
 	}
 
@@ -34,6 +37,10 @@ class extends Component {
 
 		if (!empty($this->param)) {
 			return $postRepository->search($this->param);
+		}
+
+		if ($this->favorites) {
+			return $postRepository->getFavoritePosts(auth()->user());
 		}
 
 		return $postRepository->getPostsPaginate($this->category);

@@ -8,6 +8,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
 
 class Post extends Model
@@ -42,5 +43,13 @@ class Post extends Model
 		return $this->comments()->whereHas('user', function ($query) {
 			$query->whereValid(true);
 		});
+	}
+
+	/**
+	 * Get the users that have favorited the Post.
+	 */
+	public function favoritedByUsers(): BelongsToMany
+	{
+		return $this->belongsToMany(User::class, 'favorites');
 	}
 }

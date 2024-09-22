@@ -42,6 +42,25 @@ new class extends Component {
             ->get();
         // dd ($this->comments);
     }
+    public function favoritePost(): void
+    {
+        $user = auth()->user();
+
+        if ($user) {
+            $user->favoritePosts()->attach($this->post->id);
+            $this->post->is_favorited = true;
+        }
+    }
+
+    public function unfavoritePost(): void
+    {
+        $user = auth()->user();
+
+        if ($user) {
+            $user->favoritePosts()->detach($this->post->id);
+            $this->post->is_favorited = false;
+        }
+    }
 }; ?>
 
 <div>
@@ -49,6 +68,25 @@ new class extends Component {
     @section('description', $post->meta_description)
     @section('keywords', $post->meta_keywords)
     <div id="top" class="flex justify-end gap-4">
+        @auth
+            <x-popover>
+                <x-slot:trigger>
+                    @if ($post->is_favorited)
+                        <x-button icon="s-star" wire:click="unfavoritePost" spinner
+                            class="text-yellow-500 btn-ghost btn-sm" />
+                    @else
+                        <x-button icon="s-star" wire:click="favoritePost" spinner class="btn-ghost btn-sm" />
+                    @endif
+                </x-slot:trigger>
+                <x-slot:content class="pop-small">
+                    @if ($post->is_favorited)
+                        @lang('Remove from favorites')
+                    @else
+                        @lang('Bookmark this post')
+                    @endif
+                </x-slot:content>
+            </x-popover>
+        @endauth
         <x-popover>
             <x-slot:trigger>
                 <x-button class="btn-sm"><a

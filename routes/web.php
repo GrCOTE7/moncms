@@ -25,4 +25,5 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
 	Volt::route('/profile', 'auth.profile')->name('profile');
+	Volt::route('/favorites', 'index')->name('posts.favorites');
 });

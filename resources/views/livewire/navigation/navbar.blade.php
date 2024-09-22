@@ -64,6 +64,13 @@ new class extends Component {
             @endif
         </span>
 
+        @auth
+            @if ($user->favoritePosts()->exists())
+                <a title="{{ __('Favorites posts') }}" href="{{ route('posts.favorites') }}"><x-icon name="s-star"
+                        class="w-5 h-5" /></a>
+            @endif
+        @endauth
+
         <a href="{{ route('test') }}"><x-icon name="c-cog-6-tooth" /></a>
 
         <x-theme-toggle title="{{ __('Toggle theme') }}" class="w-4 h-8" />

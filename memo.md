@@ -550,3 +550,33 @@ php artisan make:volt auth/profile --class
 - Pour les plus grands, dans **navigation.sidebar**
 
 ### Réf.: ***<https://laravel.sillo.org/posts/mon-cms-le-profil>***
+
+## Les favoris
+
+### php artisan make:migration create_favorites_table
+
+### Relation n:n (User & Post)
+
+    Comme convention de nommage de la table pivot pas respectée (Devrait être posts_users mais est favorites), on doit préciser ce nom dans les relations BelongsToMany
+
+### getPostBySlug: Vérifie en plus si l'user a mis le post en favori
+
+### Dans show.post, on affiche l'icône étoile pour favori ou pas (Le bloc PHP gère favoritePost() et unfavoritePost())
+
+### Dans index, affichage de l'icône étoile si post favori
+
+### Après PostRepository, ajout de getFavoritePosts(), on pose dans la navigation.navbar, le code pour afficher l'icône des favoris (Déjà sélectionné par l'utilisateur en cours)
+
+### Enfin, pour afficher cette page
+- Ajout de la route dans **routes/web.php**
+- Ajout du bouton dans **navigation/navbar**
+- Dans le composant index:
+  - On défini une nouvelle propriété $favorites
+  - mount() : On gère le cas où la requête est "/favorites" (On met la propriété favorites à true)
+  - getPosts() : Si la propriété favorites est à true, on appelle getFavoritePosts(auth()->user()) 
+  -Pour le HTML, on adapte le titre de la page
+- On renseigne fr.json pour ce titre
+
+### Boutons pour scroller
+
+### Réf.: ***<https://laravel.sillo.org/posts/mon-cms-les-favoris>***

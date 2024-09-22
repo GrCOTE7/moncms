@@ -8,7 +8,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\{BelongsToMany, HasMany};
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -50,6 +50,14 @@ class User extends Authenticatable
 		return $this->comments()->whereHas('user', function ($query) {
 			$query->whereValid(true);
 		});
+	}
+
+	/**
+	 * Get the favorite posts of the user.
+	 */
+	public function favoritePosts(): BelongsToMany
+	{
+		return $this->belongsToMany(Post::class, 'favorites');
 	}
 
 	/**

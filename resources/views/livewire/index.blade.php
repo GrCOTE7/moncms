@@ -9,6 +9,8 @@ include_once './../resources/views/livewire/index.php';
             size="text-2xl sm:text-3xl md:text-4xl" />
     @elseif($param !== '')
         <x-header title="{{ __('Posts for search ') }} '{{ $param }}'" size="text-2xl sm:text-3xl md:text-4xl" />
+    @elseif($favorites)
+        <x-header title="{{ __('Your favorites posts') }}" size="text-2xl sm:text-3xl md:text-4xl" />
     @endif
 
     <div class="mb-4 mary-table-pagination">
@@ -42,6 +44,11 @@ include_once './../resources/views/livewire/index.php';
                         @if ($post->pinned)
                             <x-badge value="{{ __('Pinned') }}" class="p-3 badge-warning" />
                         @endif
+                        @auth
+                            @if ($post->is_favorited)
+                                <x-icon name="s-star" class="w-6 h-6 text-yellow-500 cursor-pointer" />
+                            @endif
+                        @endauth
                     </x-slot:menu>
 
                     <x-slot:actions>
