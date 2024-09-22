@@ -526,7 +526,7 @@ class Comment extends Model
 
 ## Le Profil
 
-### Composant
+### Composant <!-- markmap: fold -->
 
 ```php	
 php artisan make:volt auth/profile --class
@@ -539,12 +539,12 @@ php artisan make:volt auth/profile --class
 
 ### Ajouter les traductions
 
-### Faire la route de ce composant
+### Faire la route de ce composant <!-- markmap: fold -->
 
 - (Pensez que c'est que pour les "authorisés"
 → Middleware('auth')) et comme il y aura d'autre route pour "eux", en faire un group()
 
-### Enfin, ajouter les liens dans les vues adhoc
+### Enfin, ajouter les liens dans les vues adhoc <!-- markmap: fold -->
 
 - Pour les petits écrans, dans **navigation.navbar**
 - Pour les plus grands, dans **navigation.sidebar**
