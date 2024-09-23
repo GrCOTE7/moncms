@@ -3,10 +3,7 @@
 use Livewire\Attributes\{Layout, Validate, Title};
 use Livewire\Volt\Component;
 
-new
-#[Title('Login')]
-#[Layout('components.layouts.auth')]
-class extends Component {
+new #[Title('Login')] #[Layout('components.layouts.auth')] class extends Component {
     #[Validate('required|email')]
     public string $email = '';
 
@@ -19,6 +16,10 @@ class extends Component {
 
         if (auth()->attempt($credentials)) {
             request()->session()->regenerate();
+
+            if (auth()->user()->isAdmin()) {
+                return redirect()->intended('/admin/dashboard');
+            }
 
             return redirect()->intended('/');
         }

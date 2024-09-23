@@ -53,11 +53,23 @@ new class extends Component {
 
             @if ($user = auth()->user())
                 <x-dropdown>
+
                     <x-slot:trigger>
                         <x-button label="{{ $user->name }}" class="btn-ghost" />
                     </x-slot:trigger>
+
+                    @if ($user->isAdminOrRedac())
+                        <x-menu-item title="{{ __('Administration') }}" link="{{ route('admin') }}" />
+                    @endif
+
+                    <x-menu-separator />
+
                     <x-menu-item title="{{ __('Profile') }}" link="{{ route('profile') }}" />
+                    
+                    <x-menu-separator />
+
                     <x-menu-item title="{{ __('Logout') }}" wire:click="logout" />
+
                 </x-dropdown>
             @else
                 <x-button label="{{ __('Login') }}" link="/login" class="btn-ghost" />

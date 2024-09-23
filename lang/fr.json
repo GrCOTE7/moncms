@@ -274,11 +274,21 @@
     "Generate a secure password": "Créer un mot de passe sécurisé",
     "Profile updated with success.": "Profil mis à jour avec succès.",
     "Delete account": "Supprimer le compte",
-    "Are you sure to delete your account?": "Etes-vous sûr de vouloir supprimer votre compte ?",
+    "Are you sure to delete your account?": "Êtes-vous sûr de vouloir supprimer votre compte ?",
     "Profile": "Profil",
     "Bookmark this post": "Marquer cet article",
     "Remove from favorites": "Supprimer des favoris",
     "Your favorites posts": "Vos articles favoris",
     "To up": "Vers le haut",
-    "To bottom": "Vers le bas"
+    "To bottom": "Vers le bas",
+    "In a glance": "En un coup d'oeil",
+    "Recent posts": "Articles récents",
+    "Users": "Utilisateurs",
+    "Dashboard": "Tableau de bord",
+    "Recent Comments": "Commentaires récents",
+    "Show post": "Afficher l'article",
+    "in post:": "dans l'article :",
+    "Go on site": "Aller sur le site",
+    "Edit or answer": "Modifier ou répondre",
+    "Posts": "Articles"
 }
