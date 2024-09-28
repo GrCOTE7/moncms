@@ -1599,7 +1599,7 @@ APP_TINYMCE_LOCALE=fr_FR
 
 ### Réf.: ***<https://laravel.sillo.org/posts/mon-cms-creer-un-article#top>***
 
-## Modifier un article \<!-- markmap: fold -->
+## Modifier un article <!-- markmap: fold -->
 
 ### Composant
 
@@ -1609,7 +1609,7 @@ APP_TINYMCE_LOCALE=fr_FR
 php artisan make:volt admin/posts/edit --class
 ```
 
-#### Route <!-- markmap: fold -->
+#### Route posts.edit <!-- markmap: fold -->
 
 ```php
 // Dans le groupe du middleware 'IsAdminOrRedac'
@@ -1792,9 +1792,9 @@ class extends Component {
 "Edit this post": "Modifier cet article",
 ```
 
-#### Bouton clone dans le posts.show \<!-- markmap: fold -->
+#### Bouton clone dans le posts.show <!-- markmap: fold -->
 
-##### HTML
+##### HTML <!-- markmap: fold -->
 
 ```php
 @if (Auth::user()->isAdmin() || Auth::user()->id == $post->user_id)
@@ -1813,13 +1813,13 @@ class extends Component {
 @endif
 ```
 
-##### Traduction Clone
+##### Traduction Clone <!-- markmap: fold -->
 
 ```php
 "Clone this post": "Dupliquer cet article"
 ```
 
-##### Logique du clonage  \<!-- markmap: fold -->
+##### Logique du clonage  <!-- markmap: fold -->
 
 ```php
 public function clonePost(int $postId): void
@@ -1835,7 +1835,7 @@ public function clonePost(int $postId): void
 }
 ```
 
-##### Lien Articles dans dashbord
+##### Lien Articles dans dashbord <!-- markmap: fold -->
 
 ```php
 // admin.index
@@ -1846,3 +1846,304 @@ public function clonePost(int $postId): void
 ```
 
 ### Réf.: ***<https://laravel.sillo.org/posts/mon-cms-modifier-un-article>***
+
+## Les catégories <!-- markmap: fold -->
+
+### Création category.index <!-- markmap: fold -->
+
+```php
+php artisan make:volt admin/categories/index --class
+```
+
+### Route categories.index <!-- markmap: fold -->
+
+```php
+use App\Http\Middleware\{IsAdmin, IsAdminOrRedac};
+...
+// Dans le groupe du middleware 'IsAdminOrRedac'
+Route::middleware(IsAdmin::class)->group(function () {
+    Volt::route('/categories/index', 'admin.categories.index')->name('categories.index');
+});
+```
+
+### Item dans barre latérale <!-- markmap: fold -->
+
+#### HTML Item dans admin.sidebar
+```php
+<x-menu-sub title="{{ __('Posts') }}" icon="s-document-text">
+    ...
+    @if (Auth::user()->isAdmin())
+        <x-menu-item title="{{ __('Categories') }}" link="{{ route('categories.index') }}" />
+    @endif
+</x-menu-sub> 
+```
+
+#### Traduction Item \<!-- markmap: fold -->
+
+```php
+"Categories": "Catégories"
+```
+
+### Code composant categories.index <!-- markmap: fold -->
+
+#### Base <!-- markmap: fold -->
+
+```php
+<?php
+
+use Livewire\Volt\Component;
+use App\Models\Category;
+use Livewire\WithPagination;
+use Livewire\Attributes\Layout;
+
+new #[Layout('components.layouts.admin')] 
+class extends Component {
+    use WithPagination;
+
+    public array $sortBy = ['column' => 'title', 'direction' => 'asc'];
+
+    public function headers(): array
+    {
+        return [['key' => 'title', 'label' => __('Title')], ['key' => 'slug', 'label' => 'Slug']];
+    }
+    
+    public function with(): array
+    {
+        return [
+            'categories' => Category::orderBy(...array_values($this->sortBy))->paginate(10),
+            'headers'    => $this->headers(),
+        ];
+    }
+    
+}; ?>
+
+<div>
+    <x-header title="{{ __('Categories') }}" separator progress-indicator>
+        <x-slot:actions class="lg:hidden">
+            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline"
+                link="{{ route('admin') }}" />
+        </x-slot:actions>
+    </x-header>
+    <x-card>
+        <x-table striped :headers="$headers" :rows="$categories" :sort-by="$sortBy" link="#"
+            with-pagination>
+        </x-table>
+    </x-card>
+</div>
+```
+
+#### Ajout bouton supprimer catégorie <!-- markmap: fold -->
+
+##### HTML Supprimer catégorie
+
+```php
+<x-table striped :headers="$headers" :rows="$categories" :sort-by="$sortBy" link="#"
+    with-pagination>
+        @scope('actions', $category)
+        <x-popover>
+            <x-slot:trigger>
+                <x-button icon="o-trash" wire:click="delete({{ $category->id }})"
+                    wire:confirm="{{ __('Are you sure to delete this category?') }}" spinner
+                    class="text-red-500 btn-ghost btn-sm" />
+            </x-slot:trigger>
+            <x-slot:content class="pop-small">
+                @lang('Delete')
+            </x-slot:content>
+        </x-popover>
+    @endscope
+</x-table>
+```
+
+##### Logique Supprimer catégorie
+
+```php
+public function delete(Category $category): void
+{
+    $category->delete();
+    $this->success(__('Category deleted with success.'));
+}
+```
+
+##### Traduction Supprimer catégorie
+
+```php
+"Are you sure to delete this category?": "Êtes-vous sûr de vouloir supprimer cette catégorie ?",
+"Category deleted with success.": "Catégorie supprimée avec succès."
+```
+
+#### Formulaire catégorie <!-- markmap: fold -->
+
+##### Composant formulaire creation/modification <!-- markmap: fold -->
+
+```php
+php artisan make:volt admin/categories/category-form
+```
+
+
+##### HTML admin/categories/category-form.blade.php <!-- markmap: fold -->
+
+```php
+<x-form wire:submit="save">
+    <x-input label="{{ __('Title') }}" wire:model.debounce.500ms="title" wire:change="$refresh" />
+    <x-input type="text" wire:model="slug" label="{{ __('Slug') }}" />
+    <x-slot:actions>
+        <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit"
+            class="btn-primary" />
+    </x-slot:actions>
+</x-form>
+```
+
+##### Ajout du formulaire Créer catégorie <!-- markmap: fold -->
+
+```php
+    <x-card title="{{ __('Create a new category') }}">
+        @include('livewire.admin.categories.category-form')
+    </x-card>
+</div>
+```
+
+##### Complément logique validation catégorie <!-- markmap: fold -->
+
+```php
+...
+
+use Livewire\Attributes\{Layout, Validate};
+use Illuminate\Support\Str;
+use Mary\Traits\Toast;
+
+new #[Layout('components.layouts.admin')] 
+class extends Component {
+    use Toast, WithPagination;
+
+    ...
+
+    #[Validate('required|max:255|unique:categories,title')]
+	public string $title = '';
+
+    #[Validate('required|max:255|unique:posts,slug|regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/')]
+    public string $slug = '';
+
+    public function updatedTitle($value): void
+	{
+		$this->generateSlug($value);
+	}
+
+    private function generateSlug(string $title): void
+	{
+		$this->slug = Str::of($title)->slug('-');
+	}
+
+    public function save(): void
+	{
+		$data = $this->validate();
+		Category::create($data);
+		$this->success(__('Category created with success.'));
+	}
+```
+
+##### Traduction Créer catégorie <!-- markmap: fold -->
+
+```php
+"Create a new category": "Créer une nouvelle catégorie",
+"Category created with success.": "Catégorie créée avec succès."
+```
+
+### Modification d'une catégorie <!-- markmap: fold -->
+
+#### Création du composant modification <!-- markmap: fold -->
+
+```php
+php artisan make:volt admin/categories/edit --class
+```
+
+#### Code du composant d'édition <!-- markmap: fold -->
+
+```php
+<?php
+use App\Models\Category;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
+use Livewire\Attributes\Layout;
+use Livewire\Volt\Component;
+use Mary\Traits\Toast;
+
+new #[Layout('components.layouts.admin')] 
+class extends Component {
+  use Toast;
+  
+  public Category $category;
+  public string $title = '';
+  public string $slug  = '';
+  
+  public function mount(Category $category): void {
+    $this->category = $category;
+    $this->fill($this->category->toArray());
+  }
+  
+  public function updatedTitle($value): void {
+    $this->generateSlug($value);
+  }
+  
+  public function save(): void {
+    $data = $this->validate($this->rules());
+    $this->category->update($data);
+    $this->success(__('Category updated successfully.'), redirectTo: '/admin/categories/index');
+  }
+  
+  protected function rules(): array
+  {
+  return [
+      'title' => 'required|string|max:255',
+      'slug'  => ['required', 'string', 'max:255', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/', Rule::unique('categories')->ignore($this->category->id)],
+  ];
+  }
+  
+  private function generateSlug(string $title): void
+  {
+    $this->slug = Str::of($title)->slug('-');
+  }
+}; ?>
+
+<div>
+    <x-header title="{{ __('Edit a category') }}" separator progress-indicator>
+        <x-slot:actions class="lg:hidden">
+            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline"
+                link="{{ route('admin') }}" />
+        </x-slot:actions>
+    </x-header>
+    <x-card>
+        @include('livewire.admin.categories.category-form')
+    </x-card>
+</div>
+```
+
+#### Traduction modification de catégorie <!-- markmap: fold -->
+
+```php
+"Category updated successfully.": "Catégorie mise à jour avec succès.",
+"Edit a category": "Modifier une catégorie",
+```
+
+#### Lien dans tableau des catégories  <!-- markmap: fold -->
+
+```php
+// admin/categories/index
+<x-table striped :headers="$headers" :rows="$categories" :sort-by="$sortBy" link="/admin/categories/{id}/edit" with-pagination>
+```
+
+##### Route pour la modification de catégorie <!-- markmap: fold -->
+
+```php
+Route::middleware(IsAdmin::class)->group(function () {
+	...
+	Volt::route('/categories/{category}/edit', 'admin.categories.edit')->name('categories.edit');
+});
+```
+
+### Réf.: ***<https://laravel.sillo.org/posts/mon-cms-modifier-un-article>***
+
+## Les pages
+
+### Composant tableau des pages \<!-- markmap: fold -->
+
+### Réf.: ***<https://laravel.sillo.org/posts/mon-cms-les-pages>***
