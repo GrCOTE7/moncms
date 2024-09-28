@@ -104,22 +104,30 @@ php artisan mary:install
 
 #### Dynamic Title/Description/Keywords (S.E.O.) <!-- markmap: fold -->
 
-- **Layout:**
-title :
-*\<title>{{ (isset($title) ? $title . ' | ' :
-(View::hasSection('title') ? View::getSection('title') . ' | ' :
- '')) . config('app.name') }}</title>
-\<meta name="description" content="@yield('description')">
-\<meta name="keywords" content="@yield('keywords')">*
-- **Vue** (Blade):
+##### **Layout:**
+
+    - title :
+```php
+  <title>{{ (isset($title) ? $title . ' | ' :
+  (View::hasSection('title') ? View::getSection('title') . ' | ' :
+   '')) . config('app.name') }}</title>
+  <meta name="description" content="@yield('description')">
+  <meta name="keywords" content="@yield('keywords')">*
+```
+
+##### **Vue** (Blade):
+```php
 @php
-&nbsp;&nbsp;$title='TitrePage'
+  $title='TitrePage'
 @endphp
-ou :
+```
+
+    ou :
+```php
 @section('title', $post->seo_title ?? $post->title)
-Et :
 @section('description', $post->meta_description)
 @section('keywords', $post->meta_keywords
+```
 
 #### Plugin prose de Tailwind <!-- markmap: fold -->
 
@@ -1010,3 +1018,582 @@ public function login() {
 ```
 
 ### Réf.: ***<https://laravel.sillo.org/posts/mon-cms-ladministration>***
+
+## Tableau des articles <!-- markmap: fold -->
+
+### Composant
+
+#### CLI <!-- markmap: fold -->
+
+```php
+php artisan make:volt admin/posts/index --class
+```
+#### Code <!-- markmap: fold -->
+
+##### Dans le composant admin.posts.index
+
+```php
+<?php
+
+use Mary\Traits\Toast;
+use Livewire\Volt\Component;
+use Livewire\WithPagination;
+use App\Models\{Post, Category};
+use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\{Layout, Title};
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\{Builder, Collection};
+
+new 
+#[Layout('components.layouts.admin'), Title('List Posts')]
+class extends Component {
+    use Toast, WithPagination;
+
+    public string $search = '';
+    public Collection $categories;
+    public $category_id = 0;
+    public array $sortBy  = ['column' => 'created_at', 'direction' => 'desc'];
+
+    public function mount(): void {
+        $this->categories = $this->getCategories();
+    }
+
+    public function getCategories(): Collection {
+        if (Auth::user()->isAdmin()) {
+            return Category::all();
+        }
+        
+        return Category::whereHas('posts', fn (Builder $q) => $q->where('user_id', Auth::id()))->get();
+        }
+        
+    public function headers(): array {
+        $headers = [
+            ['key' => 'title', 'label' => __('Title')],
+        ];
+    
+        if (Auth::user()->isAdmin()) {
+            $headers = array_merge($headers, [['key' => 'user_name', 'label' => __('Author')]]);
+        }
+    
+        return array_merge($headers, [
+            ['key' => 'category_title', 'label' => __('Category')],
+            ['key' => 'comments_count', 'label' => __('')],
+            ['key' => 'active', 'label' => __('Published')],
+            ['key' => 'date', 'label' => __('Date')],
+      ]);
+      }
+
+    public function posts(): LengthAwarePaginator {
+        return Post::query()
+            ->select('id', 'title', 'slug', 'category_id', 'active', 'user_id', 'created_at', 'updated_at')
+            ->when(Auth::user()->isAdmin(), fn (Builder $q) => $q->withAggregate('user', 'name'))
+            ->when(!Auth::user()->isAdmin(), fn (Builder $q) => $q->where('user_id', Auth::id()))
+            ->withAggregate('category', 'title')
+            ->withcount('comments')
+            ->when($this->search, fn (Builder $q) => $q->where('title', 'like', "%{$this->search}%"))
+            ->when($this->category_id, fn (Builder $q) => $q->where('category_id', $this->category_id))
+            ->when('date' === $this->sortBy['column'], fn (Builder $q) => $q->orderBy('created_at', $this->sortBy['direction']), fn (Builder $q) => $q->orderBy($this->sortBy['column'], $this->sortBy['direction']))
+            ->latest()
+            ->paginate(6);
+    }
+
+    public function deletePost(int $postId): void {
+        $post = Post::findOrFail($postId);
+        $post->delete();
+        $this->success("{$post->title} " . __('deleted'));
+    }
+
+    public function clonePost(int $postId): void {
+        $originalPost       = Post::findOrFail($postId);
+        $clonedPost         = $originalPost->replicate();
+        $postRepository     = new PostRepository();
+        $clonedPost->slug   = $postRepository->generateUniqueSlug($originalPost->slug);
+        $clonedPost->active = false;
+        $clonedPost->save();
+    
+        // Ici on redirigera vers le formulaire de modification de l'article cloné
+    }
+        
+    public function with(): array {
+        return [
+            'headers' => $this->headers(),
+            'posts'   => $this->posts(),
+        ];
+    }
+}; ?>
+
+<div>
+    <x-header title="{{ __('Posts') }}" separator progress-indicator>
+        <x-slot:actions>
+            <x-input placeholder="{{ __('Search...') }}" wire:model.live.debounce="search" clearable icon="o-magnifying-glass" />
+            <x-button label="{{ __('Add a post') }}" class="btn-outline lg:hidden" link="#" />
+            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline lg:hidden"
+                link="{{ route('admin') }}" />
+        </x-slot:actions>
+    </x-header>
+
+    @if ($posts->count() > 0)
+                <x-card>
+            <x-table striped :headers="$headers" :rows="$posts" :sort-by="$sortBy" link="#" with-pagination>
+
+                @scope('header_comments_count', $header)
+                    {{ $header['label'] }}
+                    <x-icon name="c-chat-bubble-left" />
+                @endscope
+
+                @scope('cell_comments_count', $post)
+                    @if ($post->comments_count > 0)
+                        <x-badge value="{{ $post->comments_count }}" class="badge-primary" />
+                    @endif
+                @endscope
+
+                @scope('cell_active', $post)
+                    @if ($post->active)
+                        <x-icon name="o-check-circle" />
+                    @endif
+                @endscope
+
+                @scope('cell_date', $post)
+                    @lang('Created') {{ $post->created_at->diffForHumans() }}
+                    @if ($post->updated_at != $post->created_at)
+                        <br>
+                        @lang('Updated') {{ $post->updated_at->diffForHumans() }}
+                    @endif
+                @endscope
+
+                @scope('actions', $post)
+                    <div class="flex">
+                        <x-popover>
+                            <div class="flex">
+                                <x-slot:trigger>
+                                    <x-button icon="o-finger-print" wire:click="clonePost({{ $post->id }})" spinner
+                                        class="btn-ghost btn-sm" />
+                                </x-slot:trigger>
+                                <x-slot:content class="pop-small">
+                                    @lang('Clone')
+                                </x-slot:content>
+                            </x-popover>
+                        <x-popover>
+                            <x-slot:trigger>
+                                <x-button icon="o-trash" wire:click="deletePost({{ $post->id }})"
+                                    wire:confirm="{{ __('Are you sure to delete this post?') }}" spinner
+                                    class="text-red-500 btn-ghost btn-sm" />
+                            </x-slot:trigger>
+                            <x-slot:content class="pop-small">
+                                @lang('Delete')
+                            </x-slot:content>
+                        </x-popover>
+                    </div>
+                @endscope
+
+            </x-table>
+        </x-card>
+    @endif
+</div>
+```
+
+##### Dans le PostRepository
+```php
+public function generateUniqueSlug(string $slug): string
+{
+	$newSlug = $slug;
+	$counter = 1;
+	while (Post::where('slug', $newSlug)->exists()) {
+		$newSlug = $slug . '-' . $counter;
+		++$counter;
+	}
+	return $newSlug;
+}
+```
+
+
+#### Traductions <!-- markmap: fold -->
+
+```php
+"Title": "Titre",
+"Author": "Auteur",
+"Updated": "Mis à jour",
+"Category": "Catégorie",
+"Published": "Publié",
+"Add a post": "Ajouter un article",
+"Are you sure to delete this post?": "Êtes-vous sûr de vouloir supprimer cet article ?",
+"deleted": "supprimé",
+"Clone": "Dupliquer",
+"Filters": "Filtres",
+"Select a category": "Sélectionnez une catégorie"
+```
+
+### Route <!-- markmap: fold -->
+
+```php
+Route::middleware('auth')->group(function () {
+	...
+	Route::middleware(IsAdminOrRedac::class)->prefix('admin')->group(function () {
+		...
+		Volt::route('/posts/index', 'admin.posts.index')->name('posts.index');
+	});
+});
+```
+
+### Navigation <!-- markmap: fold -->
+
+#### admin/sidebar
+
+```php
+... Dashboard
+<x-menu-sub title="{{ __('Posts') }}" icon="s-document-text">
+    <x-menu-item title="{{ __('All posts') }}" link="{{ route('posts.index') }}" />
+</x-menu-sub>
+```
+
+#### Traduction
+
+```php
+"All posts": "Tous les articles",
+```
+
+### Réf.: ***<https://laravel.sillo.org/posts/mon-cms-tableau-des-articles>***
+
+## Créer un article \<!-- markmap: fold -->
+
+### Composant (Formulaire) \<!-- markmap: fold -->
+
+#### CLI
+
+```php
+php artisan make:volt admin/posts/create --class
+```
+
+#### Code Création \<!-- markmap: fold --> //2ar
+
+##### Base <!-- markmap: fold -->
+
+```php
+<?php
+use Livewire\Volt\Component;
+use App\Models\Category;
+use Livewire\Attributes\Layout;
+
+new #[Layout('components.layouts.admin')] 
+
+class extends Component {
+
+    public function with(): array {
+      return [
+        'categories' => Category::orderBy('title')->get(),
+    ];}
+      
+}; ?>
+
+<div>
+    <x-header title="{{ __('Add a post') }}" separator progress-indicator>
+        <x-slot:actions>
+            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline lg:hidden"
+                link="{{ route('admin') }}" />
+        </x-slot:actions>
+    </x-header>
+    <x-card>
+        <x-form wire:submit="save">
+            <x-select label="{{ __('Category') }}" option-label="title" :options="$categories" wire:model="category_id"
+                wire:change="$refresh" />
+            <br>
+            <div class="flex gap-6">
+                <x-checkbox label="{{ __('Published') }}" wire:model="active" />
+                <x-checkbox label="{{ __('Pinned') }}" wire:model="pinned" />
+            </div>
+            <x-input type="text" wire:model="title" label="{{ __('Title') }}"
+                placeholder="{{ __('Enter the title') }}" wire:change="$refresh" />
+            <x-input type="text" wire:model="slug" label="{{ __('Slug') }}" />
+            <x-editor wire:model="body" label="{{ __('Content') }}" :config="config('tinymce.config')"
+                folder="{{ 'photos/' . now()->format('Y/m') }}" />
+            <x-card title="{{ __('SEO') }}" shadow separator>
+                <x-input placeholder="{{ __('Title') }}" wire:model="seo_title" hint="{{ __('Max 70 chars') }}" />
+                <br>
+                <x-textarea label="{{ __('META Description') }}" wire:model="meta_description"
+                    hint="{{ __('Max 160 chars') }}" rows="2" inline />
+                <br>
+                <x-textarea label="{{ __('META Keywords') }}" wire:model="meta_keywords"
+                    hint="{{ __('Keywords separated by comma') }}" rows="1" inline />
+            </x-card>
+            <x-slot:actions>
+                <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit"
+                    class="btn-primary" />
+            </x-slot:actions>
+        </x-form>
+    </x-card>
+</div>
+```
+
+##### Traduction <!-- markmap: fold -->
+```php
+"Select a category": "Sélectionnez une catégorie",
+"Pinned": "Épinglé",
+"Content": "Contenu",
+"META Keywords": "META mots-clefs",
+"Keywords separated by comma": "Mots-clefs séparés par une virgule",
+"Max 70 chars": "Max 70 caractères",
+"Max 160 chars": "Max 160 caractères",
+"Enter the title": "Entrez le titre",
+"Post added with success.": "Article ajouté avec succès."
+```
+
+##### Propriétés - Validation <!-- markmap: fold -->
+
+```php
+use Livewire\Attributes\{Layout, Validate};
+...
+public int $category_id;
+
+#[Validate('required|string|max:16777215')]
+public string $body = '';
+
+#[Validate('required|string|max:255')]
+public string $title = '';
+
+#[Validate('required|max:255|unique:posts,slug|regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/')]
+public string $slug = '';
+
+#[Validate('required')]
+public bool $active = false;
+
+#[Validate('required')]
+public bool $pinned = false;
+
+#[Validate('required|max:70')]
+public string $seo_title = '';
+
+#[Validate('required|max:160')]
+public string $meta_description = '';
+
+#[Validate('required|regex:/^[A-Za-z0-9-éèàù]{1,50}?(,[A-Za-z0-9-éèàù]{1,50})*$/')]
+public string $meta_keywords = '';
+
+public function mount(): void
+{
+    $category          = Category::first();
+    $this->category_id = $category->id;
+}
+```
+
+##### Update du slug du title <!-- markmap: fold -->
+
+```php
+public function updatedTitle($value) {
+    $this->slug      = Str::slug($value);
+    $this->seo_title = $value;
+}
+```
+
+##### Enregistrement <!-- markmap: fold -->
+
+```php
+...
+
+use App\Models\{Category, Post};
+use Mary\Traits\Toast;
+
+new #[Layout('components.layouts.admin')] 
+class extends Component {
+    use Toast;
+
+    ...
+
+    public function save() {
+        $data = $this->validate();
+
+    Post::create(
+        $data + [
+            'user_id'     => Auth::id(),
+            'category_id' => $this->category_id,
+        ],
+    );
+
+        $this->success(__('Post added with success.'), redirectTo: '/admin/posts/index');
+    }
+```
+
+##### Gestion de l'image //2do \<!-- markmap: fold -->
+
+###### Ajout du trait Livewire WithFileUploads
+
+```php
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
+use Livewire\WithFileUploads;
+
+new #[Layout('components.layouts.admin')] 
+class extends Component {
+    use WithFileUploads, Toast;
+
+    #[Rule('required|image|max:2000')]
+	public ?TemporaryUploadedFile $photo = null;
+```
+
+###### Composant dans form
+
+```php
+            <x-file wire:model="photo" label="{{ __('Featured image') }}"
+                hint="{{ __('Click on the image to modify') }}" accept="image/png, image/jpeg">
+                <img src="{{ $photo == '' ? '/storage/ask.jpg' : $photo }}" class="h-40" />
+            </x-file>
+            <x-slot:actions>
+                ...
+            </x-slot:actions>
+        </x-form>
+    </x-card>
+</div>
+```
+
+###### Traductions
+
+```php
+"Featured image": "Image mise en avant",
+"Click on the image to modify": "Cliquez sur cette image pour la modifier",
+```
+
+###### Image / défaut
+
+- <a href="https://laravel.sillo.org/ask.jpg">Récupérer l'image</a>
+- À poser dans : ./public/storage/ask.jpg
+
+###### Save
+
+- Par défaut, image temporaire ./storage/app/livewire-tmp
+- Ajouter :
+```php
+public function save()
+{
+    $data = $this->validate();
+
+    $date = now()->format('Y/m');
+    $path = $date . '/' . basename($this->photo->store('photos/' . $date, 'public'));
+
+    Post::create(
+        $data + [
+            'user_id'     => Auth::id(),
+            'category_id' => $this->category_id,
+            'image'       => $path,
+        ],
+    );
+
+    $this->success(__('Post added with success.'), redirectTo: '/admin/posts/index');
+}
+```
+
+###### Url des images
+
+    Ajout dans app/helpers.php :
+
+```php
+if (!function_exists('replaceAbsoluteUrlsWithRelative')) {
+  function replaceAbsoluteUrlsWithRelative(string $content) {
+      $baseUrl = url('/');
+  
+      if ('/' !== substr($baseUrl, -1)) {
+          $baseUrl .= '/';
+      }
+      
+      $pattern     = '/<img\s+[^>]*src="(?:https?:\/\/)?' . preg_quote(parse_url($baseUrl, PHP_URL_HOST), '/') . '\/([^"]+)"/i';
+      $replacement = '<img src="/$1"';
+  
+      return preg_replace($pattern, $replacement, $content);
+  }
+}
+```
+
+    Adaptation de save() :
+```php
+public function save() {
+   ...
+
+    $data['body'] = replaceAbsoluteUrlsWithRelative($data['body']);
+    
+    Post::create(
+
+    ...
+
+}
+```
+
+### Route <!-- markmap: fold -->
+
+```php
+Route::middleware('auth')->group(function () {
+	...
+	Route::middleware(IsAdminOrRedac::class)->prefix('admin')->group(function () {
+		...
+		Volt::route('/posts/create', 'admin.posts.create')->name('posts.create');
+	});
+});
+```
+
+### Menu (admin.sidebar) <!-- markmap: fold -->
+
+```php
+<x-menu-sub title="{{ __('Posts') }}" icon="s-document-text">
+    <x-menu-item title="{{ __('All posts') }}" link="{{ route('posts.index') }}" />
+    <x-menu-item title="{{ __('Add a post') }}" link="{{ route('posts.create') }}" />
+</x-menu-sub>
+```
+
+### Éditeur (TinyMCE) <!-- markmap: fold -->
+
+#### Installation <!-- markmap: fold -->
+
+##### Hébergée (Usage Illimité)
+
+###### <a href="https://www.tiny.cloud/get-tiny">Télécharger Free TinyMCE</a>
+
+###### Installer dans : ./storage/app/public/scripts
+
+###### Paramétrage
+
+```php
+<?php
+// Fichier config/tinymce.php
+
+return [
+'config' => [
+  'language'       => env('APP_TINYMCE_LOCALE', 'en_US'),
+  'plugins'        => 'codesample fullscreen',
+  'toolbar'        => 'undo redo style | fontfamily fontsize | alignleft aligncenter alignright alignjustify | bullist numlist | copy cut paste pastetext | hr | codesample | link image quicktable | fullscreen',
+  'toolbar_sticky' => true,
+  'min_height'     => 1000,
+  'license_key'    => 'gpl',
+  'valid_elements' => '*[*]',
+],
+];
+```
+
+```php
+
+// Fichier ./.env
+
+APP_TINYMCE_LOCALE=fr_FR
+```
+
+###### Traductions
+
+- <a href="https://www.tiny.cloud/get-tiny/language-packages">Récupérer les fichiers de traduction</a>
+
+- Les copier dans : ./storage/app/public/scripts/fr_FR.js
+
+###### Activation
+
+```php
+// Fichier ./resources\views\components\layouts\admin.blade.php
+<script src="{{ asset('storage/scripts/tinymce.min.js') }}" ></script>
+... @vite(...)
+```
+
+
+##### CDN (Usage limité: 1000 appels/mois - Mise à jour auto)
+
+```php
+// Fichier ./resources\views\components\layouts\admin.blade.php
+<script src="https://cdn.tiny.cloud/1/YOUR-KEY-HERE/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+... @vite(...)
+```
+
+#### Réf.: ***<https://mary-ui.com/docs/components/editor>***
+
+### Réf.: ***<https://laravel.sillo.org/posts/mon-cms-tableau-des-articles>***
