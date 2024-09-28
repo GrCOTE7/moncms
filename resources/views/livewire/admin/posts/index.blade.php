@@ -111,7 +111,7 @@ new #[Title('List Posts'), Layout('components.layouts.admin')] class extends Com
 
     @if ($posts->count() > 0)
         <x-card>
-            <x-table striped :headers="$headers" :rows="$posts" :sort-by="$sortBy" link="#" with-pagination>
+            <x-table striped :headers="$headers" :rows="$posts" :sort-by="$sortBy" link="/admin/posts/{slug}/edit" with-pagination>
                 @scope('header_comments_count', $header)
                     {{ $header['label'] }}
                     <x-icon name="c-chat-bubble-left" />

@@ -48,7 +48,7 @@ new #[Title('Dashboard')] #[Layout('components.layouts.admin')] class extends Co
         </x-slot:heading>
         <x-slot:content class="flex flex-wrap gap-4">
 
-            <a href="#" class="flex-grow">
+            <a href="{{ route('posts.index') }}" class="flex-grow">
                 <x-stat title="{{ __('Posts') }}" description="" value="{{ $posts->count() }}" icon="s-document-text"
                     class="shadow-hover" />
             </a>

@@ -61,6 +61,18 @@ new class extends Component {
             $this->post->is_favorited = false;
         }
     }
+
+    public function clonePost(int $postId): void
+    {
+        $originalPost = Post::findOrFail($postId);
+        $clonedPost = $originalPost->replicate();
+        $postRepository = new PostRepository();
+        $clonedPost->slug = $postRepository->generateUniqueSlug($originalPost->slug);
+        $clonedPost->active = false;
+        $clonedPost->save();
+
+        redirect()->route('posts.edit', $clonedPost->slug);
+    }
 }; ?>
 
 <div>
@@ -86,6 +98,26 @@ new class extends Component {
                     @endif
                 </x-slot:content>
             </x-popover>
+            @if (Auth::user()->isAdmin() || Auth::user()->id == $post->user_id)
+                <x-popover>
+                    <x-slot:trigger>
+                        <x-button icon="c-pencil-square" link="{{ route('posts.edit', $post) }}" spinner
+                            class="btn-ghost btn-sm" />
+                    </x-slot:trigger>
+                    <x-slot:content class="pop-small">
+                        @lang('Edit this post')
+                    </x-slot:content>
+                </x-popover>
+                <x-popover>
+                    <x-slot:trigger>
+                        <x-button icon="o-finger-print" wire:click="clonePost({{ $post->id }})" spinner
+                            class="btn-ghost btn-sm" />
+                    </x-slot:trigger>
+                    <x-slot:content class="pop-small">
+                        @lang('Clone this post')
+                    </x-slot:content>
+                </x-popover>
+            @endif
         @endauth
 
         <x-popover>

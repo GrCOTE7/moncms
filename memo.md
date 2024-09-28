@@ -1254,9 +1254,9 @@ Route::middleware('auth')->group(function () {
 
 ### Réf.: ***<https://laravel.sillo.org/posts/mon-cms-tableau-des-articles>***
 
-## Créer un article \<!-- markmap: fold -->
+## Créer un article <!-- markmap: fold -->
 
-### Composant (Formulaire) \<!-- markmap: fold -->
+### Composant (Formulaire) <!-- markmap: fold -->
 
 #### CLI
 
@@ -1264,7 +1264,7 @@ Route::middleware('auth')->group(function () {
 php artisan make:volt admin/posts/create --class
 ```
 
-#### Code Création \<!-- markmap: fold --> //2ar
+#### Code Création
 
 ##### Base <!-- markmap: fold -->
 
@@ -1325,6 +1325,7 @@ class extends Component {
 ```
 
 ##### Traduction <!-- markmap: fold -->
+
 ```php
 "Select a category": "Sélectionnez une catégorie",
 "Pinned": "Épinglé",
@@ -1412,9 +1413,9 @@ class extends Component {
     }
 ```
 
-##### Gestion de l'image //2do \<!-- markmap: fold -->
+##### Gestion de l'image <!-- markmap: fold -->
 
-###### Ajout du trait Livewire WithFileUploads
+###### Ajout du trait Livewire WithFileUploads <!-- markmap: fold -->
 
 ```php
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
@@ -1428,7 +1429,7 @@ class extends Component {
 	public ?TemporaryUploadedFile $photo = null;
 ```
 
-###### Composant dans form
+###### Composant dans form <!-- markmap: fold -->
 
 ```php
             <x-file wire:model="photo" label="{{ __('Featured image') }}"
@@ -1443,19 +1444,19 @@ class extends Component {
 </div>
 ```
 
-###### Traductions
+###### Traductions <!-- markmap: fold -->
 
 ```php
 "Featured image": "Image mise en avant",
 "Click on the image to modify": "Cliquez sur cette image pour la modifier",
 ```
 
-###### Image / défaut
+###### Image / défaut <!-- markmap: fold -->
 
 - <a href="https://laravel.sillo.org/ask.jpg">Récupérer l'image</a>
 - À poser dans : ./public/storage/ask.jpg
 
-###### Save
+###### Save <!-- markmap: fold -->
 
 - Par défaut, image temporaire ./storage/app/livewire-tmp
 - Ajouter :
@@ -1479,7 +1480,7 @@ public function save()
 }
 ```
 
-###### Url des images
+###### Url des images <!-- markmap: fold -->
 
     Ajout dans app/helpers.php :
 
@@ -1596,4 +1597,252 @@ APP_TINYMCE_LOCALE=fr_FR
 
 #### Réf.: ***<https://mary-ui.com/docs/components/editor>***
 
-### Réf.: ***<https://laravel.sillo.org/posts/mon-cms-tableau-des-articles>***
+### Réf.: ***<https://laravel.sillo.org/posts/mon-cms-creer-un-article#top>***
+
+## Modifier un article \<!-- markmap: fold -->
+
+### Composant
+
+#### Création <!-- markmap: fold -->
+
+```php
+php artisan make:volt admin/posts/edit --class
+```
+
+#### Route <!-- markmap: fold -->
+
+```php
+// Dans le groupe du middleware 'IsAdminOrRedac'
+Volt::route('/posts/{post:slug}/edit', 'admin.posts.edit')->name('posts.edit');
+```
+
+#### Lien dans tableau des articles (posts.index) <!-- markmap: fold -->
+
+```php
+<x-table striped :headers="$headers" :rows="$posts" :sort-by="$sortBy" link="/admin/posts/{slug}/edit" with-pagination>
+```
+
+#### Formulaire <!-- markmap: fold -->
+
+```php
+<div>
+    <x-header title="{{ __('Edit a post') }}" separator progress-indicator>
+        <x-slot:actions>
+            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline lg:hidden"
+                link="{{ route('admin') }}" />
+        </x-slot:actions>
+    </x-header>
+
+    <x-card>
+        <x-form wire:submit="save">
+           	<x-select label="{{ __('Category') }}" option-label="title" :options="$categories" wire:model="category_id"
+                wire:change="$refresh" />
+			<br>
+            <div class="flex gap-6">
+                <x-checkbox label="{{ __('Published') }}" wire:model="active" />
+                <x-checkbox label="{{ __('Pinned') }}" wire:model="pinned" />
+            </div>
+            <x-input type="text" wire:model="title" label="{{ __('Title') }}"
+                placeholder="{{ __('Enter the title') }}" wire:change="$refresh" />
+            <x-input type="text" wire:model="slug" label="{{ __('Slug') }}" />
+            <x-editor wire:model="body" label="{{ __('Content') }}" :config="config('tinymce.config')"
+                folder="{{ 'photos/' . now()->format('Y/m') }}" />
+            <x-card title="{{ __('SEO') }}" shadow separator>
+                <x-input placeholder="{{ __('Title') }}" wire:model="seo_title" hint="{{ __('Max 70 chars') }}" />
+                <br>
+                <x-textarea label="{{ __('META Description') }}" wire:model="meta_description"
+                    hint="{{ __('Max 160 chars') }}" rows="2" inline />
+                <br>
+                <x-textarea label="{{ __('META Keywords') }}" wire:model="meta_keywords"
+                    hint="{{ __('Keywords separated by comma') }}" rows="1" inline />
+            </x-card>
+            <x-file wire:model="photo" label="{{ __('Featured image') }}"
+                hint="{{ __('Click on the image to modify') }}" accept="image/png, image/jpeg">
+                <img src="{{ asset('storage/photos/' . $post->image) }}" class="h-40" />
+            </x-file>
+            <x-slot:actions>
+                <x-button label="{{ __('Preview') }}" icon="m-sun" link="{{ '/posts/' . $post->slug }}" external
+                    class="btn-outline" />
+                <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit"
+                    class="btn-primary" />
+            </x-slot:actions>
+        </x-form>
+    </x-card>
+</div>
+```
+
+#### La logique <!-- markmap: fold -->
+
+```php
+<?php
+
+use App\Models\{Category, Post};
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
+use illuminate\Support\Str;
+use Illuminate\Validation\Rule;
+use Livewire\Attributes\{Layout, Title};
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
+use Livewire\Volt\Component;
+use Livewire\WithFileUploads;
+use Mary\Traits\Toast;
+
+new #[Title('Edit Post'), Layout('components.layouts.admin')] 
+class extends Component {
+  use WithFileUploads, Toast;
+  
+  public int $postId;
+  public ?Collection $categories;
+  public int $category_id;
+  public Post $post;
+  public string $body                  = '';
+  public string $title                 = '';
+  public string $slug                  = '';
+  public bool $active                  = false;
+  public bool $pinned                  = false;
+  public string $seo_title             = '';
+  public string $meta_description      = '';
+  public string $meta_keywords         = '';
+  public ?TemporaryUploadedFile $photo = null;
+  
+  public function mount(Post $post): void
+  {
+    if (Auth()->user()->isRedac() && $post->user_id !== Auth()->id()) {
+      abort(403);
+    }
+  
+    $this->post = $post;
+    $this->fill($this->post);
+    $this->categories = Category::orderBy('title')->get();
+  }
+  
+  public function updatedTitle($value)
+  {
+    $this->slug      = Str::slug($value);
+    $this->seo_title = $value;
+  }
+  
+  public function save()
+  {
+    $data = $this->validate([
+      'title'            => 'required|string|max:255',
+      'body'             => 'required|string|max:16777215',
+      'category_id'      => 'required',
+      'photo'            => 'nullable|image|max:2000',
+      'active'           => 'required',
+      'pinned'           => 'required',
+      'slug'             => ['required', 'string', 'max:255', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/', Rule::unique('posts')->ignore($this->post->id)],
+      'seo_title'        => 'required|max:70',
+      'meta_description' => 'required|max:160',
+      'meta_keywords'    => 'required|regex:/^[A-Za-z0-9-éèàù]{1,50}?(,[A-Za-z0-9-éèàù]{1,50})*$/',
+    ]);
+    
+    if ($this->photo) {
+      $date          = now()->format('Y/m');
+      $path          = $date . '/' . basename($this->photo->store('photos/' . $date, 'public'));
+      $data['image'] = $path;
+    }
+    
+    $data['body'] = replaceAbsoluteUrlsWithRelative($data['body']);
+    
+    $this->post->update(
+      $data + [
+      'category_id' => $this->category_id,
+      ],
+    );
+    
+    $this->success(__('Post updated with success.'));
+  }
+}; ?>
+```
+
+#### Traduction Modifier <!-- markmap: fold -->
+
+```php
+"Edit a post": "Modifier un article",
+"Post updated with success.": "Article mis à jour avec succès."
+```
+
+#### Bouton édition dans le posts.show <!-- markmap: fold -->
+
+##### HTML
+
+```php
+@auth
+    <x-popover>
+        ...
+    </x-popover>
+    @if (Auth::user()->isAdmin() || Auth::user()->id == $post->user_id)
+        <x-popover>
+            <x-slot:trigger>
+                <x-button icon="c-pencil-square" link="{{ route('posts.edit', $post) }}" spinner
+                    class="btn-ghost btn-sm" />
+            </x-slot:trigger>
+            <x-slot:content class="pop-small">
+                @lang('Edit this post')
+            </x-slot:content>
+        </x-popover>
+    @endif
+@endauth
+```
+
+##### Traduction Modifier
+
+```php
+"Edit this post": "Modifier cet article",
+```
+
+#### Bouton clone dans le posts.show \<!-- markmap: fold -->
+
+##### HTML
+
+```php
+@if (Auth::user()->isAdmin() || Auth::user()->id == $post->user_id)
+    <x-popover>
+        ...
+    </x-popover>
+    <x-popover>
+        <x-slot:trigger>
+            <x-button icon="o-finger-print" wire:click="clonePost({{ $post->id }})" spinner
+                class="btn-ghost btn-sm" />
+        </x-slot:trigger>
+        <x-slot:content class="pop-small">
+            @lang('Clone this post')
+        </x-slot:content>
+    </x-popover>
+@endif
+```
+
+##### Traduction Clone
+
+```php
+"Clone this post": "Dupliquer cet article"
+```
+
+##### Logique du clonage  \<!-- markmap: fold -->
+
+```php
+public function clonePost(int $postId): void
+{
+    $originalPost = Post::findOrFail($postId);
+    $clonedPost = $originalPost->replicate();
+    $postRepository = new PostRepository();
+    $clonedPost->slug = $postRepository->generateUniqueSlug($originalPost->slug);
+    $clonedPost->active = false;
+    $clonedPost->save();
+
+    redirect()->route('posts.edit', $clonedPost->slug);
+}
+```
+
+##### Lien Articles dans dashbord
+
+```php
+// admin.index
+<a href="{{ route('posts.index') }}" class="flex-grow">
+    <x-stat title="{{ __('Posts') }}" description="" value="{{ $posts->count() }}" icon="s-document-text"
+        class="shadow-hover" />
+</a>
+```
+
+### Réf.: ***<https://laravel.sillo.org/posts/mon-cms-modifier-un-article>***
