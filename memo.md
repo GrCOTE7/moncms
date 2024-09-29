@@ -1019,18 +1019,21 @@ public function login() {
 
 ### Réf.: ***<https://laravel.sillo.org/posts/mon-cms-ladministration>***
 
-## Tableau des articles <!-- markmap: fold -->
+## Les articles <!-- markmap: fold -->
 
-### Composant
+### Tableau des articles <!-- markmap: fold -->
 
-#### CLI <!-- markmap: fold -->
+#### Composant <!-- markmap: fold -->
+
+##### CLI
 
 ```php
 php artisan make:volt admin/posts/index --class
 ```
-#### Code <!-- markmap: fold -->
 
-##### Dans le composant admin.posts.index
+##### Code
+
+###### Dans le composant admin.posts.index <!-- markmap: fold -->
 
 ```php
 <?php
@@ -1192,7 +1195,8 @@ class extends Component {
 </div>
 ```
 
-##### Dans le PostRepository
+###### Dans le PostRepository <!-- markmap: fold -->
+
 ```php
 public function generateUniqueSlug(string $slug): string
 {
@@ -1207,7 +1211,7 @@ public function generateUniqueSlug(string $slug): string
 ```
 
 
-#### Traductions <!-- markmap: fold -->
+##### Traductions
 
 ```php
 "Title": "Titre",
@@ -1223,7 +1227,7 @@ public function generateUniqueSlug(string $slug): string
 "Select a category": "Sélectionnez une catégorie"
 ```
 
-### Route <!-- markmap: fold -->
+#### Routes <!-- markmap: fold -->
 
 ```php
 Route::middleware('auth')->group(function () {
@@ -1235,9 +1239,9 @@ Route::middleware('auth')->group(function () {
 });
 ```
 
-### Navigation <!-- markmap: fold -->
+#### Navigation <!-- markmap: fold -->
 
-#### admin/sidebar
+##### admin/sidebar
 
 ```php
 ... Dashboard
@@ -1246,27 +1250,27 @@ Route::middleware('auth')->group(function () {
 </x-menu-sub>
 ```
 
-#### Traduction
+##### Traduction
 
 ```php
 "All posts": "Tous les articles",
 ```
 
-### Réf.: ***<https://laravel.sillo.org/posts/mon-cms-tableau-des-articles>***
+#### Réf.: ***<https://laravel.sillo.org/posts/mon-cms-tableau-des-articles>***
 
-## Créer un article <!-- markmap: fold -->
+### Créer un article <!-- markmap: fold -->
 
-### Composant (Formulaire) <!-- markmap: fold -->
+#### Composant (Formulaire) <!-- markmap: fold -->
 
-#### CLI
+##### CLI
 
 ```php
 php artisan make:volt admin/posts/create --class
 ```
 
-#### Code Création
+##### Code Création
 
-##### Base <!-- markmap: fold -->
+###### Base <!-- markmap: fold -->
 
 ```php
 <?php
@@ -1324,7 +1328,7 @@ class extends Component {
 </div>
 ```
 
-##### Traduction <!-- markmap: fold -->
+###### Traduction <!-- markmap: fold -->
 
 ```php
 "Select a category": "Sélectionnez une catégorie",
@@ -1338,7 +1342,7 @@ class extends Component {
 "Post added with success.": "Article ajouté avec succès."
 ```
 
-##### Propriétés - Validation <!-- markmap: fold -->
+###### Propriétés - Validation <!-- markmap: fold -->
 
 ```php
 use Livewire\Attributes\{Layout, Validate};
@@ -1376,7 +1380,7 @@ public function mount(): void
 }
 ```
 
-##### Update du slug du title <!-- markmap: fold -->
+###### Update du slug du title <!-- markmap: fold -->
 
 ```php
 public function updatedTitle($value) {
@@ -1385,7 +1389,7 @@ public function updatedTitle($value) {
 }
 ```
 
-##### Enregistrement <!-- markmap: fold -->
+###### Enregistrement <!-- markmap: fold -->
 
 ```php
 ...
@@ -1515,7 +1519,7 @@ public function save() {
 }
 ```
 
-### Route <!-- markmap: fold -->
+#### Routes <!-- markmap: fold -->
 
 ```php
 Route::middleware('auth')->group(function () {
@@ -1527,7 +1531,7 @@ Route::middleware('auth')->group(function () {
 });
 ```
 
-### Menu (admin.sidebar) <!-- markmap: fold -->
+#### Menu (admin.sidebar) <!-- markmap: fold -->
 
 ```php
 <x-menu-sub title="{{ __('Posts') }}" icon="s-document-text">
@@ -1536,11 +1540,9 @@ Route::middleware('auth')->group(function () {
 </x-menu-sub>
 ```
 
-### Éditeur (TinyMCE) <!-- markmap: fold -->
+#### Éditeur (TinyMCE) <!-- markmap: fold -->
 
-#### Installation <!-- markmap: fold -->
-
-##### Hébergée (Usage Illimité)
+##### Installation hébergée (Usage Illimité) <!-- markmap: fold -->
 
 ###### <a href="https://www.tiny.cloud/get-tiny">Télécharger Free TinyMCE</a>
 
@@ -1587,7 +1589,7 @@ APP_TINYMCE_LOCALE=fr_FR
 ```
 
 
-##### CDN (Usage limité: 1000 appels/mois - Mise à jour auto)
+##### Installation CDN (Usage limité: 1000 appels/mois - Mise à jour auto) <!-- markmap: fold -->
 
 ```php
 // Fichier ./resources\views\components\layouts\admin.blade.php
@@ -1597,32 +1599,32 @@ APP_TINYMCE_LOCALE=fr_FR
 
 #### Réf.: ***<https://mary-ui.com/docs/components/editor>***
 
-### Réf.: ***<https://laravel.sillo.org/posts/mon-cms-creer-un-article#top>***
+#### Réf.: ***<https://laravel.sillo.org/posts/mon-cms-creer-un-article#top>***
 
-## Modifier un article <!-- markmap: fold -->
+### Modifier un article <!-- markmap: fold -->
 
-### Composant
+#### Composant
 
-#### Création <!-- markmap: fold -->
+##### Création <!-- markmap: fold -->
 
 ```php
 php artisan make:volt admin/posts/edit --class
 ```
 
-#### Route posts.edit <!-- markmap: fold -->
+##### Route posts.edit <!-- markmap: fold -->
 
 ```php
 // Dans le groupe du middleware 'IsAdminOrRedac'
 Volt::route('/posts/{post:slug}/edit', 'admin.posts.edit')->name('posts.edit');
 ```
 
-#### Lien dans tableau des articles (posts.index) <!-- markmap: fold -->
+##### Lien dans tableau des articles (posts.index) <!-- markmap: fold -->
 
 ```php
 <x-table striped :headers="$headers" :rows="$posts" :sort-by="$sortBy" link="/admin/posts/{slug}/edit" with-pagination>
 ```
 
-#### Formulaire <!-- markmap: fold -->
+##### Formulaire <!-- markmap: fold -->
 
 ```php
 <div>
@@ -1671,7 +1673,7 @@ Volt::route('/posts/{post:slug}/edit', 'admin.posts.edit')->name('posts.edit');
 </div>
 ```
 
-#### La logique <!-- markmap: fold -->
+##### La logique <!-- markmap: fold -->
 
 ```php
 <?php
@@ -1756,16 +1758,16 @@ class extends Component {
 }; ?>
 ```
 
-#### Traduction Modifier <!-- markmap: fold -->
+##### Traduction Éditer <!-- markmap: fold -->
 
 ```php
 "Edit a post": "Modifier un article",
 "Post updated with success.": "Article mis à jour avec succès."
 ```
 
-#### Bouton édition dans le posts.show <!-- markmap: fold -->
+##### Bouton édition dans le posts.show <!-- markmap: fold -->
 
-##### HTML
+###### HTML
 
 ```php
 @auth
@@ -1786,15 +1788,15 @@ class extends Component {
 @endauth
 ```
 
-##### Traduction Modifier
+###### Traduction Modifier
 
 ```php
 "Edit this post": "Modifier cet article",
 ```
 
-#### Bouton clone dans le posts.show <!-- markmap: fold -->
+##### Bouton clone dans le posts.show <!-- markmap: fold -->
 
-##### HTML <!-- markmap: fold -->
+###### HTML <!-- markmap: fold -->
 
 ```php
 @if (Auth::user()->isAdmin() || Auth::user()->id == $post->user_id)
@@ -1813,13 +1815,13 @@ class extends Component {
 @endif
 ```
 
-##### Traduction Clone <!-- markmap: fold -->
+###### Traduction Clone <!-- markmap: fold -->
 
 ```php
 "Clone this post": "Dupliquer cet article"
 ```
 
-##### Logique du clonage  <!-- markmap: fold -->
+###### Logique du clonage  <!-- markmap: fold -->
 
 ```php
 public function clonePost(int $postId): void
@@ -1835,7 +1837,7 @@ public function clonePost(int $postId): void
 }
 ```
 
-##### Lien Articles dans dashbord <!-- markmap: fold -->
+###### Lien Articles dans dashboard <!-- markmap: fold -->
 
 ```php
 // admin.index
@@ -1845,7 +1847,7 @@ public function clonePost(int $postId): void
 </a>
 ```
 
-### Réf.: ***<https://laravel.sillo.org/posts/mon-cms-modifier-un-article>***
+#### Réf.: ***<https://laravel.sillo.org/posts/mon-cms-modifier-un-article>***
 
 ## Les catégories <!-- markmap: fold -->
 
@@ -2142,8 +2144,343 @@ Route::middleware(IsAdmin::class)->group(function () {
 
 ### Réf.: ***<https://laravel.sillo.org/posts/mon-cms-modifier-un-article>***
 
-## Les pages
+## Les pages <!-- markmap: fold -->
 
-### Composant tableau des pages \<!-- markmap: fold -->
+### Composant Pages <!-- markmap: fold -->
+
+#### CLI Pages
+
+```php
+php artisan make:volt admin/pages/index --class
+```
+
+#### Route Pages
+
+```php
+// Groupe middleware IsAdminOrRedac > IsAdmin
+Volt::route('/pages/index', 'admin.pages.index')->name('pages.index');
+```
+
+#### Lien Pages
+
+```php
+// admin.sidebar
+@if (Auth::user()->isAdmin())
+    <x-menu-sub title="{{ __('Pages') }}" icon="s-document">
+        <x-menu-item title="{{ __('All pages') }}" link="{{ route('pages.index') }}" />
+    </x-menu-sub>
+@endif
+```
+
+#### Traduction Pages
+
+```php
+"All pages": "Toutes les pages",
+```
+
+#### Code Pages <!-- markmap: fold -->
+
+```php
+<?php
+
+use App\Models\Page;
+use Livewire\Attributes\{Layout, Title};
+use Livewire\Volt\Component;
+use Livewire\WithPagination;
+use Mary\Traits\Toast;
+
+new #[Title('Pages'), Layout('components.layouts.admin')] 
+class extends Component {
+  use Toast, WithPagination;
+  
+  public function headers(): array {
+    return [
+      ['key' => 'title',  'label' => __('Title')],
+      ['key' => 'slug',   'label' => 'Slug'],
+      ['key' => 'active', 'label' => __('Published')]
+    ];
+  }
+  
+  public function deletePage(Page $page): void {
+    $page->delete();
+    $this->success(__('Page deleted'));
+  }
+  
+  public function with(): array {
+    return [
+      'pages'   => Page::select('id', 'title', 'slug', 'active')->get(),
+      'headers' => $this->headers(),
+    ];
+  }
+}; ?>
+
+<div>
+    <x-header title="{{ __('Pages') }}" separator progress-indicator >
+        <x-slot:actions class="lg:hidden">
+            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline"
+                link="{{ route('admin') }}" />
+            <x-button icon="c-document-plus" label="{{ __('Add a page') }}" class="btn-outline"
+                link="#" />
+        </x-slot:actions>
+    </x-header>
+
+    <x-card>
+        <x-table striped :headers="$headers" :rows="$pages" link="#">
+            @scope('cell_active', $page)
+                @if ($page->active)
+                    <x-icon name="o-check-circle" />
+                @endif
+            @endscope
+            @scope('actions', $page)
+                <x-popover>
+                    <x-slot:trigger>
+                        <x-button icon="o-trash" wire:click="deletePage({{ $page->id }})"
+                            wire:confirm="{{ __('Are you sure to delete this page?') }}" spinner
+                            class="text-red-500 btn-ghost btn-sm" />
+                    </x-slot:trigger>
+                    <x-slot:content class="pop-small">
+                        @lang('Delete')
+                    </x-slot:content>
+                </x-popover>
+            @endscope
+        </x-table>
+    </x-card>
+</div>
+```
+
+#### Traduction composant Pages
+
+```php
+"Add a page": "Ajouter une page",
+"Are you sure to delete this page?": "Êtes-vous sûr de vouloir supprimer cette page ?"
+```
+
+### Composant création pages <!-- markmap: fold -->
+
+#### CLI Creation Pages
+
+```php
+php artisan make:volt admin/pages/create --class
+```
+
+#### Route Ajouter Pages
+
+```php
+// Groupe middleware IsAdminOrRedac > IsAdmin
+Volt::route('/pages/create', 'admin.pages.create')->name('pages.create');
+```
+
+#### Lien Ajouter Pages
+
+```php
+// admin.sidebar
+@if (Auth::user()->isAdmin())
+    <x-menu-sub title="{{ __('Pages') }}" icon="s-document">
+        <x-menu-item title="{{ __('All pages') }}" link="{{ route('pages.index') }}" />
+        <x-menu-item title="{{ __('Add a page') }}" link="{{ route('pages.create') }}" />
+    </x-menu-sub>
+@endif
+```
+
+#### Formulaire Pages (Création & modification) <!-- markmap: fold -->
+
+```php
+// pages/page-form.blade.php
+<x-card>
+    <x-form wire:submit="save">
+        <x-input type="text" wire:model="title" label="{{ __('Title') }}"
+            placeholder="{{ __('Enter the title') }}" wire:change="$refresh" />
+        <x-input type="text" wire:model="slug" label="{{ __('Slug') }}" /><br>
+        <x-checkbox label="{{ __('Published') }}" wire:model="active" /><br>
+        <x-editor wire:model="body" label="{{ __('Content') }}" :config="config('tinymce.config')"
+            folder="{{ 'photos/' . now()->format('Y/m') }}" />
+        <x-card title="{{ __('SEO') }}" shadow separator>
+            <x-input placeholder="{{ __('Title') }}" wire:model="seo_title" hint="{{ __('Max 70 chars') }}" />
+            <br>
+            <x-textarea label="{{ __('META Description') }}" wire:model="meta_description"
+                hint="{{ __('Max 160 chars') }}" rows="2" inline />
+            <br>
+            <x-textarea label="{{ __('META Keywords') }}" wire:model="meta_keywords"
+                hint="{{ __('Keywords separated by comma') }}" rows="1" inline />
+        </x-card>
+        <x-slot:actions>
+            <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit"
+                class="btn-primary" />
+        </x-slot:actions>
+    </x-form>
+</x-card>
+```
+
+#### Code Créer Pages <!-- markmap: fold -->
+
+```php
+<?php
+
+use App\Models\Page;
+use illuminate\Support\Str;
+use Livewire\Attributes\{Layout, Validate, Title};
+use Livewire\Volt\Component;
+use Mary\Traits\Toast;
+
+new #[Title('Create Page'), Layout('components.layouts.admin')] 
+class extends Component {
+    use Toast;
+    
+    #[Validate('required|max:65000')]
+    public string $body = '';
+    
+    #[Validate('required|max:255')]
+    public string $title = '';
+    
+    #[Validate('required|max:255|unique:posts,slug|regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/')]
+    public string $slug = '';
+    
+    #[Validate('required')]
+    public bool $active = false;
+    
+    #[Validate('required|max:70')]
+    public string $seo_title = '';
+    
+    #[Validate('required|max:160')]
+    public string $meta_description = '';
+    
+    #[Validate('required|regex:/^[A-Za-z0-9-éèàù]{1,50}?(,[A-Za-z0-9-éèàù]{1,50})*$/')]
+    public string $meta_keywords = '';
+    
+    public function updatedTitle($value): void {
+        $this->generateSlug($value);
+        $this->seo_title = $value;
+    }
+    
+    public function save() {
+        $data = $this->validate();
+        Page::create($data);
+        $this->success(__('Page added with success.'), redirectTo: '/admin/pages/index');
+    }
+    
+    private function generateSlug(string $title): void {
+        $this->slug = Str::of($title)->slug('-');
+    }
+}; ?>
+
+<div>
+    <x-header title="{{ __('Add a page') }}" separator progress-indicator>
+        <x-slot:actions class="lg:hidden">
+            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline"
+                link="{{ route('admin') }}" />
+        </x-slot:actions>
+    </x-header>
+    @include('livewire.admin.pages.page-form')
+</div>
+```
+
+#### Traduction Ajouter Pages
+
+```php
+"Page added with success.": "Page ajoutée avec succès."
+```
+
+#### Lien ajout Pages
+
+```php
+// pages.index
+<x-button icon="c-document-plus" label="{{ __('Add a page') }}" class="btn-outline" link="{{ route('pages.create') }}" />
+```
+
+
+### Composant modification (édition) pages <!-- markmap: fold -->
+
+#### CLI édition Pages
+
+```php
+php artisan make:volt admin/pages/edit --class
+```
+
+#### Route Éditer Pages
+
+```php
+// Groupe middleware IsAdminOrRedac > IsAdmin
+Volt::route('/pages/{page:slug}/edit', 'admin.pages.edit')->name('pages.edit');
+```
+
+#### Lien Éditer Pages
+
+```php
+// pages.index
+<x-table striped :headers="$headers" :rows="$pages" link="/admin/pages/{slug}/edit">
+```
+
+#### Code Éditer Pages <!-- markmap: fold -->
+
+```php
+<?php
+
+use App\Models\Page;
+use illuminate\Support\Str;
+use Illuminate\Validation\Rule;
+use Livewire\Attributes\{Layout, Title};
+use Livewire\Volt\Component;
+use Mary\Traits\Toast;
+
+new #[Title('Edit Page'), Layout('components.layouts.admin')] 
+class extends Component {
+    use Toast;
+    
+    public Page $page;
+    public string $body             = '';
+    public string $title            = '';
+    public string $slug             = '';
+    public bool $active             = false;
+    public string $seo_title        = '';
+    public string $meta_description = '';
+    public string $meta_keywords    = '';
+    
+    public function mount(Page $page): void {
+        $this->page = $page;
+        $this->fill($this->page);
+    }
+    
+    public function updatedTitle($value): void {
+        $this->generateSlug($value);
+    }
+    
+    public function save() {
+        $data = $this->validate([
+            'title'            => 'required|string|max:255',
+            'body'             => 'required|max:65000',
+            'active'           => 'required',
+            'slug'             => ['required', 'string', 'max:255', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/', Rule::unique('pages')->ignore($this->page->id)],
+            'seo_title'        => 'required|max:70',
+            'meta_description' => 'required|max:160',
+            'meta_keywords'    => 'required|regex:/^[A-Za-z0-9-éèàù]{1,50}?(,[A-Za-z0-9-éèàù]{1,50})*$/',
+        ]);
+    
+        $this->page->update($data);
+        
+        $this->success(__('Page edited with success.'), redirectTo: '/admin/pages/index');
+    }
+    
+    private function generateSlug(string $title): void {
+        $this->slug = Str::of($title)->slug('-');
+    }
+}; ?>
+
+<div>
+    <x-header title="{{ __('Edit a page') }}" shadow separator progress-indicator>
+        <x-slot:actions class="lg:hidden">
+            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline"
+                link="{{ route('admin') }}" />
+        </x-slot:actions>
+    </x-header>
+    @include('livewire.admin.pages.page-form')
+</div>
+```
+
+#### Traduction Éditer Pages
+
+```php
+"Page edited with success.": "Page mise à jour avec succès.",
+"Edit a page": "Modifier une page"
+```
 
 ### Réf.: ***<https://laravel.sillo.org/posts/mon-cms-les-pages>***

@@ -4,9 +4,12 @@
  * (ɔ) Mon CMS - 2024-2024
  */
 
+
 use App\Http\Middleware\{IsAdmin, IsAdminOrRedac};
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
+
+// À chaque changement: php artisan view:clear & php artisan route:clear
 
 Volt::route('/', 'index');
 Volt::route('/test', 'test')->name('test');
@@ -16,10 +19,12 @@ Route::get('/uuu', function () {
 })->name('uuu');
 
 Volt::route('/category/{slug}', 'index');
-Volt::route('/posts/{slug}', 'posts.show')->name('posts.show');
 Volt::route('/search/{param}', 'index')->name('posts.search');
 
 Volt::route('/users', 'users.index');
+
+Volt::route('/posts/{slug}', 'posts.show')->name('posts.show');
+Volt::route('/pages/{page:slug}', 'pages.show')->name('pages.show');
 
 Route::middleware('guest')->group(function () {
 	Volt::route('/register', 'auth.register');
@@ -38,7 +43,10 @@ Route::middleware('auth')->group(function () {
 		Volt::route('/posts/{post:slug}/edit', 'admin.posts.edit')->name('posts.edit');
 		Route::middleware(IsAdmin::class)->group(function () {
 			Volt::route('/categories/index', 'admin.categories.index')->name('categories.index');
-            Volt::route('/categories/{category}/edit', 'admin.categories.edit')->name('categories.edit');
+			Volt::route('/categories/{category}/edit', 'admin.categories.edit')->name('categories.edit');
+			Volt::route('/pages/index', 'admin.pages.index')->name('pages.index');
+			Volt::route('/pages/create', 'admin.pages.create')->name('pages.create');
+			Volt::route('/pages/{page:slug}/edit', 'admin.pages.edit')->name('pages.edit');
 		});
 	});
 });
