@@ -4,7 +4,6 @@
  * (ɔ) Mon CMS - 2024-2024
  */
 
-
 use App\Http\Middleware\{IsAdmin, IsAdminOrRedac};
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
@@ -47,6 +46,8 @@ Route::middleware('auth')->group(function () {
 			Volt::route('/pages/index', 'admin.pages.index')->name('pages.index');
 			Volt::route('/pages/create', 'admin.pages.create')->name('pages.create');
 			Volt::route('/pages/{page:slug}/edit', 'admin.pages.edit')->name('pages.edit');
+            Volt::route('/users/index', 'admin.users.index')->name('users.index');
+            Volt::route('/users/{user}/edit', 'admin.users.edit')->name('users.edit');
 		});
 	});
 });

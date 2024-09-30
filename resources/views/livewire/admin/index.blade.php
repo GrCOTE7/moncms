@@ -58,14 +58,12 @@ new #[Title('Dashboard')] #[Layout('components.layouts.admin')] class extends Co
                     <x-stat title="{{ __('Pages') }}" value="{{ $pages->count() }}" icon="s-document"
                         class="shadow-hover" />
                 </a>
-                <a href="#" class="flex-grow">
-                    <x-stat title="{{ __('Users') }}" value="{{ $users }}" icon="s-user"
-                        class="shadow-hover" />
+                <a href="{{ route('users.index') }}" class="flex-grow">
+                    <x-stat title="{{ __('Users') }}" value="{{ $users }}" icon="s-user" class="shadow-hover" />
                 </a>
             @endif
             <a href="#" class="flex-grow">
-                <x-stat title="{{ __('Comments') }}" value="{{ $commentsNumber }}" icon="c-chat-bubble-left"
-                    class="shadow-hover" />
+                <x-stat title="{{ __('Comments') }}" value="{{ $commentsNumber }}" icon="c-chat-bubble-left" class="shadow-hover" />
             </a>
         </x-slot:content>
     </x-collapse>

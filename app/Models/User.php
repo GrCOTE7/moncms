@@ -76,6 +76,14 @@ class User extends Authenticatable
 	}
 
 	/**
+	 * Get the posts for the User.
+	 */
+	public function posts(): HasMany
+	{
+		return $this->hasMany(Post::class);
+	}
+
+	/**
 	 * Get the attributes that should be cast.
 	 *
 	 * @return array<string, string>
@@ -86,13 +94,5 @@ class User extends Authenticatable
 			'email_verified_at' => 'datetime',
 			'password'          => 'hashed',
 		];
-	}
-
-	/**
-	 * Get the posts for the User.
-	 */
-	protected function posts(): HasMany
-	{
-		return $this->hasMany(Post::class);
 	}
 }
