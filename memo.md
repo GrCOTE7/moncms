@@ -89,6 +89,8 @@ php artisan mary:install
 
 ## FrontEnd <!-- markmap: fold -->
 
+### 2do authentification
+
 ### index (HomePage) <!-- markmap: fold -->
 
 #### Image

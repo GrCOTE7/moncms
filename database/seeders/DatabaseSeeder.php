@@ -6,7 +6,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -27,6 +26,7 @@ class DatabaseSeeder extends Seeder
 			MenusSeeder::class,
 			FootermenusSeeder::class,
 			CommentSeeder::class,
+			MembersSeeder::class,
 		]);
 
 		printf('%s%s', str_repeat(' ', 2), "Data tables properly filled.\n\n");
