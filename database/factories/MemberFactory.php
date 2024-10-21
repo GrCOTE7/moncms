@@ -22,13 +22,10 @@ class MemberFactory extends Factory
 	{
 		++static::$nb;
 
-        $modulo         = static::$total / 10;
+		$modulo = static::$total / 10;
 
 		if (0 === static::$nb % $modulo || static::$nb === static::$total) {
-			echo '  Member # ' .
-              str_pad(number_format(static::$nb, 0, ',', ' '),7,' ', STR_PAD_LEFT)
-               . ' / ' . number_format(static::$total, 0, ',', ' ') . "\n";
-			// echo '  Member # ' . sprintf('% 7d', static::$nb) . ' / ' . static::$total . "\n";
+			echo '  Member # ' . str_pad(number_format(static::$nb, 0, ',', ' '), 7, ' ', STR_PAD_LEFT) . ' / ' . number_format(static::$total, 0, ',', ' ') . "\n";
 		}
 
 		return [

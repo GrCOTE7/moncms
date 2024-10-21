@@ -29,10 +29,15 @@ new class extends Component {
 
 	public function members(): LengthAwarePaginator
 	{
-		return Member::select(['id', 'name', 'username', 'email'])
+		// return Member::select(['id', 'name', 'username', 'email'])
+		// 	->orderBy('name')
+		// 	->orderBy('username')
+		// 	->paginate(2500);
+
+		return Member::selectRaw('id, name, username, email')
 			->orderBy('name')
 			->orderBy('username')
-			->paginate(10000);
+			->paginate(2500);
 	}
 
 	public function with(): array

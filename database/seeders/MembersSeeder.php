@@ -17,15 +17,11 @@ class MembersSeeder extends Seeder
 	 */
 	public function run(): void
 	{
-		$totalUser = 1e4;
+		$totalUser = 3e5;
 		MemberFactory::setTotal($totalUser);
         echo "\n";
 		Member::factory($totalUser)
 			->create();
-		// Member::factory()
-		// ->setTotal(123)
-		// ->count(123)
-		// ->create();
 		echo "\n";
 	}
 }
