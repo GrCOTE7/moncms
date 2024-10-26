@@ -7,7 +7,7 @@ markmap:
 <-- Réf.: <https://laravel.sillo.org/posts/mon-cms-les-donnees> -->
 <-- VSCode: Utiliser extention markmap -->
 
-## Base <!-- markmap: fold -->
+## Bases <!-- markmap: fold -->
 
 ### 1 / Base Laravel <!-- markmap: fold -->
 
@@ -62,9 +62,9 @@ markmap:
 
 ### Réf.: ***<https://laravel.sillo.org/posts/mon-cms-les-donnees>***
 
-## Technos FrontEnd <!-- markmap: fold -->
+### Technos FrontEnd <!-- markmap: fold -->
 
-### MaryUI <!-- markmap: fold -->
+#### MaryUI <!-- markmap: fold -->
 
 - *composer require robsontenorio/mary*
 - *php artisan mary:install*
@@ -74,7 +74,7 @@ php artisan mary:install
 → 0 (livewire/Volt)
 → npm install --save-dev (npm)
 
-### Volt <!-- markmap: fold -->
+#### Volt <!-- markmap: fold -->
 
 - Une vue Volt (Dans /route/web.php) :
 *Volt::route('/*url*', 'dossier(s).fichier')->name('dossier.fichier');*
@@ -85,9 +85,578 @@ php artisan mary:install
 - À utiliser pour faire register / login / forgot-password
 (En pensant aussi à faire les routes correspondantes)
 
-### Référence: ***<https://laravel.sillo.org/posts/mon-cms-lauthentification>***
+#### Référence: ***<https://laravel.sillo.org/posts/mon-cms-lauthentification>***
 
-## FrontEnd <!-- markmap: fold -->
+## Le projet (Mon CMS) \<!-- markmap: fold -->
+
+### Bases du projet
+
+#### Pose de laravel <!-- markmap: fold -->
+
+```php
+composer  create-project laravel/laravel moncms --prefer-dist
+```
+
+#### Setting - (.env) <!-- markmap: fold -->
+
+```php
+APP_NAME="Mon CMS"
+...
+APP_URL=http://moncms (là ajustez selon votre serveur local)
+...
+APP_LOCALE=fr
+...
+DB_CONNECTION=mysql OU sqlite (Alors, pas besoin des lignes ci-dessous)
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=moncms
+DB_USERNAME=root
+DB_PASSWORD=
+...
+```
+
+
+#### Package de langues <!-- markmap: fold -->
+
+```php
+composer require --dev laravel-lang/common
+php artisan lang:update
+```
+
+#### Les données <!-- markmap: fold -->
+
+    - database/migrations/0001_01_01_000000_create_users_table.php :
+
+```php
+public function up(): void {
+  Schema::create('users', function (Blueprint $table) {
+    $table->id();
+    $table->string('name')->unique();
+    $table->string('email')->unique();
+    $table->string('password');
+    $table->enum('role', ['user', 'redac', 'admin'])->default('user');
+    $table->boolean('valid')->default(false);
+    $table->rememberToken();
+    $table->timestamps();
+});
+
+  Schema::create('password_reset_tokens', function (Blueprint $table) {
+    $table->string('email')->primary();
+    $table->string('token');
+    $table->timestamp('created_at')->nullable();
+});
+
+  Schema::create('sessions', function (Blueprint $table) {
+    $table->string('id')->primary();
+    $table->foreignId('user_id')->nullable()->index();
+    $table->string('ip_address', 45)->nullable();
+    $table->text('user_agent')->nullable();
+    $table->longText('payload');
+    $table->integer('last_activity')->index();
+});
+}
+```
+
+    - database/factories/UserFactory.php :
+
+```php
+return [
+    'name'           => fake()->lastname(),
+    'email'          => fake()->unique()->safeEmail(),
+    'password'       => static::$password ??= Hash::make('password'),
+    'remember_token' => Str::random(10),
+    'valid'          => true,
+];
+```
+
+    - app/Models/User.php :
+
+```php
+protected $fillable = ['name', 'email', 'password', 'role', 'valid'];
+```
+
+    - Les catégories
+
+```php
+php artisan make:model Category --migration
+```
+
+    - Migrations categories :
+
+```php
+public function up(): void
+{
+    Schema::create('categories', function (Blueprint $table) {
+        $table->id();
+        $table->string('title')->unique();
+        $table->string('slug')->unique();
+    });
+}
+```
+
+    - Model categories :
+
+```php
+<?php
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Category extends Model
+{
+    public $timestamps = false;
+
+	protected $fillable = [	'title', 'slug', ];
+}
+```
+
+    - Les articles :
+
+```php
+php artisan make:model Post --migration
+```
+
+
+    - Migration articles :
+
+```php
+public function up(): void
+{
+    Schema::create('posts', function (Blueprint $table) {
+        $table->id();
+        $table->timestamps();
+        $table->string('title');
+        $table->string('slug')->unique();
+        $table->mediumText('body');
+        $table->boolean('active')->default(false);
+        $table->string('image')->nullable();
+        $table->string('seo_title');
+        $table->text('meta_description');
+        $table->text('meta_keywords');
+        $table->boolean('pinned')->default(false);
+
+        $table->foreignId('user_id')
+            ->constrained()
+            ->onDelete('cascade')
+            ->onUpdate('cascade');
+
+        $table->foreignId('category_id')
+            ->constrained()
+            ->onDelete('cascade')
+            ->onUpdate('cascade');
+    });
+}
+```
+
+
+    - Factory des articles :
+
+```php
+php artisan make:factory PostFactory
+```
+
+  - Code factory articles
+
+```php
+public function definition(): array
+{
+	return [
+		'body'             => fake()->paragraphs($nb = 8, $asText = true),
+		'meta_description' => fake()->sentence($nbWords = 6, $variableNbWords = true),
+		'meta_keywords'    => implode(',', fake()->words($nb = 3, $asText = false)),
+		'active'           => true,
+	];
+}
+```
+
+    - Model des artcicles (Models/Post.php)
+
+```php
+protected $fillable = ['title', 'slug', 'body', 'active', 'image', 'user_id', 'category_id', 'seo_title', 'meta_description', 'meta_keywords', 'pinned'];
+```
+
+
+    - Les relations dans Models/Post.php :
+
+```php
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+class Post extends Model
+{
+  ...
+  
+  public function user(): BelongsTo
+  {
+    return $this->belongsTo(User::class);
+  }
+  
+  public function category(): BelongsTo
+  {
+    return $this->belongsTo(Category::class);
+  }
+...
+```
+
+    - Les relations dans Models/User.php :
+
+```php
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+class User extends Authenticatable
+{
+  ...
+  
+  public function posts(): HasMany
+  {
+      return $this->hasMany(Post::class);
+  }
+  ...
+```
+
+    - Exécution des migrations :
+
+```php
+php artisan migrate
+```
+
+    - Création des fake users :
+
+```php
+php artisan make:seeder UserSeeder
+```
+
+    - Code du seeder des users :
+
+```php
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Database\Seeder;
+
+class UserSeeder extends Seeder
+{
+  public function run()
+  {
+      $users = [
+          [
+              'name'       => 'Admin',
+              'email'      => 'admin@example.com',
+              'role'       => 'admin',
+              'created_at' => Carbon::now()->subYears(3),
+              'updated_at' => Carbon::now()->subYears(3),
+          ],
+          [
+              'name'       => 'Redac',
+              'email'      => 'redac@example.com',
+              'role'       => 'redac',
+              'created_at' => Carbon::now()->subYears(3),
+              'updated_at' => Carbon::now()->subYears(3),
+          ],
+          [
+              'name'       => 'User',
+              'email'      => 'user@example.com',
+              'role'       => 'user',
+              'created_at' => Carbon::now()->subYears(2),
+              'updated_at' => Carbon::now()->subYears(2),
+          ],
+      ];
+  
+      foreach ($users as $userData) {
+          User::factory()->create($userData);
+      }
+  
+  }
+}
+```
+
+    - Création des fake categories :
+
+```php
+php artisan make:seeder CategorySeeder
+```
+
+    - Code du seeder des users :
+
+```php
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use App\Models\Category;
+
+class CategorySeeder extends Seeder
+{
+  public function run()
+  {
+      $categories = [
+          [
+              'title' => 'Categorie 1',
+              'slug'  => 'category-1',
+          ],
+          [
+              'title' => 'Categorie 2',
+              'slug'  => 'category-2',
+          ],
+          [
+              'title' => 'Categorie 3',
+              'slug'  => 'category-3',
+          ],
+      ];
+  
+      foreach ($categories as $categoryData) {
+          Category::create($categoryData);
+      }
+  }
+}
+```
+
+    - Création des fake articles :
+
+```php
+// Créer app/helpers.php
+<?php
+
+if (!function_exists('generateRandomDateInRange')) {
+  function generateRandomDateInRange($startDate, $endDate)
+  {
+      $start = Carbon\Carbon::parse($startDate);
+      $end   = Carbon\Carbon::parse($endDate);
+  
+      $difference = $end->timestamp - $start->timestamp;
+  
+      $randomSeconds = rand(0, $difference);
+  
+      return $start->copy()->addSeconds($randomSeconds);
+  }
+}
+```
+
+    - Activer ce helper dans composer.json :
+
+```php
+"autoload": {
+    "files": [
+        "app/helpers.php"
+    ],
+    ...
+},
+```
+
+    - Recréer l'autoload :
+
+```php
+composer dumpautoload
+```
+
+    - Création du seeder des fake users :
+
+```php
+php artisan make:seeder PostSeeder
+```
+
+    - Code du seeder des fake users :
+
+```php
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\Post;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
+
+class PostSeeder extends Seeder
+{
+  public static $nbrPosts;
+  
+  public function run()
+  {
+      $nbrCategories = 3;
+  
+      $this->createPost(1, 1);
+      $this->createPost(2, rand(1, $nbrCategories));
+      $this->createPost(3, 1);
+      $this->createPost(4, 1);
+      $this->createPost(5, rand(1, $nbrCategories));
+      $this->createPost(6, 1);
+      $this->createPost(7, 1);
+      $this->createPost(8, rand(1, $nbrCategories));
+      $this->createPost(9, rand(1, $nbrCategories));
+  }
+  
+  protected function createPost($id, $category_id)
+  {
+      $months = ['03', '03', '03', '04', '04', '06', '06', '06', '06'];
+  
+      $date = generateRandomDateInRange('2022-01-01', '2024-07-01');
+  
+      $postId = "Post {$id}";
+  
+      return Post::factory()->create([
+          'title'       => $postId,
+          'seo_title'   => $postId,
+          'slug'        => Str::of($postId)->slug('-'),
+          'user_id'     => rand(1, 2),
+          'image'       => '2024/' . $months[$id - 1] . '/img0' . $id . '.jpg',
+          'category_id' => $category_id,
+          'created_at'  => $date,
+          'updated_at'  => $date,
+          'pinned'      => 5 == $id,
+      ]);
+  }
+}
+```
+
+    - Enregistrer les seeders (seeders/DatabaseSeeder.php) :
+
+```php
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+
+class DatabaseSeeder extends Seeder
+{
+    /**
+     * Seed the application's database.
+     */
+    public function run(): void
+    {
+        $this->call([
+            UserSeeder::class,
+            CategorySeeder::class,
+            PostSeeder::class,            
+        ]);
+    }
+}
+```
+
+    - Lancer la population :
+
+```php
+php artisan db:seed
+```
+
+    - Les pages :
+
+```php
+php artisan make:model Page --migration
+```
+
+```php
+public function up(): void
+{
+    Schema::create('pages', function (Blueprint $table) {
+        $table->id();
+        $table->string('slug');
+        $table->string('title');
+        $table->mediumText('body');
+        $table->boolean('active')->default(false);
+        $table->string('seo_title');
+        $table->text('meta_description');
+        $table->text('meta_keywords');
+    });
+}
+```
+
+```php
+<?php
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Page extends Model
+{
+  use HasFactory;
+  
+  public $timestamps  = false;
+  protected $fillable = [
+      'title',
+      'slug',
+      'body',
+      'active',
+      'seo_title',
+      'meta_description',
+      'meta_keywords',
+  ];
+}
+```
+
+```php
+php artisan make:factory PageFactory
+```
+
+```php
+public function definition(): array
+{
+    return [
+        'body'             => fake()->paragraph(10),
+        'meta_description' => fake()->sentence($nbWords = 6, $variableNbWords = true),
+        'meta_keywords'    => implode(',', fake()->words($nb = 3, $asText = false)),
+    ];
+}
+```
+
+```php
+php artisan make:seeder PageSeeder
+```
+
+```php
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use App\Models\Page;
+
+class PageSeeder extends Seeder
+{
+  public function run()
+  {
+      $items = [
+          ['slug' => 'terms', 'title' => 'Terms'],
+          ['slug' => 'privacy-policy', 'title' => 'Privacy Policy'],
+      ];
+  
+      foreach ($items as $item) {
+          Page::factory()->create([
+              'title'     => $item['title'],
+              'seo_title' => 'Page ' . $item['title'],
+              'slug'      => $item['slug'],
+              'active'    => true,
+          ]);
+      }
+  }
+}
+```
+
+    - On ajoute ce seeder dans DatabaseSeeder.php
+
+```php
+public function run(): void
+{
+    $this->call([
+        UserSeeder::class,
+        CategorySeeder::class,
+        PostSeeder::class,
+        PageSeeder::class,   
+    ]);
+}
+```
+
+    - On rafraîchit la base :
+
+```php
+php artisan migrate:fresh --seed
+```
+
+#### Réf.: ***<https://laravel.sillo.org/posts/mon-cms-les-donnees>***
 
 ### 2do authentification
 

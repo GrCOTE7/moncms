@@ -13,6 +13,7 @@ use Livewire\Volt\Volt;
 Volt::route('/', 'index');
 Volt::route('/test', 'test')->name('test');
 Volt::route('/test2', 'test2')->name('test2');
+Volt::route('/test3', 'test3')->name('test3');
 
 Route::get('/uuu', function () {
 	return view('uuu');
@@ -48,11 +49,11 @@ Route::middleware('auth')->group(function () {
 			Volt::route('/pages/create', 'admin.pages.create')->name('pages.create');
 			Volt::route('/pages/{page:slug}/edit', 'admin.pages.edit')->name('pages.edit');
 
-            // 2do: Optimisation requête (Ici ou page test2)
-            // https://www.youtube.com/watch?v=dKexOXT0oso&ab_channel=LaravelJutsu
-            Volt::route('/users/index', 'admin.users.index')->name('users.index');
+			// 2do: Optimisation requête (Ici ou page test2)
+			// https://www.youtube.com/watch?v=dKexOXT0oso&ab_channel=LaravelJutsu
+			Volt::route('/users/index', 'admin.users.index')->name('users.index');
 
-            Volt::route('/users/{user}/edit', 'admin.users.edit')->name('users.edit');
+			Volt::route('/users/{user}/edit', 'admin.users.edit')->name('users.edit');
 		});
 	});
 });

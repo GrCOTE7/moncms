@@ -6,6 +6,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Project;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class MemberFactory extends Factory
@@ -25,13 +26,14 @@ class MemberFactory extends Factory
 		$modulo = static::$total / 10;
 
 		if (0 === static::$nb % $modulo || static::$nb === static::$total) {
-			echo '  Member # ' . str_pad(number_format(static::$nb, 0, ',', ' '), 7, ' ', STR_PAD_LEFT) . ' / ' . number_format(static::$total, 0, ',', ' ') . "\n";
+			echo str_repeat(' ', 4) . 'Member # ' . str_pad(number_format(static::$nb, 0, ',', ' '), 7, ' ', STR_PAD_LEFT) . ' / ' . number_format(static::$total, 0, ',', ' ') . "\n";
 		}
 
 		return [
-			'name'     => fake()->name(),
-			'username' => fake()->unique()->userName(),
-			'email'    => fake()->unique()->safeEmail(),
+			'name'       => fake()->name(),
+			'username'   => fake()->unique()->userName(),
+			'project_id' => Project::factory(),
+			'email'      => fake()->unique()->safeEmail(),
 		];
 	}
 
