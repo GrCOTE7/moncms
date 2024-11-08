@@ -29,10 +29,8 @@ class extends Component {
     }
 }; ?>
 
+@section('title', __('Password renewal'))
 <div>
-
-    @section('title', __('Password renewal'))
-       
     <x-card class="flex items-center justify-center h-[96vh]" data-link='/' data-tip="{{  __('Return on site') }}" title="{{ __('Password renewal') }}" subtitle="{{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}" shadow separator progress-indicator id='my-title'>
         <x-session-status class="mb-4" :status="session('status')" />
         <x-form wire:submit="sendPasswordResetLink">

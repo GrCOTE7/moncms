@@ -77,7 +77,7 @@
     "Hello!": "Bonjour !",
     "Hide": "Cacher",
     "Hide :name": "Masquer :name",
-    "Home": "Maison",
+    "Home": "Accueil",
     "HTTP Version Not Supported": "Version HTTP non prise en charge",
     "I'm a teapot": "Je suis une théière",
     "If you did not create an account, no further action is required.": "Si vous n'avez pas créé de compte, vous pouvez ignorer ce message.",
@@ -333,6 +333,7 @@
     "Page added with success.": "Page ajoutée avec succès.",
     "Page edited with success.": "Page mise à jour avec succès.",
     "Edit a page": "Modifier une page",
+    "Edit this page": "Modifier cette page",
     "Accounts": "Comptes",
     "All": "Tous",
     "Administrators": "Administrateurs",
@@ -343,9 +344,12 @@
     "Valid": "Valide",
     "Valid user": "Utilisateur validé",
     "Send an email": "Envoyer un email",
-    "Are you sure to delete this user?": "Etes-vous sûr de vouloir supprimer cet utilisateur ?",
+    "Are you sure to delete this user?": "Êtes-vous sûr de vouloir supprimer cet utilisateur ?",
     "Registration": "Inscription",
     "Edit an account": "Modifier un compte",
     "Select a role": "Sélectionnez un rôle",
-    "User edited with success.": "Utilisateur mis à jour avec succès."
+    "User edited with success.": "Utilisateur mis à jour avec succès.",
+    "Use this form to contact me": "Utilisez ce formulaire pour me contacter",
+    "Your message...": "Votre message...",
+    "Max 1000 chars": "Max 1000 caractères"
 }

@@ -1,6 +1,7 @@
 <?php
 include_once './../resources/views/livewire/index.php';
 ?>
+@section('title', __('Home'))
 
 <div class="relative grid items-center w-full py-0 mx-auto md:px-6 max-w-12xl">
 
@@ -22,7 +23,7 @@ include_once './../resources/views/livewire/index.php';
         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             @forelse($posts as $post)
                 <x-card
-                    class="w-full transition duration-500 ease-in-out shadow-md shadow-gray-500 hover:shadow-lg hover:shadow-gray-400"
+                    class="w-full transition duration-500 ease-in-out shadow-md shadow-gray-500 hover:shadow-lg hover:shadow-orange-400"
                     title="{!! $post->title !!}">
 
                     <div class="text-justify">{!! str(strip_tags($post->excerpt))->words(config('app.excerptSize')) !!}</div>

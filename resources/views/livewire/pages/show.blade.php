@@ -47,7 +47,7 @@ new class extends Component {
     <x-header title="{!! $page->title !!}" />
 
     <!-- Contenu de la page -->
-    <div class="relative items-center w-full px-5 py-5 mx-auto prose md:px-12 max-w-7xl">
+    <div class="relative items-center w-full px-5 py-5 mx-auto prose md:px-12 max-w-7xl text-justify">
         {!! $page->body !!}
     </div>
 </div>

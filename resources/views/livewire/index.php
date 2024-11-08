@@ -11,9 +11,7 @@ use Livewire\Attributes\Title;
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
 
-new
-#[Title('Accueil')]
-class extends Component {
+new class extends Component {
 	use WithPagination;
 
 	public ?Category $category = null;

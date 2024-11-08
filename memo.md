@@ -948,8 +948,8 @@ public function definition(): array
     }
   
   }; ?>
-  <div>/div>
-    @section('title', __('Register'))
+  @section('title', __('Register'))
+  <div>
     <x-card class="flex items-center justify-center h-[96vh]">
       <a href="/" title="{{ __('Return on site') }}">
         <x-card class="items-center" title="{{ __('Register') }}" shadow separator progress-indicator />
@@ -1026,7 +1026,7 @@ public function definition(): array
   use Illuminate\Validation\ValidationException;
   
   new
-  #[Title('Login')] #[Layout('components.layouts.auth')]
+  #[Layout('components.layouts.auth')]
   class extends Component {
   
     #[Validate('required|string|email')]
@@ -1077,6 +1077,7 @@ public function definition(): array
   
   }; ?>
   
+  @section('title', __('Login'))
   <div>
     <x-card class="flex items-center justify-center h-screen">
       <a href="/" title="{{ __('Return on site') }}">
@@ -1180,8 +1181,8 @@ public function definition(): array
     }
   }; ?>
   
+@section('title', __('Password renewal'))
 <div>
-  @section('title', __('Password renewal'))
   <x-card class="flex items-center justify-center h-[96vh]" data-link='/' data-tip="{{  __('Return on site') }}" title="{{ __('Password renewal') }}" subtitle="{{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}" shadow separator progress-indicator id='my-title'>
     <x-session-status class="mb-4" :status="session('status')" />
     <x-form wire:submit="sendPasswordResetLink">
@@ -1290,8 +1291,8 @@ public function definition(): array
     }
   }; ?>
   
+  @section('title', __('Reset Password'))
   <div>
-    @section('title', __('Reset Password'))
     <x-card class="flex items-center justify-center h-[96vh]" shadow separator progress-indicator>
       <a href="/" title="{{ __('Return on site') }}">
           <x-card class="items-center" title="{{__('Reset Password')}}" shadow separator progress-indicator />
@@ -1344,7 +1345,7 @@ public function definition(): array
 
 ### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-lauthentification](https://laravel.sillo.org/posts/mon-cms-lauthentification)***
 
-## - La page d'accueil (HomePage) \<!-- markmap: fold -->
+## - La page d'accueil (HomePage) <!-- markmap: fold -->
 
 ### Route index & category <!-- markmap: fold -->
 
@@ -1647,26 +1648,19 @@ return [
       return ['posts' => $this->getPosts()];
     }
   }; ?>
-    
-  @section('title')
-    {{ __('Home') }}
-  @endsection
-  
+
+  @section('title',__('Home'))
   <div class="relative grid items-center w-full py-5 mx-auto md:px-6 max-w-12xl">
-  
     @if ($category)
       <x-header title="{{ __('Posts for category ') }} {{ $category->title }}" size="text-2xl sm:text-3xl   md:text-4xl" />
     @endif
-  
     <div class="mb-5 mary-table-pagination">
       {{ $posts->links() }}
     </div>
-  
     <div class="container mx-auto">
       <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         @forelse($posts as $post)
-          <x-card class="w-full transition duration-500 ease-in-out shadow-md shadow-gray-500 hover:shadow-xl hover:shadow-gray-400" title="{!! $post->title !!}">
-    
+          <x-card class="w-full transition duration-5500 ease-in-out shadow-md shadow-gray-500 hover:shadow-xl hover:shadow-orange-400" title="{!! $post->title !!}">
             <div class="text-justify">
               {!! str(strip_tags($post->excerpt))->words(config('app.excerptSize')) !!}
             </div>
@@ -1683,13 +1677,11 @@ return [
                 </a>
               </x-slot:figure>
             @endif
-
             <x-slot:menu>
               @if ($post->pinned)
                 <x-badge value="{{ __('Pinned') }}" class="p-3 badge-warning" />
               @endif
             </x-slot:menu>
-
             <x-slot:actions>
               <div class="flex flex-col items-end space-y-2 sm:items-start sm:flex-row sm:space-y-0 sm:space-x-2">
                 <x-popover>
@@ -1700,7 +1692,6 @@ return [
                       @lang('Show this category')
                   </x-slot:content>
                 </x-popover>
-
                 <x-popover>
                   <x-slot:trigger>
                     <x-button label="{{ __('Read') }}" link="{{ url('/posts/' . $post->slug) }}" class="mt-1 btn-outline btn-sm" />
@@ -1721,12 +1712,10 @@ return [
             @endforelse
           </div>
       </div>
-  
     <!-- Pagination inférieure -->
     <div class="mt-5 mary-table-pagination">
       {{ $posts->links() }}
     </div>
-  
   </div>
 ```
 
@@ -1759,13 +1748,13 @@ return [
 
 ```php
   .pop-small {
-    @apply !p-1 !px-2 text-sm border-info text-center
+    @apply !p-1 !px-2 text-sm border-warning text-center
 }
 ```
 
 ### Référence: ***[https://laravel.sillo.org/posts/mon-cms-la-page-daccueil](https://laravel.sillo.org/posts/mon-cms-la-page-daccueil)***
 
-## - Les articles & les pages <!-- markmap: fold -->
+## - Les articles & les pages \<!-- markmap: fold -->
 
 ### Composant posts.show <!-- markmap: fold -->
 
@@ -1805,6 +1794,7 @@ return [
       $this->post     = $postRepository->getPostBySlug($slug);
     }
   }; ?>
+
   <div>
     @section('title', $post->seo_title ?? $post->title)
     @section('description', $post->meta_description)
@@ -1912,6 +1902,7 @@ return [
   \<head>
   ...
   &nbsp;&nbsp;**\<link rel="stylesheet" href="{{ asset('storage/css/prism.css') }}">**
+  ... @vite(...)
   \</head>
   \<body class="min-h-screen font-sans antialiased bg-base-200/50 dark:bg-base-200">
   ...
@@ -2111,7 +2102,7 @@ public function search(string $search): LengthAwarePaginator {
 
     <x-header title="{!! $page->title !!}" />
 
-    <div class="relative items-center w-full px-5 py-5 mx-auto prose md:px-12 max-w-7xl">
+    <div class="relative items-center w-full px-5 py-5 mx-auto prose md:px-12 max-w-7xl text-justify">
       {!! $page->body !!}
     </div>
   </div>
@@ -2125,16 +2116,34 @@ public function search(string $search): LengthAwarePaginator {
 
 ### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-articles](https://laravel.sillo.org/posts/mon-cms-les-articles)***
 
-### La page Contact <!-- markmap: fold -->
+### La page Contact \<!-- markmap: fold -->
 
-#### Route Contact
+#### Model & Migration Contact \<!-- markmap: fold -->
 
 ```php
-... /pages/{page:slug}
-Volt::route('/contact', 'contact')->name('contact');
+//2do make model -m
+```
+
+```php
+//2do model Contact
+```
+
+```php
+//2do migration
+```
+
+#### Route Contact <!-- markmap: fold -->
+
+```php
+... /pages/{page:slug} (Ndlr: Route pages.show)
+Volt::route('/contact', 'pages.contact')->name('pages.contact');
 ```
 
 #### Composant Contact (livewire/contact.blade.php) <!-- markmap: fold -->
+
+```php
+php artisan make:volt pages/contact --class
+```
 
 ```php
 <?php
@@ -2190,7 +2199,7 @@ class extends Component {
     <x-card title="{{ __('Contact') }}" subtitle="{{ __('Use this form to contact me') }}" shadow separator
         progress-indicator>
         <x-form wire:submit="save">
-            <!-- Affichage des champs de nom et d'email uniquement si l'utilisateur n'est pas connecté -->
+            <!-- Affichage des champs de nom et d\'email uniquement si \'utilisateur n\'est pas connecté -->
             @if (!Auth()->check())
                 <x-input label="{{ __('Name') }}" wire:model="name" icon="o-user" inline />
                 <x-input label="{{ __('E-mail') }}" wire:model="email" icon="o-envelope" inline />
@@ -2201,24 +2210,23 @@ class extends Component {
             <!-- Boutons d'actions -->
             <x-slot:actions>
                 <x-button label="{{ __('Cancel') }}" link="/" class="btn-ghost" />
-                <x-button label="{{ __('Save') }}" type="submit" icon="o-paper-airplane" class="btn-primary"
+                <x-button label="{{ __('Send') }}" type="submit" icon="o-paper-airplane" class="btn-primary"
                     spinner="login" />
             </x-slot:actions>
         </x-form>
     </x-card>
 </div>
-
 ```
 
-#### Traductions Contact
+#### Traductions Contact <!-- markmap: fold -->
 
 ```json
 "Use this form to contact me": "Utilisez ce formulaire pour me contacter",
 "Your message...": "Votre message...",
-"Max 10000 chars": "Max 10000 caractères"
+"Max 1000 chars": "Max 1000 caractères"
 ```
 
-## - Les menus & le footer <!-- markmap: fold -->
+## - Les menus & le footer \<!-- markmap: fold -->
 
 ### Les données pour menus et footer <!-- markmap: fold -->
 
@@ -8462,7 +8470,14 @@ new #[Title('Settings')] #[Layout('components.layouts.admin')] class extends Com
 
 ### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-parametres](https://laravel.sillo.org/posts/mon-cms-les-parametres)***
 
-## III &nbsp;/ &nbsp; **A I D E &nbsp; & &nbsp; C O N T A C T** <!-- markmap: fold -->
+## III &nbsp;/ &nbsp; **A I D E &nbsp; & &nbsp; C O N T A C T** \<!-- markmap: fold -->
+
+### **0 / Liens techniques clés**
+
+#### [MailHog](http://127.0.0.1:8025) \<!-- markmap: fold -->
+
+- *Le service doit être démarré...*
+
 
 ### **[1 / Le TOP: Le dépôt GIT officiel](https://github.com/bestmomo/sillo)**
 
@@ -8481,7 +8496,7 @@ new #[Title('Settings')] #[Layout('components.layouts.admin')] class extends Com
 
 ### **[4 / Un message personnel](https://laravel.sillo.org/contact)**
 
-## //2do PR dès que Complete <!-- markmap: fold -->
+## //2do PR dès que Complete & plus de autres 2do <!-- markmap: fold -->
 
 - Update Memo
 

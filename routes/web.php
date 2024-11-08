@@ -25,9 +25,11 @@ Volt::route('/category/{slug}', 'index');
 
 Volt::route('/search/{param}', 'index')->name('posts.search');
 
-
 Volt::route('/posts/{slug}', 'posts.show')->name('posts.show');
+
 Volt::route('/pages/{page:slug}', 'pages.show')->name('pages.show');
+
+Volt::route('/contact', 'pages.contact')->name('pages.contact');
 
 Route::middleware('guest')->group(function () {
 	Volt::route('/register', 'auth.register');
@@ -46,7 +48,6 @@ Route::middleware('auth')->group(function () {
 		Volt::route('/posts/create', 'admin.posts.create')->name('posts.create');
 		Volt::route('/posts/{post:slug}/edit', 'admin.posts.edit')->name('posts.edit');
 		Route::middleware(IsAdmin::class)->group(function () {
-
 			Volt::route('/categories/index', 'admin.categories.index')->name('categories.index');
 			Volt::route('/categories/{category}/edit', 'admin.categories.edit')->name('categories.edit');
 
@@ -54,11 +55,10 @@ Route::middleware('auth')->group(function () {
 			Volt::route('/pages/create', 'admin.pages.create')->name('pages.create');
 			Volt::route('/pages/{page:slug}/edit', 'admin.pages.edit')->name('pages.edit');
 
-			//2do: Optimisation requête (Ici ou page test2)
+			// 2do: Optimisation requête (Ici ou page test2)
 			// https://www.youtube.com/watch?v=dKexOXT0oso&ab_channel=LaravelJutsu
 			Volt::route('/users/index', 'admin.users.index')->name('users.index');
 			Volt::route('/users/{user}/edit', 'admin.users.edit')->name('users.edit');
-
 		});
 	});
 });

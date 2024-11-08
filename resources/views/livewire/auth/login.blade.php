@@ -30,8 +30,8 @@ class extends Component {
     }
 }; ?>
 
+@section('title', __('Login'))
 <div>
-    @section('title', __('Login'))
     <x-card class="flex items-center justify-center h-[96vh]">
         <a href="/" title="{{ __('Return on site') }}">
             <x-card class="items-center" title="{{ __('Login') }}" shadow separator progress-indicator />
