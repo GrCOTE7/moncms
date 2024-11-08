@@ -17,7 +17,7 @@ return new class() extends Migration {
 		Schema::create('users', function (Blueprint $table) {
 			$table->id();
 			$table->string('name')->unique();
-			$table->string('email')->unique();
+			$table->string('email');
 			$table->string('password');
 			$table->enum('role', ['user', 'redac', 'admin'])->default('user');
 			$table->boolean('valid')->default(false);

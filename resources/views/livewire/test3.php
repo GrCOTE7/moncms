@@ -13,7 +13,7 @@ use Livewire\WithPagination;
 new class extends Component {
 	use WithPagination;
 
-	public array $sortBy = ['column' => 'name', 'direction' => 'asc'];
+	public array $sortBy = ['column' => 'username', 'direction' => 'asc'];
 	public int $k        = 0;
 
 	public function mount(Request $request)
@@ -31,6 +31,8 @@ new class extends Component {
 		return [
 			// , 'sortable' => false],
 			['key' => 'id', 'label' => '#', 'class' => 'w-1 text-right'],
+			['key' => 'username', 'label' => 'Username', 'class' => 'w-64'],
+			['key' => 'firstname', 'label' => 'First Name', 'class' => 'w-64'],
 			['key' => 'name', 'label' => 'Name', 'class' => 'w-64'],
 			['key' => 'project_id', 'label' => '# Pj', 'class' => 'w-1 text-right'],
 			['key' => 'project_name', 'label' => 'Pj name', 'class' => 'capitalize'],
@@ -43,7 +45,7 @@ new class extends Component {
 		// 0: WithAggregate
 		// 1: Méthode simple
 		// 2: Comme vidéo
-		$k = 0;
+		$k = 1;
 
 		$this->k = $k;
 
@@ -53,7 +55,7 @@ new class extends Component {
 				->withAggregate('project', 'start_at')
 				// ->whereIn('members.id', [844, 462, 553])
 				->orderBy(...array_values($this->sortBy))
-				->paginate(perPage: 2500);
+				->paginate(perPage: 100);
 		}
 		if (1 === $k) {
 			// Méthode simple mais efficace pour les projets liés : 60-80ms
@@ -61,15 +63,15 @@ new class extends Component {
 				->join('projects', 'members.project_id', '=', 'projects.id')
 			// ->whereIn('members.id', [844, 462, 553])
 				->orderBy(...array_values($this->sortBy))
-				->paginate(2500);
+				->paginate(100);
 		}
 
 		//   ok k 3.
 
-        return Member::query()
-            ->with('project')
-            ->selectRaw('members.*')
-            ->paginate(2);
+		return Member::query()
+			->with('project')
+			->selectRaw('members.*')
+			->paginate(2);
 	}
 
 	public function with(): array

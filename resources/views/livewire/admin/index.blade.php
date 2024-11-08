@@ -7,7 +7,8 @@ use Livewire\Attributes\{Layout, Title};
 use Livewire\Volt\Component;
 use Mary\Traits\Toast;
 
-new #[Title('Dashboard')] #[Layout('components.layouts.admin')] class extends Component {
+new #[Title('Dashboard')] #[Layout('components.layouts.admin')]
+class extends Component {
     use Toast;
 
     public array $headersPosts;
@@ -59,11 +60,13 @@ new #[Title('Dashboard')] #[Layout('components.layouts.admin')] class extends Co
                         class="shadow-hover" />
                 </a>
                 <a href="{{ route('users.index') }}" class="flex-grow">
-                    <x-stat title="{{ __('Users') }}" value="{{ $users }}" icon="s-user" class="shadow-hover" />
+                    <x-stat title="{{ __('Users') }}" value="{{ $users }}" icon="s-user"
+                        class="shadow-hover" />
                 </a>
             @endif
             <a href="#" class="flex-grow">
-                <x-stat title="{{ __('Comments') }}" value="{{ $commentsNumber }}" icon="c-chat-bubble-left" class="shadow-hover" />
+                <x-stat title="{{ __('Comments') }}" value="{{ $commentsNumber }}" icon="c-chat-bubble-left"
+                    class="shadow-hover" />
             </a>
         </x-slot:content>
     </x-collapse>

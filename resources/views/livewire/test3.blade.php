@@ -7,7 +7,7 @@ include_once 'test3.php';
 
 
     @if($k<2)
-        <p class="mt-[-15px] mb-3">{{ number_format($members->total(), 0, ',', ' ') }} members - {{ $k }}</p>
+        <p class="mt-[-15px] mb-3">{{ number_format($members->total(), 0, ',', ' ') }} members - Case #{{ $k }}</p>
 
 
         {{ $members->links() }}

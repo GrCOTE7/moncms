@@ -37,7 +37,7 @@ new class extends Component {
 		return Member::selectRaw('id, name, username, email')
 			->orderBy('name')
 			->orderBy('username')
-			->paginate(2500);
+			->paginate(25000);
 	}
 
 	public function with(): array

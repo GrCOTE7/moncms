@@ -51,5 +51,7 @@ class UserSeeder extends Seeder
 		foreach ($users as $userData) {
 			User::factory()->create($userData);
 		}
+        
+        User::factory(3)->create();
 	}
 }

@@ -14,13 +14,56 @@ mais avez besoin d'aide, n'hésitez-pas
 à nous contacter. Voir "AIDE & CONTACT" 
 en fin de ce mémo -->
 
+## MANUEL → Mode d'Emploi <!-- markmap: fold -->
+
+### Mode d'emploi
+
+#### Explorer les branches
+
+```json
+- successivement en mode étude.
+
+    Développer le noeud le plus haut que vous n'avez pas encore visité
+    ( Si vous démarrez juste, c'est... Ce 'Manuel' v1.0.0 ! ),
+    et aller jusqu'au bout de la branche avant de passer à la suivante.
+    (Vous êtes 'au bout' lorsqu'il n'y a plus de ligne à la
+    droite du dernier sujet déployé.).
+```
+
+```bash
+- selon la thématique de la racine en mode recherche.
+```
+
+#### Coder... Oui... Mais pas de suite
+
+    Commencer par survoler les généralités, simplement en les lisant toutes.
+
+    Ne commencer à coder qu'à partir du noeud racine 'Le projet (Mon CMS)' !
+
+### Philosophie <!-- markmap: fold -->
+
+    Cet type de présentation peut vous sembler surprenante de prime abord...
+
+    ... Mais passé le cap de la surprise et de la découverte... :
+
+    Au delà de l'aspect qui peut sembler ludique, et plutôt sympa sur le plan esthétique,
+    car étant coloré, animé et dynamique, ce Mémo peut vite devenir, au fil du temps,
+    votre allié le plus puissant pour avoir une vision quasi synoptique du sujet étudié.
+
+    Donc, si vous parvenez à réussir à l'utiliser, ne serait-ce dans un premier temps,
+    pour découvrir, apprendre, voire réviser vos connaissances, vous observerez en prin-
+    cipe assez rapidement dans l'avenir que vous saurez y revenir, et y retrouver,
+    parce qu'organisées, rapidement et facilement, les infos dont vous aurez alors
+    ponctuellement besoin :-) ! Bon usage... Et bon code !
+
 ## LARAVEL VOLT - Généralités <!-- markmap: fold -->
 
 ### 1 / Bases Laravel <!-- markmap: fold -->
 
 - **composer  create-project laravel/laravel monapp --prefer-dist**
 - Paramètres .env file (APP_NAME, APP_URL & DB_DATABASE)
-- Ajout Fr : **composer require --dev laravel-lang/common
+- Ajout Fr :
+  **composer require --dev laravel-lang/common
   php artisan lang:update**
 - Ajout Debugbar : **composer require barryvdh/laravel-debugbar --dev**
 
@@ -144,36 +187,23 @@ en fin de ce mémo -->
 
 ## Le projet (Mon CMS) <!-- markmap: fold -->
 
-### Installation de laravel <!-- markmap: fold -->
+### Installation de Laravel <!-- markmap: fold -->
+
+#### Commande de base
 
 ```php
+// En CLI :
   composer  create-project laravel/laravel moncms --prefer-dist
 ```
 
-### Outil recommandé (Debugbar) <!-- markmap: fold -->
+    Cette commande inclue l'installation des dépendances (PHP) et librairies (JS)
+    (Que vous pouvez relancer régulièrement pour mises à jour) :
+    - composer update
+    - npm i
 
-    Installer la debugbar, active qu'en développement
-    (Dans ./.env : APP_DEBUG = true) :
+#### Settings - (.env)
 
-```php
-  composer require barryvdh/laravel-debugbar --dev
-```
-
-    Restart servers :
-
-    - PHP, dans une première console (CLI):
-
-```php
-  php artisan serv
-```
-
-    - VITE, dans une seconde CLI :
-
-```php
-  npm run dev
-```
-
-### Settings - (.env) <!-- markmap: fold -->
+    Copier/coller le .env_exemple et l'adapter :
 
 ```php
   APP_NAME="Mon CMS"
@@ -189,7 +219,39 @@ en fin de ce mémo -->
   DB_USERNAME=root
   DB_PASSWORD=
   ...
+  MAIL_FROM_USER="MonPseudo"
+  MAIL_FROM_ADDRESS="MonEmail@example.com"
+  ...
 ```
+
+### Exécuter votre script <!-- markmap: fold -->
+
+#### Start & / || Restart les serveurs
+
+    - PHP, dans une première console (CLI):
+
+```php
+  php artisan serv
+```
+
+    - VITE!, dans une seconde CLI :
+
+```php
+  npm run dev
+```
+
+#### Ouvrir votre navigateur sur [http://127.0.0.1:8000](http://127.0.0.1:8000)
+
+### Outil recommandé (Debugbar) <!-- markmap: fold -->
+
+    Installer la debugbar, active qu'en développement
+    (Dans ./.env : APP_DEBUG = true) :
+
+```php
+  composer require barryvdh/laravel-debugbar --dev
+```
+
+    Restart les serveurs
 
 ### Package des langues <!-- markmap: fold -->
 
@@ -235,13 +297,17 @@ en fin de ce mémo -->
 ##### database/factories/UserFactory.php <!-- markmap: fold -->
 
 ```php
-  return [
-    'name'           => fake()->lastname(),
-    'email'          => fake()->unique()->safeEmail(),
-    'password'       => static::$password ??= Hash::make('password'),
-    'remember_token' => Str::random(10),
-    'valid'          => true,
-  ];
+public function definition(): array
+{
+    $name = fake('fr_FR')->lastname();
+    return [
+        'name'           => $name,
+        'email'          => strtolower($name).'@example.com',
+        'password'       => static::$password ??= Hash::make('password'),
+        'remember_token' => Str::random(10),
+        'valid'          => true,
+    ];
+}
 ```
 
 ##### app/Models/User.php <!-- markmap: fold -->
@@ -430,8 +496,7 @@ en fin de ce mémo -->
   use App\Models\User;
   use Illuminate\Database\Seeder;
   
-  class UserSeeder extends Seeder
-  {
+  class UserSeeder extends Seeder {
     public function run() {
       $users = [
         [
@@ -455,11 +520,18 @@ en fin de ce mémo -->
             'created_at' => Carbon::now()->subYears(2),
             'updated_at' => Carbon::now()->subYears(2),
         ],
+        [
+            'name'       => env('MAIL_FROM_USER', 'Moi'),
+            'email'      => env('MAIL_FROM_ADDRESS', 'moi@example.com'),
+            'role'       => 'admin',
+            'created_at' => Carbon::now()->subYears(3),
+            'updated_at' => Carbon::now()->subYears(3),
+        ],
       ];
-  
       foreach ($users as $userData) {
         User::factory()->create($userData);
       }
+      User::factory(3)->create();
     }
   }
 ```
@@ -582,7 +654,7 @@ en fin de ce mémo -->
     protected function createPost($id, $category_id) {
       $months = ['03', '03', '03', '04', '04', '06', '06', '06', '06'];
   
-      $date = generateRandomDateInRange('2022-01-01', '2024-07-01');
+      $date = generateRandomDateInRange('2022-01-01', '2024-11-07');
   
       $postId = "Post {$id}";
   
@@ -759,13 +831,13 @@ en fin de ce mémo -->
 
 ### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-donnees](https://laravel.sillo.org/posts/mon-cms-les-donnees)***
 
-## **0I / F R O N T - E N D &nbsp;:**
+## &nbsp;**I &nbsp;/ &nbsp; F R O N T &nbsp;- &nbsp;E N D &nbsp;:**
 
-## - L'authentification <!-- markmap: fold -->
+## - L'authentification \<!-- markmap: fold -->
 
 ### Installer MaryUI (Avec Volt et npm) <!-- markmap: fold -->
 
-#### Voir ci-avant : Généralités / Technos
+#### Revoir ci-avant : ' Généralités / Technos / MaryUI ' pour l'installation
 
 #### Sont alors créés (Entre autres...)
 
@@ -781,7 +853,7 @@ en fin de ce mémo -->
 
 ##### **[URL du rendu](http://127.0.0.1:8000)**
 
-### Layout pour l'authentification <!-- markmap: fold -->
+### Layout pour l'authentification \<!-- markmap: fold -->
 
     ./resources/views/components/layouts/auth.blade.php
 
@@ -906,7 +978,7 @@ en fin de ce mémo -->
 
     ./lang/fr.json
 
-```php
+```json
   "Password": "Mot de passe",
   "Confirm Password": "Confirmation du mot de passe",
   "Register": "Créer un compte",
@@ -1027,7 +1099,7 @@ en fin de ce mémo -->
 
 ##### Traduction pour formulaire Login <!-- markmap: fold -->
 
-```php
+```json
   "Forgot your password?": "Mot de passe oublié ?",
   "Remember me": "Se rappeler de moi"
 ```
@@ -1119,7 +1191,7 @@ en fin de ce mémo -->
 
 ###### Traduction pour forgot-password <!-- markmap: fold -->
 
-```php
+```json
   "Password renewal": "Renouvellement du mot de passe",
   "Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.": "Mot de passe oublié ? Pas de problème. Indiquez-nous simplement votre adresse courriel et nous vous enverrons par courriel un lien de réinitialisation du mot de passe pour en choisir un nouveau.",
   "Email Password Reset Link": "Envoi du lien de renouvellement"
@@ -1639,7 +1711,7 @@ return [
 
 #### Traduction pour les articles <!-- markmap: fold -->
 
-```php
+```json
   "Show this category": "Voir cette catégorie",
   "Read this post": "Lire cet article",
   "Posts for category ": "Articles pour la catégorie ",
@@ -1746,7 +1818,7 @@ return [
 
 #### Traduction posts.show <!-- markmap: fold -->
 
-```php
+```json
   "By ": "Par "
 ```
 
@@ -1958,7 +2030,7 @@ public function search(string $search): LengthAwarePaginator {
 
 #### Traductions nécessaires (**lang/fr.json**) <!-- markmap: fold -->
 
-```php
+```json
   "Search...": "Rechercher...",
   "Posts for search ": "Articles pour la recherche",
 ```
@@ -2026,11 +2098,104 @@ public function search(string $search): LengthAwarePaginator {
 
 #### Traduction pages.show
 
-```php
+```json
   "Edit this page": "Modifier cette page"
 ```
 
 ### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-articles](https://laravel.sillo.org/posts/mon-cms-les-articles)***
+
+### La page Contact <!-- markmap: fold -->
+
+#### Route Contact
+
+```php
+... /pages/{page:slug}
+Volt::route('/contact', 'contact')->name('contact');
+```
+
+#### Composant Contact (livewire/contact.blade.php) <!-- markmap: fold -->
+
+```php
+<?php
+use App\Models\Contact;
+use Livewire\Attributes\{Layout, Rule};
+use Livewire\Volt\Component;
+use Mary\Traits\Toast;
+
+// Définition du composant avec les attributs de titre et de mise en page
+new
+#[Title('Contact')]
+class extends Component {
+    use Toast;
+
+    // Définition des règles de validation pour les champs du formulaire
+    #[Rule('required|string|max:255')]
+    public string $name = '';
+
+    #[Rule('required|email')]
+    public string $email = '';
+
+    #[Rule('required|max:1000')]
+    public string $message = '';
+
+    #[Rule('nullable|numeric|exists:users,id')]
+    public ?int $user_id = null;
+
+    // Méthode de montage pour pré-remplir les champs avec les informations de l'utilisateur authentifié
+    public function mount(): void {
+        if (Auth::check()) {
+            $this->name = Auth::user()->name;
+            $this->email = Auth::user()->email;
+            $this->user_id = Auth::id();
+        }
+    }
+
+    // Méthode pour enregistrer le formulaire de contact
+    public function save() {
+        // Validation des données du formulaire
+        $data = $this->validate();
+
+        // Création d'un nouveau contact avec les données validées
+        Contact::create($data);
+
+        // Affichage d'un message de réussite avec une redirection
+        $this->success(__('Your message has been sent!'), redirectTo: '/');
+    }
+}; ?>
+
+<div>
+    @section('title', 'Contact')
+    <!-- Formulaire de contact encapsulé dans une carte -->
+    <x-card title="{{ __('Contact') }}" subtitle="{{ __('Use this form to contact me') }}" shadow separator
+        progress-indicator>
+        <x-form wire:submit="save">
+            <!-- Affichage des champs de nom et d'email uniquement si l'utilisateur n'est pas connecté -->
+            @if (!Auth()->check())
+                <x-input label="{{ __('Name') }}" wire:model="name" icon="o-user" inline />
+                <x-input label="{{ __('E-mail') }}" wire:model="email" icon="o-envelope" inline />
+            @endif
+            <!-- Champ de message -->
+            <x-textarea wire:model="message" hint="{{ __('Max 1000 chars') }}" rows="5"
+                placeholder="{{ __('Your message...') }}" inline />
+            <!-- Boutons d'actions -->
+            <x-slot:actions>
+                <x-button label="{{ __('Cancel') }}" link="/" class="btn-ghost" />
+                <x-button label="{{ __('Save') }}" type="submit" icon="o-paper-airplane" class="btn-primary"
+                    spinner="login" />
+            </x-slot:actions>
+        </x-form>
+    </x-card>
+</div>
+
+```
+
+#### Traductions Contact
+
+```json
+"Use this form to contact me": "Utilisez ce formulaire pour me contacter",
+"Your message...": "Votre message...",
+"Max 10000 chars": "Max 10000 caractères"
+```
 
 ## - Les menus & le footer <!-- markmap: fold -->
 
@@ -2401,7 +2566,7 @@ public function search(string $search): LengthAwarePaginator {
 
     ./lang/fr.json :
 
-```php
+```json
   "Go to the GitHub repository and... Fork it!": "Aller sur le dépôt GitHub et... Clonez-le !",
   "Go to the Discord channel": "Allez sur le canal Discord"
 ```
@@ -2631,7 +2796,7 @@ new class extends Component {
 
     Traductions Comment nécessaires dans posts.show :
 
-```php
+```json
 "Number of comments: ": "Nombre de commentaires : ",
 "View comments": "Voir les commentaires",
 "All comments": "Tous les commentaires",
@@ -3344,7 +3509,7 @@ new #[Title('Profile')] #[Layout('components.layouts.auth')] class extends Compo
 
 ### Traductions pour Profile <!-- markmap: fold -->
 
-```php
+```json
 "Update profile": "Modifier le profil",
 "Your name can't be changed": "Votre nom ne peut pas être modifié",
 "You can change your profile picture on Gravatar": "Vous pouvez changer votre image de profil sur Gravatar",
@@ -3658,7 +3823,7 @@ html {
 
 ### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-favoris](https://laravel.sillo.org/posts/mon-cms-les-favoris)***
 
-## **II / B A C K - O F F I C E &nbsp;:**
+## &nbsp;**II &nbsp;/ &nbsp; B A C K &nbsp;- &nbsp;O F F I C E &nbsp;:**
 
 ## - L'administration <!-- markmap: fold -->
 
@@ -3733,6 +3898,8 @@ Route::middleware('auth')->group(function () {
 
 #### SideBar <!-- markmap: fold -->
 
+##### Création Sidebar de l'admin.
+
 ```php
 php artisan make:volt admin/sidebar --class
 ```
@@ -3772,6 +3939,8 @@ new class() extends Component {
     </x-menu>
 </div>
 ```
+
+##### À la fin du mémo complet, vous devrez obtenir cet [aspect du menu admin](https://prnt.sc/n_CyeC0MgHlB)
 
 #### Layout <!-- markmap: fold -->
 
@@ -3992,7 +4161,7 @@ new #[Title('Dashboard')] #[Layout('components.layouts.admin')] class extends Co
 
 #### Traductions Dashboard <!-- markmap: fold -->
 
-```php
+```json
 "In a glance": "En un coup d'oeil",
 "Recent posts": "Articles récents",
 "Users": "Utilisateurs",
@@ -4092,7 +4261,7 @@ Route::middleware('auth')->group(function () {
 
     lang/fr.json :
 
-```php
+```json
 "All posts": "Tous les articles",
 ```
 
@@ -4294,7 +4463,7 @@ public function generateUniqueSlug(string $slug): string {
 
 ##### Traductions admin posts list <!-- markmap: fold -->
 
-```php
+```json
 "Title": "Titre",
 "Author": "Auteur",
 "Updated": "Mis à jour",
@@ -4470,7 +4639,7 @@ class extends Component {
 
 ##### Traductions admin.posts.create <!-- markmap: fold -->
 
-```php
+```json
 "Select a category": "Sélectionnez une catégorie",
 "Pinned": "Épinglé",
 "Content": "Contenu",
@@ -4585,7 +4754,7 @@ class extends Component {
 
 ###### Traductions pour Image <!-- markmap: fold -->
 
-```php
+```json
 "Featured image": "Image mise en avant",
 "Click on the image to modify": "Cliquez sur cette image pour la modifier",
 ```
@@ -4802,7 +4971,7 @@ class extends Component {
 
 #### Traductions Édition <!-- markmap: fold -->
 
-```php
+```json
 "Edit a post": "Modifier un article",
 "Post updated with success.": "Article mis à jour avec succès."
 ```
@@ -4832,7 +5001,7 @@ class extends Component {
 
 ##### Traduction Édition du post
 
-```php
+```json
 "Edit this post": "Modifier cet article"
 ```
 
@@ -4859,7 +5028,7 @@ class extends Component {
 
 ###### Traduction Clone <!-- markmap: fold -->
 
-```php
+```json
 "Clone this post": "Dupliquer cet article"
 ```
 
@@ -4909,7 +5078,7 @@ Route::middleware(IsAdmin::class)->group(function () {
 
     Traduction Item :
 
-```php
+```json
 "Categories": "Catégories"
 ```
 
@@ -4997,7 +5166,7 @@ public function delete(Category $category): void {
 
 ##### Traduction Supprimer catégorie
 
-```php
+```json
 "Are you sure to delete this category?": "Êtes-vous sûr de vouloir supprimer cette catégorie ?",
 "Category deleted with success.": "Catégorie supprimée avec succès."
 ```
@@ -5067,7 +5236,7 @@ class extends Component {
 
 ##### Traduction Créer catégorie
 
-```php
+```json
 "Create a new category": "Créer une nouvelle catégorie",
 "Category created with success.": "Catégorie créée avec succès."
 ```
@@ -5157,7 +5326,7 @@ class extends Component {
 
 #### Traduction modification de catégorie
 
-```php
+```json
 "Category updated successfully.": "Catégorie mise à jour avec succès.",
 "Edit a category": "Modifier une catégorie"
 ```
@@ -5200,7 +5369,7 @@ Volt::route('/pages/index', 'admin.pages.index')->name('pages.index');
 
     Traduction Pages :
 
-```php
+```json
 "All pages": "Toutes les pages",
 ```
 
@@ -5412,7 +5581,7 @@ class extends Component {
 
 #### Traduction Ajouter Pages \<!-- markmap: fold -->
 
-```php
+```json
 "Page added with success.": "Page ajoutée avec succès."
 ```
 
@@ -5507,7 +5676,7 @@ class extends Component {
 
 #### Traduction Éditer Pages <!-- markmap: fold -->
 
-```php
+```json
 "Page edited with success.": "Page mise à jour avec succès.",
 "Edit a page": "Modifier une page"
 ```
@@ -5740,7 +5909,7 @@ new #[Title('Users'), Layout('components.layouts.admin')] class extends Componen
 
 ##### Traductions Comptes <!-- markmap: fold -->
 
-```php
+```json
 "Accounts": "Comptes",
 "No users with these criteria": "Aucun utilisateur avec ces critères",
 "All": "Tous",
@@ -5860,7 +6029,7 @@ class extends Component {
 
 ##### Traduction Modification Comptes <!-- markmap: fold -->
 
-```php
+```json
 "Edit an account": "Modifier un compte",
 "Select a role": "Sélectionnez un rôle",
 "User edited with success.": "Utilisateur mis à jour avec succès."
@@ -6022,7 +6191,7 @@ class extends Component {
 </div>
 ```
 
-```php
+```json
 "Comment validated": "Commentaire validé",
 "Comment deleted": "Commentaire supprimé",
 "Sent on": "Envoyé le",
@@ -6215,13 +6384,12 @@ class extends Component {
 
     Traductions admin. modif. des commentaires :
 
-```php
+```json
 "Edit a comment": "Modifier un commentaire",
 "Your answer": "Votre réponse",
 "Comment edited with success.": "Commentaire mis à jour avec succès.",
 "Answer created with success.": "Réponse ajoutée avec succès."
 ```
-`
 
 ### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-commentaires](https://laravel.sillo.org/posts/mon-cms-les-commentaires)***
 
@@ -6682,7 +6850,7 @@ class extends Component {
 
     N.B.: "Edit" existe déjà, mais remplacé ici
 
-```php
+```json
 "Submenus": "Sous-menus",
 "Edit a submenu": "Modifier un sous-menu",
 "Create a new menu": "Créer un nouveau menu",
@@ -7163,9 +7331,9 @@ class extends Component {
 
 ## - Les Médias <!-- markmap: fold -->
 
-### Gestion des Images \<!-- markmap: fold -->
+### 1 ) &nbsp;Gestion des Images <!-- markmap: fold -->
 
-#### Route admin.images.index \<!-- markmap: fold -->
+#### Route admin.images.index <!-- markmap: fold -->
 
 ```php
 Route::middleware('auth')->group(function () {
@@ -7177,7 +7345,7 @@ Route::middleware('auth')->group(function () {
             Volt::route('/images/index', 'admin.images.index')->name('images.index');
 ```
 
-#### Lien admin.images.index dans admin.sidebar \<!-- markmap: fold -->
+#### Lien admin.images.index dans admin.sidebar <!-- markmap: fold -->
 
 ```php
 ... Route Menus
@@ -7189,83 +7357,1094 @@ Route::middleware('auth')->group(function () {
 @endif
 ```
 
-#### Composant admin.images.index \<!-- markmap: fold -->
+#### Composant admin.images.index <!-- markmap: fold -->
 
-##### Création composant admin.images.index \<!-- markmap: fold -->
+##### Création composant admin.images.index <!-- markmap: fold -->
 
 ```php
 php artisan make:volt admin/images/index --class
 ```
 
-##### Code composant admin.images.index \<!-- markmap: fold -->
+##### Code composant admin.images.index <!-- markmap: fold -->
+
+###### À noter : La fonction "Gérer l'image" n'est pas encore codée
+
+###### *Le code étant un peu long, il est scindé en 2 fichiers* **:**
+
+###### PHP admin/images/index_images.php <!-- markmap: fold -->
 
 ```php
+<?php
+use Mary\Traits\Toast;
+use Livewire\Volt\Component;
+use Livewire\WithPagination;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
+use Livewire\Attributes\{Layout, Title};
+use Illuminate\Pagination\LengthAwarePaginator;
 
+new #[Title('Images')] #[Layout('components.layouts.admin')]
+class extends Component {
+    use Toast;
+    use WithPagination;
+    
+    public array $allImages = [];
+    public Collection $years;
+    public Collection $months;
+    public $selectedYear;
+    public $selectedMonth;
+    public int $perPage = 10;
+    public int $page    = 1;
+    public $myDirectory;
+    
+    // Définir les en-têtes de table.
+    public function headers(): array {
+        return [
+            ['key' => 'image', 'label' => 'Image'], // Colonne ne correspondant pas à un champs de la BdD
+            ['key' => 'path', 'label' => __('Path') . ' (/photos/)'],
+            ['key' => 'actions', 'label' => 'Actions', 'class' => 'bg-red-500/10 text-center'], // 3 colonnes groupées
+        ];
+    }
+    
+    public function mount(): void {
+        $this->years  = $this->getYears();
+        $this->months = $this->getMonths($this->selectedYear);
+        $this->getImages();
+    }
+    
+    public function updating($property, $value): void {
+        if ('selectedYear' == $property) {
+            $this->months = $this->getMonths($value);
+        }
+    }
+    
+    public function getImages(): LengthAwarePaginator {
+        $imagesPath = "photos/{$this->selectedYear}/{$this->selectedMonth}";
+        $allFiles   = Storage::disk('public')->files($imagesPath);
+    
+        $this->allImages = collect($allFiles)
+            ->map(function ($file) {
+                return [
+                    'path' => (strlen($file) > 30) ? substr($file, 7, 13) . ' ... ' . substr($file, -9) : substr($file, 7, 23),
+                    // 'path' => $file,
+                    'url' => Storage::disk('public')->url($file),
+                ];
+            })
+            ->toArray();
+    
+        $this->page = LengthAwarePaginator::resolveCurrentPage('page');
+        $total      = count($this->allImages);
+        $images     = array_slice($this->allImages, ($this->page - 1) * $this->perPage, $this->perPage, true);
+    
+        return new LengthAwarePaginator($images, $total, $this->perPage, $this->page, [
+            'path'     => LengthAwarePaginator::resolveCurrentPath(),
+            'pageName' => 'page',
+        ]);
+    }
+    
+    public function deleteImage($index): void {
+        $url = $this->allImages[$index]['url'];
+    
+        // Trouver la position de '/storage'
+        $pos = strpos($url, '/storage');
+        // Extraire la partie de l'URL après '/storage'
+        $path = substr($url, $pos + strlen('/storage'));
+        // dd($index, $url, $relativePath);
+    
+        Storage::disk('public')->delete($path);
+    
+        $this->success(__('Image deleted with success.'));
+    
+        // $this->getImages();
+        $this->deleteDirectoryIfEmpty();
+    }
+    
+    public function deleteDirectoryIfEmpty() {
+        $directory = "photos/{$this->selectedYear}/{$this->selectedMonth}";
+        $files     = Storage::disk('public')->files($directory);
+    
+        if (0 == count($files)) {
+            Storage::disk('public')->deleteDirectory($directory);
+            $this->success(__('Image and empty directory deleted with success.'));
+            redirect()->route('images.index');
+        } else {
+            // $this->error(__('Directory is not empty.'));
+            $this->success(__('Image deleted with success.'));
+            $this->getImages();
+        }
+    }
+    
+    public function with(): array {
+        return [
+            'headers' => $this->headers(),
+            'images'  => $this->getImages(),
+        ];
+    }
+    
+    private function getYears(): Collection {
+        return $this->getDirectories('photos', function ($years) {
+            $this->selectedYear = $years->first()['id'] ?? null;
+    
+            return $years;
+        });
+    }
+    
+    private function getMonths($year): Collection {
+        return $this->getDirectories("photos/{$year}", function ($months) {
+            $this->selectedMonth = $months->first()['id'] ?? null;
+            // À activer avec l'exemple de débogage à dé-commenter aussi (en fin de ce code)
+            // $this->selectedMonth = '07'; // NE PAS EFFACER la COPIE de l'image...
+            $this->getImages();
+    
+            return $months;
+        });
+    }
+    
+    private function getDirectories(string $basePath, Closure $callback): Collection {
+        $directories = Storage::disk('public')->directories($basePath);
+  
+      $items = collect($directories)->map(function ($path) {
+          $name = basename($path);
+  
+          return ['id' => $name, 'name' => $name];
+      })->sortByDesc('id');
+  
+      return $callback($items);
+    }
+};
 ```
 
-##### Traduction code composant admin.images.index \<!-- markmap: fold -->
+###### BLADE admin/images/index.blade.php <!-- markmap: fold -->
 
 ```php
+<?php
+include_once 'index_images.php';
+?>
+
+<div>
+    <x-header title="{{ __('Images') }}" separator progress-indicator>
+        <x-slot:actions class="lg:hidden">
+            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline"
+                link="{{ route('admin') }}" />
+        </x-slot:actions>
+    </x-header>
+
+    <x-card title="{!! __('Select year and month') !!}" class="shadow-md">
+        <x-select label="{{ __('Year') }}" :options="$years" wire:model="selectedYear" wire:change="$refresh" />
+        <br>
+        <x-select label="{{ __('Month') }}" :options="$months" wire:model="selectedMonth" wire:change="$refresh" />
+    </x-card>
+
+    <x-card>
+        <x-table striped :headers="$headers" :rows="$images" class="border-2 border-red-500/10" with-pagination>
+
+            @scope('cell_image', $image)
+                <div class="w-20 border-white border-[3px]">
+                    <a href="{{ $image['url'] }}" target="_blank">
+                        <img src="{{ $image['url'] }}" alt="" title="{{ __('Click here to see bigger!') }}">
+                    </a>
+                    {{-- {{ dd($image) }} --}}
+                </div>
+            @endscope
+
+            @scope('cell_actions', $image, $selectedYear, $selectedMonth, $perPage, $page, $loop)
+                <div class="flex flex-nowrap justify-center text-center gap-2">
+                    <x-popover>
+
+                        <x-slot:trigger>
+                            <x-button icon="s-briefcase" data-url="{{ $image['url'] }}" onClick="copyUrl(this)"
+                                class="text-blue-500 btn-ghost btn-sm" spinner />
+                        </x-slot:trigger>
+                        <x-slot:content class="pop-small">
+                            @lang('Copy url')
+                        </x-slot:content>
+
+                    </x-popover>
+                    <x-popover>
+
+                        <x-slot:trigger>
+                            <x-button icon="c-wrench"
+                                link="{{ route('images.edit', ['year' => $selectedYear, 'month' => $selectedMonth, 'id' => $loop->index + ($page - 1) * $perPage]) }}"
+                                class="text-blue-500 btn-ghost btn-sm" spinner />
+                        </x-slot:trigger>
+                        <x-slot:content class="pop-small">
+                            @lang('Manage image')
+                        </x-slot:content>
+
+                    </x-popover>
+                    <x-popover class="border-white border-2">
+
+                        <x-slot:trigger>
+                            <x-button icon="o-trash" wire:click="deleteImage({{ $loop->index }})"
+                                wire:confirm="{{ __('Are you sure to delete this image?') }}" spinner
+                                class="text-red-500 btn-ghost btn-sm" />
+                        </x-slot:trigger>
+                        <x-slot:content class="pop-small">
+                            @lang('Delete image')
+                        </x-slot:content>
+
+                    </x-popover>
+                </div>
+            @endscope
+        </x-table>
+
+        <x-header class="my-3 mb-0" separator progress-indicator />
+
+        {{--
+        <h3 class="text-xl font-bold">Exemple de débogage rapide :</h3>
+        <pre>
+            @php
+                $imagesPath = "photos/{$this->selectedYear}/{$this->selectedMonth}";
+                $allFiles = Storage::disk('public')->files($imagesPath);
+                echo 'Dossier demandé : ' . $imagesPath . '<br>';
+                // var_dump($allFiles);
+                print_r($allFiles);
+                echo '<br><hr><br>';
+
+                // Exemple de l'image 2024/07 :
+                $path = '/photos/2024/07/j6pMm9U3u2VbmaHYePcDfXzeHC3hIn8fvjH7nlzo.jpg';
+                echo 'La photo : <b>photos/2024/07/j6pMm9U3u2VbmaHYePcDfXzeHC3hIn8fvjH7nlzo.jpg</b><br>
+                existe t\'elle dans 2024/07 ? <b>' . (Storage::disk('public')->exists($path) ? 'Oui' : 'Non').' !</b>';
+                // Attention: Décommenter ci-dessous effacera réellement l'image...Conserver la copie pour une restauration facile
+                // Storage::disk('public')->delete($path);
+            @endphp
+        </pre>
+        --}}
+
+    </x-card>
+    <script>
+        function copyUrl(button) {
+            const url = button.getAttribute('data-url');
+            const textArea = document.createElement('textarea');
+            textArea.value = url;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                alert('URL copiée : ' + url);
+            } catch (err) {
+                console.error('Erreur lors de la copie de l\'URL: ', err);
+            }
+            document.body.removeChild(textArea);
+        }
+    </script>
+</div>
+```
+
+##### Traduction code composant admin.images.index <!-- markmap: fold -->
+
+```json
 "Select year and month": "Sélectionner l'année et le mois",
 "Year": "Année",
 "Month": "Mois",
+"Click here to see bigger!": "Cliquer ici pour voir en plus grand !",
 "Path": "Chemin",
 "Copy url": "Copier l'URL",
 "Manage image": "Gérer l'image",
 "Delete image": "Supprimer l'image",
-"Image deleted with success.": "Image supprimée avec succès."
+"Image deleted with success.": "Image supprimée avec succès.",
+"Image and empty directory deleted with success.":"Image et dossier (vide) supprimés avec succès.",
 ```
 
 ### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-medias-partie-1](https://laravel.sillo.org/posts/mon-cms-les-medias-partie-1)***
 
-### uuu \<!-- markmap: fold -->
+### 2 ) &nbsp;Modification des Images <!-- markmap: fold -->
+
+#### Route admin.images.edit <!-- markmap: fold -->
 
 ```php
-777
+Route::middleware('auth')->group(function () {
+	...
+	Route::middleware(IsAdminOrRedac::class)->prefix('admin')->group(function () {
+		...
+		Route::middleware(IsAdmin::class)->group(function () {
+			...
+			Volt::route('/images/{year}/{month}/{id}/edit', 'admin.images.edit')->name('images.edit');
+```
+
+#### Lien admin.images.edit dans admin.images.index <!-- markmap: fold -->
+
+```php
+<x-popover>
+    <x-slot:trigger>
+        <x-button icon="c-wrench"
+            link="{{ route('images.edit', ['year' => $selectedYear, 'month' => $selectedMonth, 'id' => $loop->index + ($page - 1) * $perPage]) }}"
+```
+
+#### Package  Intervention Image <!-- markmap: fold -->
+
+##### Installation Intervention Image
+
+```php
+composer require intervention/image-laravel
+```
+
+##### Publication de la configuration Intervention Image
+
+```php
+php artisan vendor:publish --provider="Intervention\Image\Laravel\ServiceProvider"
+```
+
+##### Réf.: [https://image.intervention.io](https://image.intervention.io/v3/introduction/frameworks)
+
+#### Composant admin.images.edit <!-- markmap: fold -->
+
+##### Création composant admin.images.edit <!-- markmap: fold -->
+
+```php
+php artisan make:volt admin/images/edit --class
+```
+
+##### Code composant admin.images.edit <!-- markmap: fold -->
+
+###### *Le code étant long, il est scindé en 2 fichiers* **:**
+
+###### PHP admin/images/edit_images.php <!-- markmap: fold -->
+
+```php
+<?php
+use Mary\Traits\Toast;
+use Livewire\Volt\Component;
+use App\Models\{Page, Post};
+use Intervention\Image\ImageManager;
+use Livewire\Attributes\{Layout, Title};
+use Intervention\Image\Drivers\Gd\Driver;
+use Illuminate\Support\Facades\{File, Storage};
+
+new #[Title('Edit Image'), Layout('components.layouts.admin')] class extends Component {
+    use Toast;
+    
+    public int $year;
+    public int $month;
+    public int $id;
+    public string $image;
+    public string $displayImage;
+    public array $usage;
+    public string $fileName;
+    public string $imagePath;
+    public string $tempPath;
+    public int $width;
+    public int $height;
+    public string $imageScale  = '1';
+    public array $selectValues = [['id' => '1', 'name' => '1'], ['id' => '0.95', 'name' => '0.95'], ['id' => '0.9', 'name' => '0.9'], ['id' => '0.85', 'name' => '0.85'], ['id' => '0.8', 'name' => '0.8']];
+    public string $group;
+    public int $brightness = 0;
+    public int $contrast   = 0;
+    public int $gamma      = 10;
+    public int $red        = 0;
+    public int $green      = 0;
+    public int $blue       = 0;
+    public int $reduce     = 0;
+    public int $blur       = 0;
+    public int $sharpen    = 0;
+    public bool $changed;
+    public int $clipW = 0;
+    public int $clipH = 0;
+    
+    public function mount($year, $month, $id): void {
+        $this->year  = $year;
+        $this->month = $month;
+        $this->id    = $id;
+        $this->getImage($year, $month, $id);
+        $this->usage = $this->findUsage();
+        $this->saveImageToTemp(false);
+        $this->getImageInfos();
+    }
+    
+    public function saveImageToTemp($viewToast): void {
+        $tempDir        = Storage::disk('public')->path('temp');
+        $this->tempPath = "{$tempDir}/{$this->fileName}";
+    
+        if (!File::exists($tempDir)) {
+            File::makeDirectory($tempDir, 0o755, true);
+        }
+    
+        if (File::exists($this->imagePath)) {
+            File::copy($this->imagePath, $this->tempPath);
+        }
+    
+        if ($viewToast) {
+            $this->success(__('Changes validated'));
+        }
+    
+        $this->image = Storage::disk('public')->url('temp/' . $this->fileName);
+    }
+    
+    public function restoreImage($cancel): void {
+        if (File::exists($this->imagePath)) {
+            File::copy($this->imagePath, $this->tempPath);
+            $this->refreshImageUrl();
+            $this->clipW = 0;
+            $this->clipH = 0;
+            $this->getImageInfos();
+            $this->success(__('Image restored'));
+        }
+    
+        $this->changed = false;
+    
+        if ($cancel) {
+            $this->info(__('No modification has been made'));
+            $this->exit();
+        }
+    }
+    
+    public function updated($property, $value) {
+        if ('group' === $property) {
+            return;
+        }
+    
+        $manager = new ImageManager(new Driver());
+        $image   = $manager->read($this->tempPath);
+    
+        switch ($property) {
+            case 'imageScale':
+                $image->scale(height: $this->height * $value);
+                $this->width      = $image->width();
+                $this->height     = $image->height();
+                $this->imageScale = '1';
+    
+                break;
+            case 'brightness':
+                $image->brightness($value);
+                $this->brightness = 0;
+    
+                break;
+            case 'contrast':
+                $image->contrast($value);
+                $this->contrast = 0;
+    
+                break;
+            case 'gamma':
+                $image->gamma($value / 10.0);
+                $this->gamma = 10;
+    
+                break;
+            case 'red':
+                $image->colorize(red: $value);
+                $this->red = 0;
+    
+                break;
+            case 'green':
+                $image->colorize(green: $value);
+                $this->green = 0;
+    
+                break;
+            case 'blue':
+                $image->colorize(blue: $value);
+                $this->blue = 0;
+    
+                break;
+            case 'blur':
+                $image->blur($value);
+                $this->blur = 0;
+    
+                break;
+            case 'sharpen':
+                $image->sharpen($value);
+                $this->sharpen = 0;
+    
+                break;
+            case 'clipW':
+                $width  = $this->width - $this->width * $value * 0.01;
+                $offset = ($this->width - $width) / 2;
+                $image->crop($width, $this->height, $offset);
+                $this->width  = $image->width();
+                $this->height = $image->height();
+                $this->clipW  = 0;
+    
+                break;
+            case 'clipH':
+                $height = $this->height - $this->height * $value * 0.01;
+                $offset = ($this->height - $height) / 2;
+                $image->crop($this->width, $height, 0, $offset);
+                $this->width  = $image->width();
+                $this->height = $image->height();
+                $this->clipH  = 0;
+    
+                break;
+            case 'reduce':
+                $image->reduceColors(49 - $value);
+                $this->reduce = 0;
+    
+                break;
+            default:
+                break;
+        }
+    
+        $image->save();
+        $this->info(__('Image modified ! (Not saved yet)'));
+        $this->changed = true;
+        $this->refreshImageUrl();
+    }
+    
+    public function invert(): void {
+        $manager = new ImageManager(new Driver());
+        $image   = $manager->read($this->tempPath);
+        $image->invert();
+        $image->save();
+        $this->info(__('Image modified ! (Not saved yet)'));
+        $this->changed = true;
+        $this->refreshImageUrl();
+    }
+    
+    public function getImage($year, $month, $id): void {
+        $imagesPath         = "photos/{$year}/{$month}";
+        $allFiles           = Storage::disk('public')->files($imagesPath);
+        $image              = $allFiles[$id];
+        $this->imagePath    = Storage::disk('public')->path($image);
+        $this->fileName     = basename($this->imagePath);
+        $this->image        = Storage::disk('public')->url("temp/{$this->fileName}");
+        $this->displayImage = Storage::disk('public')->url($image);
+        $this->refreshImageUrl();
+    }
+    
+    public function keepVersion(): void {
+        if (File::exists($this->tempPath)) {
+            File::copy($this->tempPath, $this->imagePath);
+        }
+        $this->success(__('Image changes applied successfully'));
+        $this->exit();
+    }
+    
+    public function exit(): void {
+        if (File::exists($this->tempPath)) {
+            File::delete($this->tempPath);
+        }
+    
+        redirect()->route('images.index');
+    }
+    
+    public function applyChanges(): void {
+        if (File::exists($this->tempPath)) {
+            File::copy($this->tempPath, $this->imagePath);
+        }
+    
+        $this->changed = false;
+    
+        $this->success(__('Image changes applied successfully'));
+    }
+    
+    private function getImageInfos(): void {
+        $manager      = new ImageManager(new Driver());
+        $image        = $manager->read($this->tempPath);
+        $this->width  = $image->width();
+        $this->height = $image->height();
+    }
+    
+    private function findUsage(): array {
+        $usage = [];
+    
+        $name = $this->year . '/' . str_pad($this->month, 2, '0', STR_PAD_LEFT) . '/' . $this->fileName;
+    
+        $posts = Post::select('id', 'title', 'slug')
+            ->where('image', 'LIKE', "%{$name}%")
+            ->orWhere('body', 'LIKE', "%{$name}%")
+            ->get();
+    
+        foreach ($posts as $post) {
+            $usage[] = [
+                'type'  => 'post',
+                'id'    => $post->id,
+                'title' => $post->title,
+              'slug'  => $post->slug,
+          ];
+      }
+  
+      $pages = Page::where('body', 'LIKE', "%{$name}%")->get();
+  
+      foreach ($pages as $page) {
+          $usage[] = [
+              'type'  => 'page',
+              'id'    => $page->id,
+              'title' => $page->title,
+              'slug'  => $page->slug,
+          ];
+      }
+  
+      return $usage;
+    }
+    
+    private function refreshImageUrl(): void {
+        $this->image = Storage::disk('public')->url("temp/{$this->fileName}") . '?' . now()->timestamp;
+    }
+};
+```
+
+###### BLADE admin/images/edit.blade.php <!-- markmap: fold -->
+
+```php
+<?php
+include_once 'edit_image.php';
+?>
+
+<div class="flex flex-col h-full lg:flex-row">
+    <div class="w-full p-4 lg:w-3/4">
+        <x-header title="{{ __('Manage an image') }}" separator progress-indicator>
+            <x-slot:actions class="lg:hidden">
+                <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline"
+                    link="{{ route('admin') }}" />
+            </x-slot:actions>
+        </x-header>
+        <x-card>
+            <div class="flex items-center justify-between h-full">
+                <p>@lang('The url of this image is :') <i>{{ $this->displayImage }}</i></p>
+                <x-button label="{!! __('Copy url') !!}" data-url="{{ $this->displayImage }}" onclick="copyUrl(this)"
+                    class="btn-sm" />
+            </div>
+            <br>
+            @if (empty($this->usage))
+                <x-badge value="{!! __('This image is not used') !!}" class="badge-warning" />
+            @else
+                @foreach ($this->usage as $use)
+                    @if ($use['type'] == 'post')
+                        <p>@lang('This image is in the post ') : <a href="{{ route('posts.show', $use['slug']) }}"
+                                target="_blank">{{ $use['title'] }}</a></p>
+                    @else
+                        <p>@lang('This image is in the page ') :
+                            <a href="{{ route('pages.show', $use['slug']) }}" target="_blank">{{ $use['title'] }}</a>
+                        </p>
+                    @endif
+                @endforeach
+            @endif
+            <br><br>
+            <x-header separator progress-indicator />
+            <div class="flex items-center justify-center h-full">
+                <img src="{{ $image }}" alt="">
+            </div>
+            <x-header separator progress-indicator />
+        </x-card>
+    </div>
+
+    <div class="w-full p-4 lg:w-1/4">
+        <p class="mb-2 text-3xl">@lang('Settings')</p>
+        <x-accordion wire:model="group" class="mb-4 shadow-md">
+            <x-collapse name="group1">
+                <x-slot:heading>
+                    @lang('Size change')
+                </x-slot:heading>
+                <x-slot:content>
+                    @lang('Height') :
+                    <x-badge value="{{ $this->height }}px" class="badge-primary" /><br>
+                    @lang('Width') :
+                    <x-badge value="{{ $this->width }}px" class="badge-primary" /><br><br>
+                    <x-radio inline label="{{ __('Select a rescale value') }}" :options="$selectValues"
+                        wire:model="imageScale" wire:change="$refresh" />
+                </x-slot:content>
+            </x-collapse>
+            <x-collapse name="group2">
+                <x-slot:heading>
+                    @lang('Brightness, contrast and gamma correction')
+                </x-slot:heading>
+                <x-slot:content>
+                    <x-range wire:model.live.debounce="brightness" min="-20" max="20" step="2"
+                        label="{{ __('Brightness') }}" class="range-primary" />
+                    <x-range wire:model.live.debounce="contrast" min="-20" max="20" step="2"
+                        label="{{ __('Contrast') }}" class="range-primary" />
+                    <x-range wire:model.live.debounce="gamma" min="5" max="22"
+                        label="{{ __('Gamma Correction') }}" class="range-primary" />
+                </x-slot:content>
+            </x-collapse>
+            <x-collapse name="group3">
+                <x-slot:heading>
+                    @lang('Color correction')
+                </x-slot:heading>
+                <x-slot:content>
+                    <x-range wire:model.live.debounce="red" min="-20" max="20" step="2"
+                        label="{{ __('Red') }}" class="range-primary" />
+                    <x-range wire:model.live.debounce="green" min="-20" max="20" step="2"
+                        label="{{ __('Green') }}" class="range-primary" />
+                    <x-range wire:model.live.debounce="blue" min="-20" max="20" step="2"
+                        label="{{ __('Blue') }}" class="range-primary" />
+                    <x-range wire:model.live.debounce="reduce" min="0" max="48" step="2"
+                        label="{{ __('Reduce color') }}" class="range-primary" />
+                    <x-button label="{{ __('Invert colors') }}" wire:click="invert" class="mt-2 btn-outline btn-sm" />
+                </x-slot:content>
+            </x-collapse>
+            <x-collapse name="group4">
+                <x-slot:heading>
+                    @lang('Blur and sharpen')
+                </x-slot:heading>
+                <x-slot:content>
+                    <x-range wire:model.live.debounce="blur" min="0" max="20" step="2"
+                        label="{{ __('Blur') }}" class="range-primary" />
+                    <x-range wire:model.live.debounce="sharpen" min="0" max="20" step="2"
+                        label="{{ __('Sharpen') }}" class="range-primary" />
+                </x-slot:content>
+            </x-collapse>
+            <x-collapse name="group5">
+                <x-slot:heading>
+                    @lang('Crop')
+                </x-slot:heading>
+                <x-slot:content>
+                    <x-range wire:model.live.debounce="clipW" min="0" max="40" step="2"
+                        label="{{ __('Width') }}" class="range-primary" />
+                    <x-range wire:model.live.debounce="clipH" min="0" max="40" step="2"
+                        label="{{ __('Height') }}" class="range-primary" />
+                </x-slot:content>
+            </x-collapse>
+        </x-accordion>
+        @if ($changed)
+            <x-button wire:click="restoreImage(false)" class="btn-sm">@lang('Restore image to its original state')
+            </x-button><br>
+            <x-button wire:click="applyChanges" class="mt-2 btn-sm">@lang('Valid changes')</x-button><br>
+            <x-button wire:click="restoreImage(true)" class="mt-2 btn-sm">@lang('Finish and discard this version')</x-button>
+        @endif
+        <x-button wire:click="keepVersion" class="mt-2 btn-sm">@lang('Finish and keep this version')</x-button><br>
+    </div>
+
+    <script>
+        function copyUrl(button) {
+            const url = button.dataset.url; //+ succinct...
+            const textArea = document.createElement('textarea');
+            textArea.value = url;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                alert('URL copiée: ' + url);
+            } catch (err) {
+                console.error('Erreur lors de la copie de l\'URL: ', err);
+            }
+            document.body.removeChild(textArea);
+        }
+    </script>
+</div>
+```
+
+##### Traduction code composant admin.images.edit <!-- markmap: fold -->
+
+```json
+"Manage an image": "Gérer une image",
+"The url of this image is :": "L'URL de cette image est :",
+"This image is in the post ": "Cette image est dans l'article ",
+"This image is in the page ": "Cette image est dans la page ",
+"Select a rescale value": "Sélectionnez une valeur de redimensionnement",
+"Height": "Hauteur",
+"Width": "Largeur",
+"Size change": "Changement des dimensions",
+"Brightness": "Luminosité",
+"Brightness, contrast and gamma correction": "Correction de luminosité, contraste et gamma",
+"Contrast": "Contraste",
+"Restore image to its original state": "Restaurer l'image à son état d'origine",
+"Color correction": "Correction de couleur",
+"Valid changes": "Valider les modifications",
+"Changes validated": "Modifications validées",
+"Finish and keep this version": "Terminer et garder cette version",
+"This image is not used": "Cette image n'est pas utilisée",
+"Finish and discard this version": "Terminer et oublier cette version",
+"Are you sure to delete this image?": "Êtes-vous sûr de vouloir supprimer cette image ?",
+"Blur and sharpen": "Flou et netteté",
+"Blur": "Flou",
+"Sharpen": "Netteté",
+"Image modified ! (Not saved yet)": "Image modifiée ! (Non sauvegardée)",
+"Image restored": "Image restaurée",
+"No modification has been made": "Aucune modification n'a été apportée à l'image",
+"Image changes applied successfully": "Modifications de l'image appliquées avec succès"
 ```
 
 ### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-medias-partie-2](https://laravel.sillo.org/posts/mon-cms-les-medias-partie-2)***
 
-## - //2do Les Paramètres <!-- markmap: fold -->
+## - Les Paramètres <!-- markmap: fold -->
 
-### uuu \<!-- markmap: fold -->
-
-```php
-777
-```
-
-### uuu \<!-- markmap: fold -->
+### Route Setting <!-- markmap: fold -->
 
 ```php
-777
+Route::middleware('auth')->group(function () {
+    ...
+    Route::middleware(IsAdminOrRedac::class)->prefix('admin')->group(function () {
+        ...
+        Route::middleware(IsAdmin::class)->group(function () {
+            ...
+            Volt::route('/settings', 'admin.settings')->name('settings');
 ```
 
-### uuu \<!-- markmap: fold -->
+### Création composant Setting<!-- markmap: fold -->
 
 ```php
-777
+php artisan make:volt admin/settings --class
 ```
 
-### uuu \<!-- markmap: fold -->
+### Lien Setting dans admin.sidebar <!-- markmap: fold -->
 
 ```php
-777
+@if (Auth::user()->isAdmin())
+    ... images.index
+    <x-menu-item icon="m-cog-8-tooth" title="{{ __('Settings') }}" link="{{ route('settings') }}" :class="App::isDownForMaintenance() ? 'bg-red-300' : ''" />
+@endif
 ```
 
-### uuu \<!-- markmap: fold -->
+### Variables Setting (.env) <!-- markmap: fold -->
 
 ```php
-777
+APP_MAINTENANCE_DRIVER=file
+APP_MAINTENANCE_STORE=database
+APP_MAINTENANCE_SECRET=230542a-177b-4b66-ffb1-dd77g4c93515
 ```
+
+### Le rendu Front-End de Setting <!-- markmap: fold -->
+
+#### layout.app
+
+```php
+<div class="text-center hero-content text-neutral-content">
+    <div>
+        <h1 class="mb-5 text-4xl font-bold sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl">
+            {{ config('app.title') }}
+        </h1>
+        <p class="mb-1 text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl">
+            {{ config('app.subTitle') }}
+        </p>
+    </div>
+</div>
+```
+
+#### index
+
+```php
+@if ($post->pinned)
+    <x-badge value="{{ __('Pinned') }}" class="p-3 badge-warning" />
+@elseif($post->created_at->gt(now()->subWeeks(config('app.newPost'))))
+    <x-badge value="{{ __('New') }}" class="p-3 badge-success" />
+@endif
+```
+
+### Les données pour Setting <!-- markmap: fold -->
+
+#### Model & Migration Setting <!-- markmap: fold -->
+
+```php
+php artisan make:model Setting -m
+```
+
+```php
+class Setting extends Model {
+    public $timestamps = false;
+    protected $fillable = ['key', 'value'];
+}
+```
+
+```php
+    public function up(): void {
+    Schema::create('settings', function (Blueprint $table) {
+        $table->id();
+        $table->string('key')->unique();
+        $table->text('value');
+    });
+}
+```
+
+#### Seeder Setting <!-- markmap: fold -->
+
+```php
+php artisan make:seeder SettingSeeder
+```
+
+```php
+<?php
+namespace Database\seeders;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+class SettingSeeder extends Seeder {
+    public function run() {
+        $settings = [
+            ['key' => 'pagination', 'value' => 6],
+            ['key' => 'excerptSize', 'value' => 30],
+            ['key' => 'title', 'value' => 'Mon titre'],
+            ['key' => 'subTitle', 'value' => 'Mon sous-titre'],
+            ['key' => 'newPost', 'value' => 4],
+        ];
+    
+        DB::table('settings')->insert($settings);
+    }
+}
+```
+
+#### DatabaseSeeder Setting <!-- markmap: fold -->
+
+```php
+public function run(): void
+{
+    $this->call([
+        ...
+        SettingSeeder::class,
+    ]);
+}
+```
+
+```php
+php artisan migrate:fresh --seed
+```
+
+### Chargement systématique des paramètres <!-- markmap: fold -->
+
+    Dans AppServiceProvider.php :
+
+```php
+use App\Models\{Menu, Setting};
+...
+    public function boot(): void {
+        if (!$this->app->runningInConsole()) {
+            $settings = Setting::all();
+                foreach ($settings as $setting) {
+                    config(['app.' . $setting->key => $setting->value]);
+                }
+            }
+      ...
+    }
+```
+
+### Code composant Setting <!-- markmap: fold -->
+
+```php
+<?php
+use Mary\Traits\Toast;
+use App\Models\Setting;
+use Livewire\Volt\Component;
+use Illuminate\Support\Facades\Artisan;
+use Livewire\Attributes\{Layout, Validate};
+use Illuminate\Database\Eloquent\Collection;
+
+new #[Title('Settings')] #[Layout('components.layouts.admin')] class extends Component {
+    use Toast;
+
+    private const SETTINGS_KEYS = ['pagination', 'excerptSize', 'title', 'subTitle', 'newPost'];
+
+    #[Validate('required|max:30')]
+    public string $title;
+
+    #[Validate('required|max:50')]
+    public string $subTitle;
+
+    #[Validate('required|integer|between:2,12')]
+    public int $pagination;
+
+    #[Validate('required|integer|between:10,60')]
+    public int $excerptSize;
+
+    #[Validate('required|integer|between:1,12')]
+    public int $newPost;
+
+    public bool $maintenance = false;
+    public Collection $settings;
+
+    public function mount(): void {
+        $this->settings = Setting::all();
+
+        $this->maintenance = App::isDownForMaintenance();
+
+        foreach (self::SETTINGS_KEYS as $key) {
+            $this->{$key} = $this->settings->where('key', $key)->first()->value ?? null;
+        }
+    }
+
+    public function updatedMaintenance(): void {
+        if ($this->maintenance) {
+            Artisan::call('down', ['--secret' => env('APP_MAINTENANCE_SECRET')]);
+        } else {
+            Artisan::call('up'); // → php artisan up
+        }
+    }
+
+    public function save() {
+        $data = $this->validate();
+
+        DB::transaction(function () use ($data) {
+            foreach (self::SETTINGS_KEYS as $key) {
+                $setting = $this->settings->where('key', $key)->first();
+                if ($setting) {
+                    $setting->value = $data[$key];
+                    $setting->save();
+                }
+            }
+        });
+
+        $this->success(__('Settings updated successfully!'));
+    }
+}; ?>
+
+<div>
+    <x-header title="{{ __('Settings') }}" separator progress-indicator>
+        <x-slot:actions>
+            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline lg:hidden"
+                link="{{ route('admin') }}" />
+        </x-slot:actions>
+    </x-header>
+    <x-card>
+        <x-card separator class="mb-6 border-4 {{ $maintenance ? 'bg-red-300' : 'bg-zinc-100' }} border-zinc-950">
+            <div class="flex items-center justify-between">
+                <x-toggle label="{{ __('Maintenance Mode') }}" wire:model="maintenance" wire:change="$refresh" />
+                @if($maintenance)
+                    <x-button label="{{ __('Go to bypass page')}}" link="/{{ env('APP_MAINTENANCE_SECRET') }}"  />
+                @endif
+            </div>
+        </x-card>
+        <x-form wire:submit="save">
+            <x-card separator class="border-4 bg-zinc-100 border-zinc-950">
+                <x-input label="{{ __('Site title') }}" wire:model="title" />
+                <br>
+                <x-input label="{{ __('Site sub title') }}" wire:model="subTitle" />
+            </x-card>
+            <x-card separator class="border-4 bg-zinc-100 border-zinc-950">
+                <x-range min="2" max="12" wire:model="pagination" label="{!! __('Home pagination') !!}"
+                    hint="{{ __('Between 2 and 12.') }}" class="range-info" wire:change="$refresh" />
+                <x-badge value="{{ $pagination }}" class="my-2 badge-neutral" />
+            </x-card>
+            <x-card separator class="border-4 bg-zinc-100 border-zinc-950">
+                <x-range min="10" max="60" step="5" wire:model="excerptSize"
+                    label="{!! __('Post excerpt (number of words)') !!}" hint="{{ __('Between 10 and 60.') }}" class="range-info"
+                    wire:change="$refresh" />
+                <x-badge value="{{ $excerptSize }}" class="my-2 badge-neutral" />
+            </x-card>
+            <x-card separator class="border-4 bg-zinc-100 border-zinc-950">
+                <x-range min="1" max="12" step="1" wire:model="newPost"
+                    label="{!! __('Number of weeks a post is marked new') !!}" hint="{{ __('Between 1 and 12.') }}" class="range-info"
+                    wire:change="$refresh" />
+                <x-badge value="{{ $newPost }}" class="my-2 badge-neutral" />
+            </x-card>
+            <x-slot:actions>
+                <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit"
+                    class="btn-primary" />
+            </x-slot:actions>
+        </x-form>
+    </x-card>
+</div>
+```
+
+### Nettoyage code (Code cleaning) <!-- markmap: fold -->
+
+    Suppression de code (Devenu inutile) dans app/config.php :
+
+```php
+    'pagination'  => 6,
+    'excerptSize' => 30,
+```
+
+### Traductions Setting <!-- markmap: fold -->
+
+```json
+"Home pagination": "Pagination de la page d'accueil",
+"Between 2 and 12.": "Entre 2 et 12.",
+"Post excerpt (number of words)": "Extrait de l'article (nombre de mots)",
+"Between 30 and 60.": "Entre 10 et 60.",
+"Site title": "Titre du site",
+"Site sub title": "Sous-titre",
+"Settings updated successfully!": "Paramètres bien enregistrés !",
+"Number of weeks a post is marked new": "Nombre de semaines qu'un article est marqué comme nouveau",
+"Between 1 and 12.": "Entre 1 et 12",
+"Go to bypass page": "Aller sur la page de bypass",
+```
+
+### Maintenance : Réf.: [Doc Laravel // Maintenance](https://laravel.com/docs/11.x/configuration#maintenance-mode)
 
 ### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-parametres](https://laravel.sillo.org/posts/mon-cms-les-parametres)***
 
-## III / **A I D E &nbsp; & &nbsp; C O N T A C T** <!-- markmap: fold -->
+## III &nbsp;/ &nbsp; **A I D E &nbsp; & &nbsp; C O N T A C T** <!-- markmap: fold -->
 
 ### **[1 / Le TOP: Le dépôt GIT officiel](https://github.com/bestmomo/sillo)**
 
-- En faisant un Pull Request
-- En levant une issue
+- En [récupérant le code complet du projet](https://github.com/bestmomo/sillo/blob/master/doc/installation.md)
+- En y faisant un Pull Request
+- En y levant une issue
 
 ### **[2 / Le site officiel](https://laravel.sillo.org/login)**
 
@@ -7278,8 +8457,9 @@ php artisan make:volt admin/images/index --class
 
 ### **[4 / Un message personnel](https://laravel.sillo.org/contact)**
 
+## //2ar Reprendre moncms et y appliquer le mémo (du début)
 
-## PR dès que Complete <!-- markmap: fold -->
+## //2do PR dès que Complete <!-- markmap: fold -->
 
 - Update Memo
 

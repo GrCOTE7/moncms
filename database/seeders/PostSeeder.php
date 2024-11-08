@@ -30,7 +30,7 @@ class PostSeeder extends Seeder
 	{
 		$months = ['03', '03', '03', '04', '04', '06', '06', '06', '06'];
 
-		$date = generateRandomDateInRange('2022-01-01', '2024-07-01');
+		$date = generateRandomDateInRange('2022-01-01', '2024-11-07');
 
 		$postId = "Post {$id}";
 

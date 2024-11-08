@@ -16,12 +16,13 @@ return new class extends Migration {
 	{
 		Schema::create('members', function (Blueprint $table) {
 			$table->id();
-			$table->string('name')->index();
 			$table->string('username')->unique();
+			$table->string('firstname')->index();
+			$table->string('name')->index();
 			$table->string('email')->unique();
 			$table->timestamps();
 
-			$table->index(['name', 'username', 'email']);
+			$table->index(['username', 'name', 'email']);
 		});
 	}
 
