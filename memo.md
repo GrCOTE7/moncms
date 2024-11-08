@@ -833,7 +833,7 @@ public function definition(): array
 
 ## &nbsp;**I &nbsp;/ &nbsp; F R O N T &nbsp;- &nbsp;E N D &nbsp;:**
 
-## - L'authentification \<!-- markmap: fold -->
+## - L'authentification <!-- markmap: fold -->
 
 ### Installer MaryUI (Avec Volt et npm) <!-- markmap: fold -->
 
@@ -845,7 +845,7 @@ public function definition(): array
 - Un layout (resources\views\components\layouts\app.blade.php)
 - Un composant Volt (resources\views\livewire\users\index.blade.php)
 
-#### Rappel : Dorénavant, lancer aussi le serveur Vite
+#### Rappel : Dorénavant, bien lancer aussi le serveur Vite
 
 ```php
   npm run dev
@@ -853,7 +853,7 @@ public function definition(): array
 
 ##### **[URL du rendu](http://127.0.0.1:8000)**
 
-### Layout pour l'authentification \<!-- markmap: fold -->
+### Layout pour l'authentification <!-- markmap: fold -->
 
     ./resources/views/components/layouts/auth.blade.php
 
@@ -865,8 +865,7 @@ public function definition(): array
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ isset($title) ? $title . ' | ' . config('app.name') : config('app.name') }}</title>
-
+    <title>{{ (isset($title) ? $title . ' | ' : (View::hasSection('title') ? View::getSection('title') . ' | ' : '')) . config('app.name') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
@@ -884,7 +883,7 @@ public function definition(): array
 </html>
 ```
 
-### Composants VOLT pour authentification <!-- markmap: fold -->
+### Composants VOLT pour authentification \<!-- markmap: fold -->
 
 #### Composant Register
 
@@ -917,7 +916,7 @@ public function definition(): array
   use App\Notifications\UserRegistered;
   use Livewire\Attributes\{Layout, Validate, Title};
   
-  new #[Title('Register')] #[Layout('components.layouts.auth')] 
+  new #[Layout('components.layouts.auth')] 
   class extends Component {
       use Toast;
 
@@ -944,33 +943,33 @@ public function definition(): array
     }
 
     protected function createUser(array $data): User {
-        $data['password'] = Hash::make($data['password']);
-        return User::create($data);
+      $data['password'] = Hash::make($data['password']);
+      return User::create($data);
     }
   
   }; ?>
+  <div>/div>
+    @section('title', __('Register'))
+    <x-card class="flex items-center justify-center h-[96vh]">
+      <a href="/" title="{{ __('Return on site') }}">
+        <x-card class="items-center" title="{{ __('Register') }}" shadow separator progress-indicator />
+      </a>
+      <x-form wire:submit="register" class="w-full sm:min-w-[30vw]">
+        <x-input label="{{ __('Name') }} *" wire:model="name" icon="o-user" inline required />
+        <x-input label="{{ __('E-mail') }} *" wire:model="email" icon="o-envelope" inline required />
+        <x-input label="{{ __('Password') }} *" wire:model="password" type="password" icon="o-key" inline required />
+        <x-input label="{{ __('Confirm Password') }} *" wire:model="password_confirmation" type="password" icon="o-key" inline required />
+        <p class="text-[12px] text-right italic my-[-10px]">* : {{__('Required information') }}</p>
+        <div style="display: none;">
+            <x-input wire:model="gender" type="text" inline />
+        </div>
+        <x-slot:actions>
+          <x-button label="{{ __('Already registered?') }}" class="btn-ghost" link="/login" />
+          <x-button label="{{ __('Register') }}" type="submit" icon="o-paper-airplane" class="btn-primary" spinner="login" />
+        </x-slot:actions>
+        </x-form>
   
-  <div>
-      <x-card class="flex items-center justify-center h-screen" title="{{ __('Register') }}" shadow separator
-          progress-indicator>
-  
-          <x-form wire:submit="register" class="w-full sm:min-w-[30vw]">
-              <x-input label="{{ __('Name') }}" wire:model="name" icon="o-user" inline required />
-              <x-input label="{{ __('E-mail') }}" wire:model="email" icon="o-envelope" inline required />
-              <x-input label="{{ __('Password') }}" wire:model="password" type="password" icon="o-key" inline required />
-              <x-input label="{{ __('Confirm Password') }}" wire:model="password_confirmation" type="password"
-                  icon="o-key" inline required />
-              <div style="display: none;">
-                  <x-input wire:model="gender" type="text" inline />
-              </div>
-              <x-slot:actions>
-                  <x-button label="{{ __('Already registered?') }}" class="btn-ghost" link="/login" />
-                  <x-button label="{{ __('Register') }}" type="submit" icon="o-paper-airplane" class="btn-primary"
-                      spinner="login" />
-              </x-slot:actions>
-          </x-form>
-  
-      </x-card>
+    </x-card>
   </div>
 ```
 
@@ -985,6 +984,7 @@ public function definition(): array
   "Already registered?": "Déjà enregistré ?",
   "Name": "Nom",
   "E-mail": "Courriel",
+  "Required information": "Information requise",
   "Registration successful!": "Compte créé avec succès !"
 ```
 
@@ -1078,11 +1078,15 @@ public function definition(): array
   }; ?>
   
   <div>
-    <x-card class="flex items-center justify-center h-screen" title="{{ __('Login') }}" shadow separator progress-indicator>
+    <x-card class="flex items-center justify-center h-screen">
+      <a href="/" title="{{ __('Return on site') }}">
+        <x-card class="items-center" title="{{ __('Login') }}" shadow separator progress-indicator />
+      </a>
       <x-form wire:submit="login">
-        <x-input label="{{ __('E-mail') }}" wire:model="email" icon="o-envelope" type="email" inline />
-        <x-input label="{{ __('Password') }}" wire:model="password" type="password" icon="o-key" type="password" inline />
+        <x-input label="{{ __('E-mail') }} *" wire:model="email" icon="o-envelope" type="email" inline />
+        <x-input label="{{ __('Password') }} *" wire:model="password" type="password" icon="o-key" type="password" inline />
         <x-checkbox label="{{ __('Remember me') }}" wire:model="remember" />
+        <p class="text-[12px] text-right italic my-[-10px]">* : {{__('Required information') }}</p> 
         <x-slot:actions>
           <div class="flex flex-col space-y-2 flex-end sm:flex-row sm:space-y-0 sm:space-x-2">
             <x-button label="{{ __('Login') }}" type="submit" icon="o-paper-airplane" class="ml-2 btn-primary sm:order-1" />
@@ -1153,7 +1157,7 @@ public function definition(): array
   use Livewire\Attributes\{ Layout, Title };
   use Livewire\Volt\Component;
   
-  new #[Title('Password renewal')] 
+  new
   #[Layout('components.layouts.auth')]
   class extends Component {
   
@@ -1176,17 +1180,32 @@ public function definition(): array
     }
   }; ?>
   
-  <div>
-    <x-card class="flex items-center justify-center h-screen" title="{{__('Password renewal')}}" subtitle="{{__('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.')}}" shadow separator  progress-indicator>
-      <x-session-status class="mb-4" :status="session('status')" />
-      <x-form wire:submit="sendPasswordResetLink">
-        <x-input label="{{__('E-mail')}}" wire:model="email" icon="o-envelope" inline required />
-        <x-slot:actions>
-            <x-button label="{{ __('Email Password Reset Link') }}" type="submit" icon="o-paper-airplane" class="btn-primary" />
-        </x-slot:actions>
-      </x-form>
-    </x-card>
-  </div>
+<div>
+  @section('title', __('Password renewal'))
+  <x-card class="flex items-center justify-center h-[96vh]" data-link='/' data-tip="{{  __('Return on site') }}" title="{{ __('Password renewal') }}" subtitle="{{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}" shadow separator progress-indicator id='my-title'>
+    <x-session-status class="mb-4" :status="session('status')" />
+    <x-form wire:submit="sendPasswordResetLink">
+      <x-input label="{{ __('E-mail') }} *" wire:model="email" icon="o-envelope" inline required />
+      <x-slot:actions>
+        <x-button label="{{ __('Email Password Reset Link') }}" type="submit" icon="o-paper-airplane" class="btn-primary" />
+      </x-slot:actions>
+    </x-form>
+  </x-card>
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const card = document.getElementById('my-title');
+    const link = card.getAttribute('data-link');
+    const tip = card.getAttribute('data-tip');
+    const divs = card.getElementsByTagName('div');
+    // console.log(divs)
+    const titleElement = card.querySelector('title');
+    if (divs.length >= 4) {
+      const titleElement = divs[3]; // Cible le quatrième <div>
+      titleElement.innerHTML = `<a href="${link}" title="${tip}">${titleElement.innerHTML}</a>`;
+    }
+  });
+  </script>
+</div>
 ```
 
 ###### Traduction pour forgot-password <!-- markmap: fold -->
@@ -1272,18 +1291,23 @@ public function definition(): array
   }; ?>
   
   <div>
-    <x-card class="flex items-center justify-center h-screen" title="{{__('Reset Password')}}" shadow separator progress-indicator>
+    @section('title', __('Reset Password'))
+    <x-card class="flex items-center justify-center h-[96vh]" shadow separator progress-indicator>
+      <a href="/" title="{{ __('Return on site') }}">
+          <x-card class="items-center" title="{{__('Reset Password')}}" shadow separator progress-indicator />
+      </a>
       <x-session-status class="mb-4" :status="session('status')" />
       <x-form wire:submit="resetPassword">
-        <x-input label="{{__('E-mail')}}" wire:model="email" icon="o-envelope" inline />
-        <x-input label="{{__('Password')}}" wire:model="password" type="password" icon="o-key" inline />
-        <x-input label="{{__('Confirm Password')}}" wire:model="password_confirmation" type="password" icon="o-key" inline required autocomplete="new-password" />
+        <x-input label="{{ __('E-mail') }} *" wire:model="email" icon="o-envelope" inline />
+        <x-input label="{{ __('Password') }} *" wire:model="password" type="password" icon="o-key" inline />
+        <x-input label="{{ __('Confirm Password') }} *" wire:model="password_confirmation" type="password" icon="o-key" inline required autocomplete="new-password" />
+        <p class="text-[12px] text-right italic my-[-10px]">* : {{__('Required information') }}</p>
         <x-slot:actions>
-          <x-button label="{{ __('Reset Password') }}" type="submit" icon="o-paper-airplane"         class="btn-primary" />
+          <x-button label="{{ __('Reset Password') }}" type="submit" icon="o-paper-airplane" class="btn-primary" />
         </x-slot:actions>
       </x-form>
     </x-card>
-  </div>
+</div>
 ```
 
 ###### **[Rendu forgot-password](http://127.0.0.1:8000/forgot-password)** (Tester la soumission du Formulaire)
@@ -1320,9 +1344,9 @@ public function definition(): array
 
 ### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-lauthentification](https://laravel.sillo.org/posts/mon-cms-lauthentification)***
 
-## - La page d'accueil (HomePage) <!-- markmap: fold -->
+## - La page d'accueil (HomePage) \<!-- markmap: fold -->
 
-### Route index <!-- markmap: fold -->
+### Route index & category <!-- markmap: fold -->
 
 ```php
   Volt::route('/', 'index');
@@ -1363,26 +1387,23 @@ public function definition(): array
   </head>
   
   <body class="min-h-screen font-sans antialiased bg-base-200/50 dark:bg-base-200">
-  
     {{-- HERO --}}
-
     <div class="min-h-[10vw] hero" style="background-image: url({{ asset('storage/hero.jpg') }});">
       <div class="bg-opacity-60 hero-overlay">
       </div>
       <a href="{{ '/' }}">
       <div class="text-center hero-content text-neutral-content">
         <div>
-          <h1 class="mb-5 text-4xl font-bold sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl">
+          <h1 class="mb-5 text-4xl font-bold sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">
               Mon Titre
           </h1>
-          <p class="mb-1 text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl">
+          <p class="mb-1 text-lg sm:text-xl md:text-1xl lg:text-2xl xl:text-3xl">
               Mon sous-titre
           </p>
         </div>              
       </div>
     </a>
     </div>
-  
   </body>
 ```
 
@@ -1527,7 +1548,7 @@ public function definition(): array
 </body>
 ```
 
-### Bloc des articles <!-- markmap: fold -->
+### Bloc central : Les articles <!-- markmap: fold -->
 
 #### Création app/Repositories/PostRepository.php <!-- markmap: fold -->
 
@@ -1553,9 +1574,9 @@ public function definition(): array
   
     protected function getBaseQuery(): Builder {
       $specificReqs = [
-      'mysql'  => "LEFT(body, LOCATE(' ', body, 700))",
-      'sqlite' => 'substr(body, 1, 700)',
-      'pgsql'  => 'substring(body from 1 for 700)',
+        'mysql'  => "LEFT(body, LOCATE(' ', body, 700))",
+        'sqlite' => 'substr(body, 1, 700)',
+        'pgsql'  => 'substring(body from 1 for 700)',
       ];
       
       $usedDbSystem = env('DB_CONNECTION', 'mysql');
@@ -3518,7 +3539,8 @@ new #[Title('Profile')] #[Layout('components.layouts.auth')] class extends Compo
 "Delete account": "Supprimer le compte",
 "Are you sure to delete your account?": "Êtes-vous sûr de vouloir supprimer votre compte ?",
 "Profile": "Profil",
-"Go on site": "Allez sur le site"
+"Go on site": "Allez sur le site",
+"Return on site": "Retourner sur le site"
 ```
 
 ### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-le-profil](https://laravel.sillo.org/posts/mon-cms-le-profil)***
@@ -3891,7 +3913,9 @@ use App\Http\Middleware\IsAdminOrRedac;
 Route::middleware('auth')->group(function () {
     ...
     Route::middleware(IsAdminOrRedac::class)->prefix('admin')->group(function () {
+        Volt::route('/', 'admin.index')->name('admin.root');        
         Volt::route('/dashboard', 'admin.index')->name('admin');
+
     });
 });
 ```
@@ -8456,8 +8480,6 @@ new #[Title('Settings')] #[Layout('components.layouts.admin')] class extends Com
 - Pour discuter en LIVE
 
 ### **[4 / Un message personnel](https://laravel.sillo.org/contact)**
-
-## //2ar Reprendre moncms et y appliquer le mémo (du début)
 
 ## //2do PR dès que Complete <!-- markmap: fold -->
 

@@ -57,14 +57,19 @@ class extends Component {
 }; ?>
 
 <div>
-    <x-card class="flex items-center justify-center h-screen" title="{{__('Reset Password')}}" shadow separator progress-indicator>
+    @section('title', __('Reset Password'))
+    <x-card class="flex items-center justify-center h-[96vh]" shadow separator progress-indicator>
+    <a href="/" title="{{ __('Return on site') }}">
+        <x-card class="items-center" title="{{__('Reset Password')}}" shadow separator progress-indicator />
+    </a>
         <x-session-status class="mb-4" :status="session('status')" />
         <x-form wire:submit="resetPassword">
-            <x-input label="{{__('E-mail')}}" wire:model="email" icon="o-envelope" inline />
-            <x-input label="{{__('Password')}}" wire:model="password" type="password" icon="o-key" inline />
-            <x-input label="{{__('Confirm Password')}}" wire:model="password_confirmation" type="password" icon="o-key" inline required autocomplete="new-password" />
+            <x-input label="{{ __('E-mail') }} *" wire:model="email" icon="o-envelope" inline />
+            <x-input label="{{ __('Password') }} *" wire:model="password" type="password" icon="o-key" inline />
+            <x-input label="{{ __('Confirm Password') }} *" wire:model="password_confirmation" type="password" icon="o-key" inline required autocomplete="new-password" />
+            <p class="text-[12px] text-right italic my-[-10px]">* : {{__('Required information') }}</p>
             <x-slot:actions>
-               <x-button label="{{ __('Reset Password') }}" type="submit" icon="o-paper-airplane" class="btn-primary" />
+                <x-button label="{{ __('Reset Password') }}" type="submit" icon="o-paper-airplane" class="btn-primary" />
             </x-slot:actions>
         </x-form>
     </x-card>

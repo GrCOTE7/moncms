@@ -27,10 +27,10 @@
         <a href="{{ '/' }}">
             <div class="text-center hero-content text-neutral-content">
                 <div>
-                    <h1 class="mb-5 text-4xl font-bold sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl">
+                    <h1 class="mb-5 text-4xl font-bold sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">
                         Mon Titre
                     </h1>
-                    <p class="mb-1 text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl">
+                    <p class="mb-1 text-lg sm:text-xl md:text-1xl lg:text-2xl xl:text-3xl">
                         Mon sous-titre
                     </p>
                 </div>

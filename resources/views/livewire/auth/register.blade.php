@@ -7,7 +7,8 @@ use Livewire\Volt\Component;
 use App\Notifications\UserRegistered;
 use Mary\Traits\Toast;
 
-new #[Title('Register')] #[Layout('components.layouts.auth')]
+new
+#[Layout('components.layouts.auth')]
 class extends Component {
 
     use Toast;
@@ -53,15 +54,20 @@ class extends Component {
 }; ?>
 
 <div>
-    <x-card class="flex items-center justify-center h-screen" title="{{ __('Register') }}" shadow separator
-        progress-indicator>
 
+    @section('title', __('Register'))
+
+    <x-card class="flex items-center justify-center h-[96vh]">
+        <a href="/" title="{{ __('Return on site') }}">
+            <x-card class="items-center" title="{{ __('Register') }}" shadow separator progress-indicator />
+        </a>
         <x-form wire:submit="register" class="w-full sm:min-w-[30vw]">
-            <x-input label="{{ __('Name') }}" wire:model="name" icon="o-user" inline required />
-            <x-input label="{{ __('E-mail') }}" wire:model="email" icon="o-envelope" inline required />
-            <x-input label="{{ __('Password') }}" wire:model="password" type="password" icon="o-key" inline required />
-            <x-input label="{{ __('Confirm Password') }}" wire:model="password_confirmation" type="password"
+            <x-input label="{{ __('Name') }} *" wire:model="name" icon="o-user" inline required />
+            <x-input label="{{ __('E-mail') }} *" wire:model="email" icon="o-envelope" inline required />
+            <x-input label="{{ __('Password') }} *" wire:model="password" type="password" icon="o-key" inline required />
+            <x-input label="{{ __('Confirm Password') }} *" wire:model="password_confirmation" type="password"
                 icon="o-key" inline required />
+            <p class="text-[12px] text-right italic my-[-10px]">* : {{__('Required information') }}</p>
             <div style="display: none;">
                 <x-input wire:model="gender" type="text" inline />
             </div>
