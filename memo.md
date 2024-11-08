@@ -8478,17 +8478,16 @@ new #[Title('Settings')] #[Layout('components.layouts.admin')] class extends Com
 
 - *Le service doit être démarré...*
 
-
 ### **[1 / Le TOP: Le dépôt GIT officiel](https://github.com/bestmomo/sillo)**
 
 - En [récupérant le code complet du projet](https://github.com/bestmomo/sillo/blob/master/doc/installation.md)
-- En y faisant un Pull Request
-- En y levant une issue
+- Puis, en y faisant un Pull Request (Et là... : BRAVOs (*Mabrouk*) !!!)
+- Ou au pire, en y levant une issue... Mais pas si gravissime (*Malich*) ;-)
 
 ### **[2 / Le site officiel](https://laravel.sillo.org/login)**
 
 - Message possible en bas de chaque article
-(Vous devez alors vous loguer ou créer un compte)
+(*Vous devez alors vous loguer ou créer un compte*)
 
 ### **[3 / Le canal officiel DISCORD](https://discord.com/channels/1258750464800063640/1258750464800063646)**
 
