@@ -10,7 +10,7 @@ use Faker\Factory as FakerBase;
 
 class Fakers
 {
-	public function completeFakeSentences($length = 150, $locale = null): object
+	public function completeFakeSentences($length = 250, $locale = null): object
 	{
 		if (!$locale) {
 			$localeConverter = new TimeFcts();
@@ -18,8 +18,9 @@ class Fakers
 		}
 
 		$faker                 = FakerBase::create($locale);
-		$completeFakeSentences = $faker->realText(min($length + 100, 200), 3);
+		$completeFakeSentences = $faker->realText($length+100, 3);
 
+        //2do factorise
 		$positionPoint        = strrpos(substr($completeFakeSentences, 0, $length), '.');
 		$positionPointVirgule = strrpos(substr($completeFakeSentences, 0, $length), ';');
 		$positionPointExcla   = strrpos(substr($completeFakeSentences, 0, $length), '!');
@@ -46,7 +47,7 @@ class Fakers
 			}
 		} catch (\Exception $e) {
 			echo 'Error: ' . $e->getMessage() . "\n";
-			$usentencesO = (object) [
+			$sentencesO = (object) [
 				'complete' => $completeFakeSentences,
 				'wellCut'  => $wellCut,
 			];
