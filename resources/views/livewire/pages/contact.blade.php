@@ -1,8 +1,8 @@
 <?php
-// use App\Models\Contact;
-use Livewire\Attributes\{Layout, Rule};
-use Livewire\Volt\Component;
 use Mary\Traits\Toast;
+use App\Models\Contact;
+use Livewire\Volt\Component;
+use Livewire\Attributes\{Layout, Rule};
 
 // Définition du composant avec les attributs de titre et de mise en page
 new
@@ -52,13 +52,15 @@ class extends Component {
         progress-indicator>
         <x-form wire:submit="save">
             <!-- Affichage des champs de nom et d'email uniquement si l'utilisateur n'est pas connecté -->
+            {{-- //2do champs requis --}}
             @if (!Auth()->check())
-                <x-input label="{{ __('Name') }}" wire:model="name" icon="o-user" inline />
-                <x-input label="{{ __('E-mail') }}" wire:model="email" icon="o-envelope" inline />
+                <x-input label="{{ __('Name') }} *" wire:model="name" icon="o-user" inline />
+                <x-input label="{{ __('E-mail') }} *" wire:model="email" icon="o-envelope" inline />
             @endif
             <!-- Champ de message -->
             <x-textarea wire:model="message" hint="{{ __('Max 1000 chars') }}" rows="5"
-                placeholder="{{ __('Your message...') }}" inline />
+                placeholder="{{ __('Your message...') }} *" inline />
+            <p class="text-[12px] text-right italic my-[-10px]">* : {{ __('Required information') }}</p>
             <!-- Boutons d'actions -->
             <x-slot:actions>
                 <x-button label="{{ __('Cancel') }}" link="/" class="btn-ghost" />

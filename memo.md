@@ -2118,18 +2118,126 @@ public function search(string $search): LengthAwarePaginator {
 
 ### La page Contact \<!-- markmap: fold -->
 
-#### Model & Migration Contact \<!-- markmap: fold -->
+#### Données Contact \<!-- markmap: fold -->
+
+##### Model & Migration Contact <!-- markmap: fold -->
 
 ```php
 //2do make model -m
+php artisan make:model Contact -m
 ```
 
 ```php
-//2do model Contact
+<?php
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+class Contact extends Model {
+    use HasFactory;
+    use Notifiable;
+
+    protected $fillable = ['name', 'email', 'message', 'user_id'];
+
+    public function user(): BelongsTo {
+        return $this->belongsTo(User::class);
+    }
+}
 ```
 
 ```php
-//2do migration
+<?php
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+    class CreateContactsTable extends Migration {
+    public function up() {
+        Schema::create('contacts', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id')->nullable()->default(null);
+            $table->string('name');
+            $table->string('email');
+            $table->text('message');
+            $table->boolean('handled')->default(false);
+            $table->timestamps();
+        });
+    }
+
+    public function down() {
+      Schema::dropIfExists('contacts');
+    }
+}
+```
+
+##### 2do Seeder avec Factory Contact \<!-- markmap: fold -->
+
+```php
+php artisan make:factory Contact
+```
+
+```php
+<?php
+namespace Database\Factories;
+
+use App\Models\Contact;
+use Faker\Factory as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+    class ContactFactory extends Factory {
+    
+    protected $model = Contact::class;
+    
+    public function definition() {
+        $faker = Faker::create('fr_FR');
+    
+        return [
+            'name'    => $faker->name,
+            'email'   => $faker->unique()->safeEmail,
+            'message' => $faker->realText(200, 2),
+      ];
+  }
+}
+```
+
+```php
+php artisan make:seeder ContactSeeder
+```
+
+```php
+<?php
+namespace database\seeders;
+
+use App\Models\Contact;
+use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+class ContactSeeder extends Seeder {
+    use WithoutModelEvents;
+    
+    public function run() {
+        Contact::factory()->count(5)->create();
+    }
+}
+```
+
+```php
+class DatabaseSeeder extends Seeder {
+    public function run(): void {
+        $this->call([
+            ...
+            ContactSeeder::class,
+        ]);
+        ...
+    }
+}
+```
+
+```php
+php artisan db:seed
 ```
 
 #### Route Contact <!-- markmap: fold -->
@@ -2147,18 +2255,16 @@ php artisan make:volt pages/contact --class
 
 ```php
 <?php
-use App\Models\Contact;
-use Livewire\Attributes\{Layout, Rule};
-use Livewire\Volt\Component;
 use Mary\Traits\Toast;
+use App\Models\Contact;
+use Livewire\Volt\Component;
+use Livewire\Attributes\{Layout, Rule};
 
-// Définition du composant avec les attributs de titre et de mise en page
 new
 #[Title('Contact')]
 class extends Component {
     use Toast;
 
-    // Définition des règles de validation pour les champs du formulaire
     #[Rule('required|string|max:255')]
     public string $name = '';
 
@@ -2201,12 +2307,13 @@ class extends Component {
         <x-form wire:submit="save">
             <!-- Affichage des champs de nom et d\'email uniquement si \'utilisateur n\'est pas connecté -->
             @if (!Auth()->check())
-                <x-input label="{{ __('Name') }}" wire:model="name" icon="o-user" inline />
-                <x-input label="{{ __('E-mail') }}" wire:model="email" icon="o-envelope" inline />
+                <x-input label="{{ __('Name') }} *" wire:model="name" icon="o-user" inline />
+                <x-input label="{{ __('E-mail') }} *" wire:model="email" icon="o-envelope" inline />
             @endif
             <!-- Champ de message -->
             <x-textarea wire:model="message" hint="{{ __('Max 1000 chars') }}" rows="5"
-                placeholder="{{ __('Your message...') }}" inline />
+                placeholder="{{ __('Your message...') }} *" inline />
+            <p class="text-[12px] text-right italic my-[-10px]">* : {{ __('Required information') }}</p>
             <!-- Boutons d'actions -->
             <x-slot:actions>
                 <x-button label="{{ __('Cancel') }}" link="/" class="btn-ghost" />
@@ -2223,10 +2330,11 @@ class extends Component {
 ```json
 "Use this form to contact me": "Utilisez ce formulaire pour me contacter",
 "Your message...": "Votre message...",
-"Max 1000 chars": "Max 1000 caractères"
+"Max 1000 chars": "Max 1000 caractères",
+"Your message has been sent!": "Votre message a bien été envoyé !"
 ```
 
-## - Les menus & le footer \<!-- markmap: fold -->
+## - Les menus & le footer <!-- markmap: fold -->
 
 ### Les données pour menus et footer <!-- markmap: fold -->
 
@@ -2602,11 +2710,15 @@ class extends Component {
 
 ### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-menus](https://laravel.sillo.org/posts/mon-cms-les-menus)***
 
-## - Les commentaires <!-- markmap: fold -->
+## - Les commentaires \<!-- markmap: fold -->
 
 ### Model & Migration et factory & seeder Comment <!-- markmap: fold -->
 
 #### Model Comment <!-- markmap: fold -->
+
+```php
+php artisan make:model Comment --migration
+```
 
 ```php
 <?php
@@ -2648,22 +2760,18 @@ class Comment extends Model {
 #### Structure Comment <!-- markmap: fold -->
 
 ```php
-php artisan make:model Comment -m
-```
-
-```php
 public function up(): void {
     Schema::create('comments', function (Blueprint $table) {
         $table->id();
-        $table->timestamps();
         $table->text('body');
-        $table->foreignId('user_id')->constrained()->onDelete('cascade');
         $table->foreignId('post_id')->constrained()->onDelete('cascade');
+        $table->foreignId('user_id')->constrained()->onDelete('cascade');
         $table->unsignedBigInteger('parent_id')->nullable()->default(null);
         $table->foreign('parent_id')
             ->references('id')
             ->on('comments')
             ->onDelete('cascade');
+        $table->timestamps();
     });
 }
 ```
@@ -6425,6 +6533,8 @@ class extends Component {
 
 ### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-commentaires](https://laravel.sillo.org/posts/mon-cms-les-commentaires)***
 
+### //2do admin.contact
+
 ## - Les Menus <!-- markmap: fold -->
 
 ### Liste des Menus & Submenus <!-- markmap: fold -->
@@ -8470,11 +8580,19 @@ new #[Title('Settings')] #[Layout('components.layouts.admin')] class extends Com
 
 ### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-parametres](https://laravel.sillo.org/posts/mon-cms-les-parametres)***
 
-## III &nbsp;/ &nbsp; **A I D E &nbsp; & &nbsp; C O N T A C T** \<!-- markmap: fold -->
+### Optimisations diverses <!-- markmap: fold -->
 
-### **0 / Liens techniques clés**
+#### DataBaseSeeder <!-- markmap: fold -->
 
-#### [MailHog](http://127.0.0.1:8025) \<!-- markmap: fold -->
+    //2do Cf .Sillo
+
+#### //2do Contact Seeder (Avec App/Tools) <!-- markmap: fold -->
+
+## III &nbsp;/ &nbsp; **A I D E &nbsp; & &nbsp; C O N T A C T** <!-- markmap: fold -->
+
+### **0 / Liens clés techniques**
+
+#### [MailHog](http://127.0.0.1:8025) <!-- markmap: fold -->
 
 - *Le service doit être démarré...*
 

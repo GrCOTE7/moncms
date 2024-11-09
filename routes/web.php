@@ -11,10 +11,10 @@ use Livewire\Volt\Volt;
 // À chaque changement: php artisan view:clear & php artisan route:clear
 
 Volt::route('/', 'index');
-Volt::route('/test', 'test')->name('test'); // Simple component
-Volt::route('/test1', 'test1')->name('test1'); // To do...
-Volt::route('/test2', 'test2')->name('test2'); // Simple members list
-Volt::route('/test3', 'test3')->name('test3'); // Members list with birthday
+Volt::route('/test', 'various.test')->name('various.test'); // Simple component
+Volt::route('/test1', 'various.test1')->name('various.test1'); // To do...
+Volt::route('/test2', 'various.test2')->name('various.test2'); // Simple members list
+Volt::route('/test3', 'various.test3')->name('various.test3'); // Members list with birthday
 Volt::route('/users', 'users.index');
 
 Route::get('/memo', function () {

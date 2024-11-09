@@ -83,7 +83,7 @@ new class extends Component {
             @endif
         @endauth
 
-        <a href="{{ route('test') }}"><x-icon name="c-cog-6-tooth" /></a>
+        <a href="{{ route('various.test') }}"><x-icon name="c-cog-6-tooth" /></a>
 
         <x-theme-toggle title="{{ __('Toggle theme') }}" class="w-4 h-8" />
         <livewire:search />

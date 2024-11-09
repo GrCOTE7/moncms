@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
 			CategorySeeder::class,
 			PostSeeder::class,
 			PageSeeder::class,
+			ContactSeeder::class,
 			MenusSeeder::class,
 			FootermenusSeeder::class,
 			CommentSeeder::class,

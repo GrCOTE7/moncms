@@ -351,5 +351,8 @@
     "User edited with success.": "Utilisateur mis à jour avec succès.",
     "Use this form to contact me": "Utilisez ce formulaire pour me contacter",
     "Your message...": "Votre message...",
-    "Max 1000 chars": "Max 1000 caractères"
+    "Max 1000 chars": "Max 1000 caractères",
+    "Your message has been sent!": "Votre message a bien été envoyé !",
+    "Simple component": "Simple composant",
+    "A user": "Un utilisateur"
 }

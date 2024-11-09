@@ -17,7 +17,7 @@ class MembersSeeder extends Seeder
 	 */
 	public function run(): void
 	{
-		$totalUser = 1e5; // 1e5
+		$totalUser = 1e2; // 1e5
 		echo "\n";
 		MemberFactory::setTotal($totalUser);
 		for ($i = 1; $i <= $totalUser / 5; ++$i) {
