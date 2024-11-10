@@ -883,7 +883,7 @@ public function definition(): array
 </html>
 ```
 
-### Composants VOLT pour authentification \<!-- markmap: fold -->
+### Composants VOLT pour authentification <!-- markmap: fold -->
 
 #### Composant Register
 
@@ -1754,7 +1754,7 @@ return [
 
 ### Référence: ***[https://laravel.sillo.org/posts/mon-cms-la-page-daccueil](https://laravel.sillo.org/posts/mon-cms-la-page-daccueil)***
 
-## - Les articles & les pages \<!-- markmap: fold -->
+## - Les articles & les pages <!-- markmap: fold -->
 
 ### Composant posts.show <!-- markmap: fold -->
 
@@ -1823,14 +1823,14 @@ return [
     </div>
     <br>
     <hr>
-    <p>@lang('By ') {{ $post->user->name }}</p>
+    <p>@lang('By') {{ $post->user->name }}</p>
   </div>
 ```
 
 #### Traduction posts.show <!-- markmap: fold -->
 
 ```json
-  "By ": "Par "
+  "By": "Par"
 ```
 
 ### Dynamic Title/Description/Keywords (S.E.O.) <!-- markmap: fold -->
@@ -2116,9 +2116,9 @@ public function search(string $search): LengthAwarePaginator {
 
 ### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-articles](https://laravel.sillo.org/posts/mon-cms-les-articles)***
 
-### La page Contact \<!-- markmap: fold -->
+### La page Contact<!-- markmap: fold -->
 
-#### Données Contact \<!-- markmap: fold -->
+#### Données Contact <!-- markmap: fold -->
 
 ##### Model & Migration Contact <!-- markmap: fold -->
 
@@ -2173,7 +2173,7 @@ use Illuminate\Database\Migrations\Migration;
 }
 ```
 
-##### 2do Seeder avec Factory Contact \<!-- markmap: fold -->
+##### Seeder avec Factory Contact <!-- markmap: fold -->
 
 ```php
 php artisan make:factory Contact
@@ -2189,17 +2189,17 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
     class ContactFactory extends Factory {
     
-    protected $model = Contact::class;
+        protected $model = Contact::class;
     
-    public function definition() {
-        $faker = Faker::create('fr_FR');
-    
-        return [
-            'name'    => $faker->name,
-            'email'   => $faker->unique()->safeEmail,
-            'message' => $faker->realText(200, 2),
-      ];
-  }
+        public function definition() {
+            $faker = Faker::create('fr_FR');
+      
+            return [
+                'name'    => $faker->name,
+                'email'   => $faker->unique()->safeEmail,
+                'message' => $faker->realText(200, 2),
+          ];
+    }
 }
 ```
 
@@ -2285,15 +2285,12 @@ class extends Component {
             $this->user_id = Auth::id();
         }
     }
-
     // Méthode pour enregistrer le formulaire de contact
     public function save() {
         // Validation des données du formulaire
         $data = $this->validate();
-
         // Création d'un nouveau contact avec les données validées
         Contact::create($data);
-
         // Affichage d'un message de réussite avec une redirection
         $this->success(__('Your message has been sent!'), redirectTo: '/');
     }
@@ -2710,7 +2707,7 @@ class extends Component {
 
 ### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-menus](https://laravel.sillo.org/posts/mon-cms-les-menus)***
 
-## - Les commentaires \<!-- markmap: fold -->
+## - Les commentaires <!-- markmap: fold -->
 
 ### Model & Migration et factory & seeder Comment <!-- markmap: fold -->
 
@@ -2815,10 +2812,9 @@ php artisan make:factory CommentFactory
 ```
 
 ```php
-public function definition(): array
-{
+public function definition(): array {
     return [
-        'body' => fake()->paragraph($nbSentences = 4, $variableNbSentences = true),
+        'body' => fake()->paragraph(4),
     ];
 }
 ```
@@ -2899,6 +2895,8 @@ public function getPostBySlug(string $slug): Post {
 
 ### Ajouter & modifier dans posts.show pour Comment <!-- markmap: fold -->
 
+    Notons que le bouton pour voir le(s) commentaire(s) n'est pas encore opérationnel...
+
 ```php
 new class extends Component {
     ...
@@ -2935,6 +2933,7 @@ new class extends Component {
 
 ```json
 "Number of comments: ": "Nombre de commentaires : ",
+"View comment": "Voir le commentaire",
 "View comments": "Voir les commentaires",
 "All comments": "Tous les commentaires",
 "No comments": "Aucun commentaire"
@@ -2988,10 +2987,8 @@ new class extends Component {
 }; ?>
 ...
 // Modifier le bouton pour l'activer au click
-<x-button label="{{ $commentsCount > 1 ? 
-  __('View comments') : __('View comment') }}"
-  wire:click="showComments"
-  class="btn-outline" spinner />
+<x-button label="{{ $commentsCount > 1 ? __('View comments') : __('View comment') }}"
+wire:click="showComments" class="btn-outline" spinner />
 ...
 ```
 
@@ -3007,7 +3004,7 @@ php artisan make:volt posts/comment-form --class
 @if ($showForm)
     <x-card title="{{ $formTitle }}" shadow="hidden" class="!p-0">
         <x-form wire:submit="{{ $formAction }}" class="mb-4">
-            <x-textarea wire:model="message" hint="{{ __('Max 10000 chars') }}" rows="5" inline />
+            <x-textarea wire:model="message" hint="{{ __('Max 10000 chars') }}" rows="5" placeholder="{{ __('Your message...') }}" inline />
             <x-slot:actions>
                 @if ($formAction === 'updateComment')
                     <x-button label="{{ __('Cancel') }}" wire:click="toggleModifyForm(false)"
@@ -3043,7 +3040,7 @@ Gravatar::get('email@example.com');
 php artisan make:notification CommentCreated
 ```
 
-    app/Notifications/CommentCreated.php :
+    Dans app/Notifications/CommentCreated.php :
 
 ```php
 <?php
@@ -3086,7 +3083,8 @@ class CommentCreated extends Notification
 ```php
 "A comment has been created on your post": "Un commentaire a été ajouté à votre article",
 "This comment is awaiting moderation.": "Ce commentaire est en attente de modération.",
-"Manage this comment": "Gérer ce commentaire"
+"Manage this comment": "Gérer ce commentaire",
+"by": "par"
 ```
 
 #### Affichage des commentaires 1er niveau <!-- markmap: fold -->
@@ -3094,6 +3092,7 @@ class CommentCreated extends Notification
 ```php
 php artisan make:volt posts/commentBase --class
 ```
+
 ```php
 <?php
 use App\Models\{ Comment, Post };
@@ -3208,7 +3207,8 @@ new class() extends Component {
 "Comments": "Commentaires",
 "Modify": "Modifier",
 "1 comment": "1 commentaire",
-"comments": "commentaires"
+"comments": "commentaires",
+"Max 10000 chars": "Max 10 000 caractères"
 ```
 
     Modification de posts.show :
@@ -3489,11 +3489,13 @@ new class() extends Component {
     @endforeach
 ```
 
-### Sécurité // {!! $uneVariabledansDuCodeBladeQuiContient DuCodeDestinéÀLaVue !!} <!-- markmap: fold -->
+### Sécurité // {!! $uneVariabledansDuCodeBladeQuiContientDuCodeDestinéÀLaVue !!} <!-- markmap: fold -->
 
 ```php
 composer require mews/purifier
----
+```
+
+```php
 use Mews\Purifier\Casts\CleanHtmlInput;
 
 class Comment extends Model
@@ -3557,14 +3559,15 @@ php artisan make:volt auth/profile --class
 ```php
 <?php
 use App\Models\User;
-use Illuminate\Support\Facades\{Auth, Hash};
-use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
-use Livewire\Attributes\Layout;
-use Livewire\Volt\Component;
 use Mary\Traits\Toast;
+use Illuminate\Support\Str;
+use Livewire\Volt\Component;
+use Livewire\Attributes\Layout;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\{Auth, Hash};
 
-new #[Title('Profile')] #[Layout('components.layouts.auth')] class extends Component {
+new #[Title('Profile')] #[Layout('components.layouts.auth')]
+class extends Component {
     use Toast;
 
     public User $user;
@@ -3603,7 +3606,7 @@ new #[Title('Profile')] #[Layout('components.layouts.auth')] class extends Compo
 }; ?>
 
 <div>
-    <x-card class="flex items-center justify-center h-screen" title="">
+    <x-card class="flex items-center justify-center h-[96vh]">
 
         <a href="/" title="{{ __('Go on site') }}">
             <x-card class="items-center py-0" title="{{ __('Update profile') }}" shadow separator
@@ -3618,7 +3621,7 @@ new #[Title('Profile')] #[Layout('components.layouts.auth')] class extends Compo
                 </x-slot:title>
                 <x-slot:subtitle class="flex flex-col gap-1 pl-2 mt-2 text-gray-500">
                     <x-icon name="o-hand-raised" label="{!! __('Your name can\'t be changed') !!}" />
-                    <a href="https://fr.gravatar.com/">
+                    <a href="https://fr.gravatar.com/" target="_blank" title=" {{ __('Go on Gravatar!') }} ">
                         <x-icon name="c-user" label="{{ __('You can change your profile picture on Gravatar') }}" />
                     </a>
                 </x-slot:subtitle>
@@ -3631,7 +3634,7 @@ new #[Title('Profile')] #[Layout('components.layouts.auth')] class extends Compo
                 class="btn-outline btn-sm" />
 
             <x-slot:actions>
-                <x-button label="{{ __('Cancel') }}" link="/" class="btn-ghost" />
+                <x-button label="{{ __('Cancel') }}" link="/" class="btn-ghost" title=" {{ __('Return on site') }} "/>
                 <x-button label="{{ __('Delete account') }}" icon="c-hand-thumb-down"
                     wire:confirm="{{ __('Are you sure to delete your account?') }}" wire:click="deleteAccount"
                     class="btn-warning" />
@@ -3650,6 +3653,7 @@ new #[Title('Profile')] #[Layout('components.layouts.auth')] class extends Compo
 "Update profile": "Modifier le profil",
 "Your name can't be changed": "Votre nom ne peut pas être modifié",
 "You can change your profile picture on Gravatar": "Vous pouvez changer votre image de profil sur Gravatar",
+"Go on Gravatar!": "Vous rendre sur Gravatar !",
 "Generate a secure password": "Créer un mot de passe sécurisé",
 "Profile updated with success.": "Profil mis à jour avec succès.",
 "Delete account": "Supprimer le compte",
@@ -3675,8 +3679,8 @@ php artisan make:migration create_favorites_table
 public function up(): void {
     Schema::create('favorites', function (Blueprint $table) {
         $table->id();
-        $table->foreignId('user_id')->constrained()->onDelete('cascade');
         $table->foreignId('post_id')->constrained()->onDelete('cascade');
+        $table->foreignId('user_id')->constrained()->onDelete('cascade');
     });
 }
 ```
@@ -3731,9 +3735,7 @@ public function getPostBySlug(string $slug): Post {
 }
 ```
 
-#### Route & lien Favoris <!-- markmap: fold -->
-
-    Ajout de la route dans **routes/web.php** :
+#### Route Favoris <!-- markmap: fold -->
 
 ```php
 Route::middleware('auth')->group(function () {
@@ -3742,9 +3744,10 @@ Route::middleware('auth')->group(function () {
 });
 ```
 
-#### Favoris dans posts.show <!-- markmap: fold -->
+#### Lien Favoris dans posts.show <!-- markmap: fold -->
 
     On affiche l'icône étoile pour mettre en favoris
+
     ou retirer l'article des favoris :
 
 ```php
@@ -3791,8 +3794,8 @@ public function unfavoritePost(): void {
 ```
 
 ```php
-"Bookmark this post": "Marquer cet article",
-"Remove from favorites": "Supprimer des favoris"
+"Bookmark this post": "Marquer cet article dans vos favoris",
+"Remove from favorites": "Supprimer de vos favoris"
 ```
 
 #### PostRepository pour "is_favorited" <!-- markmap: fold -->
@@ -3873,7 +3876,7 @@ Composant index :
     - On défini une nouvelle propriété $favorites
     - mount() : On gère le cas où la requête est "/favorites" (On met la propriété favorites à true)
     - getPosts() : Si la propriété favorites est à true, on appelle getFavoritePosts(auth()->user()) 
-    -Pour le HTML, on adapte alors le titre de la page
+    - Pour le HTML, on adapte alors le titre de la page :
 
 ```php
 public bool $favorites     = false;
@@ -3906,7 +3909,8 @@ public function getPosts(): LengthAwarePaginator {
 ```
 
 ```php
-"Your favorites posts": "Vos articles favoris"
+"Your favorites posts": "Vos articles favoris",
+"Toggle theme": "Basculer le thème",
 ```
 
 ### Boutons pour scroller (Aller en bas et en haut) <!-- markmap: fold -->
@@ -3963,7 +3967,7 @@ html {
 
 ## &nbsp;**II &nbsp;/ &nbsp; B A C K &nbsp;- &nbsp;O F F I C E &nbsp;:**
 
-## - L'administration <!-- markmap: fold -->
+## - L'administration \<!-- markmap: fold -->
 
 ### Gestion des rôles
 
@@ -5719,7 +5723,7 @@ class extends Component {
 </div>
 ```
 
-#### Traduction Ajouter Pages \<!-- markmap: fold -->
+#### Traduction Ajouter Pages <!-- markmap: fold -->
 
 ```json
 "Page added with success.": "Page ajoutée avec succès."

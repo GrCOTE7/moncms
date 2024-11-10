@@ -78,7 +78,7 @@ new class extends Component {
 
         @auth
             @if ($user->favoritePosts()->exists())
-                <a title="{{ __('Favorites posts') }}" href="{{ route('posts.favorites') }}"><x-icon name="s-star"
+                <a title="{{ __('Your favorites posts') }}" href="{{ route('posts.favorites') }}"><x-icon name="s-star"
                         class="w-5 h-5" /></a>
             @endif
         @endauth

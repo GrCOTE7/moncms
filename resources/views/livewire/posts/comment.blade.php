@@ -175,11 +175,9 @@ new class extends Component {
             @if ($showModifyForm || $showAnswerForm)
                 <x-card :title="$showModifyForm ? __('Update your comment') : __('Your answer')" shadow="hidden" class="!p-0">
                     <x-form :wire:submit="($showModifyForm ? 'updateAnswer' : 'createAnswer')" class="mb-4">
-                        <x-textarea wire:model="message" :placeholder="$showAnswerForm ? __('Your answer') . ' ...' : ''" hint="{{ __('Max 10000 chars') }}"
-                            rows="5" inline />
+                        <x-textarea wire:model="message" :placeholder="$showAnswerForm ? __('Your answer') . ' ...' : ''" hint="{{ __('Max 10000 chars') }}" rows="5" inline />
                         <x-slot:actions>
-      
-                      <x-button label="{{ __('Cancel') }}"
+                            <x-button label="{{ __('Cancel') }}"
                                 :wire:click="($showModifyForm ? 'toggleModifyForm(false)' : 'toggleAnswerForm(false)')"
                                 class="btn-ghost" />
                             <x-button label="{{ __('Save') }}" class="btn-primary" type="submit" spinner="save" />

@@ -8,10 +8,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 use Mary\Traits\Toast;
 
-new
-#[Title('Profile')]
-#[Layout('components.layouts.auth')]
-class extends Component {
+new #[Title('Profile')] #[Layout('components.layouts.auth')] class extends Component {
     use Toast;
 
     public User $user;
@@ -54,7 +51,7 @@ class extends Component {
 }; ?>
 
 <div>
-    <x-card class="flex items-center justify-center h-screen" title="">
+    <x-card class="flex items-center justify-center h-[96vh]">
 
         <a href="/" title="{{ __('Go on site') }}">
             <x-card class="items-center py-0" title="{{ __('Update profile') }}" shadow separator
@@ -69,20 +66,20 @@ class extends Component {
                 </x-slot:title>
                 <x-slot:subtitle class="flex flex-col gap-1 pl-2 mt-2 text-gray-500">
                     <x-icon name="o-hand-raised" label="{!! __('Your name can\'t be changed') !!}" />
-                    <a href="https://fr.gravatar.com/">
+                    <a href="https://fr.gravatar.com/" target="_blank" title=" {{ __('Go on Gravatar!') }} ">
                         <x-icon name="c-user" label="{{ __('You can change your profile picture on Gravatar') }}" />
                     </a>
                 </x-slot:subtitle>
             </x-avatar>
 
-            <x-input label="{{ __('E-mail') }}" wire:model="email" icon="o-envelope" inline /><hr>
+            <x-input label="{{ __('E-mail') }}" wire:model="email" icon="o-envelope" inline />
             <x-input label="{{ __('Password') }}" wire:model="password" icon="o-key" inline />
             <x-input label="{{ __('Confirm Password') }}" wire:model="password_confirmation" icon="o-key" inline />
             <x-button label="{{ __('Generate a secure password') }}" wire:click="generatePassword()" icon="m-wrench"
                 class="btn-outline btn-sm" />
 
             <x-slot:actions>
-                <x-button label="{{ __('Cancel') }}" link="/" class="btn-ghost" />
+                <x-button label="{{ __('Cancel') }}" link="/" class="btn-ghost" title=" {{ __('Return on site') }} "/>
                 <x-button label="{{ __('Delete account') }}" icon="c-hand-thumb-down"
                     wire:confirm="{{ __('Are you sure to delete your account?') }}" wire:click="deleteAccount"
                     class="btn-warning" />

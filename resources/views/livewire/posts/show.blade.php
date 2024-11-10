@@ -190,6 +190,9 @@ new class extends Component {
                 @endauth
             @endif
         @endif
+        @guest
+        //2do Être connecté pour poster un commentaire
+        @endguest
     </div>
 
     <div id="bottom" class="relative flex justify-end w-full py-5 mx-auto md:px-12 max-w-7xl">

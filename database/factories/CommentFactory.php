@@ -21,7 +21,7 @@ class CommentFactory extends Factory
 	public function definition(): array
 	{
 		return [
-			'body' => fake()->paragraph($nbSentences = 4, $variableNbSentences = true),
+			'body' => fake('fr_FR')->paragraph(4),
 		];
 	}
 }
