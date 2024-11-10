@@ -5,9 +5,9 @@ markmap:
 ---
 # Mon CMS <!-- markmap: duration: 1000 -->
 
-<!-- VSCode: Utiliser l'extension markmap -->
-<!-- Forcer l'ouverture d'une branche en preview : -->
-<!-- Ajouter '\' devant '<!-- markmap: fold -->' -->
+<!-- VSCode: Utiliser l'extension markmap
+Forcer l'ouverture d'une branche en preview :
+Ajouter '\' ainsi '\<!-- markmap: fold -->'
 
 <!-- Si vous souhaiter modifier ce mémo,
 mais avez besoin d'aide, n'hésitez-pas
@@ -3967,7 +3967,7 @@ html {
 
 ## &nbsp;**II &nbsp;/ &nbsp; B A C K &nbsp;- &nbsp;O F F I C E &nbsp;:**
 
-## - L'administration \<!-- markmap: fold -->
+## - L'administration <!-- markmap: fold -->
 
 ### Gestion des rôles
 
@@ -4042,7 +4042,7 @@ Route::middleware('auth')->group(function () {
 
 #### SideBar <!-- markmap: fold -->
 
-##### Création Sidebar de l'admin.
+##### Création Sidebar de l'admin
 
 ```php
 php artisan make:volt admin/sidebar --class
@@ -4369,7 +4369,7 @@ public function login() {
 
 ## - Les Articles <!-- markmap: fold -->
 
-### Tableau des articles
+### Tableau des articles <!-- markmap: fold -->
 
 #### Route Articles <!-- markmap: fold -->
 
@@ -4449,7 +4449,7 @@ class extends Component {
         if (Auth::user()->isAdmin()) {
             return Category::all();
         }
-      
+        //2fix for Redac
         return Category::whereHas('posts', fn (Builder $q) => $q->where('user_id', Auth::id()))->get();
         }
       
@@ -4622,7 +4622,7 @@ public function generateUniqueSlug(string $slug): string {
 
 #### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-tableau-des-articles](https://laravel.sillo.org/posts/mon-cms-tableau-des-articles)***
 
-### Créer un article
+### Créer un article <!-- markmap: fold -->
 
 #### Route admin/posts/create <!-- markmap: fold -->
 
@@ -4836,7 +4836,7 @@ APP_TINYMCE_LOCALE=fr_FR
 ###### Activation de TinyMCE
 
     Fichier ./resources\views\components\layouts\admin.blade.php :
- 
+
 ```php
 <script src="{{ asset('storage/scripts/tinymce.min.js') }}" ></script>
 ... @vite(...)
@@ -4872,7 +4872,7 @@ new #[Layout('components.layouts.admin')]
 class extends Component {
     use WithFileUploads, Toast;
 
-    #[Rule('required|image|max:2000')]
+    #[Rule('required|image|max:7000')]
     public ?TemporaryUploadedFile $photo = null;
 ```
 
@@ -4906,6 +4906,7 @@ class extends Component {
 ###### Save Image <!-- markmap: fold -->
 
     Par défaut, image temporaire ./storage/app/livewire-tmp
+
     → Ajouter :
 
 ```php
@@ -4962,7 +4963,7 @@ public function save() {
 
 #### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-creer-un-article](https://laravel.sillo.org/posts/mon-cms-creer-un-article)***
 
-### Modifier un article
+### Modifier un article <!-- markmap: fold -->
 
 #### Route posts.edit <!-- markmap: fold -->
 
@@ -5037,7 +5038,7 @@ class extends Component {
       'title'            => 'required|string|max:255',
       'body'             => 'required|string|max:16777215',
       'category_id'      => 'required',
-      'photo'            => 'nullable|image|max:2000',
+      'photo'            => 'nullable|image|max:7000',
       'active'           => 'required',
       'pinned'           => 'required',
       'slug'             => ['required', 'string', 'max:255', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/', Rule::unique('posts')->ignore($this->post->id)],
@@ -6181,7 +6182,7 @@ class extends Component {
 
 ### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-comptes](https://laravel.sillo.org/posts/mon-cms-les-comptes)***
 
-## - Les Commentaires <!-- markmap: fold -->
+## - Les Commentaires \<!-- markmap: fold -->
 
 ### Liste admin.comments <!-- markmap: fold -->
 
@@ -8591,6 +8592,8 @@ new #[Title('Settings')] #[Layout('components.layouts.admin')] class extends Com
     //2do Cf .Sillo
 
 #### //2do Contact Seeder (Avec App/Tools) <!-- markmap: fold -->
+
+#### //2do admin.posts.index → paginate selon config <!-- markmap: fold -->
 
 ## III &nbsp;/ &nbsp; **A I D E &nbsp; & &nbsp; C O N T A C T** <!-- markmap: fold -->
 

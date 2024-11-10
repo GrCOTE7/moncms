@@ -12,8 +12,7 @@ use Livewire\WithFileUploads;
 use Mary\Traits\Toast;
 
 new #[Layout('components.layouts.admin')] class extends Component {
-	use WithFileUploads;
-	use Toast;
+	use WithFileUploads, Toast;
 
 	public int $category_id;
 

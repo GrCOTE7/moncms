@@ -14,10 +14,10 @@ class Category extends Model
 	public $timestamps  = false;
 	protected $fillable = ['title', 'slug'];
 
-	/**
+	/**protected
 	 * Get the posts for the Category.
 	 */
-	protected function posts(): HasMany
+	public function posts(): HasMany
 	{
 		return $this->hasMany(Post::class);
 	}

@@ -52,7 +52,7 @@ class extends Component {
 			'title'            => 'required|string|max:255',
 			'body'             => 'required|string|max:16777215',
 			'category_id'      => 'required',
-			'photo'            => 'nullable|image|max:2000',
+			'photo'            => 'nullable|image|max:7000',
 			'active'           => 'required',
 			'pinned'           => 'required',
 			'slug'             => ['required', 'string', 'max:255', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/', Rule::unique('posts')->ignore($this->post->id)],
