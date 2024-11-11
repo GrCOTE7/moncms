@@ -42,8 +42,12 @@ new class extends Component {
         @endif
 
         <x-menu-item icon="c-chat-bubble-left" title="{{ __('Comments') }}" link="{{ route('comments.index') }}" />
-
-        <x-menu-item icon="m-arrow-right-end-on-rectangle" title="{{ __('Go on site') }}" link="/" />
+        @if (Auth::user()->isAdmin())
+            <x-menu-sub title="{{ __('Menus') }}" icon="m-list-bullet">
+                <x-menu-item title="{{ __('Navbar') }}" link="{{ route('menus.index') }}" />
+            </x-menu-sub>
+            <x-menu-item icon="m-arrow-right-end-on-rectangle" title="{{ __('Go on site') }}" link="/" />
+        @endif
         <x-menu-item>
             <x-theme-toggle />
         </x-menu-item>

@@ -63,6 +63,10 @@ Route::middleware('auth')->group(function () {
 			// https://www.youtube.com/watch?v=dKexOXT0oso&ab_channel=LaravelJutsu
 			Volt::route('/users/index', 'admin.users.index')->name('users.index');
 			Volt::route('/users/{user}/edit', 'admin.users.edit')->name('users.edit');
+            
+            Volt::route('/menus/index', 'admin.menus.index')->name('menus.index');
 		});
 	});
 });
+
+//2do memo à la fin vérifier que la sidebar a ce rendu///

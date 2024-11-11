@@ -8627,6 +8627,8 @@ new #[Title('Settings')] #[Layout('components.layouts.admin')] class extends Com
 
 ### **[4 / Un message personnel](https://laravel.sillo.org/contact)**
 
+## //2do tester sidebar // categories
+
 ## //2do PR dès que Complete & plus de autres 2do <!-- markmap: fold -->
 
 - Update Memo
