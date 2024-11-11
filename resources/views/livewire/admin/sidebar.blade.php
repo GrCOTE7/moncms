@@ -40,6 +40,9 @@ new class extends Component {
             </x-menu-sub>
             <x-menu-item icon="s-user" title="{{ __('Accounts') }}" link="{{ route('users.index') }}" />
         @endif
+
+        <x-menu-item icon="c-chat-bubble-left" title="{{ __('Comments') }}" link="{{ route('comments.index') }}" />
+
         <x-menu-item icon="m-arrow-right-end-on-rectangle" title="{{ __('Go on site') }}" link="/" />
         <x-menu-item>
             <x-theme-toggle />

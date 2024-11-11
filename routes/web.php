@@ -47,6 +47,10 @@ Route::middleware('auth')->group(function () {
 		Volt::route('/posts/index', 'admin.posts.index')->name('posts.index');
 		Volt::route('/posts/create', 'admin.posts.create')->name('posts.create');
 		Volt::route('/posts/{post:slug}/edit', 'admin.posts.edit')->name('posts.edit');
+
+        Volt::route('/comments/index', 'admin.comments.index')->name('comments.index');
+        Volt::route('/comments/{comment}/edit', 'admin.comments.edit')->name('comments.edit');
+
 		Route::middleware(IsAdmin::class)->group(function () {
 			Volt::route('/categories/index', 'admin.categories.index')->name('categories.index');
 			Volt::route('/categories/{category}/edit', 'admin.categories.edit')->name('categories.edit');

@@ -4308,13 +4308,14 @@ new #[Title('Dashboard')] #[Layout('components.layouts.admin')] class extends Co
 ```json
 "In a glance": "En un coup d'oeil",
 "Recent posts": "Articles récents",
-"Users": "Utilisateurs",
-"Dashboard": "Tableau de bord",
-"Recent Comments": "Commentaires récents",
 "Show post": "Afficher l'article",
 "in post:": "dans l'article :",
+"Users": "Utilisateurs",
+"Dashboard": "Tableau de bord",
 "Edit or answer": "Modifier ou répondre",
-"Posts": "Articles"
+"Posts": "Articles",
+"Recent Comments": "Commentaires récents",
+"Comment to valid from ": "Commentaire à valider de "
 ```
 
 #### Lien dans les menus <!-- markmap: fold -->
@@ -5854,13 +5855,17 @@ Route::middleware(IsAdmin::class)->group(function () {
 
     admin.index (Pavé) :
 
-```php
 @if (Auth::user()->isAdmin())
     ...
     <a href="{{ route('users.index') }}" class="flex-grow" title="{{ __('Users list') }}">
         <x-stat title="{{ __('Users') }}" value="{{ $users }}" icon="s-user" class="shadow-hover" />
     </a>
 @endif
+
+    Traduction lien dans pavé :
+
+```php
+"Users list":"Tous les utilisateurs"
 ```
 
 #### Composant Comptes <!-- markmap: fold -->
@@ -6182,7 +6187,7 @@ class extends Component {
 
 ### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-comptes](https://laravel.sillo.org/posts/mon-cms-les-comptes)***
 
-## - Les Commentaires \<!-- markmap: fold -->
+## - Les Commentaires <!-- markmap: fold -->
 
 ### Liste admin.comments <!-- markmap: fold -->
 
@@ -6386,17 +6391,19 @@ Route::middleware('auth')->group(function () {
     (Issu(s) d'users non validés)
 
 ```php
+... <br>
 @foreach ($comments as $comment)
     @if (!$comment->user->valid)
         <x-alert title="{!! __('Comment to valid from ') . $comment->user->name !!}" description="{!! $comment->body !!}" icon="c-chat-bubble-left"
             class="shadow-md alert-warning">
             <x-slot:actions>
-                <x-button link="{{ route('comments.index') }}" label="{!! __('Show the comments') !!}" />
+                <x-button link="{{ route('comments.index') }}" label="{!! __('Show this comment') !!}" />
             </x-slot:actions>
         </x-alert>
         <br>
     @endif
 @endforeach
+... Bloc 'Recent posts'
 ```
 
 #### Pré-requis <!-- markmap: fold -->
@@ -6540,7 +6547,7 @@ class extends Component {
 
 ### //2do admin.contact
 
-## - Les Menus <!-- markmap: fold -->
+## - Les Menus \<!-- markmap: fold -->
 
 ### Liste des Menus & Submenus <!-- markmap: fold -->
 

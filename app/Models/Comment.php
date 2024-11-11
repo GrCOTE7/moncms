@@ -6,11 +6,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Mews\Purifier\Casts\CleanHtmlInput;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
+use Illuminate\Notifications\Notifiable;
+use Mews\Purifier\Casts\CleanHtmlInput;
 
 class Comment extends Model
 {
@@ -23,14 +23,18 @@ class Comment extends Model
 		'user_id',
 		'parent_id',
 	];
-
-    	protected $casts = [
+	protected $casts = [
 		'body' => CleanHtmlInput::class,
 	];
 
 	public function user(): BelongsTo
 	{
 		return $this->belongsTo(User::class);
+	}
+
+	public function getDepth(): int
+	{
+		return $this->parent ? $this->parent->getDepth() + 1 : 0;
 	}
 
 	public function post(): BelongsTo

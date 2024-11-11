@@ -7,8 +7,7 @@ use Livewire\Attributes\{Layout, Title};
 use Livewire\Volt\Component;
 use Mary\Traits\Toast;
 
-new #[Title('Dashboard')] #[Layout('components.layouts.admin')]
-class extends Component {
+new #[Title('Dashboard')] #[Layout('components.layouts.admin')] class extends Component {
     use Toast;
 
     public array $headersPosts;
@@ -49,22 +48,22 @@ class extends Component {
         </x-slot:heading>
         <x-slot:content class="flex flex-wrap gap-4">
 
-            <a href="{{ route('posts.index') }}" class="flex-grow">
+            <a href="{{ route('posts.index') }}" class="flex-grow" title="{{ __('All posts') }}">
                 <x-stat title="{{ __('Posts') }}" description="" value="{{ $posts->count() }}" icon="s-document-text"
                     class="shadow-hover" />
             </a>
 
             @if (Auth::user()->isAdmin())
-                <a href="{{ route('pages.index') }}" class="flex-grow">
+                <a href="{{ route('pages.index') }}" class="flex-grow" title="{{ __('All pages') }}">
                     <x-stat title="{{ __('Pages') }}" value="{{ $pages->count() }}" icon="s-document"
                         class="shadow-hover" />
                 </a>
-                <a href="{{ route('users.index') }}" class="flex-grow">
+                <a href="{{ route('users.index') }}" class="flex-grow" title="{{ __('Users list') }}"">
                     <x-stat title="{{ __('Users') }}" value="{{ $users }}" icon="s-user"
                         class="shadow-hover" />
                 </a>
             @endif
-            <a href="#" class="flex-grow">
+            <a href="{{ route('comments.index') }}" class="flex-grow" title="{{ __('All comments') }}">
                 <x-stat title="{{ __('Comments') }}" value="{{ $commentsNumber }}" icon="c-chat-bubble-left"
                     class="shadow-hover" />
             </a>
@@ -75,10 +74,9 @@ class extends Component {
 
     @foreach ($comments as $comment)
         @if (!$comment->user->valid)
-            <x-alert title="{!! __('Comment to valid from ') . $comment->user->name !!}" description="{!! $comment->body !!}" icon="c-chat-bubble-left"
-                class="shadow-md alert-warning">
+            <x-alert title="{!! __('Comment to valid from') . ' ' . $comment->user->name !!}" description="{!! $comment->body !!}" icon="c-chat-bubble-left" class="shadow-md alert-warning">
                 <x-slot:actions>
-                    <x-button link="#" label="{!! __('Show the comments') !!}" />
+                    <x-button link="{{ route('comments.edit', $comment->id) }}" label="{!! __('Show this comment') !!}" />
                 </x-slot:actions>
             </x-alert>
             <br>
@@ -135,7 +133,7 @@ class extends Component {
                     <x-slot:actions>
                         <x-popover>
                             <x-slot:trigger>
-                                <x-button icon="c-eye" link="#" spinner class="btn-ghost btn-sm" />
+                                <x-button icon="c-eye" link="{{ route('comments.edit', $comment->id) }}" spinner class="btn-ghost btn-sm" />
                             </x-slot:trigger>
                             <x-slot:content class="pop-small">
                                 @lang('Edit or answer')
