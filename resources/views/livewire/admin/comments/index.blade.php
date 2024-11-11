@@ -58,7 +58,7 @@ class extends Component {
         <x-slot:actions>
             <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline lg:hidden"
                 link="{{ route('admin') }}" />
-            <x-input placeholder="{{ __('Search...') }}" wire:model.live.debounce="search" clearable
+            <x-input placeholder="{{ __('Search') }}..." wire:model.live.debounce="search" clearable
                 icon="o-magnifying-glass" />
         </x-slot:actions>
     </x-header>

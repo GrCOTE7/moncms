@@ -24,7 +24,7 @@ en fin de ce mémo -->
 - successivement en mode étude.
 
     Développer le noeud le plus haut que vous n'avez pas encore visité
-    ( Si vous démarrez juste, c'est... Ce 'Manuel' v1.0.0 ! ),
+    ( Si vous démarrez juste, c'est... Ce 'Manuel' v1.0.1 ! ),
     et aller jusqu'au bout de la branche avant de passer à la suivante.
     (Vous êtes 'au bout' lorsqu'il n'y a plus de ligne à la
     droite du dernier sujet déployé.).
@@ -42,7 +42,7 @@ en fin de ce mémo -->
 
 ### Philosophie <!-- markmap: fold -->
 
-    Cet type de présentation peut vous sembler surprenante de prime abord...
+    Ce type de présentation peut vous sembler surprenante de prime abord...
 
     ... Mais passé le cap de la surprise et de la découverte... :
 
@@ -51,9 +51,9 @@ en fin de ce mémo -->
     votre allié le plus puissant pour avoir une vision quasi synoptique du sujet étudié.
 
     Donc, si vous parvenez à réussir à l'utiliser, ne serait-ce dans un premier temps,
-    pour découvrir, apprendre, voire réviser vos connaissances, vous observerez en prin-
-    cipe assez rapidement dans l'avenir que vous saurez y revenir, et y retrouver,
-    parce qu'organisées, rapidement et facilement, les infos dont vous aurez alors
+    pour découvrir, apprendre, voire réviser vos connaissances, vous observerez
+    en principe assez rapidement dans l'avenir que vous saurez y revenir, et y retrouver,
+    parce qu'organisées, facilement et rapidement, les infos dont vous aurez alors
     ponctuellement besoin :-) ! Bon usage... Et bon code !
 
 ## LARAVEL VOLT - Généralités <!-- markmap: fold -->
@@ -6277,7 +6277,7 @@ class extends Component {
         <x-slot:actions>
             <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline lg:hidden"
                 link="{{ route('admin') }}" />
-            <x-input placeholder="{{ __('Search...') }}" wire:model.live.debounce="search" clearable
+            <x-input placeholder="{{ __('Search') }}..." wire:model.live.debounce="search" clearable
                 icon="o-magnifying-glass" />
         </x-slot:actions>
     </x-header>
