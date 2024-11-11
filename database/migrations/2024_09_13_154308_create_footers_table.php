@@ -14,7 +14,7 @@ return new class extends Migration {
 	 */
 	public function up(): void
 	{
-		Schema::create('footermenus', function (Blueprint $table) {
+		Schema::create('footers', function (Blueprint $table) {
 			$table->id();
 			$table->string('label');
 			$table->string('link');
@@ -27,6 +27,6 @@ return new class extends Migration {
 	 */
 	public function down(): void
 	{
-		Schema::dropIfExists('footermenus');
+		Schema::dropIfExists('footers');
 	}
 };

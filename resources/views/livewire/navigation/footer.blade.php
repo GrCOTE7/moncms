@@ -1,13 +1,13 @@
 <?php
 
-use App\Models\Footermenu;
+use App\Models\Footer;
 use Livewire\Volt\Component;
 
 new class extends Component {
     public function with(): array
     {
         return [
-            'footers' => Footermenu::orderBy('order')->get(),
+            'footers' => Footer::orderBy('order')->get(),
         ];
     }
 };
@@ -23,14 +23,14 @@ new class extends Component {
     </nav>
     <nav>
         <div class="grid grid-flow-col gap-4">
-            <a href="lien_depot_github" title="Github" target="_blank">
+            <a href="lien_depot_github" title=" {{ __('Go to the GitHub repository and... Fork it!') }} " target="_blank">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                     class="fill-current">
                     <path
                         d="M12 0C5.372 0 0 5.372 0 12c0 5.303 3.438 9.8 8.207 11.387.6.11.793-.26.793-.577v-2.2c-3.338.726-4.033-1.415-4.033-1.415-.546-1.387-1.333-1.757-1.333-1.757-1.089-.744.083-.729.083-.729 1.204.085 1.838 1.237 1.838 1.237 1.07 1.835 2.809 1.305 3.495.998.108-.775.419-1.305.762-1.605-2.665-.305-5.466-1.335-5.466-5.93 0-1.31.467-2.38 1.235-3.22-.124-.303-.535-1.523.117-3.176 0 0 1.008-.322 3.3 1.23.957-.266 1.98-.399 3-.405 1.02.006 2.043.139 3 .405 2.29-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.873.118 3.176.77.84 1.233 1.91 1.233 3.22 0 4.61-2.804 5.62-5.475 5.92.43.37.815 1.1.815 2.22v3.293c0 .319.192.694.801.576C20.565 21.796 24 17.302 24 12c0-6.628-5.372-12-12-12z" />
                 </svg>
             </a>
-            <a href=" " title="Discord" target="_blank">
+            <a href=" " title=" {{  __('Go to the Discord channel') }} ! " target="_blank">
                 <svg width="25" height="28" viewBox="0 0 71 80" class="fill-current mt-[-.05rem]"
                     xmlns="http://www.w3.org/2000/svg">
                     <path

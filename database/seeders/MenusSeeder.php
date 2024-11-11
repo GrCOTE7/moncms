@@ -13,7 +13,8 @@ class MenusSeeder extends Seeder
 {
 	public function run()
 	{
-		$menus = [['label' => 'Catégorie 1', 'link' => null, 'order' => 3],
+		$menus = [
+            ['label' => 'Catégorie 1', 'link' => null, 'order' => 3],
 			['label' => 'Catégorie 2', 'link' => '/category/category-2', 'order' => 2],
 			['label' => 'Catégorie 3', 'link' => '/category/category-3', 'order' => 1],
 		];

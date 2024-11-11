@@ -3,7 +3,7 @@ include_once 'test3.php';
 ?>
 
 <div>
-    <x-header title="Project Birthday (Test3)" shadow separator progress-indicator />
+    <x-header title="Project Birthday (Test 3)" shadow separator progress-indicator />
 
 
     @if($k<2)

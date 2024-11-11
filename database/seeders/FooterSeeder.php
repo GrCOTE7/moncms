@@ -9,7 +9,7 @@ namespace database\seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class FootermenusSeeder extends Seeder
+class FooterSeeder extends Seeder
 {
 	public function run()
 	{
@@ -22,6 +22,6 @@ class FootermenusSeeder extends Seeder
 		];
 
 		// Insérer les données dans la table footers
-		DB::table('footermenus')->insert($footers);
+		DB::table('footers')->insert($footers);
 	}
 }

@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
 			PageSeeder::class,
 			ContactSeeder::class,
 			MenusSeeder::class,
-			FootermenusSeeder::class,
+			FooterSeeder::class,
 			CommentSeeder::class,
 			MembersSeeder::class,
 		]);

@@ -67,6 +67,11 @@ Route::middleware('auth')->group(function () {
 			Volt::route('/menus/index', 'admin.menus.index')->name('menus.index');
 			Volt::route('/menus/{menu}/edit', 'admin.menus.edit')->name('menus.edit');
 			Volt::route('/submenus/{submenu}/edit', 'admin.menus.editsub')->name('submenus.edit');
+			Volt::route('/footers/index', 'admin.menus.footers')->name('menus.footers');
+			Volt::route('/footers/{footer}/edit', 'admin.menus.editfooter')->name('footers.edit');
+
+			Volt::route('/images/index', 'admin.images.index')->name('images.index');
+            Volt::route('/images/{year}/{month}/{id}/edit', 'admin.images.edit')->name('images.edit');
 		});
 	});
 });
