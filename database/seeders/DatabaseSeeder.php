@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
 			FooterSeeder::class,
 			CommentSeeder::class,
 			MembersSeeder::class,
+			SettingSeeder::class,
 		]);
 
 		printf('%s%s', str_repeat(' ', 2), "Data tables properly filled.\n\n");

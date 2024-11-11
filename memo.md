@@ -8334,7 +8334,8 @@ php artisan make:volt admin/settings --class
 ```php
 @if (Auth::user()->isAdmin())
     ... images.index
-    <x-menu-item icon="m-cog-8-tooth" title="{{ __('Settings') }}" link="{{ route('settings') }}" :class="App::isDownForMaintenance() ? 'bg-red-300' : ''" />
+    <x-menu-item icon="m-cog-8-tooth" title="{{ __('Settings') }}"
+    link="{{ route('settings') }}" :class="App::isDownForMaintenance() ? 'bg-red-300' : ''" />
 @endif
 ```
 
@@ -8577,7 +8578,7 @@ new #[Title('Settings')] #[Layout('components.layouts.admin')] class extends Com
 
 ### Nettoyage code (Code cleaning) <!-- markmap: fold -->
 
-    Suppression de code (Devenu inutile) dans app/config.php :
+    Suppression de code (Devenu inutile) dans config/app.php :
 
 ```php
     'pagination'  => 6,
@@ -8596,14 +8597,14 @@ new #[Title('Settings')] #[Layout('components.layouts.admin')] class extends Com
 "Settings updated successfully!": "Paramètres bien enregistrés !",
 "Number of weeks a post is marked new": "Nombre de semaines qu'un article est marqué comme nouveau",
 "Between 1 and 12.": "Entre 1 et 12",
-"Go to bypass page": "Aller sur la page de bypass",
+"Go to bypass page": "Aller sur la page de bypass"
 ```
 
-### Maintenance : Réf.: [Doc Laravel // Maintenance](https://laravel.com/docs/11.x/configuration#maintenance-mode)
+### Réf. Maintenance : [Doc Laravel // Maintenance](https://laravel.com/docs/11.x/configuration#maintenance-mode)
 
 ### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-parametres](https://laravel.sillo.org/posts/mon-cms-les-parametres)***
 
-### Optimisations diverses <!-- markmap: fold -->
+### Optimisations diverses \<!-- markmap: fold -->
 
 #### DataBaseSeeder <!-- markmap: fold -->
 

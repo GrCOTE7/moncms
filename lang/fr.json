@@ -433,5 +433,15 @@
     "Image modified ! (Not saved yet)": "Image modifiée ! (Non sauvegardée)",
     "Image restored": "Image restaurée",
     "No modification has been made": "Aucune modification n'a été apportée à l'image",
-    "Image changes applied successfully": "Modifications de l'image appliquées avec succès"
+    "Image changes applied successfully": "Modifications de l'image appliquées avec succès",
+    "Home pagination": "Pagination de la page d'accueil",
+    "Between 2 and 12.": "Entre 2 et 12.",
+    "Post excerpt (number of words)": "Extrait de l'article (nombre de mots)",
+    "Between 30 and 60.": "Entre 10 et 60.",
+    "Site title": "Titre du site",
+    "Site sub title": "Sous-titre",
+    "Settings updated successfully!": "Paramètres bien enregistrés !",
+    "Number of weeks a post is marked new": "Nombre de semaines qu'un article est marqué comme nouveau",
+    "Between 1 and 12.": "Entre 1 et 12",
+    "Go to bypass page": "Aller sur la page de bypass"
 }
