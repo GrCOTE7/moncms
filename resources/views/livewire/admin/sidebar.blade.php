@@ -47,9 +47,10 @@ new class extends Component {
                 <x-menu-item title="{{ __('Navbar') }}" link="{{ route('menus.index') }}" />
                 <x-menu-item title="{{ __('Footer') }}" link="{{ route('menus.footers') }}" />
             </x-menu-sub>
-            @endif
             <x-menu-item icon="c-photo" title="{{ __('Images') }}" link="{{ route('images.index') }}" />
-            <x-menu-item icon="m-cog-8-tooth" title="{{ __('Settings') }}" link="{{ route('settings') }}" :class="App::isDownForMaintenance() ? 'bg-red-300' : ''" />
+            <x-menu-item icon="m-cog-8-tooth" title="{{ __('Settings') }}" link="{{ route('settings') }}"
+                :class="App::isDownForMaintenance() ? 'bg-red-300' : ''" />
+        @endif
         <x-menu-item icon="m-arrow-right-end-on-rectangle" title="{{ __('Go on site') }}" link="/" />
         <x-menu-item>
             <x-theme-toggle />

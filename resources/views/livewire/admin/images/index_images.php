@@ -131,7 +131,7 @@ class extends Component {
 		return $this->getDirectories("photos/{$year}", function ($months) {
 			$this->selectedMonth = $months->first()['id'] ?? null;
 			// À activer avec l'exemple de débogage à dé-commenter aussi (en fin de ce code)
-			// $this->selectedMonth = '06'; //2ar '07' par défaut
+			// $this->selectedMonth = '06'; // '07' par défaut
 			$this->getImages();
 
 			return $months;

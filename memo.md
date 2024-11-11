@@ -4450,7 +4450,7 @@ class extends Component {
         if (Auth::user()->isAdmin()) {
             return Category::all();
         }
-        //2fix for Redac
+
         return Category::whereHas('posts', fn (Builder $q) => $q->where('user_id', Auth::id()))->get();
         }
       
@@ -7666,8 +7666,8 @@ class extends Component {
         return $this->getDirectories("photos/{$year}", function ($months) {
             $this->selectedMonth = $months->first()['id'] ?? null;
             // À activer avec l'exemple de débogage à dé-commenter aussi (en fin de ce code)
-            //2ar IMPORTANT: Faire une copie de l'image de ce dossier 07 pour la régénérer aisément...
-            // $this->selectedMonth = '07'; //2ar '07' par défaut
+            // IMPORTANT: Faire une copie de l'image de ce dossier 07 pour la régénérer aisément...
+            // $this->selectedMonth = '07'; // '07' par défaut
             $this->getImages();
     
             return $months;
@@ -8644,8 +8644,6 @@ new #[Title('Settings')] #[Layout('components.layouts.admin')] class extends Com
 ## //2do Lien menus list (admin.menu.index) dans header de editsub
 
 ## //2do tester sidebar // categories
-
-## //2fix redac sidebar no image and parameters - Changer aussi dans Memo
 
 ## //2do PR dès que Complete & plus de autres 2do <!-- markmap: fold -->
 
