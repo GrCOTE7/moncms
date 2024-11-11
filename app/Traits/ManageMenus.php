@@ -56,7 +56,12 @@ trait ManageMenus
 		return [
 			'pages'      => Page::select('id', 'title', 'slug')->get(),
 			'categories' => Category::all(),
-			'subOptions' => [['id' => 1, 'name' => __('Post')], ['id' => 2, 'name' => __('Page')], ['id' => 3, 'name' => __('Category')]],
+			'subOptions' => [
+                ['id' => 1, 'name' => __('Post')],
+                ['id' => 2, 'name' => __('Page')],
+                ['id' => 3, 'name' => __('Category')],
+                ['id' => 4, 'name' => __('Other')]
+            ],
 		];
 	}
 

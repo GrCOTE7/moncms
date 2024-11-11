@@ -48,8 +48,8 @@ Route::middleware('auth')->group(function () {
 		Volt::route('/posts/create', 'admin.posts.create')->name('posts.create');
 		Volt::route('/posts/{post:slug}/edit', 'admin.posts.edit')->name('posts.edit');
 
-        Volt::route('/comments/index', 'admin.comments.index')->name('comments.index');
-        Volt::route('/comments/{comment}/edit', 'admin.comments.edit')->name('comments.edit');
+		Volt::route('/comments/index', 'admin.comments.index')->name('comments.index');
+		Volt::route('/comments/{comment}/edit', 'admin.comments.edit')->name('comments.edit');
 
 		Route::middleware(IsAdmin::class)->group(function () {
 			Volt::route('/categories/index', 'admin.categories.index')->name('categories.index');
@@ -63,10 +63,14 @@ Route::middleware('auth')->group(function () {
 			// https://www.youtube.com/watch?v=dKexOXT0oso&ab_channel=LaravelJutsu
 			Volt::route('/users/index', 'admin.users.index')->name('users.index');
 			Volt::route('/users/{user}/edit', 'admin.users.edit')->name('users.edit');
-            
-            Volt::route('/menus/index', 'admin.menus.index')->name('menus.index');
+
+			Volt::route('/menus/index', 'admin.menus.index')->name('menus.index');
+			Volt::route('/menus/{menu}/edit', 'admin.menus.edit')->name('menus.edit');
+			Volt::route('/submenus/{submenu}/edit', 'admin.menus.editsub')->name('submenus.edit');
 		});
 	});
 });
 
-//2do memo à la fin vérifier que la sidebar a ce rendu///
+// 2do memo à la fin vérifier que la sidebar a ce rendu (Faire montage admin + redac)...
+
+// 2do voir pourquoi bouton sombre (submenu edit/create et menu/edit)

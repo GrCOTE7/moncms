@@ -7015,6 +7015,7 @@ class extends Component {
 "Create a new submenu": "Créer un nouveau sous-menu",
 "Are you sure to delete this submenu?": "Êtes-vous sûr de vouloir supprimer ce sous-menu ?",
 " deleted with success.": " supprimé avec succès.",
+"Root menu": "Menu racine",
 "Submenu": "Sous-menu",
 "Edit": "Modifier",
 "Link": "Lien",
@@ -7050,7 +7051,8 @@ Route::middleware('auth')->group(function () {
 @endif
 <x-popover>
     <x-slot:trigger>
-        <x-button icon="c-arrow-path-rounded-square" link="{{ route('menus.edit', $menu->id) }}" class="text-blue-500 btn-ghost btn-sm" spinner />
+        <x-button icon="c-arrow-path-rounded-square" link="{{ route('menus.edit', $menu->id) }}"
+        class="text-blue-500 btn-ghost btn-sm" spinner />
     ...
 ```
 
@@ -7117,7 +7119,7 @@ class extends Component {
 </div>
 ```
 
-### Modification d'un submenu <!-- markmap: fold -->
+### Modification d'un submenu \<!-- markmap: fold -->
 
 #### Route admin.menus.editsub <!-- markmap: fold -->
 
@@ -8602,6 +8604,8 @@ new #[Title('Settings')] #[Layout('components.layouts.admin')] class extends Com
 
 #### //2do admin.posts.index → paginate selon config <!-- markmap: fold -->
 
+#### //2do Dans optimisation Sub-Menus 'Autre' → Vu Ajouté dans Traits/ManageMenus.php + traduction
+
 ## III &nbsp;/ &nbsp; **A I D E &nbsp; & &nbsp; C O N T A C T** <!-- markmap: fold -->
 
 ### **0 / Liens clés techniques**
@@ -8626,6 +8630,8 @@ new #[Title('Settings')] #[Layout('components.layouts.admin')] class extends Com
 - Pour discuter en LIVE
 
 ### **[4 / Un message personnel](https://laravel.sillo.org/contact)**
+
+## //2do Lien menus list (admin.menu.index) dans header de editsub
 
 ## //2do tester sidebar // categories
 
