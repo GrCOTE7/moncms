@@ -8309,7 +8309,7 @@ include_once 'edit_image.php';
 
 ### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-medias-partie-2](https://laravel.sillo.org/posts/mon-cms-les-medias-partie-2)***
 
-## - Les Paramètres \<!-- markmap: fold -->
+## - Les Paramètres <!-- markmap: fold -->
 
 ### Route Setting <!-- markmap: fold -->
 
@@ -8604,7 +8604,7 @@ new #[Title('Settings')] #[Layout('components.layouts.admin')] class extends Com
 
 ### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-parametres](https://laravel.sillo.org/posts/mon-cms-les-parametres)***
 
-### Optimisations diverses \<!-- markmap: fold -->
+### Optimisations diverses <!-- markmap: fold -->
 
 #### DataBaseSeeder <!-- markmap: fold -->
 
@@ -8644,6 +8644,8 @@ new #[Title('Settings')] #[Layout('components.layouts.admin')] class extends Com
 ## //2do Lien menus list (admin.menu.index) dans header de editsub
 
 ## //2do tester sidebar // categories
+
+## //2fix redac sidebar no image and parameters - Changer aussi dans Memo
 
 ## //2do PR dès que Complete & plus de autres 2do <!-- markmap: fold -->
 

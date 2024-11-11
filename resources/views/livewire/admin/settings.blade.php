@@ -6,7 +6,8 @@ use Illuminate\Support\Facades\Artisan;
 use Livewire\Attributes\{Layout, Validate};
 use Illuminate\Database\Eloquent\Collection;
 
-new #[Title('Settings')] #[Layout('components.layouts.admin')] class extends Component {
+new #[Title('Settings')] #[Layout('components.layouts.admin')]
+class extends Component {
     use Toast;
 
     private const SETTINGS_KEYS = ['pagination', 'excerptSize', 'title', 'subTitle', 'newPost'];
