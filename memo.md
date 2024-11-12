@@ -8604,17 +8604,68 @@ new #[Title('Settings')] #[Layout('components.layouts.admin')] class extends Com
 
 ### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-parametres](https://laravel.sillo.org/posts/mon-cms-les-parametres)***
 
-### Optimisations diverses <!-- markmap: fold -->
+## - Et après ? Optimisations diverses \<!-- markmap: fold -->
 
-#### DataBaseSeeder <!-- markmap: fold -->
+### Bien évidemment, ce qui suit n'est en rien exhaustif <!-- markmap: fold -->
 
-    //2do Cf .Sillo
+    ...Car on peut toujours tout améliorer !
 
-#### //2do Contact Seeder (Avec App/Tools) <!-- markmap: fold -->
+### DataBaseSeeder <!-- markmap: fold -->
 
-#### //2do admin.posts.index → paginate selon config <!-- markmap: fold -->
+#### Principe: Pour l'instant, nous avons beaucoup (trop) de seeders dans la racine du dossier seeders/ <!-- markmap: fold -->
 
-#### //2do Dans optimisation Sub-Menus 'Autre' → Vu Ajouté dans Traits/ManageMenus.php + traduction
+    Aussi, il est possible qu'à l'avenir, notre application s'étoffe, et recèle d'autres parties très distinctes...
+    Alors, pour plus de clarté, isolons les seeders propres à la base de l'app., pour ultérieurement pouvoir,
+    selon le même principe, isoler dans d'autres dossiers, des seeders qui seront plus spécifiques...
+
+#### Modus operandi <!-- markmap: fold -->
+
+- 1 ) &nbsp; Créer un dossier **database/seeders/main**
+
+- 2 ) &nbsp; Y copier dedans tous les seeders nécessaires à la base de l'app, soit :
+    CategorySeeder, CommentSeeder, ContactSeeder, FooterSeeder, MenusSeeder, PageSeeder, PostSeeder, SettingSeeder et UserSeeder
+    &nbsp; &nbsp; &nbsp; &nbsp; ... Mais attention, car du coup, leur espace de nom change... :
+    &nbsp; &nbsp; &nbsp; &nbsp; → Donc, dans chacun d'eux, changer celui-ci: '**namespace Database\Seeders;**' → '**namespace Database\Seeders\Main;**'
+
+- 3 ) &nbsp; Créer un fichier database/seeders/**MainDatabaseSeeder.php**
+    &nbsp; &nbsp; &nbsp; &nbsp; → Y copier le code de DataBaseSeeder.php
+    &nbsp; &nbsp; &nbsp; &nbsp; → Mais y remplacer la function run() ainsi :
+
+    ```php
+	public function run()
+    {
+        $namespace = 'Database\\Seeders\\Main\\';
+        $seeders   = ['User', 'Category', 'Post', 'Page', 'Contact', 'Menus', 'Footer', 'Comment', 'Setting'];
+    
+        foreach ($seeders as $seeder) {
+            $this->call("{$namespace}{$seeder}Seeder");
+      }
+    }
+    ```
+
+- 4 ) &nbsp; Modifier database/seeders/**DatabaseSeeder.php** qui se résume alors à :
+    ```php
+    $this->call([
+        MainDatabaseSeeder::class,
+    ]);
+    ```
+
+#### Résultat *(L'instant de vérité...)* <!-- markmap: fold -->
+
+```php
+php artisan migrate:refresh --seed
+```
+
+### //2do Contact Seeder (Avec App/Tools) <!-- markmap: fold -->
+
+### //2do admin.posts.index → paginate selon config <!-- markmap: fold -->
+
+### //2do Dans optimisation Sub-Menus 'Autre' → Vu Ajouté dans Traits/ManageMenus.php + traduction
+
+### //2do Lien menus list (admin.menu.index) dans header de editsub
+
+### //2do tester sidebar // categories
+
 
 ## III &nbsp;/ &nbsp; **A I D E &nbsp; & &nbsp; C O N T A C T** <!-- markmap: fold -->
 
@@ -8640,10 +8691,6 @@ new #[Title('Settings')] #[Layout('components.layouts.admin')] class extends Com
 - Pour discuter en LIVE
 
 ### **[4 / Un message personnel](https://laravel.sillo.org/contact)**
-
-## //2do Lien menus list (admin.menu.index) dans header de editsub
-
-## //2do tester sidebar // categories
 
 ## //2do PR dès que Complete & plus de autres 2do <!-- markmap: fold -->
 

@@ -4,7 +4,7 @@
  * (ɔ) Mon CMS - 2024-2024
  */
 
-namespace Database\Seeders;
+namespace Database\Seeders\Main;
 
 use App\Models\Comment;
 use Illuminate\Database\Seeder;

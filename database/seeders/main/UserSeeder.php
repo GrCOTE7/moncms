@@ -4,7 +4,7 @@
  * (ɔ) Mon CMS - 2024-2024
  */
 
-namespace Database\Seeders;
+namespace Database\Seeders\Main;
 
 use App\Models\User;
 use Carbon\Carbon;
@@ -51,7 +51,7 @@ class UserSeeder extends Seeder
 		foreach ($users as $userData) {
 			User::factory()->create($userData);
 		}
-        
-        User::factory(3)->create();
+
+		User::factory(3)->create();
 	}
 }

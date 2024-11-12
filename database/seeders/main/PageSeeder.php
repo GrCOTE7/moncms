@@ -1,19 +1,22 @@
 <?php
 
-namespace Database\Seeders;
+/**
+ * (ɔ) Mon CMS - 2024-2024
+ */
+
+namespace Database\Seeders\Main;
 
 use App\Models\Page;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class PageSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
-    {
-        $items = [
+	/**
+	 * Run the database seeds.
+	 */
+	public function run(): void
+	{
+		$items = [
 			['slug' => 'terms', 'title' => 'Terms'],
 			['slug' => 'privacy-policy', 'title' => 'Privacy Policy'],
 		];
@@ -26,5 +29,5 @@ class PageSeeder extends Seeder
 				'active'    => true,
 			]);
 		}
-    }
+	}
 }

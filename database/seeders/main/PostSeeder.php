@@ -1,19 +1,23 @@
 <?php
 
-namespace Database\Seeders;
+/**
+ * (ɔ) Mon CMS - 2024-2024
+ */
+
+namespace Database\Seeders\Main;
 
 use App\Models\Post;
-use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class PostSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
-    {
-        $nbrCategories = 3;
+	/**
+	 * Run the database seeds.
+	 */
+	public function run(): void
+	{
+		$nbrCategories = 3;
 
 		$this->createPost(1, 1);
 		$this->createPost(2, rand(1, $nbrCategories));
@@ -24,9 +28,9 @@ class PostSeeder extends Seeder
 		$this->createPost(7, 1);
 		$this->createPost(8, rand(1, $nbrCategories));
 		$this->createPost(9, rand(1, $nbrCategories));
-    }
+	}
 
-    protected function createPost($id, $category_id)
+	protected function createPost($id, $category_id)
 	{
 		$months = ['03', '03', '03', '04', '04', '06', '06', '06', '06'];
 

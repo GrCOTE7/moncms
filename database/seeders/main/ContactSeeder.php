@@ -4,7 +4,7 @@
  * (ɔ) Mon CMS - 2024-2024
  */
 
-namespace database\seeders;
+namespace Database\Seeders\Main;
 
 use App\Models\Contact;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;

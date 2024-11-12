@@ -19,16 +19,8 @@ class DatabaseSeeder extends Seeder
 		// User::factory(10)->create();
 
 		$this->call([
-			UserSeeder::class,
-			CategorySeeder::class,
-			PostSeeder::class,
-			PageSeeder::class,
-			ContactSeeder::class,
-			MenusSeeder::class,
-			FooterSeeder::class,
-			CommentSeeder::class,
+			MainDatabaseSeeder::class,
 			MembersSeeder::class,
-			SettingSeeder::class,
 		]);
 
 		printf('%s%s', str_repeat(' ', 2), "Data tables properly filled.\n\n");
