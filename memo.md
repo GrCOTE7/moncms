@@ -36,7 +36,7 @@ en fin de ce mémo -->
 
 #### Coder... Oui... Mais pas de suite
 
-    Commencer par survoler les généralités, simplement en les lisant toutes.
+    (Pour Momo, mais pas que... ;-) :) Commencer par survoler les généralités, simplement en les lisant toutes.
 
     Ne commencer à coder qu'à partir du noeud racine 'Le projet (Mon CMS)' !
 
@@ -8608,21 +8608,27 @@ new #[Title('Settings')] #[Layout('components.layouts.admin')] class extends Com
 
 ### Bien évidemment, ce qui suit n'est en rien exhaustif <!-- markmap: fold -->
 
-    ...Car on peut toujours tout améliorer !
+- ...Car ON PEUT TOUJOURS TOUT AMÉLIORER !
 
-### DataBaseSeeder <!-- markmap: fold -->
+- Donc, si VOUS y 'voyez' un manquement...
+... Reportez-vous au point 1 de AIDE & CONTACT ;-) !
+( *Le faible critique... Le FORT agit !* :-) )
 
-#### Principe: Pour l'instant, nous avons beaucoup (trop) de seeders dans la racine du dossier seeders/ <!-- markmap: fold -->
+### Data \<!-- markmap: fold -->
+
+#### DataBaseSeeder <!-- markmap: fold -->
+
+##### Principe: Pour l'instant, nous avons beaucoup (trop) de seeders dans la racine du dossier seeders/ <!-- markmap: fold -->
 
     Aussi, il est possible qu'à l'avenir, notre application s'étoffe, et recèle d'autres parties très distinctes...
     Alors, pour plus de clarté, isolons les seeders propres à la base de l'app., pour ultérieurement pouvoir,
     selon le même principe, isoler dans d'autres dossiers, des seeders qui seront plus spécifiques...
 
-#### Modus operandi <!-- markmap: fold -->
+##### Modus operandi <!-- markmap: fold -->
 
 - 1 ) &nbsp; Créer un dossier **database/seeders/main**
 
-- 2 ) &nbsp; Y copier dedans tous les seeders nécessaires à la base de l'app, soit :
+- 2 ) &nbsp; Y copier dedans tous les seeders nécessaires à la base de l'app à ce stade, soit :
     CategorySeeder, CommentSeeder, ContactSeeder, FooterSeeder, MenusSeeder, PageSeeder, PostSeeder, SettingSeeder et UserSeeder
     &nbsp; &nbsp; &nbsp; &nbsp; ... Mais attention, car du coup, leur espace de nom change... :
     &nbsp; &nbsp; &nbsp; &nbsp; → Donc, dans chacun d'eux, changer celui-ci: '**namespace Database\Seeders;**' → '**namespace Database\Seeders\Main;**'
@@ -8650,22 +8656,25 @@ new #[Title('Settings')] #[Layout('components.layouts.admin')] class extends Com
     ]);
     ```
 
-#### Résultat *(L'instant de vérité...)* <!-- markmap: fold -->
+##### Résultat *(L'instant de vérité...)* <!-- markmap: fold -->
 
 ```php
 php artisan migrate:refresh --seed
 ```
 
-### //2do Contact Seeder (Avec App/Tools) <!-- markmap: fold -->
+#### //2do Contact Seeder (Avec App/Tools) <!-- markmap: fold -->
 
-### //2do admin.posts.index → paginate selon config <!-- markmap: fold -->
+### Front-End \<!-- markmap: fold -->
 
-### //2do Dans optimisation Sub-Menus 'Autre' → Vu Ajouté dans Traits/ManageMenus.php + traduction
+### Back-End-End \<!-- markmap: fold -->
 
-### //2do Lien menus list (admin.menu.index) dans header de editsub
+#### //2do admin.posts.index → paginate selon config <!-- markmap: fold -->
 
-### //2do tester sidebar // categories
+#### //2do Dans optimisation Sub-Menus 'Autre' → Vu Ajouté dans Traits/ManageMenus.php + traduction
 
+#### //2do Lien menus list (admin.menu.index) dans header de editsub
+
+#### //2do tester sidebar // categories
 
 ## III &nbsp;/ &nbsp; **A I D E &nbsp; & &nbsp; C O N T A C T** <!-- markmap: fold -->
 
@@ -8700,4 +8709,4 @@ php artisan migrate:refresh --seed
 
 - All the tutorial code now included
 
-- Added AIDE & CONTACT
+- Added 'Et après ?' & 'AIDE & CONTACT'
