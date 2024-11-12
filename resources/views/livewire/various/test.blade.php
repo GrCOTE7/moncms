@@ -8,5 +8,10 @@ include_once 'test.php';
     </a>
 
     <p class="text-xl mb-5">Ready</p>
-    <livewire:various.simple_component />
+
+    <div class="w-full text-justify">
+        {{ $sentence->complete }}
+        <hr class="my-3">
+        {{ $sentence->wellCut }}
+    </div>
 </div>

@@ -21,12 +21,17 @@ class Fakers
 		$completeFakeSentences = $faker->realText($length+100, 3);
 
         //2do factorise
+
+        $hyphens        = ['.', ';', '!', '...'];
+        
+        
+        
 		$positionPoint        = strrpos(substr($completeFakeSentences, 0, $length), '.');
 		$positionPointVirgule = strrpos(substr($completeFakeSentences, 0, $length), ';');
 		$positionPointExcla   = strrpos(substr($completeFakeSentences, 0, $length), '!');
 		$positionPointTrois   = strrpos(substr($completeFakeSentences, 0, $length), '...');
-		$etc                  = ' [...]';
-
+		
+        $etc                  = ' [...]';
 		try {
 			$position = max($positionPoint, $positionPointVirgule, $positionPointExcla, $positionPointTrois);
 			++$position;
