@@ -7932,10 +7932,8 @@ new #[Title('Edit Image'), Layout('components.layouts.admin')] class extends Com
         if ($viewToast) {
             $this->success(__('Changes validated'));
         }
-    
         $this->image = Storage::disk('public')->url('temp/' . $this->fileName);
     }
-    
     public function restoreImage($cancel): void {
         if (File::exists($this->imagePath)) {
             File::copy($this->imagePath, $this->tempPath);
@@ -7953,62 +7951,50 @@ new #[Title('Edit Image'), Layout('components.layouts.admin')] class extends Com
             $this->exit();
         }
     }
-    
     public function updated($property, $value) {
         if ('group' === $property) {
             return;
         }
-    
         $manager = new ImageManager(new Driver());
         $image   = $manager->read($this->tempPath);
-    
         switch ($property) {
             case 'imageScale':
                 $image->scale(height: $this->height * $value);
                 $this->width      = $image->width();
                 $this->height     = $image->height();
                 $this->imageScale = '1';
-    
                 break;
             case 'brightness':
                 $image->brightness($value);
                 $this->brightness = 0;
-    
                 break;
             case 'contrast':
                 $image->contrast($value);
                 $this->contrast = 0;
-    
                 break;
             case 'gamma':
                 $image->gamma($value / 10.0);
                 $this->gamma = 10;
-    
                 break;
             case 'red':
                 $image->colorize(red: $value);
                 $this->red = 0;
-    
                 break;
             case 'green':
                 $image->colorize(green: $value);
                 $this->green = 0;
-    
                 break;
             case 'blue':
                 $image->colorize(blue: $value);
                 $this->blue = 0;
-    
                 break;
             case 'blur':
                 $image->blur($value);
                 $this->blur = 0;
-    
                 break;
             case 'sharpen':
                 $image->sharpen($value);
                 $this->sharpen = 0;
-    
                 break;
             case 'clipW':
                 $width  = $this->width - $this->width * $value * 0.01;
@@ -8017,7 +8003,6 @@ new #[Title('Edit Image'), Layout('components.layouts.admin')] class extends Com
                 $this->width  = $image->width();
                 $this->height = $image->height();
                 $this->clipW  = 0;
-    
                 break;
             case 'clipH':
                 $height = $this->height - $this->height * $value * 0.01;
@@ -8026,17 +8011,14 @@ new #[Title('Edit Image'), Layout('components.layouts.admin')] class extends Com
                 $this->width  = $image->width();
                 $this->height = $image->height();
                 $this->clipH  = 0;
-    
                 break;
             case 'reduce':
                 $image->reduceColors(49 - $value);
                 $this->reduce = 0;
-    
                 break;
             default:
                 break;
         }
-    
         $image->save();
         $this->info(__('Image modified ! (Not saved yet)'));
         $this->changed = true;
@@ -8052,7 +8034,6 @@ new #[Title('Edit Image'), Layout('components.layouts.admin')] class extends Com
         $this->changed = true;
         $this->refreshImageUrl();
     }
-    
     public function getImage($year, $month, $id): void {
         $imagesPath         = "photos/{$year}/{$month}";
         $allFiles           = Storage::disk('public')->files($imagesPath);
@@ -8063,7 +8044,6 @@ new #[Title('Edit Image'), Layout('components.layouts.admin')] class extends Com
         $this->displayImage = Storage::disk('public')->url($image);
         $this->refreshImageUrl();
     }
-    
     public function keepVersion(): void {
         if (File::exists($this->tempPath)) {
             File::copy($this->tempPath, $this->imagePath);
@@ -8071,42 +8051,32 @@ new #[Title('Edit Image'), Layout('components.layouts.admin')] class extends Com
         $this->success(__('Image changes applied successfully'));
         $this->exit();
     }
-    
     public function exit(): void {
         if (File::exists($this->tempPath)) {
             File::delete($this->tempPath);
         }
-    
         redirect()->route('images.index');
     }
-    
     public function applyChanges(): void {
         if (File::exists($this->tempPath)) {
             File::copy($this->tempPath, $this->imagePath);
         }
-    
         $this->changed = false;
-    
         $this->success(__('Image changes applied successfully'));
     }
-    
     private function getImageInfos(): void {
         $manager      = new ImageManager(new Driver());
         $image        = $manager->read($this->tempPath);
         $this->width  = $image->width();
         $this->height = $image->height();
     }
-    
     private function findUsage(): array {
         $usage = [];
-    
         $name = $this->year . '/' . str_pad($this->month, 2, '0', STR_PAD_LEFT) . '/' . $this->fileName;
-    
         $posts = Post::select('id', 'title', 'slug')
             ->where('image', 'LIKE', "%{$name}%")
             ->orWhere('body', 'LIKE', "%{$name}%")
             ->get();
-    
         foreach ($posts as $post) {
             $usage[] = [
                 'type'  => 'post',
@@ -8115,9 +8085,7 @@ new #[Title('Edit Image'), Layout('components.layouts.admin')] class extends Com
               'slug'  => $post->slug,
           ];
       }
-  
       $pages = Page::where('body', 'LIKE', "%{$name}%")->get();
-  
       foreach ($pages as $page) {
           $usage[] = [
               'type'  => 'page',
@@ -8126,10 +8094,8 @@ new #[Title('Edit Image'), Layout('components.layouts.admin')] class extends Com
               'slug'  => $page->slug,
           ];
       }
-  
       return $usage;
     }
-    
     private function refreshImageUrl(): void {
         $this->image = Storage::disk('public')->url("temp/{$this->fileName}") . '?' . now()->timestamp;
     }
@@ -8527,7 +8493,6 @@ new #[Title('Settings')] #[Layout('components.layouts.admin')] class extends Com
         $this->success(__('Settings updated successfully!'));
     }
 }; ?>
-
 <div>
     <x-header title="{{ __('Settings') }}" separator progress-indicator>
         <x-slot:actions>
@@ -8635,21 +8600,23 @@ new #[Title('Settings')] #[Layout('components.layouts.admin')] class extends Com
 
 - 3 ) &nbsp; Créer un fichier database/seeders/**MainDatabaseSeeder.php**
     &nbsp; &nbsp; &nbsp; &nbsp; → Y copier le code de DataBaseSeeder.php
-    &nbsp; &nbsp; &nbsp; &nbsp; → Mais y remplacer la function run() ainsi :
+    &nbsp; &nbsp; &nbsp; &nbsp; → Mais y remplacer la classe ainsi :
 
     ```php
-	public function run()
-    {
-        $namespace = 'Database\\Seeders\\Main\\';
-        $seeders   = ['User', 'Category', 'Post', 'Page', 'Contact', 'Menus', 'Footer', 'Comment', 'Setting'];
+    class MainDatabaseSeeder extends Seeder {
+        private string $namespace = 'Database\\Seeders\\Main\\';
+        private array $seeders   = ['User', 'Category', 'Post', 'Page', 'Contact', 'Menus', 'Footer', 'Comment', 'Setting'];
     
-        foreach ($seeders as $seeder) {
-            $this->call("{$namespace}{$seeder}Seeder");
-      }
+        public function run() {
+            foreach ($this->seeders as $seeder) {
+                $this->call("{$this->namespace}{$seeder}Seeder");
+            }
+        }
     }
     ```
 
 - 4 ) &nbsp; Modifier database/seeders/**DatabaseSeeder.php** qui se résume alors à :
+
     ```php
     $this->call([
         MainDatabaseSeeder::class,

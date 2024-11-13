@@ -10,13 +10,14 @@ use Illuminate\Database\Seeder;
 
 class MainDatabaseSeeder extends Seeder
 {
+	private string $namespace = 'Database\\Seeders\\Main\\';
+
+	private array $seeders   = ['User', 'Category', 'Post', 'Page', 'Contact', 'Menus', 'Footer', 'Comment', 'Setting'];
+
 	public function run()
 	{
-		$namespace = 'Database\\Seeders\\Main\\';
-		$seeders   = ['User', 'Category', 'Post', 'Page', 'Contact', 'Menus', 'Footer', 'Comment', 'Setting'];
-
-		foreach ($seeders as $seeder) {
-			$this->call("{$namespace}{$seeder}Seeder");
+		foreach ($this->seeders as $seeder) {
+			$this->call("{$this->namespace}{$seeder}Seeder");
 		}
 	}
 }
