@@ -8580,7 +8580,7 @@ new #[Title('Settings')] #[Layout('components.layouts.admin')] class extends Com
 
 ## - Et après ? Optimisations diverses \<!-- markmap: fold -->
 
-### Bien évidemment, ce qui suit n'est en rien exhaustif <!-- markmap: fold -->
+### Bien évidemment, ce qui suit n'est en rien exhaustif ! <!-- markmap: fold -->
 
 - ...Car ON PEUT TOUJOURS TOUT AMÉLIORER !
 
@@ -8588,7 +8588,7 @@ new #[Title('Settings')] #[Layout('components.layouts.admin')] class extends Com
 ... Reportez-vous au point 1 de AIDE & CONTACT ;-) !
 ( *Le faible critique... Le FORT agit !* :-) )
 
-### Data <!-- markmap: fold -->
+### Données \<!-- markmap: fold -->
 
 #### DataBaseSeeder <!-- markmap: fold -->
 
@@ -8781,9 +8781,9 @@ class ContactFactory extends Factory {
 
 ### Front-End \<!-- markmap: fold -->
 
-#### Espace de test \<!-- markmap: fold -->
+#### Espace de test <!-- markmap: fold -->
 
-##### Objectif \<!-- markmap: fold -->
+##### Objectif <!-- markmap: fold -->
 
 * <small>En phase de dev, on a fréquemment besoin de tester une function native, perso, bref, un bout de code...</small>
 
@@ -8801,7 +8801,7 @@ class ContactFactory extends Factory {
     
           Voyons ci-après comment cela a été réalisé ici, grâce à un nouveau composant spécifique :
 
-##### Exemple de Test avec *cutSentence()* \<!-- markmap: fold -->
+##### Exemple de Test avec *cutSentence()* <!-- markmap: fold -->
 
 1. Route Test : *Pour des raisons de sécurité, cette page ne sera accessible qu'aux admins.
 (Donc sa route sera par exemple juste après celle nommée **settings**). Et bien-sûr, rien ne vous empêche d'ajouter
@@ -8863,13 +8863,42 @@ class ContactFactory extends Factory {
         </html>
     ```
 
-4. Composant Test (*Le fichier est scindé, cette fois non pas qu'il soit long, mais afin d'optimiser le travail du formateur de l'IDE...*)
+4. Traductions pour le test courant :
+
+    * Dans **lang/fr.json**, ajouter :
+
+      ```json
+          "Test page": "Page de test",
+          "Study": "Étude"
+      ```
+
+    * Créer **lang/de.json** :
+
+      ```json
+        {
+          "Study": "Studie",
+          "Test page": "Testseite",
+          "of": "von"
+        }
+      ```
+
+    * Créer **es.json** :
+
+      ```json
+        {
+          "Study": "Estudio",
+          "Test page": "Página de prueba",
+          "of": "de"
+        }
+      ```
+
+5. Composant Test (*Le fichier est scindé, cette fois non pas qu'il soit long, mais afin d'optimiser le travail du formateur de l'IDE...*)
     <br>
     ```bash
         php artisan make:volt various/test
     ```
 
-5. Créer various/**test.php** :
+6. Créer various/**test.php** :
     <br>
     ```php
         <?php
@@ -8899,7 +8928,7 @@ class ContactFactory extends Factory {
         };
     ```
 
-6. Et dans various/**test.blade.php** (*Déjà créée par la commande en CLI ci-avant*) :
+7. Et dans various/**test.blade.php** (*Déjà créée par la commande en CLI ci-avant*) :
     <br>
     ```html
       <?php
@@ -8917,35 +8946,6 @@ class ContactFactory extends Factory {
           </div>
       </div>
     ```
-
-##### Traductions pour test courant <!-- markmap: fold -->
-
-- Dans **lang/fr.json**, ajouter :
-
-  ```json
-    "Test page": "Page de test",
-    "Study": "Étude"
-  ```
-
-- Créer **lang/de.json** :
-
-  ```json
-  {
-    "Study": "Studie",
-    "Test page": "Testseite",
-    "of": "von"
-  }
-  ```
-
-- Créer **es.json** :
-
-  ```json
-  {
-    "Study": "Estudio",
-    "Test page": "Página de prueba",
-    "of": "de"
-  }
-  ```
 
 ### Back-End-End \<!-- markmap: fold -->
 
