@@ -3,7 +3,9 @@ include_once 'test2.php';
 ?>
 
 <div>
-    <x-header title="Members (Test 2)" shadow separator progress-indicator />
+    <a href="/" title="{{ __('Return on site') }}">
+        <x-header class="text-lg m-0" title="{{ __('Test page') }} 2" shadow separator progress-indicator />
+    </a>
 
     <p class="mt-[-15px] mb-3">{{ number_format($members->total(), 0, ',', ' ') }} résults</p>
 

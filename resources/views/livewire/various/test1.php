@@ -1,10 +1,14 @@
 <?php
 
-use Livewire\Volt\Component;
+/**
+ * (ɔ) Mon CMS - 2024-2024
+ */
+
 use App\Models\{Comment, Post};
-use Illuminate\Support\Facades\Mail;
 use App\Notifications\CommentCreated;
+use Illuminate\Support\Facades\Mail;
 use Livewire\Attributes\{Layout, Title};
+use Livewire\Volt\Component;
 
 new
 #[Title('Test 1')]

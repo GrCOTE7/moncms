@@ -3,7 +3,9 @@ include_once 'test3.php';
 ?>
 
 <div>
-    <x-header title="Project Birthday (Test 3)" shadow separator progress-indicator />
+    <a href="/" title="{{ __('Return on site') }}">
+        <x-header class="text-lg m-0" title="{{ __('Test page') }} 3" shadow separator progress-indicator />
+    </a>
 
 
     @if($k<2)

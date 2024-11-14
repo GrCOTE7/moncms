@@ -7,25 +7,27 @@
 use App\Models\Member;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Livewire\Attributes\{Layout, Title};
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
 
-new class extends Component {
+new
+#[Title('Test 3')]
+#[Layout('components.layouts.test')]
+class extends Component {
 	use WithPagination;
 
 	public array $sortBy = ['column' => 'username', 'direction' => 'asc'];
 	public int $k        = 0;
 
-	public function mount(Request $request)
-	{
+	public function mount(Request $request) {
 		$this->abc = 789;
 		// $this->sort      = $request->get('sort', 'name');
 		// $this->direction = $request->get('direction', 'asc');
 	}
 
 	// Table headers
-	public function headers(): array
-	{
+	public function headers(): array {
 		// echo $this->abc;
 
 		return [
@@ -40,8 +42,7 @@ new class extends Component {
 		];
 	}
 
-	public function members(): LengthAwarePaginator
-	{
+	public function members(): LengthAwarePaginator {
 		// 0: WithAggregate
 		// 1: Méthode simple
 		// 2: Comme vidéo
@@ -74,8 +75,7 @@ new class extends Component {
 			->paginate(2);
 	}
 
-	public function with(): array
-	{
+	public function with(): array {
 		return [
 			'members' => $this->members(),
 			'headers' => $this->headers(),

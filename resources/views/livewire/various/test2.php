@@ -5,11 +5,15 @@
  */
 
 use App\Models\Member;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
+use Livewire\Attributes\{Layout, Title};
+use Illuminate\Pagination\LengthAwarePaginator;
 
-new class extends Component {
+new
+#[Title('Test 2')]
+#[Layout('components.layouts.test')]
+class extends Component {
 	use WithPagination;
 
 	// public function mount()
@@ -17,8 +21,7 @@ new class extends Component {
 	// }
 
 	// Table headers
-	public function headers(): array
-	{
+	public function headers(): array {
 		return [
 			['key' => 'id', 'label' => '#', 'class' => 'w-1'],
 			['key' => 'name', 'label' => 'Name', 'class' => 'w-64'],
@@ -27,8 +30,7 @@ new class extends Component {
 		];
 	}
 
-	public function members(): LengthAwarePaginator
-	{
+	public function members(): LengthAwarePaginator {
 		// return Member::select(['id', 'name', 'username', 'email'])
 		// 	->orderBy('name')
 		// 	->orderBy('username')
@@ -40,8 +42,7 @@ new class extends Component {
 			->paginate(25000);
 	}
 
-	public function with(): array
-	{
+	public function with(): array {
 		return [
 			'members' => $this->members(),
 			'headers' => $this->headers(),

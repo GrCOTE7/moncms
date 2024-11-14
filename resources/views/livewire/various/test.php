@@ -9,8 +9,8 @@ use Livewire\Attributes\{Layout, Title};
 use Livewire\Volt\Component;
 
 new
-#[Layout('components.layouts.test')]
 #[Title('Test')]
+#[Layout('components.layouts.test')]
 class extends Component {
 	public $sentence;
 	private $faker;

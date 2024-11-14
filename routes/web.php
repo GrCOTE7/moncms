@@ -54,8 +54,9 @@ Route::middleware('auth')->group(function () {
 			Volt::route('/pages/create', 'admin.pages.create')->name('pages.create');
 			Volt::route('/pages/{page:slug}/edit', 'admin.pages.edit')->name('pages.edit');
 
-			// 2do: Optimisation requête (Ici ou page test2)
+			// 2do: Optimisations requête (Ici ou page test2)
 			// https://www.youtube.com/watch?v=dKexOXT0oso&ab_channel=LaravelJutsu
+            
 			Volt::route('/users/index', 'admin.users.index')->name('users.index');
 			Volt::route('/users/{user}/edit', 'admin.users.edit')->name('users.edit');
 
@@ -71,14 +72,12 @@ Route::middleware('auth')->group(function () {
 			Volt::route('/settings', 'admin.settings')->name('settings');
 
 			Volt::route('/test', 'various.test')->name('various.test'); // Simple component
-			Volt::route('/test1', 'various.test1')->name('various.test1'); // To do...
+			Volt::route('/test1', 'various.test1')->name('various.test1'); // Ready...
 			Volt::route('/test2', 'various.test2')->name('various.test2'); // Simple members list
 			Volt::route('/test3', 'various.test3')->name('various.test3'); // Members list with birthday
 			Volt::route('/users', 'users.index');
 		});
 	});
 });
-
-// 2do memo à la fin vérifier que la sidebar a ce rendu (Faire montage admin + redac)...
 
 // 2do voir pourquoi bouton sombre (submenu edit/create et menu/edit)

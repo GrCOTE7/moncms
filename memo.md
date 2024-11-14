@@ -21,18 +21,20 @@ en fin de ce mémo -->
 #### Explorer les branches
 
 * ... Successivement en mode étude.
-    
+
         Développer le noeud le plus haut que vous n'avez pas encore visité
-        (Si vous démarrez juste, c'est... Ce 'Manuel' v1.0.1 ! ),
+        (Si vous démarrez juste, c'est... Ce '**Manuel**' v1.0.1 ! ),
         et aller jusqu'au bout de la branche avant de passer à la suivante.
         (Vous êtes 'au bout' d'un flux lorsqu'il n'y a plus de ligne à la droite
         du dernier sujet déployé.).
-    
+
 * ... Selon la thématique de la racine en mode recherche.
 
-
-- Et surtout: Utiliser une 'vraie' souris (Et pas le paddle si notebook)
+* Et surtout: Utiliser une 'vraie' souris (Et pas le paddle si notebook)
 pour naviguer aisément (Molette pour zoomer/dé-zoomer)
+
+* Enfin, considérer que ce Mémo est optimisé pour être utilisé en mode 'Preview'
+* Bonne exploration, et... Bon code !
 
 #### Coder... Oui... Mais pas de suite
 
@@ -8284,7 +8286,7 @@ include_once 'edit_image.php';
 
 ### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-medias-partie-2](https://laravel.sillo.org/posts/mon-cms-les-medias-partie-2)***
 
-## - Les Paramètres <!-- markmap: fold -->
+## - Les Paramètres (*Setting*) <!-- markmap: fold -->
 
 ### Route Setting <!-- markmap: fold -->
 
@@ -8577,6 +8579,14 @@ new #[Title('Settings')] #[Layout('components.layouts.admin')] class extends Com
 ### Réf. Maintenance : [Doc Laravel // Maintenance](https://laravel.com/docs/11.x/configuration#maintenance-mode)
 
 ### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-parametres](https://laravel.sillo.org/posts/mon-cms-les-parametres)***
+
+### Fin du tutoriel - Vérification \<!-- markmap: fold -->
+
+* Si tout s'est bien passé, voilà l'admin sidebar obtenue :
+
+* \- [Pour les'Admin'](https://prnt.sc/eiWO3i8mkUwz)
+
+* \- [Pour les 'Redac'](https://prnt.sc/2xoEMOFJF-ZT)
 
 ## - Et après ? Optimisations diverses \<!-- markmap: fold -->
 
@@ -8949,17 +8959,25 @@ class ContactFactory extends Factory {
 
 ### Back-End-End \<!-- markmap: fold -->
 
-#### //2do admin.posts.index → paginate selon config <!-- markmap: fold -->
+### //2do cf si meilleur icone pour tests
 
-#### //2do admin contact cf Sillo
+### //2do admin.posts.index → paginate selon config <!-- markmap: fold -->
 
-#### //2do Dans optimisation Sub-Menus 'Autre' → Vu Ajouté dans Traits/ManageMenus.php + traduction
+### //2fix link category-2 ie
 
-#### //2do Lien menus list (admin.menu.index) dans header de editsub
+### //2fix Edit menu si 'Autre' : Pas besoin du 1er champs (Article, Page, Category)
 
-#### //2do tester sidebar // categories
+### //2do admin contact cf Sillo
 
-#### //2do vérif capture sidebar menu admin & redac
+### //2do Dans optimisation Sub-Menus 'Autre' → Vu Ajouté dans Traits/ManageMenus.php + traduction
+
+### //2do Lien menus list (admin.menu.index) dans header de editsub
+
+### //2do tester sidebar // categories
+
+### Pour aller + loin <!-- markmap: fold -->
+
+* //2do txt pour Academy
 
 ## III &nbsp;/ &nbsp; **A I D E &nbsp; & &nbsp; C O N T A C T** <!-- markmap: fold -->
 
@@ -8996,7 +9014,3 @@ class ContactFactory extends Factory {
 
 - Added 'Et après ?' & 'AIDE & CONTACT'
 
-
-## [Mon CMS](https://prnt.sc/hTBksy-AJ1tw)
-
-## [Mon CMS2](https://prnt.sc/gokPf0p7rOK7)
