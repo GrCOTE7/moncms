@@ -1,16 +1,16 @@
 <?php
-include_once 'test.php';
+include_once 'test1.php';
 ?>
 
-<div class="h-[90vh]">
+<div>
     <a href="/" title="{{ __('Return on site') }}">
-        <x-header class="text-lg m-0" title="Page de Test 1" shadow separator progress-indicator />
+        <x-header class="text-lg m-0" title="{{ __('Test page') }} 1" shadow separator progress-indicator />
     </a>
 
-    <p class="text-xl mb-5">Phrase coupée:
-        <br>{{ $sentences->wellCut }}
+    <p class="text-2xl mb-5">{{ __('Study') }} {{ __('of') }} <b>...</b>
     </p>
-    <p class="text-xl mb-5">Phrase originelle complète :<br>
-        {{ $sentences->complete }}</p>
-    <livewire:various.simple_component />
+
+    <div class="w-full text-justify">
+        Ready.
+    </div>
 </div>
