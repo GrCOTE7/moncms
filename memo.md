@@ -823,7 +823,7 @@ public function definition(): array
   }
 ```
 
-##### Rafraîchissement la base <!-- markmap: fold -->
+##### Rafraîchissement de la base <!-- markmap: fold -->
 
 ```php
   php artisan migrate:fresh --seed
@@ -8607,7 +8607,7 @@ new #[Title('Settings')] #[Layout('components.layouts.admin')] class extends Com
         private string $namespace = 'Database\\Seeders\\Main\\';
         private array $seeders   = ['User', 'Category', 'Post', 'Page', 'Contact', 'Menus', 'Footer', 'Comment', 'Setting'];
     
-        public function run() {
+        public function run(): void {
             foreach ($this->seeders as $seeder) {
                 $this->call("{$this->namespace}{$seeder}Seeder");
             }
@@ -8629,19 +8629,45 @@ new #[Title('Settings')] #[Layout('components.layouts.admin')] class extends Com
 php artisan migrate:refresh --seed
 ```
 
-#### //2do Contact Seeder (Avec App/Tools) <!-- markmap: fold -->
+#### Modification Contact Seeder \<!-- markmap: fold -->
+
+    Situation actuelle :
+
+    Voir dans la base de données : Dans les enregistrements fakes de
+    la table contacts, le champs "message" contient des phrases qui
+    se terminent souvent de façon bizarre...
+
+    Situation proposée :
+    Faire une sorte d'helper* pour améliorer la terminaison des phrases, en
+    fonction de la ponctuation contenue dans le texte généré par le Faker.
+
+    * : Cependant, comme ceci n'a pas besoin d'être chargé par l'appli
+    systématiquement, nous le  ferons en dehors des vrais 'helpers'...
+
+    Créer app/Http/Tools/Fakers.php 
+
+```php
+//2do code App/tools
+```
 
 ### Front-End \<!-- markmap: fold -->
+
+#### Se créer un espace de test
+
 
 ### Back-End-End \<!-- markmap: fold -->
 
 #### //2do admin.posts.index → paginate selon config <!-- markmap: fold -->
+
+#### //2do admin contact cf Sillo
 
 #### //2do Dans optimisation Sub-Menus 'Autre' → Vu Ajouté dans Traits/ManageMenus.php + traduction
 
 #### //2do Lien menus list (admin.menu.index) dans header de editsub
 
 #### //2do tester sidebar // categories
+
+#### //2do vérif capture sidebar menu admin & redac
 
 ## III &nbsp;/ &nbsp; **A I D E &nbsp; & &nbsp; C O N T A C T** <!-- markmap: fold -->
 
@@ -8677,3 +8703,8 @@ php artisan migrate:refresh --seed
 - All the tutorial code now included
 
 - Added 'Et après ?' & 'AIDE & CONTACT'
+
+
+## [Mon CMS](https://prnt.sc/hTBksy-AJ1tw)
+
+## [Mon CMS2](https://prnt.sc/gokPf0p7rOK7)

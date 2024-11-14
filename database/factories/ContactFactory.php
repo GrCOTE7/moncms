@@ -25,7 +25,7 @@ class ContactFactory extends Factory
 	 */
 	public function definition(): array
 	{
-        $length         = 250;
+		$length          = 250;
 		$localeConverter = new TimeFcts();
 		$locale          = $localeConverter->convertToLocale(env('APP_LOCALE', 'en'));
 
