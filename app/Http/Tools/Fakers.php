@@ -8,55 +8,66 @@ namespace App\Http\Tools;
 
 use Faker\Factory as FakerBase;
 
-class Fakers
-{
-	public function completeFakeSentences($length = 250, $locale = null): object
-	{
-		if (!$locale) {
-			$localeConverter = new TimeFcts();
-			$locale          = $localeConverter->convertToLocale(env('APP_LOCALE', 'en'));
-		}
+class Fakers {
+	/**
+	 * Generates a fake sentence (a paragraph with 3 sentences)
+	 * which is cut at a hyphen (., ;, !, ...) which is the closest
+	 * to the given length.
+	 *
+	 * @param int $length The length of the sentence to generate.
+	 * @return object Contains properties 'complete' and 'wellCut'.
+	 */
+	public function fakerSentence($length = 250): object {
+		$locale = (new TimeFcts())->appLocale();
 
-		$faker                 = FakerBase::create($locale);
-		$completeFakeSentences = $faker->realText($length + 100, 3);
+		$faker                = FakerBase::create($locale);
+		$completeFakeSentence = $faker->realText($length + 100, 3);
 
-		// 2do factorise
+		return $this->cutSentence($completeFakeSentence);
+	}
 
-		$hyphens = ['.', ';', '!', '...'];
+	/**
+	 * Cut a sentence at the hyphen (., ;, !, ...) which is the closest to the given length.
+	 *
+	 * @param string $completeFakeSentence The sentence to cut.
+	 * @param int $length The length of the sentence to generate.
+	 * @return object Contains properties 'complete' and 'wellCut'.
+	 */
+	public function cutSentence($completeFakeSentence, $length = 200): object {
+		$hyphens  = ['.', ';', '!', '...'];
+		$position = $this->findLastHyphenPosition($completeFakeSentence, $length, $hyphens);
 
-		$positionPoint        = strrpos(substr($completeFakeSentences, 0, $length), '.');
-		$positionPointVirgule = strrpos(substr($completeFakeSentences, 0, $length), ';');
-		$positionPointExcla   = strrpos(substr($completeFakeSentences, 0, $length), '!');
-		$positionPointTrois   = strrpos(substr($completeFakeSentences, 0, $length), '...');
+		$etc = ($position === $length) ? ' [...]' : '';
+		// echo "{$position} - {$length}";
+		$wellCut = substr($completeFakeSentence, 0, $position) . $etc;
 
-		$etc = ' [...]';
+		return (object) [
+			'complete' => $completeFakeSentence,
+			'wellCut'  => $wellCut,
+		];
 
-		try {
-			$position = max($positionPoint, $positionPointVirgule, $positionPointExcla, $positionPointTrois);
-			++$position;
-			$etc = '';
-		} catch (\Exception $e) {
-			$position = $length;
-		}
+		// echo '<pre>';
+		// print_r($this->sentence);
+		// echo '</pre>';
+	}
 
-		$wellCut = substr($completeFakeSentences, 0, $position) . $etc;
+	/**
+	 * Finds the position of the last hyphen in a string, given the length
+	 * and the hyphens to search for.
+	 *
+	 * @param string $text The string to search.
+	 * @param int $length The length of the string to search.
+	 * @param array $hyphens The hyphens to search for.
+	 * @return int The position of the last hyphen, or the length of the string if no hyphen is found.
+	 */
+	private function findLastHyphenPosition($text, $length, $hyphens): int {
+		$positions = array_map(function ($hyphen) use ($text, $length) {
+			return strrpos(substr($text, 0, $length), $hyphen);
+		}, $hyphens);
 
-		try {
-			$sentencesO = json_decode(json_encode([
-				'complete' => $completeFakeSentences,
-				'wellCut'  => $wellCut,
-			]));
-			if (!is_object($sentencesO)) {
-				throw new \Exception('Conversion en objet a échoué.');
-			}
-		} catch (\Exception $e) {
-			echo 'Error: ' . $e->getMessage() . "\n";
-			$sentencesO = (object) [
-				'complete' => $completeFakeSentences,
-				'wellCut'  => $wellCut,
-			];
-		}
+		// Supprime les valeurs false et obtient la position maximale
+		$positions = array_filter($positions, fn ($pos) => false !== $pos);
 
-		return $sentencesO;
+		return !empty($positions) ? max($positions) + 1 : $length;
 	}
 }

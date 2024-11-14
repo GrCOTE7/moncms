@@ -224,6 +224,10 @@ en fin de ce mémo -->
   ...
 ```
 
+```php
+  php artisan about
+```
+
 ### Exécuter votre script <!-- markmap: fold -->
 
 #### Start & / || Restart les serveurs
@@ -8631,6 +8635,8 @@ php artisan migrate:refresh --seed
 
 #### Modification Contact Seeder \<!-- markmap: fold -->
 
+##### Création d'outils (*Tools*) <!-- markmap: fold -->
+
     Situation actuelle :
 
     Voir dans la base de données : Dans les enregistrements fakes de
@@ -8638,22 +8644,163 @@ php artisan migrate:refresh --seed
     se terminent souvent de façon bizarre...
 
     Situation proposée :
+
     Faire une sorte d'helper* pour améliorer la terminaison des phrases, en
     fonction de la ponctuation contenue dans le texte généré par le Faker.
 
     * : Cependant, comme ceci n'a pas besoin d'être chargé par l'appli
-    systématiquement, nous le  ferons en dehors des vrais 'helpers'...
+    systématiquement, puisque juste nécessaire à priori pour la migration
+    de la table 'contacts', nous le ferons en dehors des 'vrais' helpers...
 
     Créer app/Http/Tools/Fakers.php 
 
 ```php
-//2do code App/tools
+<?php
+namespace App\Http\Tools;
+use Faker\Factory as FakerBase;
+
+class Fakers {
+    /**
+     * Generates a fake sentence (a paragraph with 3 sentences)
+     * which is cut at a hyphen (., ;, !, ...) which is the closest
+     * to the given length.
+     *
+     * @param int $length The length of the sentence to generate.
+     * @return object Contains properties 'complete' and 'wellCut'.
+     */
+    public function fakerSentence($length = 250): object {
+        $locale = (new TimeFcts())->appLocale();
+    
+        $faker                = FakerBase::create($locale);
+        $completeFakeSentence = $faker->realText($length + 100, 3);
+    
+        return $this->cutSentence($completeFakeSentence);
+    }
+    
+    /**
+     * Cut a sentence at the hyphen (., ;, !, ...) which is the closest to the given length.
+     *
+     * @param string $completeFakeSentence The sentence to cut.
+     * @param int $length The length of the sentence to generate.
+     * @return object Contains properties 'complete' and 'wellCut'.
+     */
+    public function cutSentence($completeFakeSentence, $length = 200): object {
+        $hyphens  = ['.', ';', '!', '...'];
+        $position = $this->findLastHyphenPosition($completeFakeSentence, $length, $hyphens);
+    
+        $etc = ($position === $length) ? ' [...]' : '';
+        // echo "{$position} - {$length}";
+        $wellCut = substr($completeFakeSentence, 0, $position) . $etc;
+    
+        return (object) [
+            'complete' => $completeFakeSentence,
+            'wellCut'  => $wellCut,
+        ];
+    
+        // echo '<pre>';
+        // print_r($this->sentence);
+        // echo '</pre>';
+    }
+    
+    /**
+     * Finds the position of the last hyphen in a string, given the length
+     * and the hyphens to search for.
+     *
+     * @param string $text The string to search.
+     * @param int $length The length of the string to search.
+     * @param array $hyphens The hyphens to search for.
+     * @return int The position of the last hyphen, or the length of the string if no hyphen is found.
+     */
+    private function findLastHyphenPosition($text, $length, $hyphens): int {
+        $positions = array_map(function ($hyphen) use ($text, $length) {
+            return strrpos(substr($text, 0, $length), $hyphen);
+        }, $hyphens);
+    
+        // Supprime les valeurs false et obtient la position maximale
+        $positions = array_filter($positions, fn ($pos) => false !== $pos);
+    
+        return !empty($positions) ? max($positions) + 1 : $length;
+    }
+}
+```
+
+    Cette classe utilise app/Http/Tools/TimeFcts.php (À créer)
+
+```php
+<?php
+namespace App\Http\Tools;
+use Illuminate\Support\Facades\Config;
+
+class TimeFcts {
+    /**
+     * Return the locale for a given language code
+     *
+     * @return string The locale, ex.: fr → fr_FR
+     */
+    public function appLocale(): bool|string {
+        $languageCode = Config::get('app.locale');
+        return \Locale::composeLocale(['language' => $languageCode, 'region' => strtoupper($languageCode)]);
+  }
+}
+```
+
+##### Modification de ContactFactory <!-- markmap: fold -->
+
+```php
+<?php
+namespace Database\Factories;
+use App\Models\Contact;
+use Faker\Factory as Faker;
+use App\Http\Tools\{Fakers, TimeFcts};
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+class ContactFactory extends Factory {
+    protected $model = Contact::class;
+
+    public function definition(): array {
+        $localeConverter = new TimeFcts();
+        $locale          = $localeConverter->appLocale();
+        $faker           = Faker::create($locale);
+        $fakerTool       = new Fakers();
+    
+        return [
+            'name'    => $faker->name,
+            'email'   => $faker->unique()->safeEmail,
+            'message' => $fakerTool->fakerSentence()->wellCut,
+      ];
+    }
+}
 ```
 
 ### Front-End \<!-- markmap: fold -->
 
-#### Se créer un espace de test
+#### Se créer un espace de test Exemple avec cutSentence()
 
+```php
+    "Test page": "Page de test",
+    "Study": "Étude"
+```
+
+de.json
+```php
+{
+    "Study": "Studie",
+    "Test page": "Testseite",
+    "of": "von"
+}
+```
+
+es.json
+
+```php
+{
+    "Study": "Estudio",
+    "Test page": "Página de prueba",
+    "of": "de"
+}
+```
+
+##### Route + Lien (Barre de nav (//2do juste admin & dev)) + Layout
 
 ### Back-End-End \<!-- markmap: fold -->
 

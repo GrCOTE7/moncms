@@ -443,5 +443,7 @@
     "Settings updated successfully!": "Paramètres bien enregistrés !",
     "Number of weeks a post is marked new": "Nombre de semaines qu'un article est marqué comme nouveau",
     "Between 1 and 12.": "Entre 1 et 12",
-    "Go to bypass page": "Aller sur la page de bypass"
+    "Go to bypass page": "Aller sur la page de bypass",
+    "Test page": "Page de test",
+    "Study": "Étude"
 }

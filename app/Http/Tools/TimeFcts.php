@@ -6,12 +6,17 @@
 
 namespace App\Http\Tools;
 
-class TimeFcts
-{
-	public function convertToLocale($languageCode)
-	{
-		// Utilise Locale pour convertir un code de langue en locale complète
-		// ex.: fr → FR
+use Illuminate\Support\Facades\Config;
+
+class TimeFcts {
+	/**
+	 * Return the locale for a given language code
+	 *
+	 * @return string The locale, ex.: fr → fr_FR
+	 */
+	public function appLocale(): bool|string {
+		$languageCode = Config::get('app.locale');
+
 		return \Locale::composeLocale(['language' => $languageCode, 'region' => strtoupper($languageCode)]);
 	}
 }
