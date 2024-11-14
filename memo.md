@@ -20,19 +20,19 @@ en fin de ce mémo -->
 
 #### Explorer les branches
 
-```json
-- successivement en mode étude.
+* ... Successivement en mode étude.
+    
+        Développer le noeud le plus haut que vous n'avez pas encore visité
+        (Si vous démarrez juste, c'est... Ce 'Manuel' v1.0.1 ! ),
+        et aller jusqu'au bout de la branche avant de passer à la suivante.
+        (Vous êtes 'au bout' d'un flux lorsqu'il n'y a plus de ligne à la droite
+        du dernier sujet déployé.).
+    
+* ... Selon la thématique de la racine en mode recherche.
 
-    Développer le noeud le plus haut que vous n'avez pas encore visité
-    ( Si vous démarrez juste, c'est... Ce 'Manuel' v1.0.1 ! ),
-    et aller jusqu'au bout de la branche avant de passer à la suivante.
-    (Vous êtes 'au bout' lorsqu'il n'y a plus de ligne à la
-    droite du dernier sujet déployé.).
-```
 
-```bash
-- selon la thématique de la racine en mode recherche.
-```
+- Et surtout: Utiliser une 'vraie' souris (Et pas le paddle si notebook)
+pour naviguer aisément (Molette pour zoomer/dé-zoomer)
 
 #### Coder... Oui... Mais pas de suite
 
@@ -1916,17 +1916,22 @@ return [
 ### Mode clair/sombre (MaryIU) <!-- markmap: fold -->
 
 - ./tailwind.config.js :
-  **export default {
+  - **export default {
   ...
   &nbsp;&nbsp;theme: {
   &nbsp;&nbsp;&nbsp;&nbsp;extend: {},
   &nbsp;&nbsp;},
   &nbsp;&nbsp;darkMode: 'class',
   }**
+
 - navigation/navbar.blade.php :
-  **&nbsp;&nbsp;&nbsp;&nbsp;\<x-theme-toggle title="{{ __('Toggle theme') }}" class="w-4 h-8" />
-  &nbsp;&nbsp;[/x-slot:actions](/x-slot:actions)
+  - **&nbsp;&nbsp;&nbsp;&nbsp;\<x-theme-toggle title="{{ __('Toggle theme') }}" class="w-4 h-8" />
+    &nbsp;&nbsp;[/x-slot:actions](/x-slot:actions)
   \</x-nav>**
+
+- lang/fr.json :
+  - "Toggle theme": "Basculer le thème"
+
 - Doc MaryUI ***[https://mary-ui.com/docs/components/theme-toggle](https://mary-ui.com/docs/components/theme-toggle)***
 
 ### Search bar <!-- markmap: fold -->
@@ -8583,7 +8588,7 @@ new #[Title('Settings')] #[Layout('components.layouts.admin')] class extends Com
 ... Reportez-vous au point 1 de AIDE & CONTACT ;-) !
 ( *Le faible critique... Le FORT agit !* :-) )
 
-### Data \<!-- markmap: fold -->
+### Data <!-- markmap: fold -->
 
 #### DataBaseSeeder <!-- markmap: fold -->
 
@@ -8604,7 +8609,7 @@ new #[Title('Settings')] #[Layout('components.layouts.admin')] class extends Com
 
 - 3 ) &nbsp; Créer un fichier database/seeders/**MainDatabaseSeeder.php**
     &nbsp; &nbsp; &nbsp; &nbsp; → Y copier le code de DataBaseSeeder.php
-    &nbsp; &nbsp; &nbsp; &nbsp; → Mais y remplacer la classe ainsi :
+    &nbsp; &nbsp; &nbsp; &nbsp; → Mais y remplacer la classe ainsi pour facorisation des call() :
 
     ```php
     class MainDatabaseSeeder extends Seeder {
@@ -8633,24 +8638,26 @@ new #[Title('Settings')] #[Layout('components.layouts.admin')] class extends Com
 php artisan migrate:refresh --seed
 ```
 
-#### Modification Contact Seeder \<!-- markmap: fold -->
+#### Modification du ContactSeeder <!-- markmap: fold -->
 
-##### Création d'outils (*Tools*) <!-- markmap: fold -->
+##### Problème & Solution <!-- markmap: fold -->
 
-    Situation actuelle :
+- Situation actuelle :
 
     Voir dans la base de données : Dans les enregistrements fakes de
     la table contacts, le champs "message" contient des phrases qui
     se terminent souvent de façon bizarre...
 
-    Situation proposée :
+- Situation proposée :
 
     Faire une sorte d'helper* pour améliorer la terminaison des phrases, en
     fonction de la ponctuation contenue dans le texte généré par le Faker.
 
-    * : Cependant, comme ceci n'a pas besoin d'être chargé par l'appli
-    systématiquement, puisque juste nécessaire à priori pour la migration
+- \* : Cependant, comme ceci n'a pas besoin d'être chargé systématiquement
+    par l'appli, puisque juste nécessaire à priori pour la population (*seed*)
     de la table 'contacts', nous le ferons en dehors des 'vrais' helpers...
+
+##### Création d'outils (*Tools*) <!-- markmap: fold -->
 
     Créer app/Http/Tools/Fakers.php 
 
@@ -8774,33 +8781,171 @@ class ContactFactory extends Factory {
 
 ### Front-End \<!-- markmap: fold -->
 
-#### Se créer un espace de test Exemple avec cutSentence()
+#### Espace de test \<!-- markmap: fold -->
 
-```php
+##### Objectif \<!-- markmap: fold -->
+
+* <small>En phase de dev, on a fréquemment besoin de tester une function native, perso, bref, un bout de code...</small>
+
+    <br>
+
+          En effet, par exemple, pour définir cutSentence(), qui est destiné au ContactSeeder,
+      il faudra à chaque avancée, relancer le process de *migration:(re)fresh --seed* puis aller
+      consulter la BdD..., et en particuliers, la table *contacts*... Plutôt fastidieux !
+  
+          Pour avoir l'aisance d'obtenir le rendu de notre code, sans avoir besoin de lancer quelque
+      commande que se soit, une extension de BdD de VSC, ou d'actualiser quoique ce soit, voire pire
+      encore, de passer sur une autre appli (Style HeidiSQL, SQLite Studio, MySQL Workbench, etc...),
+      l'idéal est d'avoir un espace d'accès rapide, isolé du reste pour simplifier la problématique,
+      et aussi éviter de s'immiscer dans le script principal...
+    
+          Voyons ci-après comment cela a été réalisé ici, grâce à un nouveau composant spécifique :
+
+##### Exemple de Test avec *cutSentence()* \<!-- markmap: fold -->
+
+1. Route Test : *Pour des raisons de sécurité, cette page ne sera accessible qu'aux admins.
+(Donc sa route sera par exemple juste après celle nommée **settings**). Et bien-sûr, rien ne vous empêche d'ajouter
+à la suite d'autres routes pour d'autres tests, quitte à transformer à terme, le lien ci-après, en dropdown...* :
+
+    <br>
+
+    ```php
+        Volt::route('/test', 'various.test')->name('various.test');
+    ```
+
+2. Lien d'accès dans Navbar aisément, rapidement accessible et réservé aux 'admin' uniquement :
+    <br>
+    ```php
+                ...
+                <x-menu-item title="{{ __('Logout') }}" wire:click="logout" />
+            </x-dropdown>
+            @if ($user->isAdmin())
+                <a href="{{ route('various.test') }}" title=" {{ __('Test page') }} ">
+                    <x-icon name="c-cog-6-tooth" />
+                </a>
+            @endif
+        @else
+            <x-button label="{{ __('Login') }}" link="/login" class="btn-ghost" />
+        ...
+    ```
+
+3. Layout épuré pour Test :
+    <br>
+    ```html
+        <!DOCTYPE html>
+        <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
+        <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+            <meta name="csrf-token" content="{{ csrf_token() }}">
+            <title>
+                {{ (isset($title) ? $title . ' | ' : (View::hasSection('title') ? View::getSection('title') . ' | ' : '')) . config('app.name') }}
+            </title>
+            <meta name="description" content="@yield('description')">
+            <meta name="keywords" content="@yield('keywords')">
+        
+            <link rel="stylesheet" href="{{ asset('storage/css/prism.css') }}">
+            @vite(['resources/css/app.css', 'resources/js/app.js'])
+        </head>
+        
+        <body class="h-[96vh] font-sans antialiased bg-base-200/50 dark:bg-base-200 my-3">
+        
+            <x-main full-width>
+                <x-slot:content>
+                    {{ $slot }}
+                </x-slot:content>
+            </x-main>
+        
+            <x-toast />
+            <script src="{{ asset('storage/scripts/prism.js') }}"></script>
+        </body>
+        </html>
+    ```
+
+4. Composant Test (*Le fichier est scindé, cette fois non pas qu'il soit long, mais afin d'optimiser le travail du formateur de l'IDE...*)
+    <br>
+    ```bash
+        php artisan make:volt various/test
+    ```
+
+5. Créer various/**test.php** :
+    <br>
+    ```php
+        <?php
+        use App\Http\Tools\Fakers;
+        use Livewire\Volt\Component;
+        use Livewire\Attributes\{Layout, Title};
+
+        new #[Layout('components.layouts.test')] #[Title('Test')] class extends Component {
+            public $sentence;
+            private $faker;
+
+            public function mount() {
+                $this->faker = new Fakers();
+                /* À noter : Cette classe utilise un autre outil : TimeFcts()->getLocale() qui extrait la variable d'environnement APP_LOCALE
+                de votre .env... Essayer de lui affecter 'de', 'es', 'it', 'nl', ou 'ru'... Tout en regardant : http://127.0.0.1:8000/test */
+                $completeFakeSentence = $this->completeFixedOrRealSentence(); // 1 param.: 0 ou rien pour avoir fake || Autre valeur pour avoir fixe
+                $this->sentence       = $this->faker->cutSentence($completeFakeSentence);
+            }
+
+            private function completeFixedOrRealSentence($fixedSentence = 0) {
+                // Cas le + fréquent en 1er
+                  return !$fixedSentence ? $this->faker->fakerSentence()->complete : "La belle-mère répondit n'avoir plus rien de la liquidation
+                          qui était close, et qu'il leur restait, outre Belleville, six cents livres de rente. Quoiqu'elle fût laide, sèche comme
+                          un cotret. et bourgeonnée comme un printemps, certes madame Martin ne manquait pas de lui en procurer une autre plus
+                          riche commode. Le médecin, bien entendu, fit encore les frais de...";
+            }
+        };
+    ```
+
+6. Et dans various/**test.blade.php** (*Déjà créée par la commande en CLI ci-avant*) :
+    <br>
+    ```html
+      <?php
+      include_once 'test.php';
+      ?>
+
+      <div>
+          <a href="/" title="{{ __('Return on site') }}"><x-header class="text-lg m-0" title="{{ __('Test page') }}" shadow separator progress-indicator /></a>
+
+          <p class="text-2xl mb-5">{{ __('Study') }} {{ __('of') }} app/Http/Tools/Fakers.php-><b>cutSentence()</b></p>
+          <div class="w-full text-justify">
+              {{ $sentence->complete }}
+              <hr class="my-3">
+              {{ $sentence->wellCut }}
+          </div>
+      </div>
+    ```
+
+##### Traductions pour test courant <!-- markmap: fold -->
+
+- Dans **lang/fr.json**, ajouter :
+
+  ```json
     "Test page": "Page de test",
     "Study": "Étude"
-```
+  ```
 
-de.json
-```php
-{
+- Créer **lang/de.json** :
+
+  ```json
+  {
     "Study": "Studie",
     "Test page": "Testseite",
     "of": "von"
-}
-```
+  }
+  ```
 
-es.json
+- Créer **es.json** :
 
-```php
-{
+  ```json
+  {
     "Study": "Estudio",
     "Test page": "Página de prueba",
     "of": "de"
-}
-```
-
-##### Route + Lien (Barre de nav (//2do juste admin & dev)) + Layout
+  }
+  ```
 
 ### Back-End-End \<!-- markmap: fold -->
 

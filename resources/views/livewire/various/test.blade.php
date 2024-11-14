@@ -2,7 +2,7 @@
 include_once 'test.php';
 ?>
 
-<div class="h-[90vh]">
+<div>
     <a href="/" title="{{ __('Return on site') }}">
         <x-header class="text-lg m-0" title="{{ __('Test page') }}" shadow separator progress-indicator />
     </a>

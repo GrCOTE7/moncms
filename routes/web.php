@@ -11,11 +11,6 @@ use Livewire\Volt\Volt;
 // À chaque changement: php artisan view:clear & php artisan route:clear
 
 Volt::route('/', 'index');
-Volt::route('/test', 'various.test')->name('various.test'); // Simple component
-Volt::route('/test1', 'various.test1')->name('various.test1'); // To do...
-Volt::route('/test2', 'various.test2')->name('various.test2'); // Simple members list
-Volt::route('/test3', 'various.test3')->name('various.test3'); // Members list with birthday
-Volt::route('/users', 'users.index');
 
 Route::get('/memo', function () {
 	return view('memo');
@@ -71,9 +66,15 @@ Route::middleware('auth')->group(function () {
 			Volt::route('/footers/{footer}/edit', 'admin.menus.editfooter')->name('footers.edit');
 
 			Volt::route('/images/index', 'admin.images.index')->name('images.index');
-            Volt::route('/images/{year}/{month}/{id}/edit', 'admin.images.edit')->name('images.edit');
-            
-            Volt::route('/settings', 'admin.settings')->name('settings');
+			Volt::route('/images/{year}/{month}/{id}/edit', 'admin.images.edit')->name('images.edit');
+
+			Volt::route('/settings', 'admin.settings')->name('settings');
+
+			Volt::route('/test', 'various.test')->name('various.test'); // Simple component
+			Volt::route('/test1', 'various.test1')->name('various.test1'); // To do...
+			Volt::route('/test2', 'various.test2')->name('various.test2'); // Simple members list
+			Volt::route('/test3', 'various.test3')->name('various.test3'); // Members list with birthday
+			Volt::route('/users', 'users.index');
 		});
 	});
 });
