@@ -38,6 +38,8 @@ include_once 'create.php';
                 <img src="{{ $photo == '' ? '/storage/ask.jpg' : $photo }}" class="h-40" />
             </x-file>
             <x-slot:actions>
+                <x-button label="{{ __('Cancel') }}" icon="o-hand-thumb-down" class="btn-outline"
+                    link="/admin/posts/index" />
                 <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit"
                     class="btn-primary" />
             </x-slot:actions>

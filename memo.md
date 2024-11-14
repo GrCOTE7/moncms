@@ -8959,6 +8959,253 @@ class ContactFactory extends Factory {
 
 ### Back-End-End \<!-- markmap: fold -->
 
+#### Ajout d'un lien Front-End & bouton Annuler (BLADE) \<!-- markmap: fold -->
+
+##### admin.posts <!-- markmap: fold -->
+<br>
+
+* \- index :
+<br>
+    ```php
+        ...
+        uuu tt → //2do component x-headerLk ?
+            ...
+    ```
+
+* \- edit :
+<br>
+    ```php
+        uuu tt
+        ...
+        <x-slot:actions>
+            <x-button label="{{ __('Cancel') }}" icon="o-hand-thumb-down" class="btn-outline" link="/admin/posts/index" />
+            <x-button label="{{ __('Preview') }}" icon="m-sun" link="{{ '/posts/' . $post->slug }}" external class="btn-outline" />
+            ...
+        ...//2do component x-cancelLk
+        <x-slot:actions>
+            <x-button label="{{ __('Cancel') }}" icon="o-hand-thumb-down" class="btn-outline" link="/admin/posts/index" />
+            <x-button label="{{ __('Preview') }}" icon="m-sun" link="{{ '/posts/' . $post->slug }}" external class="btn-outline" />
+            ...
+    ```
+
+* \- create :
+<br>
+        uuu tt
+        ...
+        <x-slot:actions>
+            <x-button label="{{ __('Cancel') }}" icon="o-hand-thumb-down" class="btn-outline"
+                link="/admin/posts/index" />
+            <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit"
+                class="btn-primary" />
+        ...
+
+##### admin.categories <!-- markmap: fold -->
+<br>
+
+* \- admin.categories.index :
+<br>
+    ```php
+        ...
+        uuu tt
+            ...
+        ...
+        uuu cc
+            ...
+    ```
+
+* \- admin.categories.edit :
+<br>
+    ```php
+        ...
+        uuu tt
+            ...
+        ...
+        uuu cc
+            ...
+    ```
+
+##### admin.pages <!-- markmap: fold -->
+<br>
+
+* \- index :
+<br>
+    ```php
+        ...
+        uuu tt
+            ...
+    ```
+
+* \- edit :
+<br>
+    ```php
+        ...
+        uuu tt
+
+        ...
+        uuu cc
+            ...
+    ```
+
+* \- create :
+<br>
+    ```php
+        ...
+        uuu tt
+        ...
+        uuu cc
+            ...
+    ```
+
+##### admin.users <!-- markmap: fold -->
+<br>
+
+* \- index :
+<br>
+    ```php
+        ...
+        uuu tt
+            ...
+    ```
+
+* \- edit :
+<br>
+    ```php
+        ...
+        uuu tt
+
+        ...
+        uuu cc
+            ...
+    ```
+
+##### admin.comments <!-- markmap: fold -->
+<br>
+
+* \- index :
+<br>
+    ```php
+        ...
+        uuu tt
+            ...
+    ```
+
+* \- edit :
+<br>
+    ```php
+        ...
+        uuu tt
+
+        ...
+        uuu cc
+            ...
+    ```
+
+* \- create :
+<br>
+    ```php
+        ...
+        uuu tt
+        ...
+        uuu cc
+            ...
+    ```
+
+##### admin.menus <!-- markmap: fold -->
+<br>
+
+* \- index :
+<br>
+    ```php
+        ...
+        uuu tt
+            ...
+    ```
+
+* \- edit :
+<br>
+    ```php
+        ...
+        uuu tt
+
+        ...
+        uuu cc
+            ...
+    ```
+
+* \- create :
+<br>
+    ```php
+        ...
+        uuu tt
+        ...
+        uuu cc
+            ...
+    ```
+
+##### admin.images <!-- markmap: fold -->
+<br>
+
+* \- index :
+<br>
+    ```php
+        ...
+        uuu tt
+            ...
+    ```
+
+* \- edit :
+<br>
+    ```php
+        ...
+        uuu tt
+
+        ...
+        uuu cc
+            ...
+    ```
+
+* \- create :
+<br>
+    ```php
+        ...
+        uuu tt
+        ...
+        uuu cc
+            ...
+    ```
+
+##### admin.settings <!-- markmap: fold -->
+<br>
+
+* \- index :
+<br>
+    ```php
+        ...
+        uuu tt
+            ...
+    ```
+
+* \- edit :
+<br>
+    ```php
+        ...
+        uuu tt
+
+        ...
+        uuu cc
+            ...
+    ```
+
+* \- create :
+<br>
+    ```php
+        ...
+        uuu tt
+        ...
+        uuu cc
+            ...
+    ```
+
 ### //2do cf si meilleur icone pour tests
 
 ### //2do admin.posts.index → paginate selon config <!-- markmap: fold -->
@@ -9006,11 +9253,10 @@ class ContactFactory extends Factory {
 
 ## //2do PR dès que Complete & plus de autres 2do <!-- markmap: fold -->
 
-- Update Memo
+* Update Memo
 
-- Complete overhaul of the design
+* Complete overhaul of the design
 
-- All the tutorial code now included
+* All the tutorial code now included
 
-- Added 'Et après ?' & 'AIDE & CONTACT'
-
+* Added 'Et après ?' & 'AIDE & CONTACT'

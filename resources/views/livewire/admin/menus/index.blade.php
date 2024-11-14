@@ -164,7 +164,7 @@ new #[Title('Nav Menu'), Layout('components.layouts.admin')] class extends Compo
 }; ?>
 
 <div>
-    {{-- //2do cf bug add submenu --}}
+
     <x-header title="{{ __('Navbar') }}" separator progress-indicator>
         <x-slot:actions class="lg:hidden">
             <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline"
