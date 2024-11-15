@@ -6625,134 +6625,133 @@ Route::middleware('auth')->group(function () {
 
 #### Trait ManageMenus (Menus & submenus) \<!-- markmap: fold -->
 
-    Créer un trait ./app/Traits/ManageMenus.php :
-
-```php
-<?php
-namespace App\Traits;
-
-use App\Models\{Category, Page, Post};
-use Illuminate\Support\Collection;
-
-trait ManageMenus
-{
+* Créer un trait ./app/Traits/**ManageMenus.php** :
+<br>
+  ```html
+  <?php
+  namespace App\Traits;
+  
+  use Illuminate\Support\Collection;
+  use App\Models\{Category, Page, Post};
+  
+  trait ManageMenus {
     public ?int $post_id = null;
     public Collection $postsSearchable;
-    
+
     public function search(string $value = ''): void {
-        $selectedOption = Post::select('id', 'title')->where('id', $this->post_id)->get();
-    
-        $this->postsSearchable = Post::query()
-            ->select('id', 'title')
-            ->where('title', 'like', "%{$value}%")
-            ->orderBy('title')
-            ->take(5)
-            ->get()
-            ->merge($selectedOption);
+      $selectedOption = Post::select('id', 'title')->where('id', $this->post_id)->get();
+
+      $this->postsSearchable = Post::query()
+        ->select('id', 'title')
+        ->where('title', 'like', "%{$value}%")
+        ->orderBy('title')
+        ->take(5)
+        ->get()
+        ->merge($selectedOption);
     }
-    
+
     public function changeSelection($value): void {
-        $this->updateSubProperties(['model' => Post::class, 'route' => 'posts.show'], $value);
+      $this->updateSubProperties(['model' => Post::class, 'route' => 'posts.show'], $value);
     }
-    
+
     public function updating($property, $value): void {
-        if ('' === $value) {
-            return;
-        }
-    
-        $modelMap = [
-            'subPage'     => ['model' => Page::class, 'route' => 'pages.show'],
-            'subCategory' => ['model' => Category::class, 'route' => 'category'],
-        ];
-    
-        if (array_key_exists($property, $modelMap)) {
-            $this->updateSubProperties($modelMap[$property], $value);
-        } elseif ('subOption' === $property) {
-            $this->resetSubProperties();
-            $this->search();
-        }
+      if ('' === $value) {
+        return;
+      }
+
+      $modelMap = [
+        'subPage'     => ['model' => Page::class, 'route' => 'pages.show'],
+        'subCategory' => ['model' => Category::class, 'route' => 'category'],
+      ];
+
+      if (array_key_exists($property, $modelMap)) {
+        $this->updateSubProperties($modelMap[$property], $value);
+      } elseif ('subOption' === $property) {
+        $this->resetSubProperties();
+        $this->search();
+      }
     }
-    
+
     public function with(): array {
-        return [
-            'pages'      => Page::select('id', 'title', 'slug')->get(),
-            'categories' => Category::all(),
-            'subOptions' => [['id' => 1, 'name' => __('Post')], ['id' => 2, 'name' => __('Page')], ['id' => 3, 'name' => __('Category')]],
-        ];
+      return [
+        'pages'      => Page::select('id', 'title', 'slug')->get(),
+        'categories' => Category::all(),
+        'subOptions' => [['id' => 1, 'name' => __('Post')], ['id' => 2, 'name' => __('Page')], ['id' => 3, 'name' => __('Category')]],
+      ];
     }
-    
+
     private function updateSubProperties($modelInfo, $value): void {
-        $model = $modelInfo['model']::find($value);
-        if ($model) {
-            $this->sublabel = $model->title;
-            $this->sublink  = 'posts.show' === $modelInfo['route'] || 'pages.show' === $modelInfo['route']
-                ? route($modelInfo['route'], $model->slug)
-                : url($modelInfo['route'] . '/' . $model->slug);
-        }
+      $model = $modelInfo['model']::find($value);
+      if ($model) {
+        $this->sublabel = $model->title;
+        $this->sublink  = 'posts.show' === $modelInfo['route'] || 'pages.show' === $modelInfo['route']
+          ? route($modelInfo['route'], $model->slug)
+          : url($modelInfo['route'] . '/' . $model->slug);
+      }
     }
-    
+
     private function resetSubProperties(): void {
-        $this->sublabel    = '';
-        $this->sublink     = '';
-        $this->subPost     = 0;
-        $this->subPage     = 0;
-        $this->subCategory = 0;
-        $this->subOption   = 1;  
+      $this->sublabel    = '';
+      $this->sublink     = '';
+      $this->subPost     = 0;
+      $this->subPage     = 0;
+      $this->subCategory = 0;
+      $this->subOption   = 1;  
+    }
   }
-}
-```
+  ```
 
-#### Formulaire submenus (Création & Modification) \<!-- markmap: fold -->
+#### Formulaire submenus (Création & Modification) <!-- markmap: fold -->
 
-    Créer admin.menus.submenu-form.blade.php :
+* Créer admin.menus.**submenu-form.blade.php** :
 
-```php
-<x-form wire:submit="saveSubmenu({{ $menu->id ?? 'null' }})">
+  ```html
+  <x-form wire:submit="saveSubmenu({{ $menu->id ?? 'null' }})">
     <x-radio :options="$subOptions" wire:model="subOption" wire:change="$refresh" />
     @if ($subOption == 1)
-        <x-choices label="{{ __('Post') }}" wire:model="subPost" :options="$postsSearchable" option-label="title"
-            hint="{{ __('Select a post, type to search') }}" debounce="300ms" min-chars="2"
-            no-result-text="{{ __('No result found!') }}" single searchable @change-selection="$wire.changeSelection($event.detail.value)" />
+      <x-choices label="{{ __('Post') }}" wire:model="subPost" :options="$postsSearchable" option-label="title"
+        hint="{{ __('Select a post, type to search') }}" debounce="300ms" min-chars="2"
+        no-result-text="{{ __('No result found!') }}" single searchable @change-selection="$wire.changeSelection($event.detail.value)" />
     @elseif($subOption == 2)
-        <x-select label="{{ __('Page') }}" option-label="title" :options="$pages"
-            placeholder="{{ __('Select a page') }}" wire:model="subPage"
-            wire:change="$refresh" />
+      <x-select label="{{ __('Page') }}" option-label="title" :options="$pages"
+        placeholder="{{ __('Select a page') }}" wire:model="subPage"
+        wire:change="$refresh" />
     @elseif($subOption == 3)
-        <x-select label="{{ __('Category') }}" option-label="title" :options="$categories"
-            placeholder="{{ __('Select a category') }}" wire:model="subCategory"
-            wire:change="$refresh" />
+      <x-select label="{{ __('Category') }}" option-label="title" :options="$categories"
+        placeholder="{{ __('Select a category') }}" wire:model="subCategory"
+        wire:change="$refresh" />
     @endif
     <x-input label="{{ __('Title') }}" wire:model="sublabel" />
     <x-input type="text" wire:model="sublink" label="{{ __('Link') }}" />
     <x-slot:actions>
-        <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save"
-            type="submit" class="btn-primary" />
+    <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save"
+      type="submit" class="btn-primary" />
     </x-slot:actions>
-</x-form>
-```
+  </x-form>
+  ```
 
-#### Composant Liste des Menus (admin.menus.index) \<!-- markmap: fold -->
+#### Composant Liste des Menus (admin.menus.index) <!-- markmap: fold -->
 
-##### Création admin.menus.index \<!-- markmap: fold -->
+##### Création admin.menus.index <!-- markmap: fold -->
 
-```php
-php artisan make:volt admin/menus/index --class
-```
+  ```bash
+  php artisan make:volt admin/menus/index --class
+  ```
 
-##### Code admin.menus.index \<!-- markmap: fold -->
+##### Code admin.menus.index <!-- markmap: fold -->
 
-```php
-<?php
-use Mary\Traits\Toast;
-use App\Traits\ManageMenus;
-use Livewire\Volt\Component;
-use App\Models\{Menu, Submenu};
-use Illuminate\Support\Collection;
-use Livewire\Attributes\{Layout, Title, Validate};
-use Illuminate\Contracts\Database\Eloquent\Builder;
-
-new #[Title('Nav Menu'), Layout('components.layouts.admin')]
-class extends Component {
+  ```html
+  <?php
+  use Mary\Traits\Toast;
+  use App\Traits\ManageMenus;
+  use Livewire\Volt\Component;
+  use App\Models\{Menu, Submenu};
+  use Illuminate\Support\Collection;
+  use Livewire\Attributes\{Layout, Title, Validate};
+  use Illuminate\Contracts\Database\Eloquent\Builder;
+  
+  new #[Title('Nav Menu'), Layout('components.layouts.admin')]
+  class extends Component {
     use Toast;
     use ManageMenus;
     
@@ -6773,350 +6772,350 @@ class extends Component {
     
     // Méthode appelée lors de l'initialisation du composant.
     public function mount(): void {
-        $this->getMenus();
-        $this->search();
+      $this->getMenus();
+      $this->search();
     }
     
     // Récupérer les menus avec leurs sous-menus triés par ordre.
     public function getMenus(): void {
-        $this->menus = Menu::with([
-            'submenus' => function (Builder $query) {
-                $query->orderBy('order');
-            },
-        ])
-            ->orderBy('order')
-            ->get();
+      $this->menus = Menu::with([
+        'submenus' => function (Builder $query) {
+          $query->orderBy('order');
+        },
+      ])
+        ->orderBy('order')
+        ->get();
     }
     
     public function up(Menu $menu): void {
-        $this->move($menu, 'up');
+      $this->move($menu, 'up');
     }
     
     public function upSub(Submenu $submenu): void {
-        $this->move($submenu, 'up', true);
+    $this->move($submenu, 'up', true);
     }
     
     public function down(Menu $menu): void {
-        $this->move($menu, 'down');
+      $this->move($menu, 'down');
     }
     
     public function downSub(Submenu $submenu): void {
-        $this->move($submenu, 'down', true);
+      $this->move($submenu, 'down', true);
     }
     
     public function deleteMenu(Menu $menu): void {
-        $this->deleteItem($menu);
+      $this->deleteItem($menu);
     }
     
     public function deleteSubmenu(Menu $menu, Submenu $submenu): void {
-        $this->deleteItem($submenu, $menu);
+      $this->deleteItem($submenu, $menu);
     }
     
     // Enregistrer un nouveau menu.
     public function saveMenu(): void {
-        $data          = $this->validate();
-        $data['order'] = $this->menus->count() + 1;
-        Menu::create($data);
-    
-        $this->success(__('Menu created with success.'), redirectTo: '/admin/menus/index');
+      $data          = $this->validate();
+      $data['order'] = $this->menus->count() + 1;
+      Menu::create($data);
+  
+      $this->success(__('Menu created with success.'), redirectTo: '/admin/menus/index');
     }
     
     // Enregistrer un nouveau sous-menu.
     public function saveSubmenu(Menu $menu): void {
-        $data = $this->validate([
-            'sublabel' => ['required', 'string', 'max:255'],
-            'sublink'  => 'required|regex:/\/([a-z0-9_-]\/*)*[a-z0-9_-]*/',
-        ]);
-    
-        $data['order'] = $menu->submenus->count() + 1;
-        $data['label'] = $this->sublabel;
-        $data['link']  = $this->sublink;
-    
-        $menu->submenus()->save(new Submenu($data));
-    
-        $this->sublabel = '';
-        $this->sublink  = '';
-    
-        $this->success(__('Submenu created with success.'));
+      $data = $this->validate([
+        'sublabel' => ['required', 'string', 'max:255'],
+        'sublink'  => 'required|regex:/\/([a-z0-9_-]\/*)*[a-z0-9_-]*/',
+      ]);
+  
+      $data['order'] = $menu->submenus->count() + 1;
+      $data['label'] = $this->sublabel;
+      $data['link']  = $this->sublink;
+  
+      $menu->submenus()->save(new Submenu($data));
+  
+      $this->sublabel = '';
+      $this->sublink  = '';
+  
+      $this->success(__('Submenu created with success.'));
     }
     
     // Méthode générique pour déplacer un élément (menu ou sous-menu)
     private function move($item, $direction, $isSubmenu = false): void {
-        $operator       = 'up' === $direction ? '<' : '>';
-        $orderDirection = 'up' === $direction ? 'desc' : 'asc';
-    
-        $query = $isSubmenu ? Submenu::where('menu_id', $item->menu_id) : Menu::query();
-    
-        $adjacentItem = $query
-            ->where('order', $operator, $item->order)
-            ->orderBy('order', $orderDirection)
-            ->first();
-    
-        if ($adjacentItem) {
-            $this->swap($item, $adjacentItem);
-        }
+      $operator       = 'up' === $direction ? '<' : '>';
+      $orderDirection = 'up' === $direction ? 'desc' : 'asc';
+  
+      $query = $isSubmenu ? Submenu::where('menu_id', $item->menu_id) : Menu::query();
+  
+      $adjacentItem = $query
+        ->where('order', $operator, $item->order)
+        ->orderBy('order', $orderDirection)
+        ->first();
+  
+      if ($adjacentItem) {
+        $this->swap($item, $adjacentItem);
+      }
     }
     
     private function swap($item1, $item2): void {
-        $tempOrder    = $item1->order;
-        $item1->order = $item2->order;
-        $item2->order = $tempOrder;
-    
-        $item1->save();
-        $item2->save();
-    
-        $this->getMenus();
+      $tempOrder    = $item1->order;
+      $item1->order = $item2->order;
+      $item2->order = $tempOrder;
+  
+      $item1->save();
+      $item2->save();
+  
+      $this->getMenus();
     }
     
     // Méthode générique pour supprimer un élément (menu ou sous-menu)
     private function deleteItem($item, $parent = null): void {
-        $isSubmenu = null !== $parent;
-    
-        $item->delete();
-    
-        if ($isSubmenu) {
-            $this->reorderItems($parent->submenus());
-        } else {
-            $this->reorderItems(Menu::query());
-        }
-    
-        $this->getMenus();
-        $this->success(__($isSubmenu ? 'Submenu' : 'Menu') . __(' deleted with success.'));
+      $isSubmenu = null !== $parent;
+  
+      $item->delete();
+  
+      if ($isSubmenu) {
+        $this->reorderItems($parent->submenus());
+      } else {
+        $this->reorderItems(Menu::query());
+      }
+  
+      $this->getMenus();
+      $this->success(__($isSubmenu ? 'Submenu' : 'Menu') . __(' deleted with success.'));
     }
     
     // Méthode générique pour réordonner les éléments
     private function reorderItems($query): void {
-        $items = $query->orderBy('order')->get();
-        foreach ($items as $index => $item) {
-            $item->order = $index + 1;
-            $item->save();
-        }
+      $items = $query->orderBy('order')->get();
+      foreach ($items as $index => $item) {
+        $item->order = $index + 1;
+        $item->save();
+      }
     }
-};?>
-
-<div>
-  <x-header title="{{ __('Navigation') }}" separator progress-indicator>
-    <x-slot:actions class="lg:hidden">
-      <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline"
-        link="{{ route('admin') }}" />
-    </x-slot:actions>
-  </x-header>
-  <x-card>
-    @foreach ($menus as $menu)
-    <x-list-item :item="$menu" no-separator no-hover>
-      <x-slot:value>
-        {{ $menu->label }}
-      </x-slot:value>
-      <x-slot:sub-value>
-        @if ($menu->link)
-        {{ $menu->link }}
-        @else
-        @lang('Root menu')
-        @endif
-      </x-slot:sub-value>
-      <x-slot:actions>
-        @if ($menu->order > 1)
-        <x-popover>
-          <x-slot:trigger>
-            <x-button icon="s-chevron-up" wire:click="up({{ $menu->id }})" spinner />
-          </x-slot:trigger>
-          <x-slot:content class="pop-small">
-            @lang('Up')
-          </x-slot:content>
-        </x-popover>
-        @endif
-        @if ($menu->order < $menus->count())
+  };?>
+  
+  <div>
+    <x-header title="{{ __('Navigation') }}" separator progress-indicator>
+      <x-slot:actions class="lg:hidden">
+        <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline"
+          link="{{ route('admin') }}" />
+      </x-slot:actions>
+    </x-header>
+    <x-card>
+      @foreach ($menus as $menu)
+      <x-list-item :item="$menu" no-separator no-hover>
+        <x-slot:value>
+          {{ $menu->label }}
+        </x-slot:value>
+        <x-slot:sub-value>
+          @if ($menu->link)
+          {{ $menu->link }}
+          @else
+          @lang('Root menu')
+          @endif
+        </x-slot:sub-value>
+        <x-slot:actions>
+          @if ($menu->order > 1)
           <x-popover>
             <x-slot:trigger>
-              <x-button icon="s-chevron-down" wire:click="down({{ $menu->id }})" spinner />
+              <x-button icon="s-chevron-up" wire:click="up({{ $menu->id }})" spinner />
             </x-slot:trigger>
             <x-slot:content class="pop-small">
-              @lang('Down')
+              @lang('Up')
             </x-slot:content>
           </x-popover>
           @endif
-          <x-popover>
-            <x-slot:trigger>
-              <x-button icon="c-arrow-path-rounded-square" link="#" class="text-blue-500 btn-ghost btn-sm" spinner />
-            </x-slot:trigger>
-            <x-slot:content class="pop-small">
-              @lang('Edit')
-            </x-slot:content>
-          </x-popover>
-          <x-popover>
-            <x-slot:trigger>
-              <x-button icon="o-trash" wire:click="deleteMenu({{ $menu->id }})"
-                wire:confirm="{{ __('Are you sure to delete this menu?') }}" spinner
-                class="text-red-500 btn-ghost btn-sm" />
-            </x-slot:trigger>
-            <x-slot:content class="pop-small">
-              @lang('Delete')
-            </x-slot:content>
-          </x-popover>
-      </x-slot:actions>
-    </x-list-item>
-
-    <x-collapse collapse-plus-minus no-icon class="ml-8">
-      <x-slot:heading>
-        <x-icon name="o-chevron-down" /><span class="pl-2 text-sm">{{ __('Submenus') }}</span>
-      </x-slot:heading>
-      <x-slot:content>
-        @foreach ($menu->submenus as $submenu)
-        <x-list-item :item="$menu" no-separator no-hover>
-          <x-slot:value>
-            {{ $submenu->label }}
-          </x-slot:value>
-          <x-slot:sub-value>
-            {{ $submenu->link }}
-          </x-slot:sub-value>
-          <x-slot:actions>
-            @if ($submenu->order > 1)
+          @if ($menu->order < $menus->count())
             <x-popover>
               <x-slot:trigger>
-                <x-button icon="s-chevron-up" wire:click="upSub({{ $submenu->id }})" spinner />
+                <x-button icon="s-chevron-down" wire:click="down({{ $menu->id }})" spinner />
               </x-slot:trigger>
               <x-slot:content class="pop-small">
-                @lang('Up')
+                @lang('Down')
               </x-slot:content>
             </x-popover>
             @endif
-            @if ($submenu->order < $menu->submenus->count())
+            <x-popover>
+              <x-slot:trigger>
+                <x-button icon="c-arrow-path-rounded-square" link="#" class="text-blue-500 btn-ghost btn-sm" spinner />
+              </x-slot:trigger>
+              <x-slot:content class="pop-small">
+                @lang('Edit')
+              </x-slot:content>
+            </x-popover>
+            <x-popover>
+              <x-slot:trigger>
+                <x-button icon="o-trash" wire:click="deleteMenu({{ $menu->id }})"
+                  wire:confirm="{{ __('Are you sure to delete this menu?') }}" spinner
+                  class="text-red-500 btn-ghost btn-sm" />
+              </x-slot:trigger>
+              <x-slot:content class="pop-small">
+                @lang('Delete')
+              </x-slot:content>
+            </x-popover>
+        </x-slot:actions>
+      </x-list-item>
+  
+      <x-collapse collapse-plus-minus no-icon class="ml-8">
+        <x-slot:heading>
+          <x-icon name="o-chevron-down" /><span class="pl-2 text-sm">{{ __('Submenus') }}</span>
+        </x-slot:heading>
+        <x-slot:content>
+          @foreach ($menu->submenus as $submenu)
+          <x-list-item :item="$menu" no-separator no-hover>
+            <x-slot:value>
+              {{ $submenu->label }}
+            </x-slot:value>
+            <x-slot:sub-value>
+              {{ $submenu->link }}
+            </x-slot:sub-value>
+            <x-slot:actions>
+              @if ($submenu->order > 1)
               <x-popover>
                 <x-slot:trigger>
-                  <x-button icon="s-chevron-down" wire:click="downSub({{ $submenu->id }})" spinner />
+                  <x-button icon="s-chevron-up" wire:click="upSub({{ $submenu->id }})" spinner />
                 </x-slot:trigger>
                 <x-slot:content class="pop-small">
-                  @lang('Down')
+                  @lang('Up')
                 </x-slot:content>
               </x-popover>
               @endif
-              <x-popover>
-                <x-slot:trigger>
-                  <x-button icon="c-arrow-path-rounded-square" link="#" class="text-blue-500 btn-ghost btn-sm"
-                    spinner />
-                </x-slot:trigger>
-                <x-slot:content class="pop-small">
-                  @lang('Edit')
-                </x-slot:content>
-              </x-popover>
-              <x-popover>
-                <x-slot:trigger>
-                  <x-button icon="o-trash" wire:click="deleteSubmenu({{ $menu->id }}, {{ $submenu->id }})"
-                    wire:confirm="{{ __('Are you sure to delete this menu?') }}" spinner
-                    class="text-red-500 btn-ghost btn-sm" />
-                </x-slot:trigger>
-                <x-slot:content class="pop-small">
-                  @lang('Delete')
-                </x-slot:content>
-              </x-popover>
-          </x-slot:actions>
-        </x-list-item>
-        @endforeach
+              @if ($submenu->order < $menu->submenus->count())
+                <x-popover>
+                  <x-slot:trigger>
+                    <x-button icon="s-chevron-down" wire:click="downSub({{ $submenu->id }})" spinner />
+                  </x-slot:trigger>
+                  <x-slot:content class="pop-small">
+                    @lang('Down')
+                  </x-slot:content>
+                </x-popover>
+                @endif
+                <x-popover>
+                  <x-slot:trigger>
+                    <x-button icon="c-arrow-path-rounded-square" link="#" class="text-blue-500 btn-ghost btn-sm"
+                      spinner />
+                  </x-slot:trigger>
+                  <x-slot:content class="pop-small">
+                    @lang('Edit')
+                  </x-slot:content>
+                </x-popover>
+                <x-popover>
+                  <x-slot:trigger>
+                    <x-button icon="o-trash" wire:click="deleteSubmenu({{ $menu->id }}, {{ $submenu->id }})"
+                      wire:confirm="{{ __('Are you sure to delete this menu?') }}" spinner
+                      class="text-red-500 btn-ghost btn-sm" />
+                  </x-slot:trigger>
+                  <x-slot:content class="pop-small">
+                    @lang('Delete')
+                  </x-slot:content>
+                </x-popover>
+            </x-slot:actions>
+          </x-list-item>
+          @endforeach
+  
+          <br>
+  
+          <x-card class="" title="{{ __('Create a new submenu') }}">
+            @include('livewire.admin.menus.submenu-form')
+          </x-card>
+  
+        </x-slot:content>
+      </x-collapse>
+      @endforeach
+  
+    </x-card>
+  
+    <br>
+  
+    <x-card class="" title="{{ __('Create a new menu') }}">
+  
+      <x-form wire:submit="saveMenu">
+        <x-input label="{{ __('Title') }}" wire:model="label" />
+        <x-input type="text" wire:model="link" label="{{ __('Link') }}" />
+        <x-slot:actions>
+          <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit" class="btn-primary" />
+        </x-slot:actions>
+      </x-form>
+  
+    </x-card>
+  </div>
+  ```
 
-        <br>
+##### Traductions Liste Menus <!-- markmap: fold -->
 
-        <x-card class="" title="{{ __('Create a new submenu') }}">
-          @include('livewire.admin.menus.submenu-form')
-        </x-card>
+* N.B.: "Edit" existe déjà, mais remplacé ici
 
-      </x-slot:content>
-    </x-collapse>
-    @endforeach
-
-  </x-card>
-
-  <br>
-
-  <x-card class="" title="{{ __('Create a new menu') }}">
-
-    <x-form wire:submit="saveMenu">
-      <x-input label="{{ __('Title') }}" wire:model="label" />
-      <x-input type="text" wire:model="link" label="{{ __('Link') }}" />
-      <x-slot:actions>
-        <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit" class="btn-primary" />
-      </x-slot:actions>
-    </x-form>
-
-  </x-card>
-</div>
-```
-
-##### Traductions Liste Menus \<!-- markmap: fold -->
-
-    N.B.: "Edit" existe déjà, mais remplacé ici
-
-```json
-"Submenus": "Sous-menus",
-"Edit a submenu": "Modifier un sous-menu",
-"Create a new menu": "Créer un nouveau menu",
-"Are you sure to delete this menu?": "Êtes-vous sûr de vouloir supprimer ce menu ?",
-"Menu created with success.": "Menu ajouté avec succès.",
-"Menu updated with success.": "Menu mis à jour avec succès.",
-"Edit a menu": "Modifier un menu",
-"Create a new submenu": "Créer un nouveau sous-menu",
-"Are you sure to delete this submenu?": "Êtes-vous sûr de vouloir supprimer ce sous-menu ?",
-" deleted with success.": " supprimé avec succès.",
-"Root menu": "Menu racine",
-"Submenu": "Sous-menu",
-"Edit": "Modifier",
-"Link": "Lien",
-"Select a post, type to search": "Sélectionnez un article, tapez pour rechercher"
-```
+  ```json
+  "Submenus": "Sous-menus",
+  "Edit a submenu": "Modifier un sous-menu",
+  "Create a new menu": "Créer un nouveau menu",
+  "Are you sure to delete this menu?": "Êtes-vous sûr de vouloir supprimer ce menu ?",
+  "Menu created with success.": "Menu ajouté avec succès.",
+  "Menu updated with success.": "Menu mis à jour avec succès.",
+  "Edit a menu": "Modifier un menu",
+  "Create a new submenu": "Créer un nouveau sous-menu",
+  "Are you sure to delete this submenu?": "Êtes-vous sûr de vouloir supprimer ce sous-menu ?",
+  " deleted with success.": " supprimé avec succès.",
+  "Root menu": "Menu racine",
+  "Submenu": "Sous-menu",
+  "Edit": "Modifier",
+  "Link": "Lien",
+  "Select a post, type to search": "Sélectionnez un article, tapez pour rechercher"
+  ```
 
 ### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-menus-partie-1](https://laravel.sillo.org/posts/mon-cms-les-menus-partie-1)***
 
-### Modification d'un menu \<!-- markmap: fold -->
+### Modification d'un menu <!-- markmap: fold -->
 
-#### Route admin.menus.edit \<!-- markmap: fold -->
+#### Route admin.menus.edit <!-- markmap: fold -->
 
-```php
-Route::middleware('auth')->group(function () {
+  ```php
+  Route::middleware('auth')->group(function () {
     ...
     Route::middleware(IsAdminOrRedac::class)->prefix('admin')->group(function () {
+      ...
+      Route::middleware(IsAdmin::class)->group(function () {
         ...
-        Route::middleware(IsAdmin::class)->group(function () {
-            ...
-            Volt::route('/menus/{menu}/edit', 'admin.menus.edit')->name('menus.edit');
-        });
+        Volt::route('/menus/{menu}/edit', 'admin.menus.edit')->name('menus.edit');
+      });
     });
-});
+  });
 ```
 
-#### Lien Modification de Menus dans la liste (admin.menus.index) \<!-- markmap: fold -->
+#### Lien Modification de Menus dans la liste (admin.menus.index) <!-- markmap: fold -->
 
-```php
-@if ($menu->order < $menus->count())
+  ```html
+  @if ($menu->order < $menus->count())
     <x-popover>
-        ...
+      ...
     </x-popover>
-@endif
-<x-popover>
+  @endif
+  <x-popover>
     <x-slot:trigger>
-        <x-button icon="c-arrow-path-rounded-square" link="{{ route('menus.edit', $menu->id) }}"
-        class="text-blue-500 btn-ghost btn-sm" spinner />
+      <x-button icon="c-arrow-path-rounded-square" link="{{ route('menus.edit', $menu->id) }}"
+      class="text-blue-500 btn-ghost btn-sm" spinner />
     ...
-```
+  ```
 
-#### Composant modification d'un menu (admin.menus.edit) \<!-- markmap: fold -->
+#### Composant modification d'un menu (admin.menus.edit) <!-- markmap: fold -->
 
-##### Création admin.menus.edit \<!-- markmap: fold -->
+##### Création admin.menus.edit <!-- markmap: fold -->
 
-```php
-php artisan make:volt admin/menus/edit --class
-```
+  ```bash
+  php artisan make:volt admin/menus/edit --class
+  ```
 
-##### Code admin.menus.edit \<!-- markmap: fold -->
+##### Code admin.menus.edit <!-- markmap: fold -->
 
-```php
-<?php
-use App\Models\Menu;
-use Illuminate\Validation\Rule;
-use Livewire\Attributes\{Layout, Title};
-use Livewire\Volt\Component;
-use Mary\Traits\Toast;
-
-new #[Title('Edit menu'), Layout('components.layouts.admin')]
-class extends Component {
+  ```html
+  <?php
+  use App\Models\Menu;
+  use Mary\Traits\Toast;
+  use Livewire\Volt\Component;
+  use Illuminate\Validation\Rule;
+  use Livewire\Attributes\{Layout, Title};
+  
+  new #[Title('Edit menu'), Layout('components.layouts.admin')]
+  class extends Component {
     use Toast;
 
     public Menu $menu;
@@ -7124,83 +7123,83 @@ class extends Component {
     public ?string $link = null;
 
     public function mount(Menu $menu): void {
-        $this->menu = $menu;
-        $this->fill($this->menu);
+      $this->menu = $menu;
+      $this->fill($this->menu);
     }
 
     public function save(): void {
-        $data = $this->validate([
-            'label' => ['required', 'string', 'max:255', Rule::unique('menus')->ignore($this->menu->id)],
-            'link' => 'nullable|regex:/\/([a-z0-9_-]\/*)*[a-z0-9_-]*/',
-        ]);
-
-        $this->menu->update($data);
-
-        $this->success(__('Menu updated with success.'), redirectTo: '/admin/menus/index');
+      $data = $this->validate([
+        'label' => ['required', 'string', 'max:255', Rule::unique('menus')->ignore($this->menu->id)],
+        'link' => 'nullable|regex:/\/([a-z0-9_-]\/*)*[a-z0-9_-]*/',
+      ]);
+  
+      $this->menu->update($data);
+  
+      $this->success(__('Menu updated with success.'), redirectTo: '/admin/menus/index');
     }
-}; ?>
-
-<div>
+  }; ?>
+  
+  <div>
     <x-header title="{{ __('Edit a menu') }}" separator progress-indicator>
-        <x-slot:actions class="lg:hidden">
-            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline"
-                link="{{ route('admin') }}" />
-        </x-slot:actions>
+      <x-slot:actions class="lg:hidden">
+        <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline"
+          link="{{ route('admin') }}" />
+      </x-slot:actions>
     </x-header>
     <x-card>
-        <x-form wire:submit="save">
-            <x-input label="{{ __('Title') }}" wire:model="label" />
-            <x-input type="text" wire:model="link" label="{{ __('Link') }}" />
-            <x-slot:actions>
-                <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit"
-                    class="btn-primary" />
-            </x-slot:actions>
-        </x-form>
+      <x-form wire:submit="save">
+          <x-input label="{{ __('Title') }}" wire:model="label" />
+          <x-input type="text" wire:model="link" label="{{ __('Link') }}" />
+          <x-slot:actions>
+            <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit"
+              class="btn-primary" />
+          </x-slot:actions>
+      </x-form>
     </x-card>
-</div>
-```
+  </div>
+  ```
 
-### Modification d'un submenu \<!-- markmap: fold -->
+### Modification d'un submenu <!-- markmap: fold -->
 
-#### Route admin.menus.editsub \<!-- markmap: fold -->
+#### Route admin.menus.editsub <!-- markmap: fold -->
 
-```php
-Volt::route('/submenus/{submenu}/edit', 'admin.menus.editsub')->name('submenus.edit');
-```
+  ```php
+  Volt::route('/submenus/{submenu}/edit', 'admin.menus.editsub')->name('submenus.edit');
+  ```
 
-#### Lien Modification d'un submenu dans la liste (admin.menus.index) \<!-- markmap: fold -->
+#### Lien Modification d'un submenu dans la liste (admin.menus.index) <!-- markmap: fold -->
 
-```php
-@if ($submenu->order < $menu->submenus->count())
+  ```html
+  @if ($submenu->order < $menu->submenus->count())
     <x-popover>
-        ...
+      ...
     </x-popover>
-@endif
-<x-popover>
+  @endif
+  <x-popover>
     <x-slot:trigger>
-        <x-button icon="c-arrow-path-rounded-square" link="{{ route('submenus.edit', $submenu->id) }}"...(À la place du '#')
+      <x-button icon="c-arrow-path-rounded-square" link="{{ route('submenus.edit', $submenu->id) }}"...(À la place du '#')
     ...
-```
+  ```
 
-#### Composant modification d'un submenu (admin.menus.editsub) \<!-- markmap: fold -->
+#### Composant modification d'un submenu (admin.menus.editsub) <!-- markmap: fold -->
 
-##### Création admin.menus.editsub \<!-- markmap: fold -->
+##### Création admin.menus.editsub <!-- markmap: fold -->
 
-```php
-php artisan make:volt admin/menus/editsub --class
-```
+  ```bash
+  php artisan make:volt admin/menus/editsub --class
+  ```
 
-##### Code admin.menus.editsub \<!-- markmap: fold -->
+##### Code admin.menus.editsub <!-- markmap: fold -->
 
-```php
-<?php
-use Mary\Traits\Toast;
-use App\Models\Submenu;
-use App\Traits\ManageMenus;
-use Livewire\Volt\Component;
-use Livewire\Attributes\{Layout, Title};
-
-new #[Title('Edit Submenu'), Layout('components.layouts.admin')] class extends Component {
+  ```html
+  <?php
+  use Mary\Traits\Toast;
+  use App\Models\Submenu;
+  use App\Traits\ManageMenus;
+  use Livewire\Volt\Component;
+  use Livewire\Attributes\{Layout, Title};
+  
+  new #[Title('Edit Submenu'), Layout('components.layouts.admin')] class extends Component {
     use Toast, ManageMenus;
 
     public Submenu $submenu;
@@ -7212,81 +7211,81 @@ new #[Title('Edit Submenu'), Layout('components.layouts.admin')] class extends C
     public int $subOption   = 1;
 
     public function mount(Submenu $submenu): void {
-        $this->submenu  = $submenu;
-        $this->sublabel = $submenu->label;
-        $this->sublink  = $submenu->link;
-        $this->search();
+      $this->submenu  = $submenu;
+      $this->sublabel = $submenu->label;
+      $this->sublink  = $submenu->link;
+      $this->search();
     }
 
     public function saveSubmenu($menu = null): void {
-        $data = $this->validate([
-            'sublabel' => ['required', 'string', 'max:255'],
-            'sublink'  => 'required|regex:/\/([a-z0-9_-]\/*)*[a-z0-9_-]*/',
-        ]);
-
-        $this->submenu->update([
-            'label' => $data['sublabel'],
-            'link'  => $data['sublink'],
-        ]);
-
-        $this->success(__('Menu updated with success.'), redirectTo: '/admin/menus/index');
+      $data = $this->validate([
+        'sublabel' => ['required', 'string', 'max:255'],
+        'sublink'  => 'required|regex:/\/([a-z0-9_-]\/*)*[a-z0-9_-]*/',
+      ]);
+  
+      $this->submenu->update([
+        'label' => $data['sublabel'],
+        'link'  => $data['sublink'],
+      ]);
+  
+      $this->success(__('Menu updated with success.'), redirectTo: '/admin/menus/index');
     }
-}; ?>
-
-<div>
+  }; ?>
+  
+  <div>
     <x-header title="{{ __('Edit a submenu') }}" separator progress-indicator>
-        <x-slot:actions class="lg:hidden">
-            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline"
-                link="{{ route('admin') }}" />
-        </x-slot:actions>
+      <x-slot:actions class="lg:hidden">
+        <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline"
+          link="{{ route('admin') }}" />
+      </x-slot:actions>
     </x-header>
     <x-card>
-        @include('livewire.admin.menus.submenu-form')
+      @include('livewire.admin.menus.submenu-form')
     </x-card>
-</div>
-```
+  </div>
+  ```
 
-### Le menu du footer \<!-- markmap: fold -->
+### Le menu du footer <!-- markmap: fold -->
 
 #### Route admin.menus.footers
 
-```php
-Volt::route('/footers/index', 'admin.menus.footers')->name('menus.footers');
-```
+  ```php
+  Volt::route('/footers/index', 'admin.menus.footers')->name('menus.footers');
+  ```
 
 #### Lien du menu du footer dans la sidebar (admin.sidebar)
 
-```php
-@if (Auth::user()->isAdmin())
+  ```html
+  @if (Auth::user()->isAdmin())
     <x-menu-sub title="{{ __('Menus') }}" icon="m-list-bullet">
-        ...
-        <x-menu-item title="{{ __('Footer') }}" link="{{ route('menus.footers') }}" />
-```
+      ...
+      <x-menu-item title="{{ __('Footer') }}" link="{{ route('menus.footers') }}" />
+  ```
 
-```php
-"Footer": "Pied de page"
-```
+  ```json
+  "Footer": "Pied de page"
+  ```
 
 #### Composant menu du footer (admin.menus.footers)
 
-##### Création admin.menus.footers \<!-- markmap: fold -->
+##### Création admin.menus.footers <!-- markmap: fold -->
 
-```php
-php artisan make:volt admin/menus/footers --class
-```
+  ```php
+  php artisan make:volt admin/menus/footers --class
+  ```
 
-##### Code admin.menus.footers \<!-- markmap: fold -->
+##### Code admin.menus.footers <!-- markmap: fold -->
 
-```php
-<?php
-use Mary\Traits\Toast;
-use App\Models\{Footer};
-use Livewire\Volt\Component;
-use Illuminate\Support\Collection;
-use Livewire\Attributes\{Layout, Validate, Title};
-
-new #[Title('Footer Menu'), Layout('components.layouts.admin')]
-class extends Component {
+  ```html
+  <?php
+  use Mary\Traits\Toast;
+  use App\Models\{Footer};
+  use Livewire\Volt\Component;
+  use Illuminate\Support\Collection;
+  use Livewire\Attributes\{Layout, Validate, Title};
+  
+  new #[Title('Footer Menu'), Layout('components.layouts.admin')]
+  class extends Component {
     use Toast;
     
     public Collection $footers;
@@ -7298,198 +7297,197 @@ class extends Component {
     public string $link = '';
     
     public function mount(): void {
-        $this->getFooters();
+      $this->getFooters();
     }
     
     public function getFooters(): void {
-        $this->footers = Footer::orderBy('order')->get();
+      $this->footers = Footer::orderBy('order')->get();
     }
     
     public function up(Footer $footer): void {
-        $previousFooter = Footer::where('order', '<', $footer->order)
-            ->orderBy('order', 'desc')
-            ->first();
-    
-        $this->swap($footer, $previousFooter);
+      $previousFooter = Footer::where('order', '<', $footer->order)
+        ->orderBy('order', 'desc')
+        ->first();
+  
+      $this->swap($footer, $previousFooter);
     }
     
     public function down(Footer $footer): void {
-        $previousFooter = Footer::where('order', '>', $footer->order)
-            ->orderBy('order', 'asc')
-            ->first();
-    
-        $this->swap($footer, $previousFooter);
+      $previousFooter = Footer::where('order', '>', $footer->order)
+        ->orderBy('order', 'asc')
+        ->first();
+  
+      $this->swap($footer, $previousFooter);
     }
     
     public function deleteFooter(Footer $footer): void {
-        $footer->delete();
-        $this->reorderFooters();
-        $this->getFooters();
-        $this->success(__('Footer deleted with success.'));
+      $footer->delete();
+      $this->reorderFooters();
+      $this->getFooters();
+      $this->success(__('Footer deleted with success.'));
     }
     
     public function saveFooter(): void {
-        $data          = $this->validate();
-        $data['order'] = $this->footers->count() + 1;
-        $newFooter     = Footer::create($data);
-        $this->footers->push($newFooter);
-        $this->success(__('Footer created with success.'));
+      $data          = $this->validate();
+      $data['order'] = $this->footers->count() + 1;
+      $newFooter     = Footer::create($data);
+      $this->footers->push($newFooter);
+      $this->success(__('Footer created with success.'));
     }
     
     private function swap(Footer $footer, Footer $previousFooter): void {
-        $tempOrder             = $footer->order;
-        $footer->order         = $previousFooter->order;
-        $previousFooter->order = $tempOrder;
-    
-        $footer->save();
-        $previousFooter->save();
-        $this->getFooters();
+      $tempOrder             = $footer->order;
+      $footer->order         = $previousFooter->order;
+      $previousFooter->order = $tempOrder;
+  
+      $footer->save();
+      $previousFooter->save();
+      $this->getFooters();
     }
     
     private function reorderFooters(): void {
-        $footers = Footer::orderBy('order')->get();
+      $footers = Footer::orderBy('order')->get();
       foreach ($footers as $index => $footer) {
-          $footer->order = $index + 1;
-          $footer->save();
+        $footer->order = $index + 1;
+        $footer->save();
       }
-  }
-}; ?>
-
-<div>
+    }
+  }; ?>
+  
+  <div>
     <x-header title="{{ __('Footer') }}" separator progress-indicator>
-        <x-slot:actions class="lg:hidden">
-            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline"
-                link="{{ route('admin') }}" />
-        </x-slot:actions>
+      <x-slot:actions class="lg:hidden">
+        <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline"
+          link="{{ route('admin') }}" />
+      </x-slot:actions>
     </x-header>
+
     <x-card>
+      @foreach ($footers as $footer)
+        <x-list-item :item="$footer" no-separator no-hover>
+          <x-slot:value>
+            {{ $footer->label }}
+          </x-slot:value>
+          <x-slot:sub-value>
+            {{ $footer->link }}
+          </x-slot:sub-value>
+          <x-slot:actions>
+            @if ($footer->order > 1)
+              <x-popover>
+                <x-slot:trigger>
+                  <x-button icon="s-chevron-up" wire:click="up({{ $footer->id }})" spinner />
+                </x-slot:trigger>
+                <x-slot:content class="pop-small">
+                  @lang('Up')
+                </x-slot:content>
+              </x-popover>
+            @endif
+            @if ($footer->order < $footers->count())
+              <x-popover>
+                <x-slot:trigger>
+                  <x-button icon="s-chevron-down" wire:click="down({{ $footer->id }})" spinner />
+                </x-slot:trigger>
+                <x-slot:content class="pop-small">
+                  @lang('Down')
+                </x-slot:content>
+              </x-popover>
+            @endif
 
-        @foreach ($footers as $footer)
-            <x-list-item :item="$footer" no-separator no-hover>
-                <x-slot:value>
-                    {{ $footer->label }}
-                </x-slot:value>
-                <x-slot:sub-value>
-                    {{ $footer->link }}
-                </x-slot:sub-value>
-                <x-slot:actions>
-                    @if ($footer->order > 1)
-                        <x-popover>
-                            <x-slot:trigger>
-                                <x-button icon="s-chevron-up" wire:click="up({{ $footer->id }})" spinner />
-                            </x-slot:trigger>
-                            <x-slot:content class="pop-small">
-                                @lang('Up')
-                            </x-slot:content>
-                        </x-popover>
-                    @endif
-                    @if ($footer->order < $footers->count())
-                        <x-popover>
-                            <x-slot:trigger>
-                                <x-button icon="s-chevron-down" wire:click="down({{ $footer->id }})" spinner />
-                            </x-slot:trigger>
-                            <x-slot:content class="pop-small">
-                                @lang('Down')
-                            </x-slot:content>
-                        </x-popover>
-                    @endif
-                    <x-popover>
-                        <x-slot:trigger>
-                            <x-button icon="c-arrow-path-rounded-square" link="{{ route('footers.edit', $footer->id) }}" class="text-blue-500 btn-ghost btn-sm" spinner />
-                        </x-slot:trigger>
-                        <x-slot:content class="pop-small">
-                            @lang('Edit')
-                        </x-slot:content>
-                    </x-popover>
-                    <x-popover>
-                        <x-slot:trigger>
-                            <x-button icon="o-trash" wire:click="deleteFooter({{ $footer->id }})"
-                                wire:confirm="{{ __('Are you sure to delete this footer?') }}" spinner
-                                class="text-red-500 btn-ghost btn-sm" />
-                        </x-slot:trigger>
-                        <x-slot:content class="pop-small">
-                            @lang('Delete')
-                        </x-slot:content>
-                    </x-popover>
-                </x-slot:actions>
-            </x-list-item>
-        @endforeach
+            <x-popover>
+              <x-slot:trigger>
+                <x-button icon="c-arrow-path-rounded-square" link="{{ route('footers.edit', $footer->id) }}"
+                  class="text-blue-500 btn-ghost   btn-sm" spinner />
+              </x-slot:trigger>
+              <x-slot:content class="pop-small">
+                  @lang('Edit')
+              </x-slot:content>
+            </x-popover>
 
+            <x-popover>
+              <x-slot:trigger>
+                <x-button icon="o-trash" wire:click="deleteFooter({{ $footer->id }})"
+                  wire:confirm="{{ __('Are you sure to delete this footer?') }}" spinner
+                  class="text-red-500 btn-ghost btn-sm" />
+              </x-slot:trigger>
+              <x-slot:content class="pop-small">
+                @lang('Delete')
+              </x-slot:content>
+            </x-popover>
+          </x-slot:actions>
+        </x-list-item>
+      @endforeach
     </x-card>
-
     <br>
-
     <x-card class="" title="{{ __('Create a new footer') }}">
-
-        <x-form wire:submit="saveFooter">
-            <x-input label="{{ __('Title') }}" wire:model="label" />
-            <x-input type="text" wire:model="link"
-                label="{{ __('Link') }} ({{ __('i.e.') }}: /{{ __('my_page') }}, /pages/slug {{ __('or') }} /pages/{{ strtolower(__('Folder')) }}/{{ __('my_page') }}-1)" />
-            <x-slot:actions>
-                <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit"
-                    class="btn-primary" />
-            </x-slot:actions>
-        </x-form>
+      <x-form wire:submit="saveFooter">
+        <x-input label="{{ __('Title') }}" wire:model="label" />
+        <x-input type="text" wire:model="link"
+          label="{{ __('Link') }} ({{ __('i.e.') }}: /{{ __('my_page') }}, /pages/slug {{ __('or') }} /pages/{{ strtolower(__('Folder')) }}/  {{ __('my_page') }}-1)" />
+        <x-slot:actions>
+          <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit"
+            class="btn-primary" />
+          </x-slot:actions>
+      </x-form>
     </x-card>
-</div>
-```
+  </div>
+  ```
 
-```php
-"Edit a footer": "Modifier le pied de page",
-"Footer deleted with success.": "Pied de page supprimé avec succès.",
-"Create a new footer": "Créer un nouveau pied de page",
-"Are you sure to delete this footer?": "Êtes-vous sûr de vouloir supprimer ce menu de pied de page ?"
-```
+  ```json
+  "Edit a footer": "Modifier le pied de page",
+  "Footer deleted with success.": "Pied de page supprimé avec succès.",
+  "Create a new footer": "Créer un nouveau pied de page",
+  "Are you sure to delete this footer?": "Êtes-vous sûr de vouloir supprimer ce menu de pied de page ?"
+  ```
 
-##### Traductions admin.menus.footers \<!-- markmap: fold -->
+##### Traductions admin.menus.footers <!-- markmap: fold -->
 
-```php
-"Edit a footer": "Modifier le pied de page",
-"Footer deleted with success.": "Pied de page supprimé avec succès.",
-"Create a new footer": "Créer un nouveau pied de page",
-"Are you sure to delete this footer?": "Êtes-vous sûr de vouloir supprimer ce menu de pied de page ?",
-"i.e.": "Ex. ",
-"my_page": "ma_page",
-"or": "ou",
-"Folder": "Dossier"
-```
+  ```json
+  "Edit a footer": "Modifier le pied de page",
+  "Footer deleted with success.": "Pied de page supprimé avec succès.",
+  "Create a new footer": "Créer un nouveau pied de page",
+  "Are you sure to delete this footer?": "Êtes-vous sûr de vouloir supprimer ce menu de pied de page ?",
+  "i.e.": "Ex. ",
+  "my_page": "ma_page",
+  "or": "ou",
+  "Folder": "Dossier"
+  ```
 
-### Modification du menu du footer \<!-- markmap: fold -->
+### Modification du menu du footer <!-- markmap: fold -->
 
 #### Route admin.menus.editfooter
 
-```php
-Volt::route('/footers/{footer}/edit', 'admin.menus.editfooter')->name('footers.edit');
-```
+  ```php
+  Volt::route('/footers/{footer}/edit', 'admin.menus.editfooter')->name('footers.edit');
+  ```
 
 #### Lien Modification d'un menu du footer dans la liste (admin.menus.footer)
 
-    (Déjà posé dans le code)
+* (*Déjà posé dans le code*)
 
-```php
-<x-button icon="c-arrow-path-rounded-square" link="{{ route('footers.edit', $footer->id) }}" class="text-blue-500 btn-ghost btn-sm" spinner />
-```
+  ```php
+  <x-button icon="c-arrow-path-rounded-square" link="{{ route('footers.edit', $footer->id) }}" class="text-blue-500 btn-ghost btn-sm" spinner />
+  ```
 
 #### Composant modification d'un menu footer (admin.menus.editfooter)
 
-##### Création admin.menus.editfooter \<!-- markmap: fold -->
+##### Création admin.menus.editfooter <!-- markmap: fold -->
 
-```php
-php artisan make:volt admin/menus/editfooter --class
-```
+  ```php
+  php artisan make:volt admin/menus/editfooter --class
+  ```
 
-##### Code admin.menus.editfooter \<!-- markmap: fold -->
+##### Code admin.menus.editfooter <!-- markmap: fold -->
 
-```php
-<?php
-use Mary\Traits\Toast;
-use App\Models\Footer;
-use Livewire\Volt\Component;
-use Illuminate\Validation\Rule;
-use Livewire\Attributes\{Layout, Title};
-
-new #[Title('Edit Footer'), Layout('components.layouts.admin')] 
-class extends Component {
+  ```html
+  <?php
+  use Mary\Traits\Toast;
+  use App\Models\Footer;
+  use Livewire\Volt\Component;
+  use Illuminate\Validation\Rule;
+  use Livewire\Attributes\{Layout, Title};
+  
+  new #[Title('Edit Footer'), Layout('components.layouts.admin')] 
+  class extends Component {
     use Toast;
     
     public Footer $footer;
@@ -7497,45 +7495,45 @@ class extends Component {
     public string $link  = '';
     
     public function mount(Footer $footer): void {
-        $this->footer = $footer;
-        $this->fill($this->footer);
+      $this->footer = $footer;
+      $this->fill($this->footer);
     }
     
     public function save(): void {
-        $data = $this->validate([
-            'label' => ['required', 'string', 'max:255', Rule::unique('footers')->ignore($this->footer->id)],
-            'link'  => 'regex:/\/([a-z0-9_-]\/*)*[a-z0-9_-]*/',
-        ]);
-    
-        $this->footer->update($data);
-    
-        $this->success(__('Footer updated with success.'), redirectTo: '/admin/footers/index');
-  }
-}; ?>
-
-<div>
+      $data = $this->validate([
+        'label' => ['required', 'string', 'max:255', Rule::unique('footers')->ignore($this->footer->id)],
+        'link'  => 'regex:/\/([a-z0-9_-]\/*)*[a-z0-9_-]*/',
+      ]);
+  
+      $this->footer->update($data);
+  
+      $this->success(__('Footer updated with success.'), redirectTo: '/admin/footers/index');
+    }
+  }; ?>
+  
+  <div>
     <x-header title="{{ __('Edit a footer') }}" separator progress-indicator>
-        <x-slot:actions class="lg:hidden">
-            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline"
-                link="{{ route('admin') }}" />
-        </x-slot:actions>
+      <x-slot:actions class="lg:hidden">
+        <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline"
+          link="{{ route('admin') }}" />
+      </x-slot:actions>
     </x-header>
     <x-card>
-        <x-form wire:submit="save">
-            <x-input label="{{ __('Title') }}" wire:model="label" />
-            <x-input type="text" wire:model="link" label="{{ __('Link') }}" />
-            <x-slot:actions>
-                <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit"
-                    class="btn-primary" />
-            </x-slot:actions>
-        </x-form>
+      <x-form wire:submit="save">
+        <x-input label="{{ __('Title') }}" wire:model="label" />
+        <x-input type="text" wire:model="link" label="{{ __('Link') }}" />
+        <x-slot:actions>
+        <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit"
+          class="btn-primary" />
+        </x-slot:actions>
+      </x-form>
     </x-card>
-</div>
-```
+  </div>
+  ```
 
-```php
-"Footer updated with success.": "Pied de page mis à jour avec succès"
-```
+  ```json
+  "Footer updated with success.": "Pied de page mis à jour avec succès"
+  ```
 
 ### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-menus-partie-2](https://laravel.sillo.org/posts/mon-cms-les-menus-partie-2)***
 
