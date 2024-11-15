@@ -91,9 +91,8 @@ include_once 'index_images.php';
             @endphp
         </pre>
         --}}
-
-
     </x-card>
+
     <script>
         function copyUrl(button) {
             const url = button.getAttribute('data-url');

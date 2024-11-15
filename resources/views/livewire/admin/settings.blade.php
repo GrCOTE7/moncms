@@ -6,8 +6,7 @@ use Illuminate\Support\Facades\Artisan;
 use Livewire\Attributes\{Layout, Validate};
 use Illuminate\Database\Eloquent\Collection;
 
-new #[Title('Settings')] #[Layout('components.layouts.admin')]
-class extends Component {
+new #[Title('Settings')] #[Layout('components.layouts.admin')] class extends Component {
     use Toast;
 
     private const SETTINGS_KEYS = ['pagination', 'excerptSize', 'title', 'subTitle', 'newPost'];
@@ -30,7 +29,8 @@ class extends Component {
     public bool $maintenance = false;
     public Collection $settings;
 
-    public function mount(): void {
+    public function mount(): void
+    {
         $this->settings = Setting::all();
 
         $this->maintenance = App::isDownForMaintenance();
@@ -40,7 +40,8 @@ class extends Component {
         }
     }
 
-    public function updatedMaintenance(): void {
+    public function updatedMaintenance(): void
+    {
         if ($this->maintenance) {
             Artisan::call('down', ['--secret' => env('APP_MAINTENANCE_SECRET')]);
         } else {
@@ -48,7 +49,8 @@ class extends Component {
         }
     }
 
-    public function save() {
+    public function save()
+    {
         $data = $this->validate();
 
         DB::transaction(function () use ($data) {
@@ -66,18 +68,40 @@ class extends Component {
 }; ?>
 
 <div>
-    <x-header title="{{ __('Settings') }}" separator progress-indicator>
-        <x-slot:actions>
-            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline lg:hidden"
-                link="{{ route('admin') }}" />
-        </x-slot:actions>
+    V normale (Sans btn Dashboard) :
+    <hr>
+    <a href="/" title="{{ __('Go on site') }}">
+        <x-header title="{{ __('Settings') }}" separator progress-indicator />
+    </a>
+
+    <hr class="mt-5 my-5 border-orange-400 border-2" />
+
+    V normale (Avec btn Dashboard) :
+    <hr>
+    <a href="/">
+        <x-header title="{{ __('Settings') }}" separator progress-indicator />
+    </a>
+    <x-slot:actions>
+        <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline lg:hidden"
+            link="{{ route('admin') }}" />
+    </x-slot:actions>
+    <x-header separator progress-indicator>
     </x-header>
+    <hr>
+    <hr>
+    <x-helpers.header-lk :title={{ __('Settings') }} :lk={{ route('admin') }} :dashboardLink="true" />
+    <x-helpers.header-lk :title="__('Settings')" :lk="route('admin')" :dashboardBtn="true" />
+
+    {{-- <x-helpers.header-lk title="Oki" /> --}}
+    <hr>
+    <hr>
+
     <x-card>
         <x-card separator class="mb-6 border-4 {{ $maintenance ? 'bg-red-300' : 'bg-zinc-100' }} border-zinc-950">
             <div class="flex items-center justify-between">
                 <x-toggle label="{{ __('Maintenance Mode') }}" wire:model="maintenance" wire:change="$refresh" />
-                @if($maintenance)
-                    <x-button label="{{ __('Go to bypass page')}}" link="/{{ env('APP_MAINTENANCE_SECRET') }}"  />
+                @if ($maintenance)
+                    <x-button label="{{ __('Go to bypass page') }}" link="/{{ env('APP_MAINTENANCE_SECRET') }}" />
                 @endif
             </div>
         </x-card>
@@ -109,5 +133,6 @@ class extends Component {
                     class="btn-primary" />
             </x-slot:actions>
         </x-form>
+        <x-header separator progress-indicator />
     </x-card>
 </div>
