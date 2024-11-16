@@ -1,9 +1,9 @@
 ---
 markmap:
-  duration: 2000
+  duration: 2100
   initialExpandLevel: -1
 ---
-# Mon CMS \<!-- markmap: duration: 1000 -->
+# Mon CMS
 
 <!-- VSCode: Utiliser l'extension markmap
 Forcer l'ouverture d'une branche en preview :
@@ -14,7 +14,7 @@ mais avez besoin d'aide, n'hésitez-pas
 à nous contacter. Voir "AIDE & CONTACT" 
 en fin de ce mémo -->
 
-## xMANUEL → Mode d'Emploi <!-- markmap: fold -->
+## MANUEL → Mode d'Emploi <!-- markmap: fold -->
 
 ### Mode d'emploi
 
@@ -24,21 +24,30 @@ en fin de ce mémo -->
 
   ```markdown
     Développer le noeud le plus haut que vous n'avez pas encore visité
-    (Et si vous démarrez tout juste, c'est donc... Ce 'MANUEL' ! ),
-    et allez  alors jusqu'au bout de la branche avant de passer à la suivante.
-    (Vous êtes 'au bout' d'un flux lorsqu'il n'y a plus de point ou de ligne à droite
-    du dernier sujet déployé, comme c'est la cas pour celui-ci.).
+    (Et si vous démarrez tout juste, c'est donc comme vous avez dû le faire
+    pour lire ces mots, en ayant cliqué sur... Ce 'MANUEL' ! ), et allez
+    alors jusqu'au bout de la branche avant de passer au suivant.
+    (Vous êtes 'au bout' d'un flux lorsqu'il n'y a plus de point ou de ligne
+    à droite du dernier sujet déployé, comme c'est la cas pour celui-ci.).
+
+    Une fois le sujet en cours exploité, regarder celui (ou ceux) en-dessous,
+    et quand il n'y en a plus, pour trouver le noeud suivant, remonter
+    au sujet juste là, à gauche : Ici, c'est donc 'Explorer les branches'
+
+    Cliquer sur son point pour le fermer, et ouvrir le suivant.
 
     Donc, présentement, le prochain point à explorer est :
     'Coder... Oui... Mais pas de suite !'
+
+    Et ainsi de suite...
 
 * ... Selon la thématique de la racine en 'mode recherche'.
 
 #### Coder... Oui... Mais pas de suite ! <!-- markmap: fold -->
 
-##### * (Pour Momo, mais pas que... ;-) :) Commencer par survoler les généralités, simplement en les lisant toutes
+##### (Pour Momo, mais pas que... ;-)) Commencer par survoler les généralités, simplement en les lisant toutes
 
-##### &nbsp; &nbsp;→ Ne commencer à coder qu'à partir du noeud racine 'Le projet (Mon CMS)' !
+##### → Ne commencer à coder qu'à partir du noeud racine '**Le projet (Mon CMS)**'
 
 ##### Astuces
 
@@ -55,8 +64,8 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
 \- Au clavier, faites  la combinaison '**Ctrl + C**' pour **C**opier,
 \- Puis '**Ctrl + V**' pour '**V**a !' dans votre éditeur, dans le fichier cible.
 &nbsp; *N'hésitez-pas à vous y entraîner et tester, ne serait-ce avec ce bloc...* ;-) *!*
- 
-##### *Bonne exploration, et... Bon code !*
+
+##### *Bonne exploration et... Bon code !*
 
 ### Philosophie <!-- markmap: fold -->
 
