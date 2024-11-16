@@ -20,18 +20,21 @@ en fin de ce mémo -->
 
 #### Explorer les branches
 
-* ... Successivement en mode étude.
+* ... Successivement en 'mode étude'.
 
   ```markdown
     Développer le noeud le plus haut que vous n'avez pas encore visité
-    (Si vous démarrez juste, c'est... Ce **'Manuel'** v1.0.1 ! ),
-    et aller jusqu'au bout de la branche avant de passer à la suivante.
-    (Vous êtes 'au bout' d'un flux lorsqu'il n'y a plus de ligne à la droite
-    du dernier sujet déployé.).
+    (Et si vous démarrez tout juste, c'est donc... Ce 'MANUEL' ! ),
+    et allez  alors jusqu'au bout de la branche avant de passer à la suivante.
+    (Vous êtes 'au bout' d'un flux lorsqu'il n'y a plus de point ou de ligne à droite
+    du dernier sujet déployé, comme c'est la cas pour celui-ci.).
 
-* ... Selon la thématique de la racine en mode recherche.
+    Donc, présentement, le prochain point à explorer est :
+    'Coder... Oui... Mais pas de suite !'
 
-#### Coder... Oui... Mais pas de suite
+* ... Selon la thématique de la racine en 'mode recherche'.
+
+#### Coder... Oui... Mais pas de suite ! <!-- markmap: fold -->
 
 ##### * (Pour Momo, mais pas que... ;-) :) Commencer par survoler les généralités, simplement en les lisant toutes
 
@@ -53,11 +56,11 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
 \- Puis '**Ctrl + V**' pour '**V**a !' dans votre éditeur, dans le fichier cible.
 &nbsp; *N'hésitez-pas à vous y entraîner et tester, ne serait-ce avec ce bloc...* ;-) *!*
  
-##### Bonne exploration, et... Bon code !
+##### *Bonne exploration, et... Bon code !*
 
-### Philosophie \<!-- markmap: fold -->
+### Philosophie <!-- markmap: fold -->
 
-    Ce type de présentation peut vous sembler surprenante de prime abord...
+* Ce type de présentation peut vous sembler surprenante de prime abord...
 
     ... Mais passé le cap de la surprise et de la découverte... :
 
@@ -71,9 +74,9 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     parce qu'organisées, facilement et rapidement, les infos dont vous aurez alors
     ponctuellement besoin :-) ! Bon usage... Et bon code !
 
-## xLARAVEL VOLT - Généralités <!-- markmap: fold -->
+## LARAVEL VOLT - Généralités <!-- markmap: fold -->
 
-### 1 / Bases Laravel \<!-- markmap: fold -->
+### 1 / Bases Laravel <!-- markmap: fold -->
 
 * **composer  create-project laravel/laravel monapp --prefer-dist**
 * Paramètres .env file (APP_NAME, APP_URL & DB_DATABASE)
@@ -82,15 +85,15 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
   php artisan lang:update**
 * Ajout Debugbar : **composer require barryvdh/laravel-debugbar --dev**
 
-### 2 / Gestion des Models et Tables \<!-- markmap: fold -->
+### 2 / Gestion des Models et Tables <!-- markmap: fold -->
 
-#### Légendes: \<!-- markmap: fold -->
+#### Légendes <!-- markmap: fold -->
 
 * Mmm : Nom d'un Model (ex. User)
 * Ttt : Nom d'une table (ex. users)
 * Ccc : Nom d'une colonne (ex. name)
 
-#### Tables: \<!-- markmap: fold -->
+#### Tables <!-- markmap: fold -->
 
 * Migration seule : *php artisan make:migration create_nnn_table*
 * Factory : *php artisan make:factory MmmFactory*
@@ -107,38 +110,45 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
 
 * Puis à les exécuter : *php artisan db:seed*
 
-#### Models + migration : \<!-- markmap: fold -->
+#### Models, relations & migrations <!-- markmap: fold -->
 
-* Migrations seule
-\- php artisan make:migration create_Ttt_table
-\- php artisan make:migration create_Ttt_table --create=products
-\- php artisan make:migration add_Ccc_to_Ttt_table --table=Ttt
-
-* \- php artisan make:model Mmm *-migration* ou
-* \- php artisan make:model Mmm **-m** *
-* *php artisan migrate* la 1ère fois
-* *php artisan migrate:refresh --seed* ensuite
 * Model (Mmm) :
-* *protected $timestamps = false;*
-* *protected $fillable = ['name', 'email', 'password', 'role', 'valid'];*
+\- **protected $timestamps = false;** *Si pas besoin des champs created_at & updated_at*
+\- **protected $fillable = ['Ccc1', 'Ccc2', ...];** *Pour population en masse*
 
 * Relations :
-* 1:n :
-  * (1) : Dans MmmN
-  * *use Illuminate\Database\Eloquent\Relations\BelongsTo;*
-  * *public function Mmm1(): BelongsTo {
-        return $this*>belongsTo(Mmm1::class);}*
-  * (n) : Dans Mmm1
-  * *use Illuminate\Database\Eloquent\Relations\HasMany;*
-  * *public function MmmN(): HasMany {
-        return $this*>HasMany(MmmN::class);}*
+  * 1:n :
+    * (1): Dans MmmN :
+      &nbsp; &nbsp; - **use Illuminate\Database\Eloquent\Relations\BelongsTo;**
+      &nbsp; &nbsp; - **public function Mmm1(): BelongsTo {
+      &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;return $this→belongsTo(Mmm1::class);
+      &nbsp; &nbsp; &nbsp; }**
+    * (n): Dans Mmm1 !
+      &nbsp; &nbsp; - **use Illuminate\Database\Eloquent\Relations\HasMany;**
+      &nbsp; &nbsp; - **public function MmmN(): HasMany {
+      &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;return $this→HasMany(MmmN::class);
+      &nbsp; &nbsp; &nbsp; }**
 
-### 3 / Divers \<!-- markmap: fold -->
+* Migrations seules :
+\- **php artisan make:migration create_Ttt_table**
+\- **php artisan make:migration create_Ttt_table --create=products**
+\- **php artisan make:migration add_Ccc_to_Ttt_table --table=Ttt**
 
-* Les Helpers ( app/helpers.php )
-  (Y écrire les fonctions appelées souvent d'un peu n'importe où ensuite)
+* Model & sa Migration simultanément :
+\- **php artisan make:model Mmm -migration**
+  ou
+\- **php artisan make:model Mmm -m**
 
-* composer.json :
+* Exécuter les migrations seules :
+\- **php artisan migrate** *la 1ère fois*
+\- **php artisan migrate:refresh --seed** *pour reset complet*
+
+### 3 / Divers <!-- markmap: fold -->
+
+* Les Helpers ( app/**helpers.php** )
+  (*Y écrire les fonctions appelées souvent d'un peu n'importe où ensuite*)
+
+* ./**composer.json** :
 <br>
 
   ```php
@@ -162,23 +172,23 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
 
 ### Technos
 
-#### MaryUI \<!-- markmap: fold -->
+#### MaryUI <!-- markmap: fold -->
 
 ##### Installation de MaryUI
 
-* ```php
+* ```bash
     composer require robsontenorio/mary
     php artisan mary:install
   ```
 
-* → 0 (livewire/Volt)
-* → npm install --save-dev (npm)
+* → **0** (livewire/Volt)
+* → **npm install --save-dev** (npm)
 
 ##### Réf.: **[Doc complète MaryUI](https://mary-ui.com)**
 
-#### Volt \<!-- markmap: fold -->
+#### Volt <!-- markmap: fold -->
 
-##### Bases VOLT
+##### Bases d'un composant VOLT
 
 * UNE FONCTIONNALITÉ avec UN COMPOSANT VOLT (LOGIQUE + VUE) :
   
@@ -192,13 +202,13 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
 
 * → Recommandé à chaque changement des routes :
 
-  ```php
+  ```bash
     php artisan view:clear & php artisan route:clear
   ```
 
 * → Pour contrôle, liste de toutes les routes :
 
-  ```php
+  ```bash
     php artisan route:list
   ```
 
@@ -209,18 +219,18 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
   ```
 
 * &nbsp; &nbsp; &nbsp;Y définir :
-* &nbsp; &nbsp; &nbsp; - La Logique (La classe PHP)
-* &nbsp; &nbsp; &nbsp; - La Vue (HTML - Template Blade)
+* &nbsp; &nbsp; &nbsp; - La Logique (La classe **PHP**)
+* &nbsp; &nbsp; &nbsp; - La Vue (HTML - Template **Blade**)
 
-* 3 / Souvent, besoin de traduire certains termes :
+* 3 / Souvent, besoin de traduire quelques termes :
   
-* &nbsp; &nbsp; &nbsp;→ Définir les clés:valeurs pour le fichier de langue (ex.: lang/fr.json)
+* &nbsp; &nbsp; &nbsp; → Définir les clés:valeurs pour le fichier de langue (ex.: lang/**fr.json**)
 
 ##### Réf.: **[Doc complète LIVEWIRE, compris VOLT](https://livewire.laravel.com/docs/quickstart)**
 
 #### Extraits de : ***[https://laravel.sillo.org/posts/mon-cms-lauthentification](https://laravel.sillo.org/posts/mon-cms-lauthentification)***
 
-## xLe projet (Mon CMS) <!-- markmap: fold -->
+## Le projet (Mon CMS) <!-- markmap: fold -->
 
 ### Installation de Laravel <!-- markmap: fold -->
 
