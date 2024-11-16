@@ -14,7 +14,7 @@ mais avez besoin d'aide, n'hésitez-pas
 à nous contacter. Voir "AIDE & CONTACT" 
 en fin de ce mémo -->
 
-## MANUEL → Mode d'Emploi \<!-- markmap: fold -->
+## MANUEL → Mode d'Emploi <!-- markmap: fold -->
 
 ### Mode d'emploi
 
@@ -67,11 +67,11 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
 
 ##### *Bonne exploration et... Bon code !*
 
-### Philosophie \<!-- markmap: fold -->
+### Philosophie <!-- markmap: fold -->
 
-* Ce type de présentation peut vous sembler surprenante de prime abord...
+* Ce type de présentation peut de prime abord, vous sembler surprenante, mais...
 
-    ... Mais passé le cap de la surprise et de la découverte... :
+    ... Passé le cap de la surprise et de la découverte... :
     <br>
 
     Au delà de l'aspect qui peut sembler ludique, et plutôt sympa sur le plan esthétique,
@@ -903,9 +903,9 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
 
 #### Sont alors créés (Entre autres...)
 
-* Une route (routes/web.php)
-* Un layout (resources\views\components\layouts\app.blade.php)
-* Un composant Volt (resources\views\livewire\users\index.blade.php)
+* Une route (./routes/**web.php**)
+* Un layout (./resources/views/components/layouts/**app.blade.php**)
+* Un composant Volt (./resources/views/livewire/users/**index.blade.php**)
 
 #### Rappel : Dorénavant, bien lancer aussi le serveur Vite
 
@@ -8862,7 +8862,7 @@ nécessaire à priori que pour la population (*seed*) de la table 'contacts', no
   }
   ```
 
-### Front-End \<!-- markmap: fold -->
+### Front-End <!-- markmap: fold -->
 
 #### Espace de test <!-- markmap: fold -->
 
@@ -8878,7 +8878,7 @@ Pour avoir l'aisance d'obtenir le rendu de notre code, sans avoir besoin de lanc
 commande que se soit, une extension de BdD de VSC, ou d'actualiser quoique ce soit, voire pire
 encore, de passer sur une autre appli (Style HeidiSQL, SQLite Studio, MySQL Workbench, etc...),
 l'idéal est d'avoir un espace d'accès rapide, isolé du reste pour simplifier la problématique,
-et aussi éviter de s'immiscer dans le script principal...<br>
+et aussi éviter ainsi de s'immiscer dans le script principal...<br>
 Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
 * Voyons ci-après comment cela a été réalisé ici, grâce à un nouveau composant spécifique :
 
@@ -9176,6 +9176,38 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
   ```
 
 ##### admin.menus \<!-- markmap: fold -->
+
+* \- index :
+<br>
+  ```html
+    ...
+    uuu tt
+    ...
+    uuu cc
+    ...
+  ```
+
+* \- edit :
+<br>
+  ```html
+    ...
+    uuu tt
+    ...
+    uuu cc
+    ...
+  ```
+
+* \- create :
+<br>
+  ```html
+    ...
+    uuu tt
+    ...
+    uuu cc
+    ...
+  ```
+
+##### admin.submenus-form \<!-- markmap: fold -->
 
 * \- index :
 <br>

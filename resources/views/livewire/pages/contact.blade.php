@@ -52,7 +52,6 @@ class extends Component {
         progress-indicator>
         <x-form wire:submit="save">
             <!-- Affichage des champs de nom et d'email uniquement si l'utilisateur n'est pas connecté -->
-            {{-- //2do champs requis --}}
             @if (!Auth()->check())
                 <x-input label="{{ __('Name') }} *" wire:model="name" icon="o-user" inline />
                 <x-input label="{{ __('E-mail') }} *" wire:model="email" icon="o-envelope" inline />

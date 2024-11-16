@@ -1,56 +1,57 @@
 <?php
 
+/**
+ * (ɔ) Mon CMS - 2024-2024
+ */
+
 namespace App\Notifications;
 
 use App\Models\Comment;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 
-class CommentCreated extends Notification
-{
-    use Queueable;
+class CommentCreated extends Notification {
+	use Queueable;
 
-    public Comment $comment;
+	public Comment $comment;
 
-    /**
-     * Create a new notification instance.
-     */
-	public function __construct(Comment $comment)
-	{
+	/**
+	 * Create a new notification instance.
+	 */
+	public function __construct(Comment $comment) {
 		$this->comment = $comment;
 	}
 
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @return array<int, string>
-     */
-    public function via(object $notifiable): array
-    {
-        return ['mail'];
-    }
+	/**
+	 * Get the notification's delivery channels.
+	 *
+	 * @return array<int, string>
+	 */
+	public function via(object $notifiable): array {
+		return ['mail'];
+	}
 
-    /**
-     * Get the mail representation of the notification.
-     */	public function toMail(object $notifiable): MailMessage
-	{
+	/**
+	 * Get the mail representation of the notification.
+	 */
+	public function toMail(object $notifiable): MailMessage {
+		echo $this->comment->id;
+
 		return (new MailMessage())
 			->subject(__('A comment has been created on your post'))
 			->line(__('A comment has been created on your post') . ' "' . $this->comment->post->title . '" ' . __('by') . ' ' . $this->comment->user->name . '.')
 			->lineIf(!$this->comment->user->valid, __('This comment is awaiting moderation.'))
-			->action(__('Manage this comment'), "#");
+			->action(__('Manage this comment'), route('comments.edit',$this->comment->id));
 	}
 
-    /**
-     * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
-     */
-    public function toArray(object $notifiable): array
-    {
-        return [
-        ];
-    }
+	/**
+	 * Get the array representation of the notification.
+	 *
+	 * @return array<string, mixed>
+	 */
+	public function toArray(object $notifiable): array {
+		return [
+		];
+	}
 }

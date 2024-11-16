@@ -6,7 +6,6 @@
 
 use App\Models\{Comment, Post};
 use App\Notifications\CommentCreated;
-use Illuminate\Support\Facades\Mail;
 use Livewire\Attributes\{Layout, Title};
 use Livewire\Volt\Component;
 
@@ -15,21 +14,26 @@ new
 #[Layout('components.layouts.test')]
 class extends Component {
 	public Post $post;
-	public $gravatar;
 	public Comment $comment;
+	public $data;
 
 	public function mount() {
 		// var_dump($post);
 		// dd($userEmail);
 
-		// 2do envoyer l'email d'un commentaire ici
-		// $this->comment = Comment::find(1);
-		// $commentCreated = new CommentCreated($comment);
-		// $mail = $commentCreated->toMail();
-		// $mail->Mail::send();
-	}
+		// 2do envoyer l'email d'un commentaire (Exemple avec le 1er commentaire récupéré) ici
+		$comment  = Comment::find(1);
+		$post     = $comment->post;
+		$user     = $comment->user->name;
+		$res      = $post->user->notify(new CommentCreated($comment));
 
-	// public function with(){
-	//     $post = $this->post;
-	// }
+		$data['user']    = $user;
+		$data['post']    = $post->title;
+		$data['resNotif'] = $res;
+		$this->data      = $data;
+
+		// public function with(){
+		//     $post = $this->post;
+		// }
+	}
 };

@@ -16,8 +16,6 @@
     <x-input label="{{ __('Title') }}" wire:model="sublabel" />
     <x-input type="text" wire:model="sublink" label="{{ __('Link') }}" />
     <x-slot:actions>
-        //2do ajouter un bouton annuler
-        <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit"
-            class="btn-primary" />
+        <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit" class="btn-primary" />
     </x-slot:actions>
 </x-form>
