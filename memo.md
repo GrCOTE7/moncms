@@ -222,29 +222,32 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
 
 ## xLe projet (Mon CMS) <!-- markmap: fold -->
 
-### Installation de Laravel \<!-- markmap: fold -->
+### Installation de Laravel <!-- markmap: fold -->
 
 #### Commande de base
 
-* En CLI :
+* En ***CLI** - **C**ommande **L**ine **I**nterface* (Console) :
 
   ```bash
     composer create-project laravel/laravel moncms --prefer-dist
   ```
 
 * Cette commande inclue l'installation des dépendances (PHP) et librairies (JS)...
-  ... Que vous pouvez relancer régulièrement pour mises à jour grâce à celles-ci :
-
-* En CLI :
+  ... Pour relancer parfois leurs mises à jours, utiliser les commandes suivantes en CLI :
 
   ```bash
     composer update
+  ```
+
+  Et :
+
+  ```bash
     npm i
   ```
 
 #### Settings ( ./.env )
 
-* Copier/coller le .env_exemple et l'adapter :
+* Adapter le ./**.env** :
 
   ```json
     APP_NAME="Mon CMS"
@@ -265,21 +268,27 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     ...
   ```
 
+* Pour contrôle :
+
   ```bash
     php artisan about
   ```
 
-### Exécuter votre script \<!-- markmap: fold -->
+* À noter: ∃ un fichier ./**.env_exemple**...En effet, lors du dépôt **Git** d'un projet, le ./**.env** est souvent,
+ pour ne pas dire toujours, ignoré des **push**es... Donc, en cas de clone par un tier, ce fichier sert
+ de matrice pour l'aider à recréer son ./**.env**
 
-#### Start & / || Restart les serveurs
+### Exécuter votre script <!-- markmap: fold -->
 
-* PHP, dans une première console (CLI):
+#### Start & & || Restart des serveurs
+
+* **PHP** dans une première console (**CLI**):
 
 * ```bash
     php artisan serv
   ```
 
-* VITE!, dans une seconde CLI :
+* **VITE!** dans une seconde CLI :
 
 * ```bash
     npm run dev
@@ -287,25 +296,25 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
 
 #### Ouvrir votre navigateur sur [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
-### Outil recommandé (Debugbar) \<!-- markmap: fold -->
+### Outil recommandé (La Debugbar) <!-- markmap: fold -->
 
 * Installer la debugbar, active qu'en développement
-    (Dans ./.env : APP_DEBUG = true) :
+(Dans ./**.env** : **APP_DEBUG = true**) :
 
   ```bash
     composer require barryvdh/laravel-debugbar --dev
   ```
 
-* Restart les serveurs
+* *Restart* ([Re]démarrer) les serveurs
 
-### Package des langues \<!-- markmap: fold -->
+### Package des langues <!-- markmap: fold -->
 
 * ```bash
     composer require --dev laravel-lang/common
     php artisan lang:update
   ```
 
-* Et Modifier dans le fichier généré: lang/fr.Json :
+* Et modifier dans le fichier généré: lang/**fr.Json** :
 
   ```json
     "Home": "Maison",
@@ -317,11 +326,11 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     "Home": "Accueil",
   ```
 
-### Les données \<!-- markmap: fold -->
+### Les données <!-- markmap: fold -->
 
-#### Tables users \<!-- markmap: fold -->
+#### Tables users <!-- markmap: fold -->
 
-##### database/migrations/0001_01_01_000000_create_users_table.php \<!-- markmap: fold -->
+##### database/migrations/**0001_01_01_000000_create_users_table.php** <!-- markmap: fold -->
 
   ```php
     public function up(): void {
@@ -339,7 +348,7 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     }
   ```
 
-##### database/factories/UserFactory.php \<!-- markmap: fold -->
+##### database/factories/**UserFactory.php** <!-- markmap: fold -->
 
   ```php
   public function definition(): array {
@@ -354,7 +363,7 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
   }
   ```
 
-##### app/Models/User.php \<!-- markmap: fold -->
+##### app/Models/**User.php** <!-- markmap: fold -->
 
   ```php
     ...
@@ -364,15 +373,15 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     }
   ```
 
-#### Tables categories \<!-- markmap: fold -->
+#### Tables categories <!-- markmap: fold -->
 
-##### Model & migration des categories \<!-- markmap: fold -->
+##### Model & migration des categories <!-- markmap: fold -->
 
-```php
+```bash
   php artisan make:model Category --migration
 ```
 
-##### Migrations des categories \<!-- markmap: fold -->
+##### Migrations des categories <!-- markmap: fold -->
 
   ```php
     public function up(): void {
@@ -384,7 +393,7 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     }
   ```
 
-##### app/Models/Category \<!-- markmap: fold -->
+##### app/Models/Category <!-- markmap: fold -->
 
   ```php
     <?php
@@ -396,15 +405,15 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     }
   ```
 
-#### Tables posts (Articles) \<!-- markmap: fold -->
+#### Tables posts (Articles) <!-- markmap: fold -->
 
-##### Création model & migration des articles \<!-- markmap: fold -->
+##### Création model & migration des articles <!-- markmap: fold -->
 
-  ```php
+  ```bash
     php artisan make:model Post --migration
   ```
 
-##### Migration des articles \<!-- markmap: fold -->
+##### Migration des articles <!-- markmap: fold -->
 
   ```php
     public function up(): void {
@@ -434,13 +443,13 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     }
   ```
 
-##### Création Factory des articles \<!-- markmap: fold -->
+##### Création Factory des articles <!-- markmap: fold -->
 
-  ```php
+  ```bash
     php artisan make:factory PostFactory
   ```
 
-##### Code factory articles \<!-- markmap: fold -->
+##### Code factory articles <!-- markmap: fold -->
 
   ```php
     public function definition(): array {
@@ -453,7 +462,7 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     }
   ```
 
-##### app/Models/Post \<!-- markmap: fold -->
+##### app/Models/Post <!-- markmap: fold -->
 
   ```php
     ...
@@ -465,9 +474,9 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     }
   ```
 
-#### Les relations \<!-- markmap: fold -->
+#### Les relations <!-- markmap: fold -->
 
-##### Les relations dans Models/Post.php \<!-- markmap: fold -->
+##### Les relations dans Models/Post.php <!-- markmap: fold -->
 
   ```php
     use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -483,7 +492,7 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     }
   ```
 
-##### La relation dans Models/User.php \<!-- markmap: fold -->
+##### La relation dans Models/User.php <!-- markmap: fold -->
 
   ```php
     use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -497,7 +506,7 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     }
   ```
 
-##### La relation dans Models/Category.php \<!-- markmap: fold -->
+##### La relation dans Models/Category.php <!-- markmap: fold -->
 
   ```php
     use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -510,17 +519,19 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     }
   ```
 
-#### Exécution des migrations \<!-- markmap: fold -->
+#### Exécution des migrations <!-- markmap: fold -->
 
-##### **php artisan migrate**
+* ```bash
+  php artisan migrate
+  ```
 
 ##### **[Voir diagramme UML des 3 tables](https://laravel.sillo.org/storage/photos/2024/08/XIVfqMqmJ7OUNl9kwGWNk5duv0U0nweTIz2nbI1E.png)**
 
-#### Population de users \<!-- markmap: fold -->
+#### Population de users <!-- markmap: fold -->
 
 ##### Création du seeder User
 
-  ```php
+  ```bash
     php artisan make:seeder UserSeeder
   ```
 
@@ -574,11 +585,11 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     }
   ```
 
-#### Population de categories \<!-- markmap: fold -->
+#### Population de categories <!-- markmap: fold -->
 
 ##### Création du seeder Category
 
-  ```php
+  ```bash
     php artisan make:seeder CategorySeeder
   ```
 
@@ -615,9 +626,9 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     }
   ```
 
-#### Population de posts \<!-- markmap: fold -->
+#### Population de posts <!-- markmap: fold -->
 
-##### Créer app/helpers.php \<!-- markmap: fold -->
+##### Créer app/**helpers.php** <!-- markmap: fold -->
 
 ###### Y copier : generateRandomDateInRange()
 
@@ -637,7 +648,7 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     }
   ```
 
-###### Activation de ce helper dans composer.json
+###### Activation de ce helper dans **composer.json**
 
   ```php
     "autoload": {
@@ -650,13 +661,13 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
 
 ###### Update de l'autoload
 
-  ```php
+  ```bash
     composer dumpautoload
   ```
 
 ##### Création du seeder de fake posts
 
-  ```php
+  ```bash
     php artisan make:seeder PostSeeder
   ```
 
@@ -709,9 +720,9 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     }
   ```
 
-#### Activation des seeders \<!-- markmap: fold -->
+#### Activation des seeders <!-- markmap: fold -->
 
-* database/seeders/DatabaseSeeder.php :
+* database/seeders/**DatabaseSeeder.php** :
 
   ```php
     <?php
@@ -738,15 +749,15 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     php artisan migrate:refresh --seed
   ```
 
-#### Les pages \<!-- markmap: fold -->
+#### Les pages <!-- markmap: fold -->
 
-##### Création Model & migration Page \<!-- markmap: fold -->
+##### Création Model & migration Page <!-- markmap: fold -->
 
-  ```php
+  ```bash
     php artisan make:model Page --migration
   ```
 
-##### Code migration Page \<!-- markmap: fold -->
+##### Code migration Page <!-- markmap: fold -->
 
   ```php
     public function up(): void {
@@ -763,7 +774,7 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     }
   ```
 
-##### Code app/models/Page \<!-- markmap: fold -->
+##### Code app/models/Page <!-- markmap: fold -->
 
   ```php
     <?php
@@ -788,13 +799,13 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     }
   ```
 
-##### Création factory Page \<!-- markmap: fold -->
+##### Création factory Page <!-- markmap: fold -->
 
-  ```php
+  ```bash
     php artisan make:factory PageFactory
   ```
 
-##### Code factory Page \<!-- markmap: fold -->
+##### Code factory Page <!-- markmap: fold -->
 
   ```php
     public function definition(): array {
@@ -806,13 +817,13 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     }
   ```
 
-##### Création seeder Page \<!-- markmap: fold -->
+##### Création seeder Page <!-- markmap: fold -->
 
-  ```php
+  ```bash
     php artisan make:seeder PageSeeder
   ```
 
-##### Code du seeder Page \<!-- markmap: fold -->
+##### Code du seeder Page <!-- markmap: fold -->
 
   ```php
     <?php
@@ -840,7 +851,7 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     }
   ```
 
-##### Ajout de ce seeder dans DatabaseSeeder.php \<!-- markmap: fold -->
+##### Ajout de ce seeder dans **DatabaseSeeder.php** <!-- markmap: fold -->
 
   ```php
     public function run(): void {
@@ -852,9 +863,9 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     }
   ```
 
-##### Rafraîchissement de la base \<!-- markmap: fold -->
+##### Rafraîchissement de la base <!-- markmap: fold -->
 
-  ```php
+  ```bash
     php artisan migrate:fresh --seed
   ```
 
@@ -862,9 +873,9 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
 
 ## &nbsp;**I &nbsp;/ &nbsp; F R O N T &nbsp;- &nbsp;E N D &nbsp;:**
 
-## - xL'authentification \<!-- markmap: fold -->
+## - L'authentification <!-- markmap: fold -->
 
-### Installer MaryUI (Avec Volt et npm) \<!-- markmap: fold -->
+### Installer MaryUI (Avec Volt et npm) <!-- markmap: fold -->
 
 #### Revoir ci-avant : ' Généralités / Technos / MaryUI ' pour l'installation
 
@@ -876,17 +887,17 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
 
 #### Rappel : Dorénavant, bien lancer aussi le serveur Vite
 
-  ```php
+  ```bash
     npm run dev
   ```
 
 ##### **[URL du rendu](http://127.0.0.1:8000)**
 
-### Layout pour l'authentification \<!-- markmap: fold -->
+### Layout pour l'authentification <!-- markmap: fold -->
 
-* ./resources/views/components/layouts/auth.blade.php
+* ./resources/views/components/layouts/**auth.blade.php** :
 
-  ```php
+  ```html
   <!DOCTYPE html>
   <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
   
@@ -912,31 +923,31 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
   </html>
   ```
 
-### Composants VOLT pour authentification \<!-- markmap: fold -->
+### Composants VOLT pour authentification <!-- markmap: fold -->
 
-#### Composant Register
+#### Composant Register <!-- markmap: fold -->
 
-##### Route pour Register \<!-- markmap: fold -->
+##### Route pour Register <!-- markmap: fold -->
 
-* ./routes/web.php :
+* ./routes/**web.php** :
 
   ```php
-    use Illuminate\Support\Facades\Route;
-    ...
-    Route::middleware('guest')->group(function () {
+  use Illuminate\Support\Facades\Route;
+  ...
+  Route::middleware('guest')->group(function () {
       Volt::route('/register', 'auth.register');
-    });
+  });
   ```
 
-##### Création composant Register \<!-- markmap: fold -->
+##### Création composant Register <!-- markmap: fold -->
 
-  ```php
+  ```bash
     php artisan make:volt auth/register --class
   ```
 
-##### Code register \<!-- markmap: fold -->
+##### Code register <!-- markmap: fold -->
 
-  ```php
+  ```html
     <?php
     use App\Models\User;
     use Mary\Traits\Toast;
@@ -1001,49 +1012,49 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     </div>
   ```
 
-##### Traduction pour formulaire Register \<!-- markmap: fold -->
+##### Traduction pour formulaire Register <!-- markmap: fold -->
 
-* ./lang/fr.json
+* ./lang/**fr.json** :
 
   ```json
-    "Password": "Mot de passe",
-    "Confirm Password": "Confirmation du mot de passe",
-    "Register": "Créer un compte",
-    "Already registered?": "Déjà enregistré ?",
-    "Name": "Nom",
-    "E-mail": "Courriel",
-    "Required information": "Information requise",
-    "Registration successful!": "Compte créé avec succès !"
+  "Password": "Mot de passe",
+  "Confirm Password": "Confirmation du mot de passe",
+  "Register": "Créer un compte",
+  "Already registered?": "Déjà enregistré ?",
+  "Name": "Nom",
+  "E-mail": "Courriel",
+  "Required information": "Information requise",
+  "Registration successful!": "Compte créé avec succès !"
   ```
 
-##### Particularité : Pot de miel \<!-- markmap: fold -->
+##### Particularité : Pot de miel <!-- markmap: fold -->
 
 * À noter: ∃ un champs caché (gender) pour identifier les robots...
 * Voir dans le code du composant : **if ($this->gender) abort(403);**
 
 ##### **[Rendu Register](http://127.0.0.1:8000/register)** (Tester la validation des champs)
 
-#### Composant Login
+#### Composant Login <!-- markmap: fold -->
 
-##### Route pour Login \<!-- markmap: fold -->
+##### Route pour Login <!-- markmap: fold -->
 
   ```php
-    ...
-    Route::middleware('guest')->group(function () {
+  ...
+  Route::middleware('guest')->group(function () {
       ...
       Volt::route('/login', 'auth.login')->name('login');
-    });
+  });
   ```
 
-##### Création composant Login \<!-- markmap: fold -->
+##### Création composant Login <!-- markmap: fold -->
 
-  ```php
+  ```bash
     php artisan make:volt auth/login --class
   ```
 
-##### Code Login \<!-- markmap: fold -->
+##### Code Login <!-- markmap: fold -->
 
-  ```php
+  ```html
   <?php
     use Livewire\Volt\Component;
     use Illuminate\Support\Str;
@@ -1130,57 +1141,57 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     </div>
   ```
 
-##### Traduction pour formulaire Login \<!-- markmap: fold -->
+##### Traduction pour formulaire Login <!-- markmap: fold -->
 
   ```json
-    "Forgot your password?": "Mot de passe oublié ?",
-    "Remember me": "Se rappeler de moi"
+"Forgot your password?": "Mot de passe oublié ?",
+"Remember me": "Se rappeler de moi"
   ```
 
 ##### **[Rendu Login](http://127.0.0.1:8000/login)** (Tester la validation des champs)
 
 #### Oubli et reset du mot de passe
 
-##### Gestion des sessions \<!-- markmap: fold -->
+##### Gestion des sessions <!-- markmap: fold -->
 
 ###### Création composant messages en session
 
-  ```php
-    php artisan make:component session-status --view
+  ```bash
+  php artisan make:component session-status --view
   ```
 
 ###### Code composant Session
 
-  ```php
-    @props(['status'])
-    
-    @if ($status)
+  ```html
+  @props(['status'])
+  
+  @if ($status)
       <div {{ $attributes->merge(['class' => 'font-medium text-sm text-green-600']) }}>
-        {{ $status }}
+      {{ $status }}
       </div>
-    @endif
+  @endif
   ```
 
-##### Gestion de l'oubli du mot de passe \<!-- markmap: fold -->
+##### Gestion de l'oubli du mot de passe <!-- markmap: fold -->
 
-###### Route pour forgot-password \<!-- markmap: fold -->
+###### Route pour forgot-password <!-- markmap: fold -->
 
   ```php
-    Route::middleware('guest')->group(function () {
+  Route::middleware('guest')->group(function () {
       ...
       Volt::route('/forgot-password', 'auth.forgot-password');
-    });
+  });
   ```
 
-###### Création composant oubli mot de passe \<!-- markmap: fold -->
+###### Création composant oubli mot de passe <!-- markmap: fold -->
 
-  ```php
-    php artisan make:volt auth/forgot-password --class
+  ```bash
+php artisan   make:volt auth/forgot-password --class
   ```
 
-###### Composant forgot-password \<!-- markmap: fold -->
+###### Composant forgot-password <!-- markmap: fold -->
 
-  ```php
+  ```html
     <?php
     use Livewire\Volt\Component;
     use Livewire\Attributes\{ Layout, Title };
@@ -1237,36 +1248,36 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
   </div>
   ```
 
-###### Traduction pour forgot-password \<!-- markmap: fold -->
+###### Traduction pour forgot-password <!-- markmap: fold -->
 
   ```json
-    "Password renewal": "Renouvellement du mot de passe",
-    "Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.": "Mot de passe oublié ? Pas de problème. Indiquez-nous simplement votre adresse courriel et nous vous enverrons par courriel un lien de réinitialisation du mot de passe pour en choisir un nouveau.",
-    "Email Password Reset Link": "Envoi du lien de renouvellement"
+  "Password renewal": "Renouvellement du mot de passe",
+  "Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.": "Mot de passe oublié ? Pas de problème. Indiquez-nous simplement votre adresse courriel et nous vous enverrons par courriel un lien de réinitialisation du mot de passe pour en choisir un nouveau.",
+  "Email Password Reset Link": "Envoi du lien de renouvellement"
   ```
 
-###### **[Rendu forgot-password](http://127.0.0.1:8000/forgot-password)** (Tester la validation du champs - Ne pas soumettre le Formulaire)
+###### **[Rendu forgot-password](http://127.0.0.1:8000/forgot-password)** (Tester la validation du champs - *Ne pas soumettre le Formulaire*)
 
-##### Gestion du reset du mot de passe \<!-- markmap: fold -->
+##### Gestion du reset du mot de passe <!-- markmap: fold -->
 
-###### Route pour reset-password \<!-- markmap: fold -->
+###### Route pour reset-password <!-- markmap: fold -->
 
   ```php
-    Route::middleware('guest')->group(function () {
+  Route::middleware('guest')->group(function () {
       ...
       Volt::route('/reset-password/{token}', 'auth.reset-password')->name('password.reset');
-    });
+  });
   ```
 
-###### Création composant reset-password \<!-- markmap: fold -->
+###### Création composant reset-password <!-- markmap: fold -->
 
-  ```php
+  ```bash
   php artisan make:volt auth/reset-password --class
   ```
 
-###### Composant reset-password \<!-- markmap: fold -->
+###### Composant reset-password <!-- markmap: fold -->
 
-  ```php
+  ```html
     <?php
     use Illuminate\Support\Str;
     use Livewire\Volt\Component;
@@ -1341,35 +1352,33 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
 
 ###### **[Rendu forgot-password](http://127.0.0.1:8000/forgot-password)** (Tester la soumission du Formulaire)
 
-###### Voir le email reçu \<!-- markmap: fold -->
+###### Voir le email reçu <!-- markmap: fold -->
 
 * Par défaut: Dans storage\logs\laravel.log (Tout à la fin du fichier, le code HTML du courriel)
 
   OU, pour avoir le vrai rendu de ce courriel, une très bonne solution GRATUITE est MailHog :
 
-###### [Installer MailHog](https://github.com/mailhog/MailHog) \<!-- markmap: fold -->
+###### [Installer MailHog](https://github.com/mailhog/MailHog) <!-- markmap: fold -->
 
-    - Dans .env :
+* \- Dans .env :
 
-```php
-  # Start MailHog
-  # Go to: http://localhost:8025
-  MAIL_MAILER=smtp
-  MAIL_HOST=localhost
-  MAIL_PORT=1025
-  MAIL_USERNAME=Admin
-  MAIL_PASSWORD=null
-  MAIL_ENCRYPTION=null
-  MAIL_FROM_ADDRESS="admin@example.com"
-  MAIL_FROM_NAME="${APP_NAME}"
-```
+  ```json
+    # Start MailHog
+    # Go to: http://localhost:8025
+    MAIL_MAILER=smtp
+    MAIL_HOST=localhost
+    MAIL_PORT=1025
+    MAIL_USERNAME=Admin
+    MAIL_PASSWORD=null
+    MAIL_ENCRYPTION=null
+    MAIL_FROM_ADDRESS="admin@example.com"
+    MAIL_FROM_NAME="${APP_NAME}"
+  ```
 
-    - Lancer le serveur MailHog :
-      → Exécuter le fichier éxécutable récupéré
+* \- Lancer le serveur MailHog :
+&nbsp; → Exécuter le fichier exécutable récupéré
 
 ###### **[URL du rendu des courriels avec MailHog](http://127.0.0.1:8025)**
-
-#### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-lauthentification](https://laravel.sillo.org/posts/mon-cms-lauthentification)***
 
 ### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-lauthentification](https://laravel.sillo.org/posts/mon-cms-lauthentification)***
 
