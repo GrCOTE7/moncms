@@ -2370,7 +2370,7 @@ class extends Component {
 "Your message has been sent!": "Votre message a bien été envoyé !"
 ```
 
-## - xLes menus & le footer <!-- markmap: fold -->
+## - xLes menus & le footer \<!-- markmap: fold -->
 
 ### Les données pour menus et footer \<!-- markmap: fold -->
 
@@ -2589,7 +2589,7 @@ class extends Component {
 
 #### Ajouter *:$menus* dans layouts/app.blade.php \<!-- markmap: fold -->
 
-```php
+```html
   <livewire:navigation.navbar :$menus />
   ...
   <livewire:navigation.sidebar :$menus />
@@ -2597,135 +2597,135 @@ class extends Component {
 
 #### Barre de Navigation
 
-##### navigation/navbar.blade.php \<!-- markmap: fold -->
+##### navigation/navbar.blade.php <!-- markmap: fold -->
 
-    Bloc PHP :
+* Bloc PHP :
 
-```php
+  ```php
   use Illuminate\Support\Collection;
   
   new class extends Component {
-    
-    public Collection $menus;
-
-    public function mount(Collection $menus): void {
+      
+      public Collection $menus;
+  
+      public function mount(Collection $menus): void {
       $this->menus = $menus;
-    }
-    ...
+      }
+      ...
   }
-```
+  ```
 
-    Bloc Blade :
+* Bloc Blade :
 
-```php
+  ```html
   <span class="hidden sm:block">
-    @foreach ($menus as $menu)
+      @foreach ($menus as $menu)
       @if ($menu->submenus->isNotEmpty())
-        <x-dropdown>
+          <x-dropdown>
           <x-slot:trigger>
-            <x-button label="{{ $menu->label }}"  class="btn-ghost" />
+              <x-button label="{{ $menu->label }}"  class="btn-ghost" />
           </x-slot:trigger>
           @foreach ($menu->submenus as $submenu)
-            <x-menu-item title="{{ $submenu->label }}" link="{{ $submenu->link }}" style="min-width: max-content;" />
+              <x-menu-item title="{{ $submenu->label }}" link="{{ $submenu->link }}" style="min-width: max-content;" />
           @endforeach
-        </x-dropdown>
+          </x-dropdown>
       @else
-        <x-button label="{{ $menu->label }}" link="{{ $menu->link }}" :external="Str::startsWith($menu->link, 'http')" class="btn-ghost" />
+          <x-button label="{{ $menu->label }}" link="{{ $menu->link }}" :external="Str::startsWith($menu->link, 'http')" class="btn-ghost" />
       @endif
-    @endforeach
-    ...
+      @endforeach
+      ...
   </span>
-```
+  ```
 
-##### navigation/sidebar.blade.php \<!-- markmap: fold -->
+##### navigation/**sidebar.blade.php** <!-- markmap: fold -->
 
-```php
+  ```html
   ...
   use Illuminate\Support\Collection;
   
   new class extends Component {
   
-    public Collection $menus;
-
-    public function mount(Collection $menus): void {
+      public Collection $menus;
+  
+      public function mount(Collection $menus): void {
       $this->menus = $menus;
-    }
-    ...
+      }
+      ...
   };
   ...
   <x-menu activate-by-route>
-    ... // Ici suppression du separator reporté ci-dessous
+      ... // Ici suppression du separator reporté ci-dessous
       </x-list-item>
       @else
-        <x-menu-item title="{{ __('Login') }}" link="/login" />
+          <x-menu-item title="{{ __('Login') }}" link="/login" />
       @endif
-    <x-menu-separator />
-    @foreach ($menus as $menu)
+      <x-menu-separator />
+      @foreach ($menus as $menu)
       @if($menu->submenus->isNotEmpty())
-        <x-menu-sub title="{{ $menu->label }}">
+          <x-menu-sub title="{{ $menu->label }}">
           @foreach ($menu->submenus as $submenu)
-            <x-menu-item title="{{ $submenu->label }}" link="{{ $submenu->link }}" />
+              <x-menu-item title="{{ $submenu->label }}" link="{{ $submenu->link }}" />
           @endforeach
-        </x-menu-sub>
+          </x-menu-sub>
       @else
-        <x-menu-item title="{{ $menu->label }}" link="{{ $menu->link }}" />
+          <x-menu-item title="{{ $menu->label }}" link="{{ $menu->link }}" />
       @endif
-    @endforeach
+      @endforeach
   </x-menu>
-```
+  ```
 
-#### Menu Pied de page \<!-- markmap: fold -->
+#### Menu Pied de page <!-- markmap: fold -->
 
-    Composant navigation/footer.blade.php :
+* Composant navigation/**footer.blade.php** :
 
-```php
-  <?php
-  use App\Models\Footer;
-  use Livewire\Volt\Component;
+  ```html
+    <?php
+    use App\Models\Footer;
+    use Livewire\Volt\Component;
+    
+    new class() extends Component {
+    
+      public function with(): array {
+    
+        return [
+          'footers' => Footer::orderBy('order')->get(),
+      ];
+    }
+    };
+  ?>
   
-  new class() extends Component {
-  
-    public function with(): array {
-  
-      return [
-        'footers' => Footer::orderBy('order')->get(),
-    ];
-  }
-  };
-?>
+  <footer class="p-10 rounded footer footer-center bg-base-200 text-base-content">
+    <nav class="grid grid-flow-col gap-4">
+      @foreach ($footers as $footer)
+        <a href="{{ $footer->link }}" class="link link-hover">
+          @lang($footer->label)
+        </a>
+      @endforeach
+    </nav>
+    <nav>
+      <div class="grid grid-flow-col gap-4">
+        <a href="https://github.com/bestmomo/sillo" title=" {{ __('Go to the GitHub repository and... Fork it!') }} ! target="_blank">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" 
+          height="24" viewBox="0 0 24 24" class="fill-current">
+            <path d="M12 0C5.372 0 0 5.372 0 12c0 5.303 3.438 9.8 8.207 11.387.6.11.793-.26.793-.577v-2.2c-3.338.726-4.033-1.415-4.033-1.415-.546-1.387-1.333-1.757-1.333-1.757-1.089-.744.083-.729.083-.729 1.204.085 1.838 1.237 1.838 1.237 1.07 1.835 2.809 1.305 3.495.998.108-.775.419-1.305.762-1.605-2.665-.305-5.466-1.335-5.466-5.93 0-1.31.467-2.38 1.235-3.22-.124-.303-.535-1.523.117-3.176 0 0 1.008-.322 3.3 1.23.957-.266 1.98-.399 3-.405 1.02.006 2.043.139 3 .405 2.29-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.873.118 3.176.77.84 1.233 1.91 1.233 3.22 0 4.61-2.804 5.62-5.475 5.92.43.37.815 1.1.815 2.22v3.293c0 .319.192.694.801.576C20.565 21.796 24 17.302 24 12c0-6.628-5.372-12-12-12z" />
+          </svg>
+        </a>
+        <a href="https://discord.com/channels/1258750464800063640/1258750464800063646" title=" {{ __('Go to the Discord channel') }} !" target="_blank">
+          <svg width="25" height="28" viewBox="0 0 71 80" class="fill-current mt-[-.05rem]" xmlns="http://www.w3.org/2000/svg">
+            <path d="M60.1045 13.8978C55.5792 11.8214 50.7265 10.2916 45.6527 9.41542C45.5603 9.39851 45.468 9.44077 45.4204 9.52529C44.7963 10.6353 44.105 12.0834 43.6209 13.2216C38.1637 12.4046 32.7345 12.4046 27.3892 13.2216C26.905 12.0581 26.1886 10.6353 25.5617 9.52529C25.5141 9.44359 25.4218 9.40133 25.3294 9.41542C20.2584 10.2888 15.4057 11.8186 10.8776 13.8978C10.8384 13.9147 10.8048 13.9429 10.7825 13.9795C1.57795 27.7309 -0.943561 41.1443 0.293408 54.3914C0.299005 54.4562 0.335386 54.5182 0.385761 54.5576C6.45866 59.0174 12.3413 61.7249 18.1147 63.5195C18.2071 63.5477 18.305 63.5139 18.3638 63.4378C19.7295 61.5728 20.9469 59.6063 21.9907 57.5383C22.0523 57.4172 21.9935 57.2735 21.8676 57.2256C19.9366 56.4931 18.0979 55.6 16.3292 54.5858C16.1893 54.5041 16.1781 54.304 16.3068 54.2082C16.679 53.9293 17.0513 53.6391 17.4067 53.3461C17.471 53.2926 17.5606 53.2813 17.6362 53.3151C29.2558 58.6202 41.8354 58.6202 53.3179 53.3151C53.3935 53.2785 53.4831 53.2898 53.5502 53.3433C53.9057 53.6363 54.2779 53.9293 54.6529 54.2082C54.7816 54.304 54.7732 54.5041 54.6333 54.5858C52.8646 55.6197 51.0259 56.4931 49.0921 57.2228C48.9662 57.2707 48.9102 57.4172 48.9718 57.5383C50.038 59.6034 51.2554 61.5699 52.5959 63.435C52.6519 63.5139 52.7526 63.5477 52.845 63.5195C58.6464 61.7249 64.529 59.0174 70.6019 54.5576C70.6551 54.5182 70.6887 54.459 70.6943 54.3942C72.1747 39.0791 68.2147 25.7757 60.1968 13.9823C60.1772 13.9429 60.1437 13.9147 60.1045 13.8978ZM23.7259 46.3253C20.2276 46.3253 17.3451 43.1136 17.3451 39.1693C17.3451 35.225 20.1717 32.0133 23.7259 32.0133C27.308 32.0133 30.1626 35.2532 30.1066 39.1693C30.1066 43.1136 27.28 46.3253 23.7259 46.3253ZM47.3178 46.3253C43.8196 46.3253 40.9371 43.1136 40.9371 39.1693C40.9371 35.225 43.7636 32.0133 47.3178 32.0133C50.9 32.0133 53.7545 35.2532 53.6986 39.1693C53.6986 43.1136 50.9 46.3253 47.3178 46.3253Z" />
+          </svg>
+        </a>
+      </div>
+    </nav>
+    <aside>
+      <p>Version 0.1.0</a> - © {{ date('Y') }} Moi</p>
+    </aside>
+  </footer>
+  ```
 
-<footer class="p-10 rounded footer footer-center bg-base-200 text-base-content">
-  <nav class="grid grid-flow-col gap-4">
-    @foreach ($footers as $footer)
-      <a href="{{ $footer->link }}" class="link link-hover">
-        @lang($footer->label)
-      </a>
-    @endforeach
-  </nav>
-  <nav>
-    <div class="grid grid-flow-col gap-4">
-      <a href="https://github.com/bestmomo/sillo" title=" {{ __('Go to the GitHub repository and... Fork it!') }} ! target="_blank">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" 
-        height="24" viewBox="0 0 24 24" class="fill-current">
-          <path d="M12 0C5.372 0 0 5.372 0 12c0 5.303 3.438 9.8 8.207 11.387.6.11.793-.26.793-.577v-2.2c-3.338.726-4.033-1.415-4.033-1.415-.546-1.387-1.333-1.757-1.333-1.757-1.089-.744.083-.729.083-.729 1.204.085 1.838 1.237 1.838 1.237 1.07 1.835 2.809 1.305 3.495.998.108-.775.419-1.305.762-1.605-2.665-.305-5.466-1.335-5.466-5.93 0-1.31.467-2.38 1.235-3.22-.124-.303-.535-1.523.117-3.176 0 0 1.008-.322 3.3 1.23.957-.266 1.98-.399 3-.405 1.02.006 2.043.139 3 .405 2.29-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.873.118 3.176.77.84 1.233 1.91 1.233 3.22 0 4.61-2.804 5.62-5.475 5.92.43.37.815 1.1.815 2.22v3.293c0 .319.192.694.801.576C20.565 21.796 24 17.302 24 12c0-6.628-5.372-12-12-12z" />
-        </svg>
-      </a>
-      <a href="https://discord.com/channels/1258750464800063640/1258750464800063646" title=" {{ __('Go to the Discord channel') }} !" target="_blank">
-        <svg width="25" height="28" viewBox="0 0 71 80" class="fill-current mt-[-.05rem]" xmlns="http://www.w3.org/2000/svg">
-          <path d="M60.1045 13.8978C55.5792 11.8214 50.7265 10.2916 45.6527 9.41542C45.5603 9.39851 45.468 9.44077 45.4204 9.52529C44.7963 10.6353 44.105 12.0834 43.6209 13.2216C38.1637 12.4046 32.7345 12.4046 27.3892 13.2216C26.905 12.0581 26.1886 10.6353 25.5617 9.52529C25.5141 9.44359 25.4218 9.40133 25.3294 9.41542C20.2584 10.2888 15.4057 11.8186 10.8776 13.8978C10.8384 13.9147 10.8048 13.9429 10.7825 13.9795C1.57795 27.7309 -0.943561 41.1443 0.293408 54.3914C0.299005 54.4562 0.335386 54.5182 0.385761 54.5576C6.45866 59.0174 12.3413 61.7249 18.1147 63.5195C18.2071 63.5477 18.305 63.5139 18.3638 63.4378C19.7295 61.5728 20.9469 59.6063 21.9907 57.5383C22.0523 57.4172 21.9935 57.2735 21.8676 57.2256C19.9366 56.4931 18.0979 55.6 16.3292 54.5858C16.1893 54.5041 16.1781 54.304 16.3068 54.2082C16.679 53.9293 17.0513 53.6391 17.4067 53.3461C17.471 53.2926 17.5606 53.2813 17.6362 53.3151C29.2558 58.6202 41.8354 58.6202 53.3179 53.3151C53.3935 53.2785 53.4831 53.2898 53.5502 53.3433C53.9057 53.6363 54.2779 53.9293 54.6529 54.2082C54.7816 54.304 54.7732 54.5041 54.6333 54.5858C52.8646 55.6197 51.0259 56.4931 49.0921 57.2228C48.9662 57.2707 48.9102 57.4172 48.9718 57.5383C50.038 59.6034 51.2554 61.5699 52.5959 63.435C52.6519 63.5139 52.7526 63.5477 52.845 63.5195C58.6464 61.7249 64.529 59.0174 70.6019 54.5576C70.6551 54.5182 70.6887 54.459 70.6943 54.3942C72.1747 39.0791 68.2147 25.7757 60.1968 13.9823C60.1772 13.9429 60.1437 13.9147 60.1045 13.8978ZM23.7259 46.3253C20.2276 46.3253 17.3451 43.1136 17.3451 39.1693C17.3451 35.225 20.1717 32.0133 23.7259 32.0133C27.308 32.0133 30.1626 35.2532 30.1066 39.1693C30.1066 43.1136 27.28 46.3253 23.7259 46.3253ZM47.3178 46.3253C43.8196 46.3253 40.9371 43.1136 40.9371 39.1693C40.9371 35.225 43.7636 32.0133 47.3178 32.0133C50.9 32.0133 53.7545 35.2532 53.6986 39.1693C53.6986 43.1136 50.9 46.3253 47.3178 46.3253Z" />
-        </svg>
-      </a>
-    </div>
-  </nav>
-  <aside>
-    <p>Version 0.1.0</a> - © {{ date('Y') }} Moi</p>
-  </aside>
-</footer>
-```
+* Dans les layouts (app & auth) :
 
-    Dans les layouts (app & auth) :
-
-```php
+  ```html
     {{-- FOOTER --}}
     <hr><br>
     <livewire:navigation.footer />
@@ -2735,972 +2735,977 @@ class extends Component {
     <x-toast />
     <script src="{{ asset('storage/scripts/prism.js') }}"></script>
   </body>
-```
+  ```
 
-    ./lang/fr.json :
+* ./lang/**fr.json** :
 
-```json
-  "Go to the GitHub repository and... Fork it": "Aller sur le dépôt GitHub et... Clonez-le",
-  "Go to the Discord channel": "Allez sur le canal Discord"
-```
-
+  ```json
+  "Go to the GitHub repository and... Fork it": "Aller sur le dépôt GitHub et... Le cloner",
+  "Go to the Discord channel": "Aller sur le canal Discord"
+  ```
+  
 ### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-menus](https://laravel.sillo.org/posts/mon-cms-les-menus)***
 
-## - xLes commentaires <!-- markmap: fold -->
+## - Les commentaires <!-- markmap: fold -->
 
-### Model & Migration et factory & seeder Comment \<!-- markmap: fold -->
+### Model & Migration et factory & seeder Comment <!-- markmap: fold -->
 
-#### Model Comment \<!-- markmap: fold -->
+#### Model Comment <!-- markmap: fold -->
 
-```php
-php artisan make:model Comment --migration
-```
+  ```bash
+  php artisan make:model Comment --migration
+  ```
 
-```php
-<?php
-namespace App\Models;
-
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
-
-class Comment extends Model {
-    use HasFactory, Notifiable;
-
-    protected $fillable = [
-        'body',
-        'post_id',
-        'user_id',
-        'parent_id',
-    ];
+  ```php
+  <?php
+  namespace App\Models;
   
-    public function user(): BelongsTo {
-        return $this->belongsTo(User::class);
+  use Illuminate\Database\Eloquent\Model;
+  use Illuminate\Notifications\Notifiable;
+  use Illuminate\Database\Eloquent\Factories\HasFactory;
+  use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
+  
+  class Comment extends Model {
+      use HasFactory, Notifiable;
+  
+      protected $fillable = [
+          'body',
+          'post_id',
+          'user_id',
+          'parent_id',
+      ];
+    
+      public function user(): BelongsTo {
+          return $this->belongsTo(User::class);
+      }
+    
+      public function post(): BelongsTo {
+          return $this->belongsTo(Post::class);
+      }
+    
+      public function parent(): BelongsTo {
+          return $this->belongsTo(Comment::class, 'parent_id');
+      }
+    
+      public function children(): HasMany {
+          return $this->hasMany(Comment::class, 'parent_id');
     }
-  
-    public function post(): BelongsTo {
-        return $this->belongsTo(Post::class);
-    }
-  
-    public function parent(): BelongsTo {
-        return $this->belongsTo(Comment::class, 'parent_id');
-    }
-  
-    public function children(): HasMany {
-        return $this->hasMany(Comment::class, 'parent_id');
   }
-}
-```
+  ```
 
-#### Structure Comment \<!-- markmap: fold -->
+#### Structure Comment <!-- markmap: fold -->
 
-```php
-public function up(): void {
-    Schema::create('comments', function (Blueprint $table) {
-        $table->id();
-        $table->text('body');
-        $table->foreignId('post_id')->constrained()->onDelete('cascade');
-        $table->foreignId('user_id')->constrained()->onDelete('cascade');
-        $table->unsignedBigInteger('parent_id')->nullable()->default(null);
-        $table->foreign('parent_id')
-            ->references('id')
-            ->on('comments')
-            ->onDelete('cascade');
-        $table->timestamps();
-    });
-}
-```
+* Migration de comments_table :
 
-#### Relations avec Comment \<!-- markmap: fold -->
-
-##### Model Post
-
-```php
-use Illuminate\Database\Eloquent\Relations\{ HasMany, BelongsTo};
-
-class Post extends Model {
-    ...
-  
-    public function comments(): HasMany {
-        return $this->hasMany(Comment::class);
-    }
-  
-    public function validComments(): HasMany {
-        return $this->comments()->whereHas('user', function ($query) {
-            $query->whereValid(true);
+  ```php
+  public function up(): void {
+      Schema::create('comments', function (Blueprint $table) {
+          $table->id();
+          $table->text('body');
+          $table->foreignId('post_id')->constrained()->onDelete('cascade');
+          $table->foreignId('user_id')->constrained()->onDelete('cascade');
+          $table->unsignedBigInteger('parent_id')->nullable()->default(null);
+          $table->foreign('parent_id')
+              ->references('id')
+              ->on('comments')
+              ->onDelete('cascade');
+          $table->timestamps();
       });
   }
-}
-```
+  ```
 
-##### Model User
+#### Relations avec Comment <!-- markmap: fold -->
 
-```php
-public function comments(): HasMany {
-    return $this->hasMany(Comment::class);
-}
-```
+* Model Post
 
-##### [Diagramme UML](https://laravel.sillo.org/storage/photos/2024/08/535DwpjTWsqCqM6Zut9mwt10mL0FeZp303J1W1Ef.png)
-
-#### Population Comment \<!-- markmap: fold -->
-
-```php
-php artisan make:factory CommentFactory
-```
-
-```php
-public function definition(): array {
-    return [
-        'body' => fake()->paragraph(4),
-    ];
-}
-```
-
-```php
-php artisan make:seeder CommentSeeder
-```
-
-```php
-<?php
-namespace Database\Seeders;
-
-use App\Models\Comment;
-use Illuminate\Database\Seeder;
-
-class CommentSeeder extends Seeder
-{
-    public function run() {
-        $nbrPosts = 9;
-        $nbrUsers = 3;
+* ```php
+  use Illuminate\Database\Eloquent\Relations\{ HasMany, BelongsTo};
   
-        foreach (range(1, $nbrPosts - 1) as $i) {
-            $this->createComment($i, rand(1, $nbrUsers));
-        }
-  
-        $comment = $this->createComment(2, 3);
-        $this->createComment(2, 2, $comment->id);
-  
-        $comment = $this->createComment(2, 2);
-        $this->createComment(2, 3, $comment->id);
-  
-        $comment = $this->createComment(2, 3, $comment->id);
-  
-        $comment = $this->createComment(2, 1, $comment->id);
-        $this->createComment(2, 3, $comment->id);
-  
-        $comment = $this->createComment(4, 1);
-  
-        $comment = $this->createComment(4, 3, $comment->id);
-        $this->createComment(4, 2, $comment->id);
-        $this->createComment(4, 1, $comment->id);
+  class Post extends Model {
+      ...
+    
+      public function comments(): HasMany {
+          return $this->hasMany(Comment::class);
+      }
+    
+      public function validComments(): HasMany {
+          return $this->comments()->whereHas('user', function ($query) {
+              $query->whereValid(true);
+        });
     }
+  }
+  ```
+
+* Model User
+
+* ```php
+  public function comments(): HasMany {
+      return $this->hasMany(Comment::class);
+  }
+  ```
+
+* [Diagramme UML](https://laravel.sillo.org/storage/photos/2024/08/535DwpjTWsqCqM6Zut9mwt10mL0FeZp303J1W1Ef.png)
+
+#### Population Comment <!-- markmap: fold -->
+
+* ```bash
+  php artisan make:factory CommentFactory
+  ```
+
+* ```php
+  public function definition(): array {
+      return [
+          'body' => fake()->paragraph(4),
+      ];
+  }
+  ```
+
+* ```bash
+  php artisan make:seeder CommentSeeder
+  ```
+
+* ```php
+  <?php
+  namespace Database\Seeders;
   
-    protected function createComment($post_id, $user_id, $id = null) {
-        return Comment::factory()->create([
-            'post_id' => $post_id,
-            'user_id' => $user_id,
-          'parent_id' => $id,
+  use App\Models\Comment;
+  use Illuminate\Database\Seeder;
+  
+  class CommentSeeder extends Seeder {
+      public function run() {
+          $nbrPosts = 9;
+          $nbrUsers = 3;
+    
+          foreach (range(1, $nbrPosts - 1) as $i) {
+              $this->createComment($i, rand(1, $nbrUsers));
+          }
+    
+          $comment = $this->createComment(2, 3);
+          $this->createComment(2, 2, $comment->id);
+    
+          $comment = $this->createComment(2, 2);
+          $this->createComment(2, 3, $comment->id);
+    
+          $comment = $this->createComment(2, 3, $comment->id);
+    
+          $comment = $this->createComment(2, 1, $comment->id);
+          $this->createComment(2, 3, $comment->id);
+    
+          $comment = $this->createComment(4, 1);
+    
+          $comment = $this->createComment(4, 3, $comment->id);
+          $this->createComment(4, 2, $comment->id);
+          $this->createComment(4, 1, $comment->id);
+      }
+    
+      protected function createComment($post_id, $user_id, $id = null) {
+          return Comment::factory()->create([
+              'post_id' => $post_id,
+              'user_id' => $user_id,
+            'parent_id' => $id,
+        ]);
+    }
+  }
+  ```
+
+* **DatabaseSeeder.php** :
+
+* ```php
+  public function run(): void {
+      $this->call([
+          ...
+          CommentSeeder::class,
       ]);
   }
-}
-```
+  ```
 
-    DatabaseSeeder.php :
+* ```bash
+  php artisan migrate:fresh --seed
+  ```
 
-```php
-public function run(): void {
-    $this->call([
-        ...
-        CommentSeeder::class,
-    ]);
-}
-```
+### Modifier dans PostRepository pour Comment <!-- markmap: fold -->
 
-```php
-php artisan migrate:fresh --seed
-```
+  ```php
+  public function getPostBySlug(string $slug): Post {
+      return Post::with('user:id,name', 'category')
+          ->withCount('validComments')
+          ->whereSlug($slug)->firstOrFail();
+  }
+  ```
 
-### Modifier dans PostRepository pour Comment \<!-- markmap: fold -->
+### Ajouter & modifier dans posts.show pour Comment <!-- markmap: fold -->
 
-```php
-public function getPostBySlug(string $slug): Post {
-    return Post::with('user:id,name', 'category')
-        ->withCount('validComments')
-        ->whereSlug($slug)->firstOrFail();
-}
-```
+* Notons que le bouton pour voir le(s) commentaire(s) n'est pas encore opérationnel...
 
-### Ajouter & modifier dans posts.show pour Comment \<!-- markmap: fold -->
+* ```html
+  new class extends Component {
+      ...
+      public int $commentsCount;
+  
+      public function mount($slug): void {
+          $postRepository = new PostRepository();
+          $this->post = $postRepository->getPostBySlug($slug);
+          $this->commentsCount = $this->post->valid_comments_count;
+      }
+  }; ?>
+     ...
+      <div class="flex justify-between">
+          <p>@lang('By ') {{ $post->user->name }}</p>
+          <em>
+              @if ($commentsCount > 0)
+                  @lang('Number of comments: ') {{ $commentsCount }}
+              @else
+                  @lang('No comments')
+              @endif
+          </em>
+      </div>
+      <div id="bottom" class="relative items-center w-full py-5 mx-auto md:px-12 max-w-7xl">
+          @if ($commentsCount > 0)
+              <div class="flex justify-center">
+                  <x-button label="{{ $commentsCount > 1 ? __('View comments') : __('View comment') }}" class="btn-outline" spinner />
+              </div>
+          @endif
+      </div>
+  </div>
+  ```
 
-    Notons que le bouton pour voir le(s) commentaire(s) n'est pas encore opérationnel...
+* Traductions Comment nécessaires dans posts.show :
 
-```php
-new class extends Component {
-    ...
-    public int $commentsCount;
+  ```json
+  "Number of comments: ": "Nombre de commentaires : ",
+  "View comment": "Voir le commentaire",
+  "View comments": "Voir les commentaires",
+  "All comments": "Tous les commentaires",
+  "No comments": "Aucun commentaire"
+  ```
 
-    public function mount($slug): void {
-        $postRepository = new PostRepository();
-        $this->post = $postRepository->getPostBySlug($slug);
-        $this->commentsCount = $this->post->valid_comments_count;
-    }
-}; ?>
-   ...
-    <div class="flex justify-between">
-        <p>@lang('By ') {{ $post->user->name }}</p>
-        <em>
-            @if ($commentsCount > 0)
-                @lang('Number of comments: ') {{ $commentsCount }}
-            @else
-                @lang('No comments')
-            @endif
-        </em>
-    </div>
-    <div id="bottom" class="relative items-center w-full py-5 mx-auto md:px-12 max-w-7xl">
-        @if ($commentsCount > 0)
-            <div class="flex justify-center">
-                <x-button label="{{ $commentsCount > 1 ? __('View comments') : __('View comment') }}" class="btn-outline" spinner />
-            </div>
-        @endif
-    </div>
-</div>
-```
+### Voir les commentaires dans posts.show <!-- markmap: fold -->
 
-    Traductions Comment nécessaires dans posts.show :
+* ```php
+  <?php
+  ...
+  use Illuminate\Support\Collection;
+  
+  new class extends Component {
+      ...
+      public Collection $comments;
+      public bool $listComments = false;
+      ...
+      public function showComments(): void {
+          $this->listComments = true;
+  
+          $this->comments = $this->post
+              ->validComments()
+              ->where('parent_id', null)
+              ->withCount([
+                  'children' => function ($query) {
+                      $query->whereHas('user', function ($q) {
+                          $q->where('valid', true);
+                      });
+                  },
+              ])
+              ->with([
+                  'user' => function ($query) {
+                      $query->select('id', 'name', 'email', 'role')->withCount('comments');
+                  },
+              ])
+              ->latest()
+              ->get();
+          dd ($this->comments); 
+          // Commenter le dd() ci-dessus après avoir observé le bon contenu de $this->comments
+          // Qui doit-être un truc style : 
+          //   Illuminate\Database\Eloquent\Collection {#609 ▼ // resources\views\livewire\posts\show.blade.php:44
+          //     #items: array:3 [▼
+          //       0 => App\Models\Comment {#612 ▶}
+          //       1 => App\Models\Comment {#606 ▶}
+          //       2 => App\Models\Comment {#616 ▶}
+          //     ]
+          //     #escapeWhenCastingToString: false
+          //   }
+          // Supprimer ces lignes commentées après avoir observé ce résultat à partir de // Commenter...
+      }
+  }; ?>
+  ```
 
-```json
-"Number of comments: ": "Nombre de commentaires : ",
-"View comment": "Voir le commentaire",
-"View comments": "Voir les commentaires",
-"All comments": "Tous les commentaires",
-"No comments": "Aucun commentaire"
-```
+* Modifier le bouton pour l'activer au click :
 
-### Voir les commentaires dans posts.show \<!-- markmap: fold -->
-
-```php
-<?php
-...
-use Illuminate\Support\Collection;
-
-new class extends Component {
-    ...
-    public Collection $comments;
-    public bool $listComments = false;
-    ...
-    public function showComments(): void {
-        $this->listComments = true;
-
-        $this->comments = $this->post
-            ->validComments()
-            ->where('parent_id', null)
-            ->withCount([
-                'children' => function ($query) {
-                    $query->whereHas('user', function ($q) {
-                        $q->where('valid', true);
-                    });
-                },
-            ])
-            ->with([
-                'user' => function ($query) {
-                    $query->select('id', 'name', 'email', 'role')->withCount('comments');
-                },
-            ])
-            ->latest()
-            ->get();
-        dd ($this->comments); 
-        // Commenter le dd() ci-dessus après avoir observé le bon contenu de $this->comments
-        // Qui doit-être un truc style : 
-        //   Illuminate\Database\Eloquent\Collection {#609 ▼ // resources\views\livewire\posts\show.blade.php:44
-        //     #items: array:3 [▼
-        //       0 => App\Models\Comment {#612 ▶}
-        //       1 => App\Models\Comment {#606 ▶}
-        //       2 => App\Models\Comment {#616 ▶}
-        //     ]
-        //     #escapeWhenCastingToString: false
-        //   }
-        // Supprimer ces lignes commentées après avoir observé ce résultat à partir de // Commenter...
-    }
-}; ?>
-...
-// Modifier le bouton pour l'activer au click
-<x-button label="{{ $commentsCount > 1 ? __('View comments') : __('View comment') }}"
-wire:click="showComments" class="btn-outline" spinner />
-...
-```
+  ```html
+  <x-button label="{{ $commentsCount > 1 ? __('View comments') : __('View comment') }}"
+  wire:click="showComments" class="btn-outline" spinner />
+  ...
+  ```
 
 ### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-commentaires-1-2](https://laravel.sillo.org/posts/mon-cms-les-commentaires-1-2)***
 
-### Le formulaire (Composant posts/comment-form) \<!-- markmap: fold -->
+### Le formulaire (Composant posts/comment-form) <!-- markmap: fold -->
 
-```php
-php artisan make:volt posts/comment-form --class
-```
+  ```bash
+  php artisan make:volt posts/comment-form --class
+  ```
 
-```php
-@if ($showForm)
-    <x-card title="{{ $formTitle }}" shadow="hidden" class="!p-0">
-        <x-form wire:submit="{{ $formAction }}" class="mb-4">
-            <x-textarea wire:model="message" hint="{{ __('Max 10000 chars') }}" rows="5" placeholder="{{ __('Your message...') }}" inline />
-            <x-slot:actions>
-                @if ($formAction === 'updateComment')
-                    <x-button label="{{ __('Cancel') }}" wire:click="toggleModifyForm(false)"
-                        class="btn-ghost" spinner />
-                @endif
-                <x-button label="{{ __('Save') }}" class="btn-primary" type="submit" spinner="save" />
-            </x-slot:actions>
-        </x-form>
-    </x-card>
-@else
-    <div class="mb-4">{!! $message !!}</div>
-@endif
-```
+  ```html
+  @if ($showForm)
+      <x-card title="{{ $formTitle }}" shadow="hidden" class="!p-0">
+          <x-form wire:submit="{{ $formAction }}" class="mb-4">
+              <x-textarea wire:model="message" hint="{{ __('Max 10000 chars') }}" rows="5" placeholder="{{ __('Your message...') }}" inline />
+              <x-slot:actions>
+                  @if ($formAction === 'updateComment')
+                      <x-button label="{{ __('Cancel') }}" wire:click="toggleModifyForm(false)"
+                          class="btn-ghost" spinner />
+                  @endif
+                  <x-button label="{{ __('Save') }}" class="btn-primary" type="submit" spinner="save" />
+              </x-slot:actions>
+          </x-form>
+      </x-card>
+  @else
+      <div class="mb-4">{!! $message !!}</div>
+  @endif
+  ```
 
-### Gravatar \<!-- markmap: fold -->
+### Gravatar <!-- markmap: fold -->
 
 #### Installer Gravatar
 
-```php
-composer require creativeorange/gravatar ~1.0
----
-Usage:
-Gravatar::get('email@example.com');
-```
+* ```bash
+  composer require creativeorange/gravatar ~1.0
+  ```
+* Usage:
+
+  ```php
+  Gravatar::get('email@example.com');
+  ```
 
 #### [Créer son Gravatar](https://gravatar.com/)
 
-### Les notifications \<!-- markmap: fold -->
+### Les notifications <!-- markmap: fold -->
 
-#### Création de commentaire \<!-- markmap: fold -->
+#### Création de commentaire <!-- markmap: fold -->
 
-```php
-php artisan make:notification CommentCreated
-```
+* ```bash
+  php artisan make:notification CommentCreated
+  ```
 
-    Dans app/Notifications/CommentCreated.php :
+* Dans app/Notifications/**CommentCreated.php** :
 
-```php
-<?php
-namespace App\Notifications;
-
-use App\Models\Comment;
-use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
-use Illuminate\Notifications\Messages\MailMessage;
-
-class CommentCreated extends Notification
-{
-    use Queueable;
+  ```php
+  <?php
+  namespace App\Notifications;
   
-    public Comment $comment;
+  use App\Models\Comment;
+  use Illuminate\Bus\Queueable;
+  use Illuminate\Notifications\Notification;
+  use Illuminate\Notifications\Messages\MailMessage;
   
-    public function __construct(Comment $comment) {
-        $this->comment = $comment;
-    }
+  class CommentCreated extends Notification
+  {
+      use Queueable;
+    
+      public Comment $comment;
+    
+      public function __construct(Comment $comment) {
+          $this->comment = $comment;
+      }
+    
+      public function via(object $notifiable): array {
+          return ['mail'];
+      }
+    
+      public function toMail(object $notifiable): MailMessage {
+          return (new MailMessage())
+              ->subject(__('A comment has been created on your post'))
+              ->line(__('A comment has been created on your post') . ' "' . $this->comment->post->title . '" ' . __('by') . ' ' . $this->comment->user->name . '.')
+              ->lineIf(!$this->comment->user->valid, __('This comment is awaiting moderation.'))
+              ->action(__('Manage this comment'), "#");
+      }
+    
+      public function toArray(object $notifiable): array {
+          return [
+          ];
+      }
+  }
+  ```
+
+* ```json
+  "A comment has been created on your post": "Un commentaire a été ajouté à votre article",
+  "This comment is awaiting moderation.": "Ce commentaire est en attente de modération.",
+  "Manage this comment": "Gérer ce commentaire",
+  "by": "par"
+  ```
+
+#### Affichage des commentaires 1er niveau <!-- markmap: fold -->
+
+* ```bash
+  php artisan make:volt posts/commentBase --class
+  ```
+
+* ```html
+  <?php
+  use Livewire\Volt\Component;
+  use App\Models\{ Comment, Post };
+  use Livewire\Attributes\Validate;
+  use App\Notifications\CommentCreated;
+  use Illuminate\Contracts\Database\Eloquent\Builder;
   
-    public function via(object $notifiable): array {
-        return ['mail'];
-    }
+  new class() extends Component {
+      public int $postId;
+      public ?Comment $comment    = null;
+      public bool $showCreateForm = true;
+      public bool $showModifyForm = false;
+      public bool $alert          = false;
+    
+      #[Validate('required|max:10000')]
+      public string $message = '';
+    
+      public function mount($postId): void {
+          $this->postId = $postId;
+      }
+    
+      public function createComment(): void {
+          $data = $this->validate();
+    
+          if (!Auth::user()->valid) {
+              $this->alert = true;
+          }
+    
+          $post = Post::select('id', 'title', 'user_id')->with('user')->findOrFail($this->postId);
+    
+          $this->comment = Comment::create([
+              'user_id' => Auth::id(),
+              'post_id' => $this->postId,
+              'body'    => $this->message,
+          ]);
+    
+          if ($this->post->user_id != Auth::id()) {
+              $post->user->notify(new CommentCreated($this->comment));
+          }
+    
+          $this->message = $data['message'];
+      }
+    
+      public function updateComment(): void {
+          $data = $this->validate();
+    
+          $this->comment->body = $data['message'];
+          $this->comment->save();
+    
+          $this->toggleModifyForm(false);
+      }
+    
+      public function toggleModifyForm(bool $state): void {
+          $this->showModifyForm = $state;
+      }
+    
+      public function deleteComment(): void {
+          $this->comment->delete();
+    
+          $this->comment = null;
+          $this->message = '';
+      }
+  }; ?>
   
-    public function toMail(object $notifiable): MailMessage {
-        return (new MailMessage())
-            ->subject(__('A comment has been created on your post'))
-            ->line(__('A comment has been created on your post') . ' "' . $this->comment->post->title . '" ' . __('by') . ' ' . $this->comment->user->name . '.')
-            ->lineIf(!$this->comment->user->valid, __('This comment is awaiting moderation.'))
-            ->action(__('Manage this comment'), "#");
-    }
+  <div class="flex flex-col mt-4">
+      @if ($this->comment)
   
-    public function toArray(object $notifiable): array {
-        return [
-        ];
-    }
-}
-```
-
-```php
-"A comment has been created on your post": "Un commentaire a été ajouté à votre article",
-"This comment is awaiting moderation.": "Ce commentaire est en attente de modération.",
-"Manage this comment": "Gérer ce commentaire",
-"by": "par"
-```
-
-#### Affichage des commentaires 1er niveau \<!-- markmap: fold -->
-
-```php
-php artisan make:volt posts/commentBase --class
-```
-
-```php
-<?php
-use App\Models\{ Comment, Post };
-use App\Notifications\CommentCreated;
-use Illuminate\Contracts\Database\Eloquent\Builder;
-use Livewire\Attributes\Validate;
-use Livewire\Volt\Component;
-
-new class() extends Component {
-    public int $postId;
-    public ?Comment $comment    = null;
-    public bool $showCreateForm = true;
-    public bool $showModifyForm = false;
-    public bool $alert          = false;
+          @if ($alert)
+              <x-alert title="{!! __('This is your first comment') !!}" description="{!! __('It will be validated by an administrator before it appears here') !!}" icon="o-exclamation-triangle"
+                  class="alert-warning" />
+          @else
+              <div class="flex flex-col justify-between mb-4 md:flex-row">
+                  <x-avatar :image="Gravatar::get(Auth::user()->email)" class="!w-24">
+                      <x-slot:title class="pl-2 text-xl">
+                          {{ Auth::user()->name }}
+                      </x-slot:title>
+                      <x-slot:subtitle class="flex flex-col gap-1 pl-2 mt-2 text-gray-500">
+                          <x-icon name="o-calendar" label="{{ $comment->created_at->diffForHumans() }}" />
+                          <x-icon name="o-chat-bubble-left"
+                              label="{{ $comment->user->comments_count }} {{ __(' comments') }}" />
+                      </x-slot:subtitle>
+                  </x-avatar>
   
-    #[Validate('required|max:10000')]
-    public string $message = '';
+                  <div class="flex flex-col mt-4 space-y-2 lg:mt-0 lg:flex-row lg:items-center lg:space-y-0 lg:space-x-2">
+                      <x-button label="{{ __('Modify') }}" wire:click="toggleModifyForm(true)"
+                          class="btn-outline btn-sm" />
+                      <x-button label="{{ __('Delete') }}" wire:click="deleteComment()"
+                          wire:confirm="{{ __('Are you sure to delete this comment?') }}"
+                          class="btn-outline btn-error btn-sm" />
+                  </div>
+              </div>
   
-    public function mount($postId): void {
-        $this->postId = $postId;
-    }
+              @include('livewire.posts.comment-form', ['formTitle' => __('Update your comment'), 'formAction' => 'updateComment', 'showForm' => $showModifyForm, 'message' => $comment->body])
   
-    public function createComment(): void {
-        $data = $this->validate();
+          @endif
   
-        if (!Auth::user()->valid) {
-            $this->alert = true;
-        }
+      @else
+          @include('livewire.posts.comment-form', ['formTitle' => __('Leave a comment'), 'formAction' => 'createComment', 'showForm' => true, 'message' => ''])
+      @endif
   
-        $post = Post::select('id', 'title', 'user_id')->with('user')->findOrFail($this->postId);
+  </div>
+  ```
+
+* ```json
+  "This is your first comment": "C'est votre premier commentaire",
+  "It will be validate by an administrator before it appears here": "Il sera valide par un administrateur avant qu'il ne soit affiché ici",
+  "Leave a comment": "Laissez un commentaire",
+  "Your comment": "Votre commentaire",
+  "Update your comment": "Modifier votre commentaire",
+  "Are you sure to delete this comment?": "Êtes-vous sûr de vouloir supprimer ce commentaire ?",
+  "Comments": "Commentaires",
+  "Modify": "Modifier",
+  "1 comment": "1 commentaire",
+  "comments": "commentaires",
+  "Max 10000 chars": "Max 10 000 caractères"
+  ```
+
+* Modification de posts.show :
+
+* ```php
+  ...
+     <div id="bottom" class="relative items-center w-full py-5 mx-auto md:px-12 max-w-7xl">
+          @if ($listComments)
+              <x-card title="{{ __('Comments') }}" shadow separator>
+                   Affichage des commentaires ici !
+                  @auth
+                      <livewire:posts.commentBase :postId="$post->id" />
+                  @endauth
+              </x-card>
+          @else
+              @if ($commentsCount > 0)
+                  <div class="flex justify-center">
+                      <x-button label="{{ $commentsCount > 1 ? __('View comments') : __('View comment') }}"
+                          wire:click="showComments" class="btn-outline" spinner />
+                  </div>
+              @else
+                  @auth
+                      <livewire:posts.commentBase :postId="$post->id" />
+                  @endauth
+              @endif
+          @endif
+      </div>
+  </div>
+  ```
+
+#### Notification de réponse à un commentaire <!-- markmap: fold -->
+
+  ```bash
+  php artisan make:notification CommentAnswerCreated
+  ```
   
-        $this->comment = Comment::create([
-            'user_id' => Auth::id(),
-            'post_id' => $this->postId,
-            'body'    => $this->message,
-        ]);
+  ```php
+  <?php
+  namespace App\Notifications;
   
-        if ($this->post->user_id != Auth::id()) {
-            $post->user->notify(new CommentCreated($this->comment));
-        }
+  use App\Models\Comment;
+  use Illuminate\Bus\Queueable;
+  use Illuminate\Notifications\Notification;
+  use Illuminate\Notifications\Messages\MailMessage;
   
-        $this->message = $data['message'];
-    }
+  class CommentAnswerCreated extends Notification
+  {
+      use Queueable;
   
-    public function updateComment(): void {
-        $data = $this->validate();
+      public Comment $comment;
   
-        $this->comment->body = $data['message'];
-        $this->comment->save();
+      public function __construct(Comment $comment) {
+          $this->comment = $comment;
+      }
+    
+      public function via(object $notifiable): array {
+          return ['mail'];
+      }
+    
+      public function toMail(object $notifiable): MailMessage {
+          return (new MailMessage())
+              ->subject(__('An answer has been created on your comment'))
+              ->line(__('An answer has been created on your comment') . ' "' . $this->comment->post->title . '" ' . __('by') . ' ' . $this->comment->user->name . '.')
+              ->action(__('Show this comment'), route('posts.show', $this->comment->post->slug));
+      }
+    
+      public function toArray(object $notifiable): array {
+          return [
+          ];
+      }
+  }
+  ```
+
+  ```json
+  "An answer has been created on your comment": "Une réponse a été apportée à votre commentaire",
+  "Show this comment": "Voir ce commentaire"
+  ```
+
+### Composant pour l'affichage des commentaires <!-- markmap: fold -->
+
+  ```bash
+  php artisan make:volt posts/comment --class
+  ```
+
+  ```CleanHtmlInput
+  <?php
+  use Livewire\Volt\Component;
+  use Livewire\Attributes\Validate;
+  use Illuminate\Support\Collection;
+  use App\Models\{ Comment, Reaction };
+  use App\Notifications\{CommentAnswerCreated, CommentCreated};
   
-        $this->toggleModifyForm(false);
-    }
+  new class() extends Component {
+      public ?Comment $comment;
+      public ?Collection $children;
+      public bool $showAnswerForm = false;
+      public bool $showModifyForm = false;
+      public bool $alert          = false;
+      public int $children_count  = 0;
+      public int $depth;
+    
+      #[Validate('required|max:10000')]
+      public string $message = '';
+    
+      public function mount($comment, $depth): void {
+          $this->comment = $comment;
+          $this->depth   = $depth;
+          $this->message = strip_tags($comment->body);
+          $this->children_count = $comment->children_count;
+      }
+    
+      public function showAnswers(): void {
+          $this->children = Comment::where('parent_id', $this->comment->id)
+              ->with([
+                  'user' => function ($query) {
+                      $query->select('id', 'name', 'email', 'role')->withCount('comments');
+                  },
+              ])
+              ->withCount(['children' => function ($query) {
+                  $query->whereHas('user', function ($q) {
+                      $q->where('valid', true);
+                  });
+              }])
+              ->get();
+    
+          $this->children_count = 0;
+      }
+    
+      public function toggleAnswerForm(bool $state): void {
+          $this->showAnswerForm = $state;
+          $this->message        = '';
+      }
+    
+      public function toggleModifyForm(bool $state): void {
+          $this->showModifyForm = $state;
+      }
+    
+      public function createAnswer(): void {
+          $data              = $this->validate();
+          $data['parent_id'] = $this->comment->id;
+          $data['user_id']   = Auth::id();
+          $data['post_id']   = $this->comment->post_id;
+          $data['body']      = $this->message;
+    
+          $item = Comment::create($data);
+    
+          $item->save();
+    
+          if ($item->post->user_id != Auth::id()) {
+              $item->post->user->notify(new CommentCreated($item));
+          }
+    
+          $author = $this->comment->user;
+          if ($author->id != $item->post->user_id && $author->id != Auth::id()) {
+              $author->notify(new CommentAnswerCreated($item));
+          }
+    
+          $this->toggleAnswerForm(false);
+    
+          $this->showAnswers();
+      }
+    
+      public function updateAnswer(): void {
+          $data = $this->validate();
+    
+          $this->comment->body = $data['message'];
+          $this->comment->save();
+    
+          $this->toggleModifyForm(false);
+      }
+    
+      public function deleteComment(): void {
+          $this->comment->delete();
+          $this->childs  = null;
+          $this->comment = null;
+      } 
+  }; ?>
   
-    public function toggleModifyForm(bool $state): void {
-        $this->showModifyForm = $state;
-    }
+  <div>
+      <style>
+          @media (max-width: 768px) {
+              .ml-0 { margin-left: 0rem; }
+              .ml-3 { margin-left: 0.75rem; }
+              .ml-6 { margin-left: 1.5rem; }
+              .ml-9 { margin-left: 2.25rem; }
+          }
+          @media (min-width: 769px) {
+              .ml-0 { margin-left: 0rem; }
+              .ml-3 { margin-left: 3rem; }
+              .ml-6 { margin-left: 6rem; }
+              .ml-9 { margin-left: 9rem; }
+          }
+      </style>
   
-    public function deleteComment(): void {
-        $this->comment->delete();
+      @if ($comment)
+          <div class="flex flex-col mt-4 ml-{{ $depth * 3 }} lg:ml-{{ $depth * 3 }} border-2 border-gray-400 rounded-md p-2 selection:transition duration-500 ease-in-out shadow-md shadow-gray-500 hover:shadow-xl hover:shadow-gray-500" >
   
-        $this->comment = null;
-        $this->message = '';
-    }
-}; ?>
-
-<div class="flex flex-col mt-4">
-    @if ($this->comment)
-
-        @if ($alert)
-            <x-alert title="{!! __('This is your first comment') !!}" description="{!! __('It will be validated by an administrator before it appears here') !!}" icon="o-exclamation-triangle"
-                class="alert-warning" />
-        @else
-            <div class="flex flex-col justify-between mb-4 md:flex-row">
-                <x-avatar :image="Gravatar::get(Auth::user()->email)" class="!w-24">
-                    <x-slot:title class="pl-2 text-xl">
-                        {{ Auth::user()->name }}
-                    </x-slot:title>
-                    <x-slot:subtitle class="flex flex-col gap-1 pl-2 mt-2 text-gray-500">
-                        <x-icon name="o-calendar" label="{{ $comment->created_at->diffForHumans() }}" />
-                        <x-icon name="o-chat-bubble-left"
-                            label="{{ $comment->user->comments_count }} {{ __(' comments') }}" />
-                    </x-slot:subtitle>
-                </x-avatar>
-
-                <div class="flex flex-col mt-4 space-y-2 lg:mt-0 lg:flex-row lg:items-center lg:space-y-0 lg:space-x-2">
-                    <x-button label="{{ __('Modify') }}" wire:click="toggleModifyForm(true)"
-                        class="btn-outline btn-sm" />
-                    <x-button label="{{ __('Delete') }}" wire:click="deleteComment()"
-                        wire:confirm="{{ __('Are you sure to delete this comment?') }}"
-                        class="btn-outline btn-error btn-sm" />
-                </div>
-            </div>
-
-            @include('livewire.posts.comment-form', ['formTitle' => __('Update your comment'), 'formAction' => 'updateComment', 'showForm' => $showModifyForm, 'message' => $comment->body])
-
-        @endif
-
-    @else
-        @include('livewire.posts.comment-form', ['formTitle' => __('Leave a comment'), 'formAction' => 'createComment', 'showForm' => true, 'message' => ''])
-    @endif
-
-</div>
-```
-
-```php
-"This is your first comment": "C'est votre premier commentaire",
-"It will be validate by an administrator before it appears here": "Il sera valide par un administrateur avant qu'il ne soit affiché ici",
-"Leave a comment": "Laissez un commentaire",
-"Your comment": "Votre commentaire",
-"Update your comment": "Modifier votre commentaire",
-"Are you sure to delete this comment?": "Êtes-vous sûr de vouloir supprimer ce commentaire ?",
-"Comments": "Commentaires",
-"Modify": "Modifier",
-"1 comment": "1 commentaire",
-"comments": "commentaires",
-"Max 10000 chars": "Max 10 000 caractères"
-```
-
-    Modification de posts.show :
-
-```php
-...
-   <div id="bottom" class="relative items-center w-full py-5 mx-auto md:px-12 max-w-7xl">
-        @if ($listComments)
-            <x-card title="{{ __('Comments') }}" shadow separator>
-                 Affichage des commentaires ici !
-                @auth
-                    <livewire:posts.commentBase :postId="$post->id" />
-                @endauth
-            </x-card>
-        @else
-            @if ($commentsCount > 0)
-                <div class="flex justify-center">
-                    <x-button label="{{ $commentsCount > 1 ? __('View comments') : __('View comment') }}"
-                        wire:click="showComments" class="btn-outline" spinner />
-                </div>
-            @else
-                @auth
-                    <livewire:posts.commentBase :postId="$post->id" />
-                @endauth
-            @endif
-        @endif
-    </div>
-</div>
-```
-
-#### Notification de réponse à un commentaire \<!-- markmap: fold -->
-
-```php
-php artisan make:notification CommentAnswerCreated
-```
-
-```php
-<?php
-namespace App\Notifications;
-
-use App\Models\Comment;
-use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
-
-class CommentAnswerCreated extends Notification
-{
-    use Queueable;
-
-    public Comment $comment;
-
-    public function __construct(Comment $comment) {
-        $this->comment = $comment;
-    }
+              <div class="flex flex-col justify-between mb-4 md:flex-row">
+                  <x-avatar :image="Gravatar::get($comment->user->email)" class="!w-24">
+                      <x-slot:title class="pl-2 text-xl">
+                          {{ $comment->user->name }}
+                      </x-slot:title>
+                      <x-slot:subtitle class="flex flex-col gap-1 pl-2 mt-2 text-gray-500">
+                          <x-icon name="o-calendar" label="{{ $comment->created_at->diffForHumans() }}" />
+                          <x-icon name="o-chat-bubble-left"  label="{{ $comment->user->comments_count == 0 ? '' : ($comment->user->comments_count == 1 ? __('1 comment') : $comment->user->comments_count . ' ' . __('comments')) }}" />
+                      </x-slot:subtitle>
+                  </x-avatar>
   
-    public function via(object $notifiable): array {
-        return ['mail'];
-    }
+                  <div class="flex flex-col mt-4 space-y-2 lg:mt-0 lg:flex-row lg:items-center lg:space-y-0 lg:space-x-2">
+                      @auth
+                          @if (Auth::user()->name == $comment->user->name)
+                              <x-button label="{{ __('Modify') }}" wire:click="toggleModifyForm(true)"
+                                  class="btn-outline btn-warning btn-sm" spinner />
+                              <x-button label="{{ __('Delete') }}" wire:click="deleteComment()"
+                                  wire:confirm="{{ __('Are you sure to delete this comment?') }}"
+                                  class="mt-2 btn-outline btn-error btn-sm" spinner />
+                          @endif
+                          @if ($depth < 3)
+                              <x-button label="{{ __('Answer') }}" wire:click="toggleAnswerForm(true)"
+                                  class="mt-2 btn-outline btn-sm" spinner />
+                          @endif
+                      @endauth
+                  </div>
+              </div>
   
-    public function toMail(object $notifiable): MailMessage {
-        return (new MailMessage())
-            ->subject(__('An answer has been created on your comment'))
-            ->line(__('An answer has been created on your comment') . ' "' . $this->comment->post->title . '" ' . __('by') . ' ' . $this->comment->user->name . '.')
-            ->action(__('Show this comment'), route('posts.show', $this->comment->post->slug));
-    }
+              @if(!$showModifyForm)
+                  <div class="mb-4">
+                      {!! nl2br($comment->body) !!}
+                  </div>
+              @endif
+              @if ($showModifyForm || $showAnswerForm)
+                  <x-card :title="($showModifyForm ? __('Update your comment') : __('Your answer'))" shadow="hidden" class="!p-0">
+                      <x-form :wire:submit="($showModifyForm ? 'updateAnswer' : 'createAnswer')" class="mb-4">
+                          <x-textarea wire:model="message" :placeholder="($showAnswerForm ? __('Your answer') . ' ...' : '')" hint="{{ __('Max 10000 chars') }}" rows="5" inline />
+                          <x-slot:actions>
+                              <x-button label="{{ __('Cancel') }}" :wire:click="($showModifyForm ? 'toggleModifyForm(false)' : 'toggleAnswerForm(false)')"
+                                  class="btn-ghost" />
+                              <x-button label="{{ __('Save') }}" class="btn-primary" type="submit" spinner="save" />
+                          </x-slot:actions>
+                      </x-form>
+                  </x-card>
+              @endif
   
-    public function toArray(object $notifiable): array {
-        return [
-        ];
-    }
-}
-```
-
-```php
-"An answer has been created on your comment": "Une réponse a été apportée à votre commentaire",
-"Show this comment": "Voir ce commentaire"
-```
-
-### Composant pour l'affichage des commentaires \<!-- markmap: fold -->
-
-```php
-php artisan make:volt posts/comment --class
-```
-
-```php
-<?php
-use App\Models\{ Comment, Reaction };
-use App\Notifications\{CommentAnswerCreated, CommentCreated};
-use Illuminate\Support\Collection;
-use Livewire\Attributes\Validate;
-use Livewire\Volt\Component;
-
-new class() extends Component {
-    public ?Comment $comment;
-    public ?Collection $children;
-    public bool $showAnswerForm = false;
-    public bool $showModifyForm = false;
-    public bool $alert          = false;
-    public int $children_count  = 0;
-    public int $depth;
+              @if ($alert)
+                  <x-alert title="{!! __('This is your first comment') !!}"
+                      description="{{ __('It will be validated by an administrator before it appears here') }}"
+                      icon="o-exclamation-triangle" class="alert-warning" />
+              @endif
   
-    #[Validate('required|max:10000')]
-    public string $message = '';
+              @if($children_count > 0)
+                  <x-button label="{{ __('Show the answers') }} ({{ $children_count }})" wire:click="showAnswers" class="mt-2 btn-outline btn-sm" spinner />
+              @endif
   
-    public function mount($comment, $depth): void {
-        $this->comment = $comment;
-        $this->depth   = $depth;
-        $this->message = strip_tags($comment->body);
-        $this->children_count = $comment->children_count;
-    }
+          </div>
+      @endif
   
-    public function showAnswers(): void {
-        $this->children = Comment::where('parent_id', $this->comment->id)
-            ->with([
-                'user' => function ($query) {
-                    $query->select('id', 'name', 'email', 'role')->withCount('comments');
-                },
-            ])
-            ->withCount(['children' => function ($query) {
-                $query->whereHas('user', function ($q) {
-                    $q->where('valid', true);
-                });
-            }])
-            ->get();
+      @if($children)
+          @foreach ($children as $child)
+              <livewire:posts.comment :comment="$child" :depth="$depth + 1" :key="$child->id">
+          @endforeach
+      @endif
   
-        $this->children_count = 0;
-    }
+  </div>
+  ```
+
+  ```json
+  "Answer": "Répondre",
+  "Show the answers": "Afficher les réponses"
+  ```
+
+* Adaptation du posts.show à la place de : 'Affichage des commentaires ici !'
+
+  ```html
+      @foreach ($comments as $comment)
+          @if (!$comment->parent_id)
+              <livewire:posts.comment :$comment :depth="0" :key="$comment->id" />
+          @endif
+      @endforeach
+  ```
+
+### Sécurité // {!! $uneVariabledansDuCodeBladeQuiContientDuCodeDestinéÀLaVue !!} <!-- markmap: fold -->
+
+  ```bash
+  composer require mews/purifier
+  ```
   
-    public function toggleAnswerForm(bool $state): void {
-        $this->showAnswerForm = $state;
-        $this->message        = '';
-    }
+  ```php
+  use Mews\Purifier\Casts\CleanHtmlInput;
   
-    public function toggleModifyForm(bool $state): void {
-        $this->showModifyForm = $state;
-    }
-  
-    public function createAnswer(): void {
-        $data              = $this->validate();
-        $data['parent_id'] = $this->comment->id;
-        $data['user_id']   = Auth::id();
-        $data['post_id']   = $this->comment->post_id;
-        $data['body']      = $this->message;
-  
-        $item = Comment::create($data);
-  
-        $item->save();
-  
-        if ($item->post->user_id != Auth::id()) {
-            $item->post->user->notify(new CommentCreated($item));
-        }
-  
-        $author = $this->comment->user;
-        if ($author->id != $item->post->user_id && $author->id != Auth::id()) {
-            $author->notify(new CommentAnswerCreated($item));
-        }
-  
-        $this->toggleAnswerForm(false);
-  
-        $this->showAnswers();
-    }
-  
-    public function updateAnswer(): void {
-        $data = $this->validate();
-  
-        $this->comment->body = $data['message'];
-        $this->comment->save();
-  
-        $this->toggleModifyForm(false);
-    }
-  
-    public function deleteComment(): void {
-        $this->comment->delete();
-        $this->childs  = null;
-        $this->comment = null;
-    } 
-}; ?>
-
-<div>
-    <style>
-        @media (max-width: 768px) {
-            .ml-0 { margin-left: 0rem; }
-            .ml-3 { margin-left: 0.75rem; }
-            .ml-6 { margin-left: 1.5rem; }
-            .ml-9 { margin-left: 2.25rem; }
-        }
-        @media (min-width: 769px) {
-            .ml-0 { margin-left: 0rem; }
-            .ml-3 { margin-left: 3rem; }
-            .ml-6 { margin-left: 6rem; }
-            .ml-9 { margin-left: 9rem; }
-        }
-    </style>
-
-    @if ($comment)
-        <div class="flex flex-col mt-4 ml-{{ $depth * 3 }} lg:ml-{{ $depth * 3 }} border-2 border-gray-400 rounded-md p-2 selection:transition duration-500 ease-in-out shadow-md shadow-gray-500 hover:shadow-xl hover:shadow-gray-500" >
-
-            <div class="flex flex-col justify-between mb-4 md:flex-row">
-                <x-avatar :image="Gravatar::get($comment->user->email)" class="!w-24">
-                    <x-slot:title class="pl-2 text-xl">
-                        {{ $comment->user->name }}
-                    </x-slot:title>
-                    <x-slot:subtitle class="flex flex-col gap-1 pl-2 mt-2 text-gray-500">
-                        <x-icon name="o-calendar" label="{{ $comment->created_at->diffForHumans() }}" />
-                        <x-icon name="o-chat-bubble-left"  label="{{ $comment->user->comments_count == 0 ? '' : ($comment->user->comments_count == 1 ? __('1 comment') : $comment->user->comments_count . ' ' . __('comments')) }}" />
-                    </x-slot:subtitle>
-                </x-avatar>
-
-                <div class="flex flex-col mt-4 space-y-2 lg:mt-0 lg:flex-row lg:items-center lg:space-y-0 lg:space-x-2">
-                    @auth
-                        @if (Auth::user()->name == $comment->user->name)
-                            <x-button label="{{ __('Modify') }}" wire:click="toggleModifyForm(true)"
-                                class="btn-outline btn-warning btn-sm" spinner />
-                            <x-button label="{{ __('Delete') }}" wire:click="deleteComment()"
-                                wire:confirm="{{ __('Are you sure to delete this comment?') }}"
-                                class="mt-2 btn-outline btn-error btn-sm" spinner />
-                        @endif
-                        @if ($depth < 3)
-                            <x-button label="{{ __('Answer') }}" wire:click="toggleAnswerForm(true)"
-                                class="mt-2 btn-outline btn-sm" spinner />
-                        @endif
-                    @endauth
-                </div>
-            </div>
-
-            @if(!$showModifyForm)
-                <div class="mb-4">
-                    {!! nl2br($comment->body) !!}
-                </div>
-            @endif
-            @if ($showModifyForm || $showAnswerForm)
-                <x-card :title="($showModifyForm ? __('Update your comment') : __('Your answer'))" shadow="hidden" class="!p-0">
-                    <x-form :wire:submit="($showModifyForm ? 'updateAnswer' : 'createAnswer')" class="mb-4">
-                        <x-textarea wire:model="message" :placeholder="($showAnswerForm ? __('Your answer') . ' ...' : '')" hint="{{ __('Max 10000 chars') }}" rows="5" inline />
-                        <x-slot:actions>
-                            <x-button label="{{ __('Cancel') }}" :wire:click="($showModifyForm ? 'toggleModifyForm(false)' : 'toggleAnswerForm(false)')"
-                                class="btn-ghost" />
-                            <x-button label="{{ __('Save') }}" class="btn-primary" type="submit" spinner="save" />
-                        </x-slot:actions>
-                    </x-form>
-                </x-card>
-            @endif
-
-            @if ($alert)
-                <x-alert title="{!! __('This is your first comment') !!}"
-                    description="{{ __('It will be validated by an administrator before it appears here') }}"
-                    icon="o-exclamation-triangle" class="alert-warning" />
-            @endif
-
-            @if($children_count > 0)
-                <x-button label="{{ __('Show the answers') }} ({{ $children_count }})" wire:click="showAnswers" class="mt-2 btn-outline btn-sm" spinner />
-            @endif
-
-        </div>
-    @endif
-
-    @if($children)
-        @foreach ($children as $child)
-            <livewire:posts.comment :comment="$child" :depth="$depth + 1" :key="$child->id">
-        @endforeach
-    @endif
-
-</div>
-```
-
-```php
-"Answer": "Répondre",
-"Show the answers": "Afficher les réponses"
-```
-
-    Adaptation du posts.show à la place de : 'Affichage des commentaires ici !'
-
-```php
-    @foreach ($comments as $comment)
-        @if (!$comment->parent_id)
-            <livewire:posts.comment :$comment :depth="0" :key="$comment->id" />
-        @endif
-    @endforeach
-```
-
-### Sécurité // {!! $uneVariabledansDuCodeBladeQuiContientDuCodeDestinéÀLaVue !!} \<!-- markmap: fold -->
-
-```php
-composer require mews/purifier
-```
-
-```php
-use Mews\Purifier\Casts\CleanHtmlInput;
-
-class Comment extends Model
-{
-    ...
-    protected $casts = [
-        'body' => CleanHtmlInput::class,
-    ];
-    ...
-}
-```
+  class Comment extends Model {
+      ...
+      protected $casts = [
+          'body' => CleanHtmlInput::class,
+      ];
+      ...
+  }
+  ```
 
 ### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-commentaires-2-2](https://laravel.sillo.org/posts/mon-cms-les-commentaires-2-2)***
 
-## - xLe profil <!-- markmap: fold -->
+## - Le profil <!-- markmap: fold -->
 
-### Route du profil \<!-- markmap: fold -->
+### Route du profil <!-- markmap: fold -->
 
-    - (Pensez que ce n'est que pour les "autorisés"
+* Considérer que ce n'est que pour les *users* "autorisés"
     → **Middleware('auth')**) et comme il y aura d'autres routes
-    pour "eux", en faire un **group()**
+    pour "eux", en faire un **group()** :
 
-```php
-Route::middleware('auth')->group(function () {
-    Volt::route('/profile', 'auth.profile')->name('profile');
-});
-```
+  ```php
+  Route::middleware('auth')->group(function () {
+      Volt::route('/profile', 'auth.profile')->name('profile');
+  });
+  ```
 
-### Liens dans les vues adhoc \<!-- markmap: fold -->
+### Liens dans les vues adhoc <!-- markmap: fold -->
 
-    - Pour les grands écrans, dans **navigation.navbar** :
+* \- Pour les grands écrans, dans **navigation.navbar** :
 
-```bash
-@if ($user = auth()->user())
-    <x-dropdown>
-        <x-slot:trigger>
-            <x-button label="{{ $user->name }}" class="btn-ghost" />
-        </x-slot:trigger>
-        <x-menu-item title="{{ __('Profile') }}" link="{{ route('profile') }}" />
-```
+  ```html
+  @if ($user = auth()->user())
+      <x-dropdown>
+          <x-slot:trigger>
+              <x-button label="{{ $user->name }}" class="btn-ghost" />
+          </x-slot:trigger>
+          <x-menu-item title="{{ __('Profile') }}" link="{{ route('profile') }}" />
+  ```
 
-    - Pour les plus petits, dans **navigation.sidebar** :
+* \- Pour les plus petits, dans **navigation.sidebar** :
 
-```bash
-@if($user = auth()->user())
-    <x-menu-separator />
-        <x-list-item :item="$user" value="name" sub-value="email" no-separator no-hover class="-mx-2 !-my-2 rounded">
-            <x-slot:actions>
-                <x-button icon="o-power" wire:click="logout" class="btn-circle btn-ghost btn-xs" tooltip-left="{{ __('Logout') }}" no-wire-navigate />
-            </x-slot:actions>
-        </x-list-item>
-        <x-menu-item title="{{ __('Profile') }}" icon="o-user" link="{{ route('profile') }}" />
-```
+  ```html
+  @if($user = auth()->user())
+      <x-menu-separator />
+          <x-list-item :item="$user" value="name" sub-value="email" no-separator no-hover class="-mx-2 !-my-2 rounded">
+              <x-slot:actions>
+                  <x-button icon="o-power" wire:click="logout" class="btn-circle btn-ghost btn-xs" tooltip-left="{{ __('Logout') }}" no-wire-navigate />
+              </x-slot:actions>
+          </x-list-item>
+          <x-menu-item title="{{ __('Profile') }}" icon="o-user" link="{{ route('profile') }}" />
+  ```
 
-### Composant Profile \<!-- markmap: fold -->
+### Composant Profile <!-- markmap: fold -->
 
-```php
-php artisan make:volt auth/profile --class
-```
+  ```bash
+  php artisan make:volt auth/profile --class
+  ```
 
-```php
-<?php
-use App\Models\User;
-use Mary\Traits\Toast;
-use Illuminate\Support\Str;
-use Livewire\Volt\Component;
-use Livewire\Attributes\Layout;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\{Auth, Hash};
+  ```html
+  <?php
+  use App\Models\User;
+  use Mary\Traits\Toast;
+  use Illuminate\Support\Str;
+  use Livewire\Volt\Component;
+  use Livewire\Attributes\Layout;
+  use Illuminate\Validation\Rule;
+  use Illuminate\Support\Facades\{Auth, Hash};
+  
+  new #[Title('Profile')] #[Layout('components.layouts.auth')]
+  class extends Component {
+      use Toast;
+  
+      public User $user;
+      public string $email = '';
+      public string $password = '';
+      public string $password_confirmation = '';
+  
+      public function mount(): void {
+          $this->user = Auth::user();
+          $this->email = $this->user->email;
+      }
+  
+      public function save(): void {
+          $data = $this->validate([
+              'email' => ['required', 'email', Rule::unique('users')->ignore($this->user->id)],
+              'password' => 'confirmed',
+          ]);
+  
+          if (!empty($data['password'])) {
+              $data['password'] = Hash::make($data['password']);
+          }
+  
+          $this->user->update($data);
+          $this->success(__('Profile updated with success.'), redirectTo: '/profile');
+      }
+  
+      public function deleteAccount(): void {
+          $this->user->delete();
+          $this->success(__('Account deleted with success.'), redirectTo: '/');
+      }
+  
+      public function generatePassword($length = 16): void {
+          $this->password = Str::random($length);
+          $this->password_confirmation = $this->password;
+      }
+  }; ?>
+  
+  <div>
+      <x-card class="flex items-center justify-center h-[96vh]">
+  
+          <a href="/" title="{{ __('Go on site') }}">
+              <x-card class="items-center py-0" title="{{ __('Update profile') }}" shadow separator
+                  progress-indicator></x-card>
+          </a>
+  
+          <x-form wire:submit="save">
+  
+              <x-avatar :image="Gravatar::get($user->email)" class="!w-24">
+                  <x-slot:title class="pl-2 text-xl">
+                      {{ $user->name }}
+                  </x-slot:title>
+                  <x-slot:subtitle class="flex flex-col gap-1 pl-2 mt-2 text-gray-500">
+                      <x-icon name="o-hand-raised" label="{!! __('Your name can\'t be changed') !!}" />
+                      <a href="https://fr.gravatar.com/" target="_blank" title=" {{ __('Go on Gravatar!') }} ">
+                          <x-icon name="c-user" label="{{ __('You can change your profile picture on Gravatar') }}" />
+                      </a>
+                  </x-slot:subtitle>
+              </x-avatar>
+  
+              <x-input label="{{ __('E-mail') }}" wire:model="email" icon="o-envelope" inline /><hr>
+              <x-input label="{{ __('Password') }}" wire:model="password" icon="o-key" inline />
+              <x-input label="{{ __('Confirm Password') }}" wire:model="password_confirmation" icon="o-key" inline />
+              <x-button label="{{ __('Generate a secure password') }}" wire:click="generatePassword()" icon="m-wrench"
+                  class="btn-outline btn-sm" />
+  
+              <x-slot:actions>
+                  <x-button label="{{ __('Cancel') }}" link="/" class="btn-ghost" title=" {{ __('Return on site') }} "/>
+                  <x-button label="{{ __('Delete account') }}" icon="c-hand-thumb-down"
+                      wire:confirm="{{ __('Are you sure to delete your account?') }}" wire:click="deleteAccount"
+                      class="btn-warning" />
+                  <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit"
+                      class="btn-primary" />
+              </x-slot:actions>
+  
+          </x-form>
+      </x-card>
+  </div>
+  ```
 
-new #[Title('Profile')] #[Layout('components.layouts.auth')]
-class extends Component {
-    use Toast;
+### Traductions pour Profile <!-- markmap: fold -->
 
-    public User $user;
-    public string $email = '';
-    public string $password = '';
-    public string $password_confirmation = '';
-
-    public function mount(): void {
-        $this->user = Auth::user();
-        $this->email = $this->user->email;
-    }
-
-    public function save(): void {
-        $data = $this->validate([
-            'email' => ['required', 'email', Rule::unique('users')->ignore($this->user->id)],
-            'password' => 'confirmed',
-        ]);
-
-        if (!empty($data['password'])) {
-            $data['password'] = Hash::make($data['password']);
-        }
-
-        $this->user->update($data);
-        $this->success(__('Profile updated with success.'), redirectTo: '/profile');
-    }
-
-    public function deleteAccount(): void {
-        $this->user->delete();
-        $this->success(__('Account deleted with success.'), redirectTo: '/');
-    }
-
-    public function generatePassword($length = 16): void {
-        $this->password = Str::random($length);
-        $this->password_confirmation = $this->password;
-    }
-}; ?>
-
-<div>
-    <x-card class="flex items-center justify-center h-[96vh]">
-
-        <a href="/" title="{{ __('Go on site') }}">
-            <x-card class="items-center py-0" title="{{ __('Update profile') }}" shadow separator
-                progress-indicator></x-card>
-        </a>
-
-        <x-form wire:submit="save">
-
-            <x-avatar :image="Gravatar::get($user->email)" class="!w-24">
-                <x-slot:title class="pl-2 text-xl">
-                    {{ $user->name }}
-                </x-slot:title>
-                <x-slot:subtitle class="flex flex-col gap-1 pl-2 mt-2 text-gray-500">
-                    <x-icon name="o-hand-raised" label="{!! __('Your name can\'t be changed') !!}" />
-                    <a href="https://fr.gravatar.com/" target="_blank" title=" {{ __('Go on Gravatar!') }} ">
-                        <x-icon name="c-user" label="{{ __('You can change your profile picture on Gravatar') }}" />
-                    </a>
-                </x-slot:subtitle>
-            </x-avatar>
-
-            <x-input label="{{ __('E-mail') }}" wire:model="email" icon="o-envelope" inline /><hr>
-            <x-input label="{{ __('Password') }}" wire:model="password" icon="o-key" inline />
-            <x-input label="{{ __('Confirm Password') }}" wire:model="password_confirmation" icon="o-key" inline />
-            <x-button label="{{ __('Generate a secure password') }}" wire:click="generatePassword()" icon="m-wrench"
-                class="btn-outline btn-sm" />
-
-            <x-slot:actions>
-                <x-button label="{{ __('Cancel') }}" link="/" class="btn-ghost" title=" {{ __('Return on site') }} "/>
-                <x-button label="{{ __('Delete account') }}" icon="c-hand-thumb-down"
-                    wire:confirm="{{ __('Are you sure to delete your account?') }}" wire:click="deleteAccount"
-                    class="btn-warning" />
-                <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit"
-                    class="btn-primary" />
-            </x-slot:actions>
-
-        </x-form>
-    </x-card>
-</div>
-```
-
-### Traductions pour Profile \<!-- markmap: fold -->
-
-```json
-"Update profile": "Modifier le profil",
-"Your name can't be changed": "Votre nom ne peut pas être modifié",
-"You can change your profile picture on Gravatar": "Vous pouvez changer votre image de profil sur Gravatar",
-"Go on Gravatar!": "Vous rendre sur Gravatar !",
-"Generate a secure password": "Créer un mot de passe sécurisé",
-"Profile updated with success.": "Profil mis à jour avec succès.",
-"Delete account": "Supprimer le compte",
-"Are you sure to delete your account?": "Êtes-vous sûr de vouloir supprimer votre compte ?",
-"Profile": "Profil",
-"Go on site": "Allez sur le site",
-"Return on site": "Retourner sur le site"
-```
+  ```json
+  "Update profile": "Modifier le profil",
+  "Your name can't be changed": "Votre nom ne peut pas être modifié",
+  "You can change your profile picture on Gravatar": "Vous pouvez changer votre image de profil sur Gravatar",
+  "Go on Gravatar!": "Vous rendre sur Gravatar !",
+  "Generate a secure password": "Créer un mot de passe sécurisé",
+  "Profile updated with success.": "Profil mis à jour avec succès.",
+  "Delete account": "Supprimer le compte",
+  "Are you sure to delete your account?": "Êtes-vous sûr de vouloir supprimer votre compte ?",
+  "Profile": "Profil",
+  "Go on site": "Allez sur le site",
+  "Return on site": "Retourner sur le site"
+  ```
 
 ### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-le-profil](https://laravel.sillo.org/posts/mon-cms-le-profil)***
 
