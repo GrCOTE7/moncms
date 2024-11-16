@@ -3704,268 +3704,270 @@ class extends Component {
 
 ### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-le-profil](https://laravel.sillo.org/posts/mon-cms-le-profil)***
 
-## - xLes favoris <!-- markmap: fold -->
+## - Les favoris <!-- markmap: fold -->
 
-### Fonctionnalité des Favoris \<!-- markmap: fold -->
+### Fonctionnalité des Favoris <!-- markmap: fold -->
 
-#### Migration Favoris \<!-- markmap: fold -->
+#### Migration Favoris <!-- markmap: fold -->
 
-```php
-php artisan make:migration create_favorites_table
-```
+  ```bash
+  php artisan make:migration create_favorites_table
+  ```
 
-```php
-public function up(): void {
-    Schema::create('favorites', function (Blueprint $table) {
-        $table->id();
-        $table->foreignId('post_id')->constrained()->onDelete('cascade');
-        $table->foreignId('user_id')->constrained()->onDelete('cascade');
-    });
-}
-```
+  ```php
+  public function up(): void {
+      Schema::create('favorites', function (Blueprint $table) {
+          $table->id();
+          $table->foreignId('post_id')->constrained()->onDelete('cascade');
+          $table->foreignId('user_id')->constrained()->onDelete('cascade');
+      });
+  }
+  ```
 
-```php
-php artisan migrate
-```
+  ```bash
+  php artisan migrate
+  ```
 
-#### Relation n:n (User & Post) \<!-- markmap: fold -->
+#### Relation n:n (User & Post) <!-- markmap: fold -->
 
-    À noter :
-    Comme la convention de nommage de table pivot est non respectée
+* À noter :
+    Comme la convention de nommage de table pivot n'est pas respectée
     (Devrait être 'posts_users' mais est 'favorites'), on doit
     préciser ce nom dans les relations BelongsToMany
   
-    Models/User.php :
+* Models/**User.php** :
 
-```php
-use Illuminate\Database\Eloquent\Relations\{ HasMany, BelongsToMany };
-...
-public function favoritePosts(): BelongsToMany {
-    return $this->belongsToMany(Post::class, 'favorites');
-}
-```
+  ```php
+  use Illuminate\Database\Eloquent\Relations\{ HasMany, BelongsToMany };
+  ...
+  public function favoritePosts(): BelongsToMany {
+      return $this->belongsToMany(Post::class, 'favorites');
+  }
+  ```
 
-    Models/Post.php :
+* Models/**Post.php** :
 
-```php
-use Illuminate\Database\Eloquent\Relations\{ HasMany, BelongsTo, BelongsToMany };
-...
-public function favoritedByUsers(): BelongsToMany {
-    return $this->belongsToMany(User::class, 'favorites');
-}
-```
+  ```php
+  use Illuminate\Database\Eloquent\Relations\{ HasMany, BelongsTo, BelongsToMany };
+  ...
+  public function favoritedByUsers(): BelongsToMany {
+      return $this->belongsToMany(User::class, 'favorites');
+  }
+  ```
 
-#### PostRepository: getPostBySlug() \<!-- markmap: fold -->
+#### PostRepository: getPostBySlug() <!-- markmap: fold -->
 
-    Vérifier en plus si l'user a mis le post en favori :
+* Vérifier en plus si l'user a mis le post en favori :
 
-```php
-public function getPostBySlug(string $slug): Post {
-    $userId = auth()->id();
-  
-    return Post::with('user:id,name', 'category')
-        ->withCount('validComments')
-        ->withExists([
-            'favoritedByUsers as is_favorited' => function ($query) use ($userId) {
-                $query->where('user_id', $userId);
-            },
-      ])
-      ->where('slug', $slug)->firstOrFail();
-}
-```
+* ```php
+  public function getPostBySlug(string $slug): Post {
+      $userId = auth()->id();
+    
+      return Post::with('user:id,name', 'category')
+          ->withCount('validComments')
+          ->withExists([
+              'favoritedByUsers as is_favorited' => function ($query) use ($userId) {
+                  $query->where('user_id', $userId);
+              },
+        ])
+        ->where('slug', $slug)->firstOrFail();
+  }
+  ```
 
-#### Route Favoris \<!-- markmap: fold -->
+#### Route Favoris <!-- markmap: fold -->
 
-```php
-Route::middleware('auth')->group(function () {
-    ...
-    Volt::route('/favorites', 'index')->name('posts.favorites');
-});
-```
-
-#### Lien Favoris dans posts.show \<!-- markmap: fold -->
-
-    On affiche l'icône étoile pour mettre en favoris
-
-    ou retirer l'article des favoris :
-
-```php
-public function favoritePost(): void {
-    $user = auth()->user();
-
-    if ($user) {
-        $user->favoritePosts()->attach($this->post->id);
-        $this->post->is_favorited = true;
-    }
-}
-
-public function unfavoritePost(): void {
-    $user = auth()->user();
-
-    if ($user) {
-        $user->favoritePosts()->detach($this->post->id);
-        $this->post->is_favorited = false;
-    }
-}
-...
-<div id="top" class="flex justify-end gap-4">
-    @auth
-        <x-popover>
-            <x-slot:trigger>
-                @if ($post->is_favorited)
-                    <x-button icon="s-star" wire:click="unfavoritePost" spinner
-                        class="text-yellow-500 btn-ghost btn-sm" />
-                @else
-                    <x-button icon="s-star" wire:click="favoritePost" spinner class="btn-ghost btn-sm" />
-                @endif
-            </x-slot:trigger>
-            <x-slot:content class="pop-small">
-                @if ($post->is_favorited)
-                    @lang('Remove from favorites')
-                @else
-                    @lang('Bookmark this post')
-                @endif
-            </x-slot:content>
-        </x-popover>
-    @endauth
-    ...
-</div>
-```
-
-```php
-"Bookmark this post": "Marquer cet article dans vos favoris",
-"Remove from favorites": "Supprimer de vos favoris"
-```
-
-#### PostRepository pour "is_favorited" \<!-- markmap: fold -->
-
-    Si connecté, trouver ses articles favoris :
-
-```php
-use Illuminate\Support\Facades\DB;
-...
-protected function getBaseQuery(): Builder {
- ...
-    return Post::select('id', 'slug', 'image', 'title', 'user_id', 'category_id', 'created_at', 'pinned')
-    ...
-    ->when(auth()->check(), function ($query) {
-        $userId = auth()->id();
-        $query->addSelect([
-            'is_favorited' => DB::table('favorites')
-                ->selectRaw('1')
-                ->whereColumn('post_id', 'posts.id')
-                ->where('user_id', $userId)
-                ->limit(1)
-        ]);
-    });
-}
-```
-
-#### Page d'accueil (Homepage) \<!-- markmap: fold -->
-
-```php
-<x-slot:menu>
-    @if ($post->pinned)
-        <x-badge value="{{ __('Pinned') }}" class="p-3 badge-warning" />
-    @endif
-    @auth
-        @if ($post->is_favorited)
-            <x-icon name="s-star" class="w-6 h-6 text-yellow-500 cursor-pointer" />
-        @endif
-    @endauth
-</x-slot:menu>
-```
-
-#### Ajout de getFavoritePosts() dans PostRepository \<!-- markmap: fold -->
-
-```php
-use App\Models\{Category, Post, User};
-...
-public function getFavoritePosts(User $user): LengthAwarePaginator {
-
-    return $this->getBaseQuery()
-        ->whereHas('favoritedByUsers', function (Builder $query) {
-            $query->where('user_id', auth()->id());
-        })
-        ->latest()
-      ->paginate(config('app.pagination'));
-}
-```
-
-    Ajout du bouton dans navigation/navbar :
-
-```php
-        ...
-        @auth
-            @if ($user->favoritePosts()->exists())
-                <a title="{{ __('Your favorites posts') }}" href="{{ route('posts.favorites') }}"><x-icon name="s-star"
-                        class="w-7 h-7" /></a>
-            @endif
-        @endauth
-        <x-theme-toggle title="{{ __('Toggle theme') }}" class="w-4 h-8" />
-        <livewire:search />
-    </x-slot:actions>
-</x-nav>
-```
-
-#### Afficher la page Favoris \<!-- markmap: fold -->
-
-Composant index :
-
-    - On défini une nouvelle propriété $favorites
-    - mount() : On gère le cas où la requête est "/favorites" (On met la propriété favorites à true)
-    - getPosts() : Si la propriété favorites est à true, on appelle getFavoritePosts(auth()->user()) 
-    - Pour le HTML, on adapte alors le titre de la page :
-
-```php
-public bool $favorites     = false;
-
-public function mount(string $slug = '', string $param = ''): void {
-    $this->param = $param;
-  
-    if (request()->is('category/*')) {
-        $this->category = $this->getCategoryBySlug($slug);
-    } elseif (request()->is('favorites')) {
-        $this->favorites = true;
-    }
-}
-...
-public function getPosts(): LengthAwarePaginator {
-    ...
-    if ($this->favorites) {
-        return $postRepository->getFavoritePosts(auth()->user());
-    }     
-    return $postRepository->getPostsPaginate($this->category);
-}
-...
-@if ($category)
-    <x-header title="{{ __('Posts for category ') }} {{ $category->title }}" size="text-2xl sm:text-3xl md:text-4xl" />
-@elseif($param !== '')
-    <x-header title="{{ __('Posts for search ') }} '{{ $param }}'" size="text-2xl sm:text-3xl md:text-4xl" />
-@elseif($favorites)
-    <x-header title="{{ __('Your favorites posts') }}" size="text-2xl sm:text-3xl md:text-4xl" />
-@endif
-```
-
-```php
-"Your favorites posts": "Vos articles favoris",
-"Toggle theme": "Basculer le thème",
-```
-
-### Boutons pour scroller (Aller en bas et en haut) \<!-- markmap: fold -->
-
-    resources/css/app.css :
-
-```php
-html {
-    scroll-behavior: smooth;
-}
-```
-
-    posts.show :
-
-```php
+  ```php
+  Route::middleware('auth')->group(function () {
       ...
+      Volt::route('/favorites', 'index')->name('posts.favorites');
+  });
+  ```
+
+#### Lien Favoris dans posts.show <!-- markmap: fold -->
+
+* On affiche l'icône étoile pour mettre en favoris ou retirer l'article des favoris :
+
+* ```html
+  public function favoritePost(): void {
+      $user = auth()->user();
+  
+      if ($user) {
+          $user->favoritePosts()->attach($this->post->id);
+          $this->post->is_favorited = true;
+      }
+  }
+  
+  public function unfavoritePost(): void {
+      $user = auth()->user();
+  
+      if ($user) {
+          $user->favoritePosts()->detach($this->post->id);
+          $this->post->is_favorited = false;
+      }
+  }
+  ...
+  <div id="top" class="flex justify-end gap-4">
+      @auth
+          <x-popover>
+              <x-slot:trigger>
+                  @if ($post->is_favorited)
+                      <x-button icon="s-star" wire:click="unfavoritePost" spinner
+                          class="text-yellow-500 btn-ghost btn-sm" />
+                  @else
+                      <x-button icon="s-star" wire:click="favoritePost" spinner class="btn-ghost btn-sm" />
+                  @endif
+              </x-slot:trigger>
+              <x-slot:content class="pop-small">
+                  @if ($post->is_favorited)
+                      @lang('Remove from favorites')
+                  @else
+                      @lang('Bookmark this post')
+                  @endif
+              </x-slot:content>
+          </x-popover>
+      @endauth
+      ...
+  </div>
+  ```
+
+* ```json
+  "Bookmark this post": "Marquer cet article dans vos favoris",
+  "Remove from favorites": "Supprimer de vos favoris"
+  ```
+
+#### PostRepository pour "is_favorited" <!-- markmap: fold -->
+
+* Si connecté, trouver ses articles favoris :
+
+  ```php
+  use Illuminate\Support\Facades\DB;
+  ...
+  protected function getBaseQuery(): Builder {
+   ...
+      return Post::select('id', 'slug', 'image', 'title', 'user_id', 'category_id', 'created_at', 'pinned')
+      ...
+      ->when(auth()->check(), function ($query) {
+          $userId = auth()->id();
+          $query->addSelect([
+              'is_favorited' => DB::table('favorites')
+                  ->selectRaw('1')
+                  ->whereColumn('post_id', 'posts.id')
+                  ->where('user_id', $userId)
+                  ->limit(1)
+          ]);
+      });
+  }
+  ```
+
+#### Page d'accueil (Homepage) <!-- markmap: fold -->
+
+  ```html
+  <x-slot:menu>
+      @if ($post->pinned)
+          <x-badge value="{{ __('Pinned') }}" class="p-3 badge-warning" />
+      @endif
+      @auth
+          @if ($post->is_favorited)
+              <x-icon name="s-star" class="w-6 h-6 text-yellow-500 cursor-pointer" />
+          @endif
+      @endauth
+  </x-slot:menu>
+  ```
+
+#### Logique & lien des favoris <!-- markmap: fold -->
+
+* Ajout de getFavoritePosts() dans PostRepository
+
+* ```php
+  use App\Models\{Category, Post, User};
+  ...
+  public function getFavoritePosts(User $user): LengthAwarePaginator {
+  
+      return $this->getBaseQuery()
+          ->whereHas('favoritedByUsers', function (Builder $query) {
+              $query->where('user_id', auth()->id());
+          })
+          ->latest()
+        ->paginate(config('app.pagination'));
+  }
+  ```
+
+* Ajout du bouton des favoris éventuels de l'user dans navigation/navbar :
+
+  ```html
+          ...
+          @auth
+              @if ($user->favoritePosts()->exists())
+                  <a title="{{ __('Your favorites posts') }}" href="{{ route('posts.favorites') }}"><x-icon name="s-star"
+                          class="w-7 h-7" /></a>
+              @endif
+          @endauth
+          <x-theme-toggle title="{{ __('Toggle theme') }}" class="w-4 h-8" />
+          <livewire:search />
+      </x-slot:actions>
+  </x-nav>
+  ```
+
+#### Afficher la page Favoris <!-- markmap: fold -->
+
+* Composant index :
+
+* ```markdown
+  - On défini une nouvelle propriété $favorites
+  - mount() : On gère le cas où la requête est "/favorites" (On met la propriété favorites à true)
+  - getPosts() : Si la propriété favorites est à true, on appelle getFavoritePosts(auth()->user()) 
+  - Pour le HTML, on adapte alors le titre de la page :
+  ```
+  
+* ```html
+  public bool $favorites = false;
+  
+  public function mount(string $slug = '', string $param = ''): void {
+      $this->param = $param;
+    
+      if (request()->is('category/*')) {
+          $this->category = $this->getCategoryBySlug($slug);
+      } elseif (request()->is('favorites')) {
+          $this->favorites = true;
+      }
+  }
+  ...
+  public function getPosts(): LengthAwarePaginator {
+      ...
+      if ($this->favorites) {
+          return $postRepository->getFavoritePosts(auth()->user());
+      }     
+      return $postRepository->getPostsPaginate($this->category);
+  }
+  ...
+  @if ($category)
+      <x-header title="{{ __('Posts for category ') }} {{ $category->title }}" size="text-2xl sm:text-3xl md:text-4xl" />
+  @elseif($param !== '')
+      <x-header title="{{ __('Posts for search ') }} '{{ $param }}'" size="text-2xl sm:text-3xl md:text-4xl" />
+  @elseif($favorites)
+      <x-header title="{{ __('Your favorites posts') }}" size="text-2xl sm:text-3xl md:text-4xl" />
+  @endif
+  ```
+
+* ```json
+  "Your favorites posts": "Vos articles favoris",
+  "Toggle theme": "Basculer le thème",
+  ```
+
+### Boutons pour scroller (Aller en bas et en haut) <!-- markmap: fold -->
+
+* resources/css/**app.css** :
+
+  ```css
+  html {
+      scroll-behavior: smooth;
+  }
+  ```
+
+* posts.show :
+
+  ```html
+    ...
 
     <div id="top" class="flex justify-end gap-4">
 
@@ -3994,851 +3996,847 @@ html {
             </x-slot:content>
         </x-popover>
     </div>
+  
+  </div>
+  ```
 
-</div>
-```
-
-```php
-"To up": "Vers le haut",
-"To bottom": "Vers le bas"
-```
+* ```json
+  "To up": "Vers le haut",
+  "To bottom": "Vers le bas"
+  ```
 
 ### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-favoris](https://laravel.sillo.org/posts/mon-cms-les-favoris)***
 
 ## &nbsp;**II &nbsp;/ &nbsp; B A C K &nbsp;- &nbsp;O F F I C E &nbsp;:**
 
-## - xL'administration <!-- markmap: fold -->
+## - L'administration <!-- markmap: fold -->
 
 ### Gestion des rôles
 
-#### Model User : Admin ou Redac \<!-- markmap: fold -->
+#### Model User : Admin ou Redac <!-- markmap: fold -->
 
-```php
-public function isAdmin(): bool {
-    return 'admin' === $this->role;
-}
-
-public function isRedac(): bool {
-    return 'redac' === $this->role;
-}
-
-public function isAdminOrRedac(): bool {
-    return 'admin' === $this->role || 'redac' === $this->role;
-}
+  ```php
+  public function isAdmin(): bool {
+      return 'admin' === $this->role;
+  }
+  
+  public function isRedac(): bool {
+      return 'redac' === $this->role;
+  }
+  
+  public function isAdminOrRedac(): bool {
+      return 'admin' === $this->role || 'redac' === $this->role;
+  }
 ```
 
-#### Middlewares \<!-- markmap: fold -->
+#### Middlewares <!-- markmap: fold -->
 
 ##### **admin**
 
-```php
-php artisan make:middleware IsAdmin
-```
+  ```bash
+  php artisan make:middleware IsAdmin
+  ```
 
-```php
-public function handle(Request $request, Closure $next): Response
-{
-    if (!auth()->user()->isAdmin()) {
-        abort(403);
-    }
-  
-    return $next($request);
-}
-```
+  ```php
+  public function handle(Request $request, Closure $next): Response {
+      if (!auth()->user()->isAdmin()) {
+          abort(403);
+      }
+    
+      return $next($request);
+  }
+  ```
 
 ##### **adminOrRedac**
 
-```php
-php artisan make:middleware IsAdminOrRedac
-```
+  ```bash
+  php artisan make:middleware IsAdminOrRedac
+  ```
 
-```php
-public function handle(Request $request, Closure $next): Response
-{
-    if (!auth()->user()->isAdmin() && !auth()->user()->isRedac()) {
-        abort(403);
-    }
-  
-    return $next($request);
-}
-```
+  ```php
+  public function handle(Request $request, Closure $next): Response {
+      if (!auth()->user()->isAdmin() && !auth()->user()->isRedac()) {
+          abort(403);
+      }
+    
+      return $next($request);
+  }
+  ```
 
 ### Tableau de Bord
 
-#### Route \<!-- markmap: fold -->
+#### Route <!-- markmap: fold -->
 
-```php
-use App\Http\Middleware\IsAdminOrRedac;
-...
-Route::middleware('auth')->group(function () {
-    ...
-    Route::middleware(IsAdminOrRedac::class)->prefix('admin')->group(function () {
-        Volt::route('/', 'admin.index')->name('admin.root');        
-        Volt::route('/dashboard', 'admin.index')->name('admin');
-
-    });
-});
+  ```php
+  use App\Http\Middleware\IsAdminOrRedac;
+  ...
+  Route::middleware('auth')->group(function () {
+      ...
+      Route::middleware(IsAdminOrRedac::class)->prefix('admin')->group(function () {
+          Volt::route('/', 'admin.index')->name('admin.root');        
+          Volt::route('/dashboard', 'admin.index')->name('admin');
+  
+      });
+  });
 ```
 
-#### SideBar \<!-- markmap: fold -->
+#### SideBar <!-- markmap: fold -->
 
 ##### Création Sidebar de l'admin
 
-```php
-php artisan make:volt admin/sidebar --class
-```
+  ```bash
+  php artisan make:volt admin/sidebar --class
+  ```
 
-```php
-<?php
+  ```html
+  <?php
+  use Livewire\Volt\Component;
+  use Illuminate\Support\Facades\{Auth, Session};
 
-use Illuminate\Support\Facades\{Auth, Session};
-use Livewire\Volt\Component;
-
-new class() extends Component {
-  public function logout(): void {
-    Auth::guard('web')->logout();
-  
-    Session::invalidate();
-    Session::regenerateToken();
-  
-    $this->redirect('/');
-  }
-}; ?>
-
-<div>
-    <x-menu activate-by-route>
-        <x-menu-separator />
-        <x-list-item :item="Auth::user()" value="name" sub-value="email" no-separator no-hover class="-mx-2 !-my-2 rounded">
-            <x-slot:actions>
-                <x-button icon="o-power" wire:click="logout" class="btn-circle btn-ghost btn-xs"
-                    tooltip-left="{{ __('Logout') }}" no-wire-navigate />
-            </x-slot:actions>
-        </x-list-item>
-        <x-menu-separator />
-        <x-menu-item title="{{ __('Dashboard') }}" icon="s-building-office-2" link="{{ route('admin') }}" />      
-        <x-menu-item icon="m-arrow-right-end-on-rectangle" title="{{ __('Go on site') }}" link="/" />
-        <x-menu-item>
-            <x-theme-toggle />
-        </x-menu-item>
-    </x-menu>
-</div>
-```
-
-##### À la fin du mémo complet, vous devrez obtenir cet [aspect du menu admin](https://prnt.sc/n_CyeC0MgHlB)
-
-#### Layout \<!-- markmap: fold -->
-
-    Créer views/layouts/admin.blade.php :
-
-```php
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ isset($title) ? $title . ' | ' . config('app.name') : config('app.name') }}</title>
-
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-
-<body class="min-h-screen font-sans antialiased bg-base-200/50 dark:bg-base-200">
-
-    {{-- MAIN --}}
-    <x-main full-width>
-
-        {{-- SIDEBAR --}}
-        <x-slot:sidebar drawer="main-drawer" collapsible class="bg-base-100">
-            <livewire:admin.sidebar />
-        </x-slot:sidebar>
-
-        <x-slot:content>
-            <!-- Drawer toggle for "main-drawer" -->
-            <label for="main-drawer" class="mr-3 lg:hidden">
-                <x-icon name="o-bars-3" class="cursor-pointer" />
-            </label>
-            {{ $slot }}
-        </x-slot:content>
-
-    </x-main>
-
-    {{--  TOAST area --}}
-    <x-toast />
-
-</body>
-
-</html>
-```
-
-#### Composant \<!-- markmap: fold -->
-
-```php
-php artisan make:volt admin/index --class
-```
-
-```php
-<?php
-use App\Models\{Comment, Page, Post, User};
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Auth;
-use Livewire\Attributes\{Layout, Title};
-use Livewire\Volt\Component;
-use Mary\Traits\Toast;
-
-new #[Title('Dashboard')] #[Layout('components.layouts.admin')] class extends Component {
-    use Toast;
-  
-    public array $headersPosts;
-    public bool $openGlance = true;
-  
-    public function mount(): void {
-        $this->headersPosts = [['key' => 'date', 'label' => __('Date')], ['key' => 'title', 'label' => __('Title')]];
+  new class() extends Component {
+    public function logout(): void {
+      Auth::guard('web')->logout();
+    
+      Session::invalidate();
+      Session::regenerateToken();
+    
+      $this->redirect('/');
     }
+  }; ?>
+
+  <div>
+      <x-menu activate-by-route>
+          <x-menu-separator />
+          <x-list-item :item="Auth::user()" value="name" sub-value="email" no-separator no-hover class="-mx-2 !-my-2 rounded">
+              <x-slot:actions>
+                  <x-button icon="o-power" wire:click="logout" class="btn-circle btn-ghost btn-xs"
+                      tooltip-left="{{ __('Logout') }}" no-wire-navigate />
+              </x-slot:actions>
+          </x-list-item>
+          <x-menu-separator />
+          <x-menu-item title="{{ __('Dashboard') }}" icon="s-building-office-2" link="{{ route('admin') }}" />      
+          <x-menu-item icon="m-arrow-right-end-on-rectangle" title="{{ __('Go on site') }}" link="/" />
+          <x-menu-item>
+              <x-theme-toggle />
+          </x-menu-item>
+      </x-menu>
+  </div>
+  ```
+
+#### Layout <!-- markmap: fold -->
+
+* Créer views/layouts/admin.blade.php :
+
+  ```html
+  <!DOCTYPE html>
+  <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
   
-    public function deleteComment(Comment $comment): void {
-        $comment->delete();
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+      <meta name="csrf-token" content="{{ csrf_token() }}">
+      <title>{{ isset($title) ? $title . ' | ' . config('app.name') : config('app.name') }}</title>
   
-        $this->warning('Comment deleted', __('Good bye!'), position: 'toast-bottom');
-    }
+      @vite(['resources/css/app.css', 'resources/js/app.js'])
+  </head>
   
-    public function with(): array {
-        $user    = Auth::user();
-        $isRedac = $user->isRedac();
-        $userId  = $user->id;
+  <body class="min-h-screen font-sans antialiased bg-base-200/50 dark:bg-base-200">
   
-        return [
-            'pages'          => Page::select('id', 'title', 'slug')->get(),
-            'posts'          => Post::select('id', 'title', 'slug', 'user_id', 'created_at', 'updated_at')->when($isRedac, fn (Builder $q) => $q->where('user_id', $userId))->latest()->get(),
-            'commentsNumber' => Comment::when($isRedac, fn (Builder $q) => $q->whereRelation('post', 'user_id', $userId))->count(),
-            'comments'       => Comment::with('user', 'post:id,title,slug')->when($isRedac, fn (Builder $q) => $q->whereRelation('post', 'user_id', $userId))->latest()->take(5)->get(),
-            'users'          => User::count(),
-        ];
-    }
-}; ?>
+      {{-- MAIN --}}
+      <x-main full-width>
+  
+          {{-- SIDEBAR --}}
+          <x-slot:sidebar drawer="main-drawer" collapsible class="bg-base-100">
+              <livewire:admin.sidebar />
+          </x-slot:sidebar>
+  
+          <x-slot:content>
+              <!-- Drawer toggle for "main-drawer" -->
+              <label for="main-drawer" class="mr-3 lg:hidden">
+                  <x-icon name="o-bars-3" class="cursor-pointer" />
+              </label>
+              {{ $slot }}
+          </x-slot:content>
+  
+      </x-main>
+  
+      {{--  TOAST area --}}
+      <x-toast />
+  
+  </body>
+  
+  </html>
+  ```
 
-<div>
-    <x-collapse wire:model="openGlance" class="shadow-md">
-        <x-slot:heading>
-            @lang('In a glance')
-        </x-slot:heading>
-        <x-slot:content class="flex flex-wrap gap-4">
+#### Composant <!-- markmap: fold -->
 
-            <a href="#" class="flex-grow">
-                <x-stat title="{{ __('Posts') }}" description="" value="{{ $posts->count() }}" icon="s-document-text"
-                    class="shadow-hover" />
-            </a>
+  ```bash
+  php artisan make:volt admin/index --class
+  ```
 
-            @if (Auth::user()->isAdmin())
-                <a href="#" class="flex-grow">
-                    <x-stat title="{{ __('Pages') }}" value="{{ $pages->count() }}" icon="s-document"
-                        class="shadow-hover" />
-                </a>
-                <a href="#" class="flex-grow">
-                    <x-stat title="{{ __('Users') }}" value="{{ $users }}" icon="s-user"
-                        class="shadow-hover" />
-                </a>
-            @endif
-            <a href="#" class="flex-grow">
-                <x-stat title="{{ __('Comments') }}" value="{{ $commentsNumber }}" icon="c-chat-bubble-left"
-                    class="shadow-hover" />
-            </a>
-        </x-slot:content>
-    </x-collapse>
+  ```html
+  <?php
+  use Mary\Traits\Toast;
+  use Livewire\Volt\Component;
+  use Illuminate\Support\Facades\Auth;
+  use Livewire\Attributes\{Layout, Title};
+  use Illuminate\Database\Eloquent\Builder;
+  use App\Models\{Comment, Page, Post, User};
+  
+  new #[Title('Dashboard')] #[Layout('components.layouts.admin')] class extends Component {
+      use Toast;
+    
+      public array $headersPosts;
+      public bool $openGlance = true;
+    
+      public function mount(): void {
+          $this->headersPosts = [['key' => 'date', 'label' => __('Date')], ['key' => 'title', 'label' => __('Title')]];
+      }
+    
+      public function deleteComment(Comment $comment): void {
+          $comment->delete();
+    
+          $this->warning('Comment deleted', __('Good bye!'), position: 'toast-bottom');
+      }
+    
+      public function with(): array {
+          $user    = Auth::user();
+          $isRedac = $user->isRedac();
+          $userId  = $user->id;
+    
+          return [
+              'pages'          => Page::select('id', 'title', 'slug')->get(),
+              'posts'          => Post::select('id', 'title', 'slug', 'user_id', 'created_at', 'updated_at')->when($isRedac, fn (Builder $q) => $q->where('user_id', $userId))->latest()->get(),
+              'commentsNumber' => Comment::when($isRedac, fn (Builder $q) => $q->whereRelation('post', 'user_id', $userId))->count(),
+              'comments'       => Comment::with('user', 'post:id,title,slug')->when($isRedac, fn (Builder $q) => $q->whereRelation('post', 'user_id', $userId))->latest()->take(5)->get(),
+              'users'          => User::count(),
+          ];
+      }
+  }; ?>
+  
+  <div>
+      <x-collapse wire:model="openGlance" class="shadow-md">
+          <x-slot:heading>
+              @lang('In a glance')
+          </x-slot:heading>
+          <x-slot:content class="flex flex-wrap gap-4">
+  
+              <a href="#" class="flex-grow">
+                  <x-stat title="{{ __('Posts') }}" description="" value="{{ $posts->count() }}" icon="s-document-text"
+                      class="shadow-hover" />
+              </a>
+  
+              @if (Auth::user()->isAdmin())
+                  <a href="#" class="flex-grow">
+                      <x-stat title="{{ __('Pages') }}" value="{{ $pages->count() }}" icon="s-document"
+                          class="shadow-hover" />
+                  </a>
+                  <a href="#" class="flex-grow">
+                      <x-stat title="{{ __('Users') }}" value="{{ $users }}" icon="s-user"
+                          class="shadow-hover" />
+                  </a>
+              @endif
+              <a href="#" class="flex-grow">
+                  <x-stat title="{{ __('Comments') }}" value="{{ $commentsNumber }}" icon="c-chat-bubble-left"
+                      class="shadow-hover" />
+              </a>
+          </x-slot:content>
+      </x-collapse>
+  
+      <br>
+  
+      @foreach ($comments as $comment)
+          @if (!$comment->user->valid)
+              <x-alert title="{!! __('Comment to valid from ') . $comment->user->name !!}" description="{!! $comment->body !!}" icon="c-chat-bubble-left"
+                  class="shadow-md alert-warning">
+                  <x-slot:actions>
+                      <x-button link="#" label="{!! __('Show the comments') !!}" />
+                  </x-slot:actions>
+              </x-alert>
+              <br>
+          @endif
+      @endforeach
+  
+      <x-collapse class="shadow-md">
+          <x-slot:heading>
+              @lang('Recent posts')
+          </x-slot:heading>
+          <x-slot:content>
+              <x-table :headers="$headersPosts" :rows="$posts->take(5)" striped>
+                  @scope('cell_date', $post)
+                      @lang('Created') {{ $post->created_at->diffForHumans() }}
+                      @if ($post->updated_at != $post->created_at)
+                          <br>
+                          @lang('Updated') {{ $post->updated_at->diffForHumans() }}
+                      @endif
+                  @endscope
+                  @scope('actions', $post)
+                      <x-popover>
+                          <x-slot:trigger>
+                              <x-button icon="s-document-text" link="{{ route('posts.show', $post->slug) }}" spinner class="btn-ghost btn-sm" />                          
+                          </x-slot:trigger>
+                          <x-slot:content class="pop-small">
+                              @lang('Show post')
+                          </x-slot:content>
+                      </x-popover>
+                  @endscope
+              </x-table>
+          </x-slot:content>
+      </x-collapse>
+  
+      <br>
+  
+      <x-collapse class="shadow-md">
+          <x-slot:heading>
+              @lang('Recent Comments')
+          </x-slot:heading>
+          <x-slot:content>
+              @foreach ($comments as $comment)
+                  <x-list-item :item="$comment" no-separator no-hover>
+                      <x-slot:avatar>
+                          <x-avatar :image="Gravatar::get($comment->user->email)">
+                              <x-slot:title>
+                                  {{ $comment->user->name }}
+                              </x-slot:title>
+                          </x-avatar>
+                      </x-slot:avatar>
+                      <x-slot:value>
+                          @lang ('in post:') {{ $comment->post->title }}
+                      </x-slot:value>
+                      <x-slot:actions>
+                          <x-popover>
+                              <x-slot:trigger>
+                                  <x-button icon="c-eye" link="#" spinner class="btn-ghost btn-sm" />                       
+                              </x-slot:trigger>
+                              <x-slot:content class="pop-small">
+                                  @lang('Edit or answer')
+                              </x-slot:content>
+                          </x-popover>
+                          <x-popover>
+                              <x-slot:trigger>
+                                  <x-button icon="s-document-text" link="{{ route('posts.show', $comment->post->slug) }}" spinner class="btn-ghost btn-sm" />                     
+                              </x-slot:trigger>
+                              <x-slot:content class="pop-small">
+                                  @lang('Show post')
+                              </x-slot:content>
+                          </x-popover>
+                          <x-popover>
+                              <x-slot:trigger>
+                                  <x-button icon="o-trash" wire:click="deleteComment({{ $comment->id }})"
+                                      wire:confirm="{{ __('Are you sure to delete this comment?') }}" 
+                                      spinner class="text-red-500 btn-ghost btn-sm" />                 
+                              </x-slot:trigger>
+                              <x-slot:content class="pop-small">
+                                  @lang('Delete')
+                              </x-slot:content>
+                          </x-popover>
+                      </x-slot:actions>
+                  </x-list-item>
+                  <p class="ml-16">{!! Str::words(nl2br($comment->body), 20, ' ...') !!}</p>
+                  <br>
+              @endforeach
+          </x-slot:content>
+      </x-collapse>
+  </div>
+  ```
 
-    <br>
+#### Traductions Dashboard <!-- markmap: fold -->
 
-    @foreach ($comments as $comment)
-        @if (!$comment->user->valid)
-            <x-alert title="{!! __('Comment to valid from ') . $comment->user->name !!}" description="{!! $comment->body !!}" icon="c-chat-bubble-left"
-                class="shadow-md alert-warning">
-                <x-slot:actions>
-                    <x-button link="#" label="{!! __('Show the comments') !!}" />
-                </x-slot:actions>
-            </x-alert>
-            <br>
-        @endif
-    @endforeach
+  ```json
+  "In a glance": "En un coup d'oeil",
+  "Recent posts": "Articles récents",
+  "Show post": "Afficher l'article",
+  "in post:": "dans l'article :",
+  "Users": "Utilisateurs",
+  "Dashboard": "Tableau de bord",
+  "Edit or answer": "Modifier ou répondre",
+  "Posts": "Articles",
+  "Recent Comments": "Commentaires récents",
+  "Comment to valid from ": "Commentaire à valider de "
+  ```
 
-    <x-collapse class="shadow-md">
-        <x-slot:heading>
-            @lang('Recent posts')
-        </x-slot:heading>
-        <x-slot:content>
-            <x-table :headers="$headersPosts" :rows="$posts->take(5)" striped>
-                @scope('cell_date', $post)
-                    @lang('Created') {{ $post->created_at->diffForHumans() }}
-                    @if ($post->updated_at != $post->created_at)
-                        <br>
-                        @lang('Updated') {{ $post->updated_at->diffForHumans() }}
-                    @endif
-                @endscope
-                @scope('actions', $post)
-                    <x-popover>
-                        <x-slot:trigger>
-                            <x-button icon="s-document-text" link="{{ route('posts.show', $post->slug) }}" spinner class="btn-ghost btn-sm" />                          
-                        </x-slot:trigger>
-                        <x-slot:content class="pop-small">
-                            @lang('Show post')
-                        </x-slot:content>
-                    </x-popover>
-                @endscope
-            </x-table>
-        </x-slot:content>
-    </x-collapse>
-
-    <br>
-
-    <x-collapse class="shadow-md">
-        <x-slot:heading>
-            @lang('Recent Comments')
-        </x-slot:heading>
-        <x-slot:content>
-            @foreach ($comments as $comment)
-                <x-list-item :item="$comment" no-separator no-hover>
-                    <x-slot:avatar>
-                        <x-avatar :image="Gravatar::get($comment->user->email)">
-                            <x-slot:title>
-                                {{ $comment->user->name }}
-                            </x-slot:title>
-                        </x-avatar>
-                    </x-slot:avatar>
-                    <x-slot:value>
-                        @lang ('in post:') {{ $comment->post->title }}
-                    </x-slot:value>
-                    <x-slot:actions>
-                        <x-popover>
-                            <x-slot:trigger>
-                                <x-button icon="c-eye" link="#" spinner class="btn-ghost btn-sm" />                       
-                            </x-slot:trigger>
-                            <x-slot:content class="pop-small">
-                                @lang('Edit or answer')
-                            </x-slot:content>
-                        </x-popover>
-                        <x-popover>
-                            <x-slot:trigger>
-                                <x-button icon="s-document-text" link="{{ route('posts.show', $comment->post->slug) }}" spinner class="btn-ghost btn-sm" />                     
-                            </x-slot:trigger>
-                            <x-slot:content class="pop-small">
-                                @lang('Show post')
-                            </x-slot:content>
-                        </x-popover>
-                        <x-popover>
-                            <x-slot:trigger>
-                                <x-button icon="o-trash" wire:click="deleteComment({{ $comment->id }})"
-                                    wire:confirm="{{ __('Are you sure to delete this comment?') }}" 
-                                    spinner class="text-red-500 btn-ghost btn-sm" />                 
-                            </x-slot:trigger>
-                            <x-slot:content class="pop-small">
-                                @lang('Delete')
-                            </x-slot:content>
-                        </x-popover>
-                    </x-slot:actions>
-                </x-list-item>
-                <p class="ml-16">{!! Str::words(nl2br($comment->body), 20, ' ...') !!}</p>
-                <br>
-            @endforeach
-        </x-slot:content>
-    </x-collapse>
-</div>
-```
-
-#### Traductions Dashboard \<!-- markmap: fold -->
-
-```json
-"In a glance": "En un coup d'oeil",
-"Recent posts": "Articles récents",
-"Show post": "Afficher l'article",
-"in post:": "dans l'article :",
-"Users": "Utilisateurs",
-"Dashboard": "Tableau de bord",
-"Edit or answer": "Modifier ou répondre",
-"Posts": "Articles",
-"Recent Comments": "Commentaires récents",
-"Comment to valid from ": "Commentaire à valider de "
-```
-
-#### Lien dans les menus \<!-- markmap: fold -->
+#### Lien dans les menus <!-- markmap: fold -->
 
 ##### Dans navigation.navbar
 
-```php
-<x-slot:actions>
-    <span class="hidden sm:block">
-        ...
-        @if ($user = auth()->user())
-            <x-dropdown>
-                ...User name
-                @if ($user->isAdminOrRedac())
-                    <x-menu-item title="{{ __('Administration') }}" link="{{ route('admin') }}" />
-                @endif
-                <x-menu-separator />
-                ... Profile
-                <x-menu-separator />
-                ... Logout
-            </x-dropdown>
-        @else ...
+  ```html
+  <x-slot:actions>
+      <span class="hidden sm:block">
+          ...
+          @if ($user = auth()->user())
+              <x-dropdown>
+                  ...User name
+                  @if ($user->isAdminOrRedac())
+                      <x-menu-item title="{{ __('Administration') }}" link="{{ route('admin') }}" />
+                  @endif
+                  <x-menu-separator />
+                  ... Profile
+                  <x-menu-separator />
+                  ... Logout
+              </x-dropdown>
+          @else ...
 ```
 
 ##### Dans navigation.sidebar
 
-```php
-    ... Logout
-    </x-list-item>
-    @if ($user->isAdminOrRedac())
-        <x-menu-item title="{{ __('Administration') }}" icon="s-building-office-2" link="{{ route('admin') }}" />
-    @endif
-    <x-menu-separator />
-    ... Profile
-```
+  ```html
+      ... Logout
+      </x-list-item>
+      @if ($user->isAdminOrRedac())
+          <x-menu-item title="{{ __('Administration') }}" icon="s-building-office-2" link="{{ route('admin') }}" />
+      @endif
+      <x-menu-separator />
+      ... Profile
+  ```
 
-#### Redac & Admin: Redirection lors du login \<!-- markmap: fold -->
+#### Redac & Admin: Redirection lors du login <!-- markmap: fold -->
 
-    Composant auth.login :
+* Composant auth.login :
 
-```php
-public function login() {
-    ...
-    if (auth()->user()->isAdmin()) {
-        return redirect()->intended('/admin/dashboard');
-    }
-    ... $this->redirectIntended()...
-}
-```
+  ```php
+  public function login() {
+      ...
+      if (auth()->user()->isAdmin()) {
+          return redirect()->intended('/admin/dashboard');
+      }
+      ... $this->redirectIntended()...
+  }
+  ```
 
 ### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-ladministration](https://laravel.sillo.org/posts/mon-cms-ladministration)***
 
-## - xLes Articles <!-- markmap: fold -->
+## - Les Articles <!-- markmap: fold -->
 
-### Tableau des articles \<!-- markmap: fold -->
+### Tableau des articles <!-- markmap: fold -->
 
-#### Route Articles \<!-- markmap: fold -->
+#### Route Articles <!-- markmap: fold -->
 
-```php
-Route::middleware('auth')->group(function () {
-    ...
-    Route::middleware(IsAdminOrRedac::class)->prefix('admin')->group(function () {
-        ...
-        Volt::route('/posts/index', 'admin.posts.index')->name('posts.index');
+  ```php
+  Route::middleware('auth')->group(function () {
+      ...
+      Route::middleware(IsAdminOrRedac::class)->prefix('admin')->group(function () {
+          ...
+          Volt::route('/posts/index', 'admin.posts.index')->name('posts.index');
+    });
   });
-});
-```
+  ```
 
-#### Navigation Articles \<!-- markmap: fold -->
+#### Navigation Articles <!-- markmap: fold -->
 
-    Lien des articles dans dashboard (Pavé 'En un coup d'oeil') :
+* Lien des articles dans dashboard (Pavé 'En un coup d'oeil') :
 
-```php
-... admin.index, pavé Posts
-<a href="{{ route('posts.index') }}" class="flex-grow" title="{{ __('All posts') }}">
-    <x-stat title="{{ __('Posts') }}" description="" value="{{ $posts->count() }}" icon="s-document-text" class="shadow-hover" />
-</a>
-```
+  ```html
+  ... admin.index, pavé Posts
+  <a href="{{ route('posts.index') }}" class="flex-grow" title="{{ __('All posts') }}">
+      <x-stat title="{{ __('Posts') }}" description="" value="{{ $posts->count() }}" icon="s-document-text" class="shadow-hover" />
+  </a>
+  ```
 
-    Lien des articles dans admin/sidebar :
+* Lien des articles dans admin/sidebar :
 
-```php
-... Lien Dashboard
-<x-menu-sub title="{{ __('Posts') }}" icon="s-document-text">
-    <x-menu-item title="{{ __('All posts') }}" link="{{ route('posts.index') }}" />
-</x-menu-sub>
-```
+  ```html
+  ... Lien Dashboard
+  <x-menu-sub title="{{ __('Posts') }}" icon="s-document-text">
+      <x-menu-item title="{{ __('All posts') }}" link="{{ route('posts.index') }}" />
+  </x-menu-sub>
+  ```
 
-    lang/fr.json :
+* lang/**fr.json** :
 
-```json
-"All posts": "Tous les articles",
-```
+  ```json
+  "All posts": "Tous les articles",
+  ```
 
-#### Composant Articles \<!-- markmap: fold -->
+#### Composant Articles <!-- markmap: fold -->
 
-##### CLI \<!-- markmap: fold -->
+##### CLI 
+<!-- markmap: fold -->
 
-```php
-php artisan make:volt admin/posts/index --class
-```
+  ```bash
+  php artisan make:volt admin/posts/index --class
+  ```
 
-##### Code admin.posts.index \<!-- markmap: fold -->
+##### Code admin.posts.index <!-- markmap: fold -->
 
-```php
-<?php
-use Mary\Traits\Toast;
-use Livewire\Volt\Component;
-use Livewire\WithPagination;
-use App\Models\{Post, Category};
-use Illuminate\Support\Facades\Auth;
-use App\Repositories\PostRepository;
-use Livewire\Attributes\{Layout, Title};
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\{Builder, Collection};
-
-new 
-#[Layout('components.layouts.admin'), Title('List Posts')]
-class extends Component {
-    use Toast, WithPagination;
-
-    public string $search = '';
-    public Collection $categories;
-    public $category_id = 0;
-    public array $sortBy  = ['column' => 'created_at', 'direction' => 'desc'];
-
-    public function mount(): void {
-        $this->categories = $this->getCategories();
-    }
-
-    public function getCategories(): Collection {
-        if (Auth::user()->isAdmin()) {
-            return Category::all();
-        }
-
-        return Category::whereHas('posts', fn (Builder $q) => $q->where('user_id', Auth::id()))->get();
-        }
-      
-    public function headers(): array {
-        $headers = [
-            ['key' => 'title', 'label' => __('Title')],
-        ];
+  ```html
+  <?php
+  use Mary\Traits\Toast;
+  use Livewire\Volt\Component;
+  use Livewire\WithPagination;
+  use App\Models\{Post, Category};
+  use Illuminate\Support\Facades\Auth;
+  use App\Repositories\PostRepository;
+  use Livewire\Attributes\{Layout, Title};
+  use Illuminate\Pagination\LengthAwarePaginator;
+  use Illuminate\Database\Eloquent\{Builder, Collection};
   
-        if (Auth::user()->isAdmin()) {
-            $headers = array_merge($headers, [['key' => 'user_name', 'label' => __('Author')]]);
-        }
+  new 
+  #[Layout('components.layouts.admin'), Title('List Posts')]
+  class extends Component {
+      use Toast, WithPagination;
   
-        return array_merge($headers, [
-            ['key' => 'category_title', 'label' => __('Category')],
-            ['key' => 'comments_count', 'label' => __('')],
-            ['key' => 'active', 'label' => __('Published')],
-            ['key' => 'date', 'label' => __('Date')],
-      ]);
+      public string $search = '';
+      public Collection $categories;
+      public $category_id = 0;
+      public array $sortBy  = ['column' => 'created_at', 'direction' => 'desc'];
+  
+      public function mount(): void {
+          $this->categories = $this->getCategories();
       }
-
-    public function posts(): LengthAwarePaginator {
-        return Post::query()
-            ->select('id', 'title', 'slug', 'category_id', 'active', 'user_id', 'created_at', 'updated_at')
-            ->when(Auth::user()->isAdmin(), fn (Builder $q) => $q->withAggregate('user', 'name'))
-            ->when(!Auth::user()->isAdmin(), fn (Builder $q) => $q->where('user_id', Auth::id()))
-            ->withAggregate('category', 'title')
-            ->withcount('comments')
-            ->when($this->search, fn (Builder $q) => $q->where('title', 'like', "%{$this->search}%"))
-            ->when($this->category_id, fn (Builder $q) => $q->where('category_id', $this->category_id))
-            ->when('date' === $this->sortBy['column'], fn (Builder $q) => $q->orderBy('created_at', $this->sortBy['direction']), fn (Builder $q) => $q->orderBy($this->sortBy['column'], $this->sortBy['direction']))
-            ->latest()
-            ->paginate(6);
-    }
-
-    public function deletePost(int $postId): void {
-        $post = Post::findOrFail($postId);
-        $post->delete();
-        $this->success("{$post->title} " . __('deleted'));
-    }
-
-    public function clonePost(int $postId): void {
-        $originalPost       = Post::findOrFail($postId);
-        $clonedPost         = $originalPost->replicate();
-        $postRepository     = new PostRepository();
-        $clonedPost->slug   = $postRepository->generateUniqueSlug($originalPost->slug);
-        $clonedPost->active = false;
-        $clonedPost->save();
   
-        // Ici on redirigera vers le formulaire de modification de l'article cloné
-    }
-      
-    public function with(): array {
-        return [
-            'headers' => $this->headers(),
-            'posts'   => $this->posts(),
-        ];
-    }
-}; ?>
-
-<div>
-    <x-header title="{{ __('Posts') }}" separator progress-indicator>
-        <x-slot:actions>
-            <x-input placeholder="{{ __('Search...') }}" wire:model.live.debounce="search" clearable icon="o-magnifying-glass" />
-            <x-button label="{{ __('Add a post') }}" class="btn-outline lg:hidden" link="{{ route('posts.create') }}" />
-            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline lg:hidden"
-                link="{{ route('admin') }}" />
-        </x-slot:actions>
-    </x-header>
-
-    <x-collapse>
-        <x-slot:heading>
-            @lang(__('Filters'))
-        </x-slot:heading>
-        <x-slot:content>
-            <x-select label="{{ __('Category') }}" :options="$categories" placeholder="{{ __('Select a category') }}"
-                option-label="title" wire:model="category_id" wire:change="$refresh" />
-        </x-slot:content>
-    </x-collapse>
+      public function getCategories(): Collection {
+          if (Auth::user()->isAdmin()) {
+              return Category::all();
+          }
   
-    <br>
+          return Category::whereHas('posts', fn (Builder $q) => $q->where('user_id', Auth::id()))->get();
+          }
+        
+      public function headers(): array {
+          $headers = [
+              ['key' => 'title', 'label' => __('Title')],
+          ];
+    
+          if (Auth::user()->isAdmin()) {
+              $headers = array_merge($headers, [['key' => 'user_name', 'label' => __('Author')]]);
+          }
+    
+          return array_merge($headers, [
+              ['key' => 'category_title', 'label' => __('Category')],
+              ['key' => 'comments_count', 'label' => __('')],
+              ['key' => 'active', 'label' => __('Published')],
+              ['key' => 'date', 'label' => __('Date')],
+        ]);
+        }
+  
+      public function posts(): LengthAwarePaginator {
+          return Post::query()
+              ->select('id', 'title', 'slug', 'category_id', 'active', 'user_id', 'created_at', 'updated_at')
+              ->when(Auth::user()->isAdmin(), fn (Builder $q) => $q->withAggregate('user', 'name'))
+              ->when(!Auth::user()->isAdmin(), fn (Builder $q) => $q->where('user_id', Auth::id()))
+              ->withAggregate('category', 'title')
+              ->withcount('comments')
+              ->when($this->search, fn (Builder $q) => $q->where('title', 'like', "%{$this->search}%"))
+              ->when($this->category_id, fn (Builder $q) => $q->where('category_id', $this->category_id))
+              ->when('date' === $this->sortBy['column'], fn (Builder $q) => $q->orderBy('created_at', $this->sortBy['direction']), fn (Builder $q) => $q->orderBy($this->sortBy['column'], $this->sortBy['direction']))
+              ->latest()
+              ->paginate(6);
+      }
+  
+      public function deletePost(int $postId): void {
+          $post = Post::findOrFail($postId);
+          $post->delete();
+          $this->success("{$post->title} " . __('deleted'));
+      }
+  
+      public function clonePost(int $postId): void {
+          $originalPost       = Post::findOrFail($postId);
+          $clonedPost         = $originalPost->replicate();
+          $postRepository     = new PostRepository();
+          $clonedPost->slug   = $postRepository->generateUniqueSlug($originalPost->slug);
+          $clonedPost->active = false;
+          $clonedPost->save();
+    
+          // Ici on redirigera vers le formulaire de modification de l'article cloné
+      }
+        
+      public function with(): array {
+          return [
+              'headers' => $this->headers(),
+              'posts'   => $this->posts(),
+          ];
+      }
+  }; ?>
+  
+  <div>
+      <x-header title="{{ __('Posts') }}" separator progress-indicator>
+          <x-slot:actions>
+              <x-input placeholder="{{ __('Search...') }}" wire:model.live.debounce="search" clearable icon="o-magnifying-glass" />
+              <x-button label="{{ __('Add a post') }}" class="btn-outline lg:hidden" link="{{ route('posts.create') }}" />
+              <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline lg:hidden"
+                  link="{{ route('admin') }}" />
+          </x-slot:actions>
+      </x-header>
+  
+      <x-collapse>
+          <x-slot:heading>
+              @lang(__('Filters'))
+          </x-slot:heading>
+          <x-slot:content>
+              <x-select label="{{ __('Category') }}" :options="$categories" placeholder="{{ __('Select a category') }}"
+                  option-label="title" wire:model="category_id" wire:change="$refresh" />
+          </x-slot:content>
+      </x-collapse>
+    
+      <br>
+  
+      @if ($posts->count() > 0)
+          <x-card>
+              <x-table striped :headers="$headers" :rows="$posts" :sort-by="$sortBy" link="#" with-pagination>
+  
+                  @scope('header_comments_count', $header)
+                      {{ $header['label'] }}
+                      <x-icon name="c-chat-bubble-left" />
+                  @endscope
+  
+                  @scope('cell_comments_count', $post)
+                      @if ($post->comments_count > 0)
+                          <x-badge value="{{ $post->comments_count }}" class="badge-primary" />
+                      @endif
+                  @endscope
+  
+                  @scope('cell_active', $post)
+                      @if ($post->active)
+                          <x-icon name="o-check-circle" />
+                      @endif
+                  @endscope
+  
+                  @scope('cell_date', $post)
+                      @lang('Created') {{ $post->created_at->diffForHumans() }}
+                      @if ($post->updated_at != $post->created_at)
+                          <br>
+                          @lang('Updated') {{ $post->updated_at->diffForHumans() }}
+                      @endif
+                  @endscope
+  
+                  @scope('actions', $post)
+                      <div class="flex">
+                          <x-popover>
+                              <div class="flex">
+                                  <x-slot:trigger>
+                                      <x-button icon="o-finger-print" wire:click="clonePost({{ $post->id }})" spinner
+                                          class="btn-ghost btn-sm" />
+                                  </x-slot:trigger>
+                                  <x-slot:content class="pop-small">
+                                      @lang('Clone')
+                                  </x-slot:content>
+                              </x-popover>
+                          <x-popover>
+                              <x-slot:trigger>
+                                  <x-button icon="o-trash" wire:click="deletePost({{ $post->id }})"
+                                      wire:confirm="{{ __('Are you sure to delete this post?') }}" spinner
+                                      class="text-red-500 btn-ghost btn-sm" />
+                              </x-slot:trigger>
+                              <x-slot:content class="pop-small">
+                                  @lang('Delete')
+                              </x-slot:content>
+                          </x-popover>
+                      </div>
+                  @endscope
+  
+              </x-table>
+          </x-card>
+      @endif
+  </div>
+  ```
 
-    @if ($posts->count() > 0)
-        <x-card>
-            <x-table striped :headers="$headers" :rows="$posts" :sort-by="$sortBy" link="#" with-pagination>
+##### Dans PostRepository <!-- markmap: fold -->
 
-                @scope('header_comments_count', $header)
-                    {{ $header['label'] }}
-                    <x-icon name="c-chat-bubble-left" />
-                @endscope
-
-                @scope('cell_comments_count', $post)
-                    @if ($post->comments_count > 0)
-                        <x-badge value="{{ $post->comments_count }}" class="badge-primary" />
-                    @endif
-                @endscope
-
-                @scope('cell_active', $post)
-                    @if ($post->active)
-                        <x-icon name="o-check-circle" />
-                    @endif
-                @endscope
-
-                @scope('cell_date', $post)
-                    @lang('Created') {{ $post->created_at->diffForHumans() }}
-                    @if ($post->updated_at != $post->created_at)
-                        <br>
-                        @lang('Updated') {{ $post->updated_at->diffForHumans() }}
-                    @endif
-                @endscope
-
-                @scope('actions', $post)
-                    <div class="flex">
-                        <x-popover>
-                            <div class="flex">
-                                <x-slot:trigger>
-                                    <x-button icon="o-finger-print" wire:click="clonePost({{ $post->id }})" spinner
-                                        class="btn-ghost btn-sm" />
-                                </x-slot:trigger>
-                                <x-slot:content class="pop-small">
-                                    @lang('Clone')
-                                </x-slot:content>
-                            </x-popover>
-                        <x-popover>
-                            <x-slot:trigger>
-                                <x-button icon="o-trash" wire:click="deletePost({{ $post->id }})"
-                                    wire:confirm="{{ __('Are you sure to delete this post?') }}" spinner
-                                    class="text-red-500 btn-ghost btn-sm" />
-                            </x-slot:trigger>
-                            <x-slot:content class="pop-small">
-                                @lang('Delete')
-                            </x-slot:content>
-                        </x-popover>
-                    </div>
-                @endscope
-
-            </x-table>
-        </x-card>
-    @endif
-</div>
-```
-
-##### Dans PostRepository \<!-- markmap: fold -->
-
-```php
-public function generateUniqueSlug(string $slug): string {
-    $newSlug = $slug;
-    $counter = 1;
-    while (Post::where('slug', $newSlug)->exists()) {
-        $newSlug = $slug . '-' . $counter;
-        ++$counter;
+  ```php
+  public function generateUniqueSlug(string $slug): string {
+      $newSlug = $slug;
+      $counter = 1;
+      while (Post::where('slug', $newSlug)->exists()) {
+          $newSlug = $slug . '-' . $counter;
+          ++$counter;
+    }
+    return $newSlug;
   }
-  return $newSlug;
-}
-```
+  ```
 
-##### Traductions admin posts list \<!-- markmap: fold -->
+##### Traductions admin posts list <!-- markmap: fold -->
 
-```json
-"Title": "Titre",
-"Author": "Auteur",
-"Updated": "Mis à jour",
-"Category": "Catégorie",
-"Published": "Publié",
-"Add a post": "Ajouter un article",
-"Are you sure to delete this post?": "Êtes-vous sûr de vouloir supprimer cet article ?",
-"deleted": "supprimé",
-"Clone": "Dupliquer",
-"Filters": "Filtres"
-```
+  ```json
+  "Title": "Titre",
+  "Author": "Auteur",
+  "Updated": "Mis à jour",
+  "Category": "Catégorie",
+  "Published": "Publié",
+  "Add a post": "Ajouter un article",
+  "Are you sure to delete this post?": "Êtes-vous sûr de vouloir supprimer cet article ?",
+  "deleted": "supprimé",
+  "Clone": "Dupliquer",
+  "Filters": "Filtres"
+  ```
 
 #### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-tableau-des-articles](https://laravel.sillo.org/posts/mon-cms-tableau-des-articles)***
 
-### Créer un article \<!-- markmap: fold -->
+### Créer un article <!-- markmap: fold -->
 
-#### Route admin/posts/create \<!-- markmap: fold -->
+#### Route admin/posts/create <!-- markmap: fold -->
 
-```php
-Route::middleware('auth')->group(function () {
-    ...
-    Route::middleware(IsAdminOrRedac::class)->prefix('admin')->group(function () {
-        ...
-        Volt::route('/posts/create', 'admin.posts.create')->name('posts.create');
+  ```php
+  Route::middleware('auth')->group(function () {
+      ...
+      Route::middleware(IsAdminOrRedac::class)->prefix('admin')->group(function () {
+          ...
+          Volt::route('/posts/create', 'admin.posts.create')->name('posts.create');
+    });
   });
-});
-```
+  ```
 
-#### Menu (admin.sidebar) \<!-- markmap: fold -->
+#### Menu (admin.sidebar) <!-- markmap: fold -->
 
-```php
-<x-menu-sub title="{{ __('Posts') }}" icon="s-document-text">
-    <x-menu-item title="{{ __('All posts') }}" link="{{ route('posts.index') }}" />
-    <x-menu-item title="{{ __('Add a post') }}" link="{{ route('posts.create') }}" />
-</x-menu-sub>
-```
+  ```html
+  <x-menu-sub title="{{ __('Posts') }}" icon="s-document-text">
+      <x-menu-item title="{{ __('All posts') }}" link="{{ route('posts.index') }}" />
+      <x-menu-item title="{{ __('Add a post') }}" link="{{ route('posts.create') }}" />
+  </x-menu-sub>
+  ```
 
-#### Composant (Formulaire) \<!-- markmap: fold -->
+#### Composant (Formulaire) <!-- markmap: fold -->
 
-##### CLI admin.posts.create \<!-- markmap: fold -->
+##### CLI admin.posts.create <!-- markmap: fold -->
 
-```php
-php artisan make:volt admin/posts/create --class
-```
+  ```bash
+  php artisan make:volt admin/posts/create --class
+  ```
 
 ##### Code Création article
 
-###### Base du code \<!-- markmap: fold -->
+###### Base du code <!-- markmap: fold -->
 
-```php
-<?php
-use Livewire\Volt\Component;
-use App\Models\Category;
-use Livewire\Attributes\Layout;
+  ```html
+  <?php
+  use App\Models\Category;
+  use Livewire\Volt\Component;
+  use Livewire\Attributes\Layout;
+  
+  new #[Layout('components.layouts.admin')] 
+  class extends Component {
+      public function with(): array {
+        return [
+          'categories' => Category::orderBy('title')->get(),
+      ];}
+  }; ?>
+  
+  <div>
+      <x-header title="{{ __('Add a post') }}" separator progress-indicator>
+          <x-slot:actions>
+              <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline lg:hidden"
+                  link="{{ route('admin') }}" />
+          </x-slot:actions>
+      </x-header>
+      <x-card>
+          <x-form wire:submit="save">
+              <x-select label="{{ __('Category') }}" option-label="title" :options="$categories" wire:model="category_id"
+                  wire:change="$refresh" />
+              <br>
+              <div class="flex gap-6">
+                  <x-checkbox label="{{ __('Published') }}" wire:model="active" />
+                  <x-checkbox label="{{ __('Pinned') }}" wire:model="pinned" />
+              </div>
+              <x-input type="text" wire:model="title" label="{{ __('Title') }}"
+                  placeholder="{{ __('Enter the title') }}" wire:change="$refresh" />
+              <x-input type="text" wire:model="slug" label="{{ __('Slug') }}" />
+              {{-- <x-editor wire:model="body" label="{{ __('Content') }}" :config="config('tinymce.config')"
+                  folder="{{ 'photos/' . now()->format('Y/m') }}" /> --}}
+              <x-card title="{{ __('SEO') }}" shadow separator>
+                  <x-input placeholder="{{ __('Title') }}" wire:model="seo_title" hint="{{ __('Max 70 chars') }}" />
+                  <br>
+                  <x-textarea label="{{ __('META Description') }}" wire:model="meta_description"
+                      hint="{{ __('Max 160 chars') }}" rows="2" inline />
+                  <br>
+                  <x-textarea label="{{ __('META Keywords') }}" wire:model="meta_keywords"
+                      hint="{{ __('Keywords separated by comma') }}" rows="1" inline />
+              </x-card>
+              <x-slot:actions>
+                  <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit"
+                      class="btn-primary" />
+              </x-slot:actions>
+          </x-form>
+      </x-card>
+  </div>
+  ```
 
-new #[Layout('components.layouts.admin')] 
-class extends Component {
-    public function with(): array {
-      return [
-        'categories' => Category::orderBy('title')->get(),
-    ];}
-}; ?>
+###### Propriétés - Validation <!-- markmap: fold -->
 
-<div>
-    <x-header title="{{ __('Add a post') }}" separator progress-indicator>
-        <x-slot:actions>
-            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline lg:hidden"
-                link="{{ route('admin') }}" />
-        </x-slot:actions>
-    </x-header>
-    <x-card>
-        <x-form wire:submit="save">
-            <x-select label="{{ __('Category') }}" option-label="title" :options="$categories" wire:model="category_id"
-                wire:change="$refresh" />
-            <br>
-            <div class="flex gap-6">
-                <x-checkbox label="{{ __('Published') }}" wire:model="active" />
-                <x-checkbox label="{{ __('Pinned') }}" wire:model="pinned" />
-            </div>
-            <x-input type="text" wire:model="title" label="{{ __('Title') }}"
-                placeholder="{{ __('Enter the title') }}" wire:change="$refresh" />
-            <x-input type="text" wire:model="slug" label="{{ __('Slug') }}" />
-            {{-- <x-editor wire:model="body" label="{{ __('Content') }}" :config="config('tinymce.config')"
-                folder="{{ 'photos/' . now()->format('Y/m') }}" /> --}}
-            <x-card title="{{ __('SEO') }}" shadow separator>
-                <x-input placeholder="{{ __('Title') }}" wire:model="seo_title" hint="{{ __('Max 70 chars') }}" />
-                <br>
-                <x-textarea label="{{ __('META Description') }}" wire:model="meta_description"
-                    hint="{{ __('Max 160 chars') }}" rows="2" inline />
-                <br>
-                <x-textarea label="{{ __('META Keywords') }}" wire:model="meta_keywords"
-                    hint="{{ __('Keywords separated by comma') }}" rows="1" inline />
-            </x-card>
-            <x-slot:actions>
-                <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit"
-                    class="btn-primary" />
-            </x-slot:actions>
-        </x-form>
-    </x-card>
-</div>
+  ```php
+  use Livewire\Attributes\{Layout, Validate};
+  ...
+  public int $category_id;
+  
+  #[Validate('required|string|max:16777215')]
+  public string $body = '';
+  
+  #[Validate('required|string|max:255')]
+  public string $title = '';
+  
+  #[Validate('required|max:255|unique:posts,slug|regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/')]
+  public string $slug = '';
+  
+  #[Validate('required')]
+  public bool $active = false;
+  
+  #[Validate('required')]
+  public bool $pinned = false;
+  
+  #[Validate('required|max:70')]
+  public string $seo_title = '';
+  
+  #[Validate('required|max:160')]
+  public string $meta_description = '';
+  
+  #[Validate('required|regex:/^[A-Za-z0-9-éèàù]{1,50}?(,[A-Za-z0-9-éèàù]{1,50})*$/')]
+  public string $meta_keywords = '';
+  
+  public function mount(): void {
+      $category          = Category::first();
+      $this->category_id = $category->id;
+  }
 ```
 
-###### Propriétés - Validation \<!-- markmap: fold -->
+###### Update du slug du title <!-- markmap: fold -->
 
-```php
-use Livewire\Attributes\{Layout, Validate};
-...
-public int $category_id;
+  ```php
+  public function updatedTitle($value) {
+      $this->slug      = Str::slug($value);
+      $this->seo_title = $value;
+  }
+  ```
 
-#[Validate('required|string|max:16777215')]
-public string $body = '';
+###### Enregistrement <!-- markmap: fold -->
 
-#[Validate('required|string|max:255')]
-public string $title = '';
+  ```php
+  ...
+  use Mary\Traits\Toast;
+  use App\Models\{Category, Post};
+  
+  new #[Layout('components.layouts.admin')] 
+  class extends Component {
+      use Toast;
+      ...
+      public function save() {
+          $data = $this->validate();
+          Post::create(
+              $data + [
+                  'user_id'     => Auth::id(),
+                  'category_id' => $this->category_id,
+              ],
+      );
+  
+          $this->success(__('Post added with success.'), redirectTo: '/admin/posts/index');
+      }
+  }
+  ```
 
-#[Validate('required|max:255|unique:posts,slug|regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/')]
-public string $slug = '';
+##### Traductions admin.posts.create <!-- markmap: fold -->
 
-#[Validate('required')]
-public bool $active = false;
+  ```json
+  "Select a category": "Sélectionnez une catégorie",
+  "Pinned": "Épinglé",
+  "Content": "Contenu",
+  "META Keywords": "META mots-clefs",
+  "Keywords separated by comma": "Mots-clefs séparés par une virgule",
+  "Max 70 chars": "Max 70 caractères",
+  "Max 160 chars": "Max 160 caractères",
+  "Enter the title": "Entrez le titre",
+  "Post added with success.": "Article ajouté avec succès."
+  ```
 
-#[Validate('required')]
-public bool $pinned = false;
+#### Éditeur (TinyMCE) <!-- markmap: fold -->
 
-#[Validate('required|max:70')]
-public string $seo_title = '';
-
-#[Validate('required|max:160')]
-public string $meta_description = '';
-
-#[Validate('required|regex:/^[A-Za-z0-9-éèàù]{1,50}?(,[A-Za-z0-9-éèàù]{1,50})*$/')]
-public string $meta_keywords = '';
-
-public function mount(): void {
-    $category          = Category::first();
-    $this->category_id = $category->id;
-}
-```
-
-###### Update du slug du title \<!-- markmap: fold -->
-
-```php
-public function updatedTitle($value) {
-    $this->slug      = Str::slug($value);
-    $this->seo_title = $value;
-}
-```
-
-###### Enregistrement \<!-- markmap: fold -->
-
-```php
-...
-use Mary\Traits\Toast;
-use App\Models\{Category, Post};
-
-new #[Layout('components.layouts.admin')] 
-class extends Component {
-    use Toast;
-    ...
-    public function save() {
-        $data = $this->validate();
-        Post::create(
-            $data + [
-                'user_id'     => Auth::id(),
-                'category_id' => $this->category_id,
-            ],
-    );
-
-        $this->success(__('Post added with success.'), redirectTo: '/admin/posts/index');
-    }
-}
-```
-
-##### Traductions admin.posts.create \<!-- markmap: fold -->
-
-```json
-"Select a category": "Sélectionnez une catégorie",
-"Pinned": "Épinglé",
-"Content": "Contenu",
-"META Keywords": "META mots-clefs",
-"Keywords separated by comma": "Mots-clefs séparés par une virgule",
-"Max 70 chars": "Max 70 caractères",
-"Max 160 chars": "Max 160 caractères",
-"Enter the title": "Entrez le titre",
-"Post added with success.": "Article ajouté avec succès."
-```
-
-#### Éditeur (TinyMCE) \<!-- markmap: fold -->
-
-##### Installation hébergée (Usage Illimité → Notre choix) \<!-- markmap: fold -->
+##### Installation hébergée (Usage Illimité → Notre choix) <!-- markmap: fold -->
 
 ###### <a href="https://www.tiny.cloud/get-tiny">Télécharger Free TinyMCE</a>
 
@@ -4846,676 +4844,676 @@ class extends Component {
 
 ###### Paramétrages
 
-    ./config/tinymce.php :
+* ./config/**tinymce.php** :
 
-```php
-<?php
-return [
-'config' => [
-  'language'       => env('APP_TINYMCE_LOCALE', 'en_US'),
-  'plugins'        => 'codesample fullscreen',
-  'toolbar'        => 'undo redo style | fontfamily fontsize | alignleft aligncenter alignright alignjustify | bullist numlist | copy cut paste pastetext | hr | codesample | link image quicktable | fullscreen',
-  'toolbar_sticky' => true,
-  'min_height'     => 1000,
-  'license_key'    => 'gpl',
-  'valid_elements' => '*[*]',
-  ],
-];
-```
+  ```php
+  <?php
+  return [
+  'config' => [
+    'language'       => env('APP_TINYMCE_LOCALE', 'en_US'),
+    'plugins'        => 'codesample fullscreen',
+    'toolbar'        => 'undo redo style | fontfamily fontsize | alignleft aligncenter alignright alignjustify | bullist numlist | copy cut paste pastetext | hr | codesample | link image quicktable | fullscreen',
+    'toolbar_sticky' => true,
+    'min_height'     => 1000,
+    'license_key'    => 'gpl',
+    'valid_elements' => '*[*]',
+    ],
+  ];
+  ```
 
-    Fichier ./.env :
+* Fichier ./.env :
 
-```php
-APP_TINYMCE_LOCALE=fr_FR
-```
+  ```json
+  APP_TINYMCE_LOCALE=fr_FR
+  ```
 
 ###### Traductions TinyMCE
 
 * <a href="https://www.tiny.cloud/get-tiny/language-packages">Récupérer les fichiers de traduction</a>
-* Les copier dans : ./storage/app/public/scripts/fr_FR.js
+* Les copier dans : ./storage/app/public/scripts/**fr_FR.js**
 
 ###### Activation de TinyMCE
 
-    Fichier ./resources\views\components\layouts\admin.blade.php :
+* Fichier ./resources/views/components/layouts/**admin.blade.php** :
 
-```php
-<script src="{{ asset('storage/scripts/tinymce.min.js') }}" ></script>
-... @vite(...)
-```
+  ```html
+  <script src="{{ asset('storage/scripts/tinymce.min.js') }}" ></script>
+  ... @vite(...)
+  ```
 
-    Dans la vue du composant admin.posts.create :
+* Dans la vue du composant admin.posts.create :
 
-```php
-<x-editor wire:model="body" label="{{ __('Content') }}" :config="config('tinymce.config')" folder="{{ 'photos/' . now()->format('Y/m') }}" />
-```
+  ```html
+  <x-editor wire:model="body" label="{{ __('Content') }}" :config="config('tinymce.config')" folder="{{ 'photos/' . now()->format('Y/m') }}" />
+  ```
 
-##### Installation CDN (Usage limité: 1000 appels/mois - Mise à jour auto) \<!-- markmap: fold -->
+##### Installation CDN (Usage limité: 1000 appels/mois - Mise à jour auto) <!-- markmap: fold -->
 
-```php
-// Fichier ./resources\views\components\layouts\admin.blade.php
-<script src="https://cdn.tiny.cloud/1/YOUR-KEY-HERE/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
-... @vite(...)
-```
+* Fichier ./resources\views\components\layouts\**admin.blade.php** :
+
+  ```html
+  <script src="https://cdn.tiny.cloud/1/YOUR-KEY-HERE/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+  ... @vite(...)
+  ```
 
 ##### Réf.: ***[https://mary-ui.com/docs/components/editor](https://mary-ui.com/docs/components/editor)***
 
-#### Gestion de l'image \<!-- markmap: fold -->
+#### Gestion de l'image <!-- markmap: fold -->
 
-###### Ajout du trait Livewire WithFileUploads \<!-- markmap: fold -->
+###### Ajout du trait Livewire WithFileUploads <!-- markmap: fold -->
 
-    admin.posts.create :
+* admin.posts.create :
 
-```php
-use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
-use Livewire\WithFileUploads;
+  ```php
+  use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
+  use Livewire\WithFileUploads;
+  
+  new #[Layout('components.layouts.admin')] 
+  class extends Component {
+      use WithFileUploads, Toast;
+  
+      #[Rule('required|image|max:7000')]
+      public ?TemporaryUploadedFile $photo = null;
+  ```
 
-new #[Layout('components.layouts.admin')] 
-class extends Component {
-    use WithFileUploads, Toast;
-
-    #[Rule('required|image|max:7000')]
-    public ?TemporaryUploadedFile $photo = null;
-```
-
-###### Image / défaut \<!-- markmap: fold -->
+###### Image / défaut <!-- markmap: fold -->
 
 * <a href="https://laravel.sillo.org/ask.jpg">Récupérer l'image</a>
 * À poser dans : ./public/storage/ask.jpg
 
-###### Composant de MaryUI dans le formulaire \<!-- markmap: fold -->
+###### Composant de MaryUI dans le formulaire <!-- markmap: fold -->
 
-```php
-            <x-file wire:model="photo" label="{{ __('Featured image') }}"
-                hint="{{ __('Click on the image to modify') }}" accept="image/png, image/jpeg">
-                <img src="{{ $photo == '' ? '/storage/ask.jpg' : $photo }}" class="h-40" />
-            </x-file>
-            <x-slot:actions>
-                ...
-            </x-slot:actions>
-        </x-form>
-    </x-card>
-</div>
-```
+  ```html
+              <x-file wire:model="photo" label="{{ __('Featured image') }}"
+                  hint="{{ __('Click on the image to modify') }}" accept="image/png, image/jpeg">
+                  <img src="{{ $photo == '' ? '/storage/ask.jpg' : $photo }}" class="h-40" />
+              </x-file>
+              <x-slot:actions>
+                  ...
+              </x-slot:actions>
+          </x-form>
+      </x-card>
+  </div>
+  ```
 
-###### Traductions pour Image \<!-- markmap: fold -->
+###### Traductions pour Image <!-- markmap: fold -->
 
-```json
-"Featured image": "Image mise en avant",
-"Click on the image to modify": "Cliquez sur cette image pour la modifier",
-```
+  ```json
+  "Featured image": "Image mise en avant",
+  "Click on the image to modify": "Cliquez sur cette image pour la modifier",
+  ```
 
-###### Save Image \<!-- markmap: fold -->
+###### Save Image <!-- markmap: fold -->
 
-    Par défaut, image temporaire ./storage/app/livewire-tmp
+* Par défaut, image temporaire → ./storage/app/livewire-tmp/
+* → Pour poser dans le dossier **photos/**, adapter la fonction save() :
 
-    → Ajouter :
-
-```php
-public function save() {
-    $data = $this->validate();
-
-    $date = now()->format('Y/m');
-    $path = $date . '/' . basename($this->photo->store('photos/' . $date, 'public'));
-
-    Post::create(
-        $data + [
-            'user_id'     => Auth::id(),
-            'category_id' => $this->category_id,
-            'image'       => $path,
-        ],
-    );
-
-    $this->success(__('Post added with success.'), redirectTo: '/admin/posts/index');
-}
-```
-
-###### Url des images \<!-- markmap: fold -->
-
-    Ajout dans app/helpers.php :
-
-```php
-if (!function_exists('replaceAbsoluteUrlsWithRelative')) {
-  function replaceAbsoluteUrlsWithRelative(string $content) {
-      $baseUrl = url('/');
+  ```php
+  public function save() {
+      $data = $this->validate();
   
-      if ('/' !== substr($baseUrl, -1)) {
-          $baseUrl .= '/';
-      }
-    
-      $pattern     = '/<img\s+[^>]*src="(?:https?:\/\/)?' . preg_quote(parse_url($baseUrl, PHP_URL_HOST), '/') . '\/([^"]+)"/i';
-      $replacement = '<img src="/$1"';
+      $date = now()->format('Y/m');
+      $path = $date . '/' . basename($this->photo->store('photos/' . $date, 'public'));
   
-      return preg_replace($pattern, $replacement, $content);
+      Post::create(
+          $data + [
+              'user_id'     => Auth::id(),
+              'category_id' => $this->category_id,
+              'image'       => $path,
+          ],
+      );
+  
+      $this->success(__('Post added with success.'), redirectTo: '/admin/posts/index');
   }
-}
-```
+  ```
 
-    Adaptation de save() :
+###### Url des images <!-- markmap: fold -->
 
-```php
-public function save() {
-   ...
-    $data['body'] = replaceAbsoluteUrlsWithRelative($data['body']);
- 
-    Post::create(
-    ...
-}
-```
+* Ajout dans app/helpers.php :
+
+  ```php
+  if (!function_exists('replaceAbsoluteUrlsWithRelative')) {
+    function replaceAbsoluteUrlsWithRelative(string $content) {
+        $baseUrl = url('/');
+    
+        if ('/' !== substr($baseUrl, -1)) {
+            $baseUrl .= '/';
+        }
+      
+        $pattern     = '/<img\s+[^>]*src="(?:https?:\/\/)?' . preg_quote(parse_url($baseUrl, PHP_URL_HOST), '/') . '\/([^"]+)"/i';
+        $replacement = '<img src="/$1"';
+    
+        return preg_replace($pattern, $replacement, $content);
+    }
+  }
+  ```
+
+* Adaptation de save() :
+
+  ```php
+  public function save() {
+     ...
+      $data['body'] = replaceAbsoluteUrlsWithRelative($data['body']);
+   
+      Post::create(
+      ...
+  }
+  ```
 
 #### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-creer-un-article](https://laravel.sillo.org/posts/mon-cms-creer-un-article)***
 
-### Modifier un article \<!-- markmap: fold -->
+### Modifier un article <!-- markmap: fold -->
 
-#### Route posts.edit \<!-- markmap: fold -->
+#### Route posts.edit <!-- markmap: fold -->
 
-    Dans le groupe du middleware 'IsAdminOrRedac' :
+* Dans le groupe du middleware 'IsAdminOrRedac' :
 
-```php
-Volt::route('/posts/{post:slug}/edit', 'admin.posts.edit')->name('posts.edit');
-```
+  ```php
+  Volt::route('/posts/{post:slug}/edit', 'admin.posts.edit')->name('posts.edit');
+  ```
 
-#### Lien dans tableau des articles (admin.posts.index) \<!-- markmap: fold -->
+#### Lien dans tableau des articles (admin.posts.index) <!-- markmap: fold -->
 
-```php
+```html
 <x-table striped :headers="$headers" :rows="$posts" :sort-by="$sortBy" link="/admin/posts/{slug}/edit" with-pagination>
 ```
 
-#### Composant édition articles admin.posts.edit \<!-- markmap: fold -->
+#### Composant édition articles admin.posts.edit <!-- markmap: fold -->
 
-```php
-php artisan make:volt admin/posts/edit --class
-```
+  ```bash
+  php artisan make:volt admin/posts/edit --class
+  ```
 
-#### La logique admin.posts.edit \<!-- markmap: fold -->
+#### La logique admin.posts.edit <!-- markmap: fold -->
 
-```php
-<?php
-use App\Models\{Category, Post};
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Storage;
-use illuminate\Support\Str;
-use Illuminate\Validation\Rule;
-use Livewire\Attributes\{Layout, Title};
-use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
-use Livewire\Volt\Component;
-use Livewire\WithFileUploads;
-use Mary\Traits\Toast;
-
-new #[Title('Edit Post'), Layout('components.layouts.admin')] 
-class extends Component {
-  use WithFileUploads, Toast;
+  ```php
+  <?php
+  use Mary\Traits\Toast;
+  use illuminate\Support\Str;
+  use Livewire\Volt\Component;
+  use Livewire\WithFileUploads;
+  use App\Models\{Category, Post};
+  use Illuminate\Validation\Rule;
+  use Illuminate\Support\Collection;
+  use Illuminate\Support\Facades\Storage;
+  use Livewire\Attributes\{Layout, Title};
+  use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
   
-  public int $postId;
-  public ?Collection $categories;
-  public int $category_id;
-  public Post $post;
-  public string $body                  = '';
-  public string $title                 = '';
-  public string $slug                  = '';
-  public bool $active                  = false;
-  public bool $pinned                  = false;
-  public string $seo_title             = '';
-  public string $meta_description      = '';
-  public string $meta_keywords         = '';
-  public ?TemporaryUploadedFile $photo = null;
-  
-  public function mount(Post $post): void {
-    if (Auth()->user()->isRedac() && $post->user_id !== Auth()->id()) {
-      abort(403);
+  new #[Title('Edit Post'), Layout('components.layouts.admin')] 
+  class extends Component {
+    use WithFileUploads, Toast;
+    
+    public int $postId;
+    public ?Collection $categories;
+    public int $category_id;
+    public Post $post;
+    public string $body                  = '';
+    public string $title                 = '';
+    public string $slug                  = '';
+    public bool $active                  = false;
+    public bool $pinned                  = false;
+    public string $seo_title             = '';
+    public string $meta_description      = '';
+    public string $meta_keywords         = '';
+    public ?TemporaryUploadedFile $photo = null;
+    
+    public function mount(Post $post): void {
+      if (Auth()->user()->isRedac() && $post->user_id !== Auth()->id()) {
+        abort(403);
+      }
+    
+      $this->post = $post;
+      $this->fill($this->post);
+      $this->categories = Category::orderBy('title')->get();
     }
-  
-    $this->post = $post;
-    $this->fill($this->post);
-    $this->categories = Category::orderBy('title')->get();
-  }
-  
-  public function updatedTitle($value) {
-    $this->slug      = Str::slug($value);
-    $this->seo_title = $value;
-  }
-  
-  public function save() {
-    $data = $this->validate([
-      'title'            => 'required|string|max:255',
-      'body'             => 'required|string|max:16777215',
-      'category_id'      => 'required',
-      'photo'            => 'nullable|image|max:7000',
-      'active'           => 'required',
-      'pinned'           => 'required',
-      'slug'             => ['required', 'string', 'max:255', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/', Rule::unique('posts')->ignore($this->post->id)],
-      'seo_title'        => 'required|max:70',
-      'meta_description' => 'required|max:160',
-      'meta_keywords'    => 'required|regex:/^[A-Za-z0-9-éèàù]{1,50}?(,[A-Za-z0-9-éèàù]{1,50})*$/',
-    ]);
-  
-    if ($this->photo) {
-      $date          = now()->format('Y/m');
-      $path          = $date . '/' . basename($this->photo->store('photos/' . $date, 'public'));
-      $data['image'] = $path;
+    
+    public function updatedTitle($value) {
+      $this->slug      = Str::slug($value);
+      $this->seo_title = $value;
     }
+    
+    public function save() {
+      $data = $this->validate([
+        'title'            => 'required|string|max:255',
+        'body'             => 'required|string|max:16777215',
+        'category_id'      => 'required',
+        'photo'            => 'nullable|image|max:7000',
+        'active'           => 'required',
+        'pinned'           => 'required',
+        'slug'             => ['required', 'string', 'max:255', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/', Rule::unique('posts')->ignore($this->post->id)],
+        'seo_title'        => 'required|max:70',
+        'meta_description' => 'required|max:160',
+        'meta_keywords'    => 'required|regex:/^[A-Za-z0-9-éèàù]{1,50}?(,[A-Za-z0-9-éèàù]{1,50})*$/',
+      ]);
+    
+      if ($this->photo) {
+        $date          = now()->format('Y/m');
+        $path          = $date . '/' . basename($this->photo->store('photos/' . $date, 'public'));
+        $data['image'] = $path;
+      }
+    
+      $data['body'] = replaceAbsoluteUrlsWithRelative($data['body']);
+    
+      $this->post->update(
+        $data + [
+        'category_id' => $this->category_id,
+        ],
+      );
+    
+      $this->success(__('Post updated with success.'));
+    }
+  }; ?>
+  ```
+
+#### Formulaire d'édition <!-- markmap: fold -->
+
+  ```html
+  <div>
+      <x-header title="{{ __('Edit a post') }}" separator progress-indicator>
+          <x-slot:actions>
+              <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline lg:hidden"
+                  link="{{ route('admin') }}" />
+          </x-slot:actions>
+      </x-header>
   
-    $data['body'] = replaceAbsoluteUrlsWithRelative($data['body']);
-  
-    $this->post->update(
-      $data + [
-      'category_id' => $this->category_id,
-      ],
-    );
-  
-    $this->success(__('Post updated with success.'));
-  }
-}; ?>
-```
+      <x-card>
+          <x-form wire:submit="save">
+              <x-select label="{{ __('Category') }}" option-label="title" :options="$categories" wire:model="category_id" wire:change="$refresh" />
+              <br>
+              <div class="flex gap-6">
+                  <x-checkbox label="{{ __('Published') }}" wire:model="active" />
+                  <x-checkbox label="{{ __('Pinned') }}" wire:model="pinned" />
+              </div>
+              <x-input type="text" wire:model="title" label="{{ __('Title') }}"
+                  placeholder="{{ __('Enter the title') }}" wire:change="$refresh" />
+              <x-input type="text" wire:model="slug" label="{{ __('Slug') }}" />
+              <x-editor wire:model="body" label="{{ __('Content') }}" :config="config('tinymce.config')"
+                  folder="{{ 'photos/' . now()->format('Y/m') }}" />
+              <x-card title="{{ __('SEO') }}" shadow separator>
+                  <x-input placeholder="{{ __('Title') }}" wire:model="seo_title" hint="{{ __('Max 70 chars') }}" />
+                  <br>
+                  <x-textarea label="{{ __('META Description') }}" wire:model="meta_description"
+                      hint="{{ __('Max 160 chars') }}" rows="2" inline />
+                  <br>
+                  <x-textarea label="{{ __('META Keywords') }}" wire:model="meta_keywords"
+                      hint="{{ __('Keywords separated by comma') }}" rows="1" inline />
+              </x-card>
+              <x-file wire:model="photo" label="{{ __('Featured image') }}"
+                  hint="{{ __('Click on the image to modify') }}" accept="image/png, image/jpeg">
+                  <img src="{{ asset('storage/photos/' . $post->image) }}" class="h-40" />
+              </x-file>
+              <x-slot:actions>
+                  <x-button label="{{ __('Preview') }}" icon="m-sun" link="{{ '/posts/' . $post->slug }}" external
+                      class="btn-outline" />
+                  <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit"
+                      class="btn-primary" />
+              </x-slot:actions>
+          </x-form>
+      </x-card>
+  </div>
+  ```
 
-#### Formulaire d'édition \<!-- markmap: fold -->
+#### Traductions Édition <!-- markmap: fold -->
 
-```php
-<div>
-    <x-header title="{{ __('Edit a post') }}" separator progress-indicator>
-        <x-slot:actions>
-            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline lg:hidden"
-                link="{{ route('admin') }}" />
-        </x-slot:actions>
-    </x-header>
+  ```json
+  "Edit a post": "Modifier un article",
+  "Post updated with success.": "Article mis à jour avec succès."
+  ```
 
-    <x-card>
-        <x-form wire:submit="save">
-            <x-select label="{{ __('Category') }}" option-label="title" :options="$categories" wire:model="category_id" wire:change="$refresh" />
-            <br>
-            <div class="flex gap-6">
-                <x-checkbox label="{{ __('Published') }}" wire:model="active" />
-                <x-checkbox label="{{ __('Pinned') }}" wire:model="pinned" />
-            </div>
-            <x-input type="text" wire:model="title" label="{{ __('Title') }}"
-                placeholder="{{ __('Enter the title') }}" wire:change="$refresh" />
-            <x-input type="text" wire:model="slug" label="{{ __('Slug') }}" />
-            <x-editor wire:model="body" label="{{ __('Content') }}" :config="config('tinymce.config')"
-                folder="{{ 'photos/' . now()->format('Y/m') }}" />
-            <x-card title="{{ __('SEO') }}" shadow separator>
-                <x-input placeholder="{{ __('Title') }}" wire:model="seo_title" hint="{{ __('Max 70 chars') }}" />
-                <br>
-                <x-textarea label="{{ __('META Description') }}" wire:model="meta_description"
-                    hint="{{ __('Max 160 chars') }}" rows="2" inline />
-                <br>
-                <x-textarea label="{{ __('META Keywords') }}" wire:model="meta_keywords"
-                    hint="{{ __('Keywords separated by comma') }}" rows="1" inline />
-            </x-card>
-            <x-file wire:model="photo" label="{{ __('Featured image') }}"
-                hint="{{ __('Click on the image to modify') }}" accept="image/png, image/jpeg">
-                <img src="{{ asset('storage/photos/' . $post->image) }}" class="h-40" />
-            </x-file>
-            <x-slot:actions>
-                <x-button label="{{ __('Preview') }}" icon="m-sun" link="{{ '/posts/' . $post->slug }}" external
-                    class="btn-outline" />
-                <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit"
-                    class="btn-primary" />
-            </x-slot:actions>
-        </x-form>
-    </x-card>
-</div>
-```
-
-#### Traductions Édition \<!-- markmap: fold -->
-
-```json
-"Edit a post": "Modifier un article",
-"Post updated with success.": "Article mis à jour avec succès."
-```
-
-#### Bouton édition dans le posts.show \<!-- markmap: fold -->
+#### Bouton édition dans le posts.show <!-- markmap: fold -->
 
 ##### HTML
 
-```php
-@auth
-    <x-popover>
-        ...
-    </x-popover>
-    @if (Auth::user()->isAdmin() || Auth::user()->id == $post->user_id)
-        <x-popover>
-            <x-slot:trigger>
-                <x-button icon="c-pencil-square" link="{{ route('posts.edit', $post) }}" spinner
-                    class="btn-ghost btn-sm" />
-            </x-slot:trigger>
-            <x-slot:content class="pop-small">
-                @lang('Edit this post')
-            </x-slot:content>
-        </x-popover>
-    @endif
-@endauth
-```
+  ```html
+  @auth
+      <x-popover>
+          ...
+      </x-popover>
+      @if (Auth::user()->isAdmin() || Auth::user()->id == $post->user_id)
+          <x-popover>
+              <x-slot:trigger>
+                  <x-button icon="c-pencil-square" link="{{ route('posts.edit', $post) }}" spinner
+                      class="btn-ghost btn-sm" />
+              </x-slot:trigger>
+              <x-slot:content class="pop-small">
+                  @lang('Edit this post')
+              </x-slot:content>
+          </x-popover>
+      @endif
+  @endauth
+  ```
 
 ##### Traduction Édition du post
 
-```json
-"Edit this post": "Modifier cet article"
-```
+  ```json
+  "Edit this post": "Modifier cet article"
+  ```
 
-#### Bouton clone dans le posts.show \<!-- markmap: fold -->
+#### Bouton clone dans le posts.show <!-- markmap: fold -->
 
-###### HTML Clone \<!-- markmap: fold -->
+##### HTML Clone <!-- markmap: fold -->
 
-```php
-@if (Auth::user()->isAdmin() || Auth::user()->id == $post->user_id)
-    <x-popover>
-        ...
-    </x-popover>
-    <x-popover>
-        <x-slot:trigger>
-            <x-button icon="o-finger-print" wire:click="clonePost({{ $post->id }})" spinner
-                class="btn-ghost btn-sm" />
-        </x-slot:trigger>
-        <x-slot:content class="pop-small">
-            @lang('Clone this post')
-        </x-slot:content>
-    </x-popover>
-@endif
-```
+  ```html
+  @if (Auth::user()->isAdmin() || Auth::user()->id == $post->user_id)
+      <x-popover>
+          ...
+      </x-popover>
+      <x-popover>
+          <x-slot:trigger>
+              <x-button icon="o-finger-print" wire:click="clonePost({{ $post->id }})" spinner
+                  class="btn-ghost btn-sm" />
+          </x-slot:trigger>
+          <x-slot:content class="pop-small">
+              @lang('Clone this post')
+          </x-slot:content>
+      </x-popover>
+  @endif
+  ```
 
-###### Traduction Clone \<!-- markmap: fold -->
+###### Traduction Clone <!-- markmap: fold -->
 
-```json
-"Clone this post": "Dupliquer cet article"
-```
+  ```json
+  "Clone this post": "Dupliquer cet article"
+  ```
 
-###### Logique du clonage  \<!-- markmap: fold -->
+###### Logique du clonage  <!-- markmap: fold -->
 
-```php
-public function clonePost(int $postId): void
-{
-    $originalPost = Post::findOrFail($postId);
-    $clonedPost = $originalPost->replicate();
-    $postRepository = new PostRepository();
-    $clonedPost->slug = $postRepository->generateUniqueSlug($originalPost->slug);
-    $clonedPost->active = false;
-    $clonedPost->save();
-
-    redirect()->route('posts.edit', $clonedPost->slug);
-}
-```
+  ```php
+  public function clonePost(int $postId): void
+  {
+      $originalPost = Post::findOrFail($postId);
+      $clonedPost = $originalPost->replicate();
+      $postRepository = new PostRepository();
+      $clonedPost->slug = $postRepository->generateUniqueSlug($originalPost->slug);
+      $clonedPost->active = false;
+      $clonedPost->save();
+  
+      redirect()->route('posts.edit', $clonedPost->slug);
+  }
+  ```
 
 #### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-modifier-un-article](https://laravel.sillo.org/posts/mon-cms-modifier-un-article)***
 
-## - xLes Catégories <!-- markmap: fold -->
+## - Les Catégories <!-- markmap: fold -->
 
-### Route categories.index \<!-- markmap: fold -->
+### Route categories.index <!-- markmap: fold -->
 
-```php
-use App\Http\Middleware\{IsAdmin, IsAdminOrRedac};
-...
-// Dans le groupe du middleware 'IsAdminOrRedac'
-Route::middleware(IsAdmin::class)->group(function () {
-    Volt::route('/categories/index', 'admin.categories.index')->name('categories.index');
-});
-```
+  ```php
+  use App\Http\Middleware\{IsAdmin, IsAdminOrRedac};
+  ...
+  // Dans le groupe du middleware 'IsAdminOrRedac'
+  Route::middleware(IsAdmin::class)->group(function () {
+      Volt::route('/categories/index', 'admin.categories.index')->name('categories.index');
+  });
+  ```
 
-### Item dans barre latérale \<!-- markmap: fold -->
+### Item dans barre latérale <!-- markmap: fold -->
 
-    HTML Item dans admin.sidebar :
+* HTML Item dans admin.sidebar :
 
-```php
-<x-menu-sub title="{{ __('Posts') }}" icon="s-document-text">
-    ...
-    @if (Auth::user()->isAdmin())
-        <x-menu-item title="{{ __('Categories') }}" link="{{ route('categories.index') }}" />
-    @endif
-</x-menu-sub> 
-```
+  ```html
+  <x-menu-sub title="{{ __('Posts') }}" icon="s-document-text">
+      ...
+      @if (Auth::user()->isAdmin())
+          <x-menu-item title="{{ __('Categories') }}" link="{{ route('categories.index') }}" />
+      @endif
+  </x-menu-sub> 
+  ```
 
-    Traduction Item :
+* Traduction Item :
 
-```json
-"Categories": "Catégories"
-```
+  ```json
+  "Categories": "Catégories"
+  ```
 
-### Création composant category.index \<!-- markmap: fold -->
+### Création composant category.index <!-- markmap: fold -->
 
-```php
-php artisan make:volt admin/categories/index --class
-```
+  ```bash
+  php artisan make:volt admin/categories/index --class
+  ```
 
-### Code composant categories.index \<!-- markmap: fold -->
+### Code composant categories.index <!-- markmap: fold -->
 
-#### Code de base \<!-- markmap: fold -->
+#### Code de base <!-- markmap: fold -->
 
-```php
-<?php
-use Livewire\Volt\Component;
-use App\Models\Category;
-use Livewire\WithPagination;
-use Livewire\Attributes\Layout;
-
-new #[Layout('components.layouts.admin')] 
-class extends Component {
-    use WithPagination;
-
-    public array $sortBy = ['column' => 'title', 'direction' => 'asc'];
-
-    public function headers(): array {
-        return [['key' => 'title', 'label' => __('Title')], ['key' => 'slug', 'label' => 'Slug']];
-    }
+  ```html
+  <?php
+  use App\Models\Category;
+  use Livewire\Volt\Component;
+  use Livewire\WithPagination;
+  use Livewire\Attributes\Layout;
   
-    public function with(): array {
-        return [
-            'categories' => Category::orderBy(...array_values($this->sortBy))->paginate(10),
-            'headers'    => $this->headers(),
-        ];
-    }
+  new #[Layout('components.layouts.admin')] 
+  class extends Component {
+      use WithPagination;
   
-}; ?>
+      public array $sortBy = ['column' => 'title', 'direction' => 'asc'];
+  
+      public function headers(): array {
+          return [['key' => 'title', 'label' => __('Title')], ['key' => 'slug', 'label' => 'Slug']];
+      }
+    
+      public function with(): array {
+          return [
+              'categories' => Category::orderBy(...array_values($this->sortBy))->paginate(10),
+              'headers'    => $this->headers(),
+          ];
+      }
+    
+  }; ?>
+  
+  <div>
+      <x-header title="{{ __('Categories') }}" separator progress-indicator>
+          <x-slot:actions class="lg:hidden">
+              <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline"
+                  link="{{ route('admin') }}" />
+          </x-slot:actions>
+      </x-header>
+      <x-card>
+          <x-table striped :headers="$headers" :rows="$categories" :sort-by="$sortBy" link="#"
+              with-pagination>
+          </x-table>
+      </x-card>
+  </div>
+  ```
 
-<div>
-    <x-header title="{{ __('Categories') }}" separator progress-indicator>
-        <x-slot:actions class="lg:hidden">
-            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline"
-                link="{{ route('admin') }}" />
-        </x-slot:actions>
-    </x-header>
-    <x-card>
-        <x-table striped :headers="$headers" :rows="$categories" :sort-by="$sortBy" link="#"
-            with-pagination>
-        </x-table>
-    </x-card>
-</div>
-```
-
-#### Ajout bouton supprimer catégorie \<!-- markmap: fold -->
+#### Ajout bouton supprimer catégorie <!-- markmap: fold -->
 
 ##### HTML Supprimer catégorie
 
-```php
-<x-table striped :headers="$headers" :rows="$categories" :sort-by="$sortBy" link="#"
-    with-pagination>
-        @scope('actions', $category)
-        <x-popover>
-            <x-slot:trigger>
-                <x-button icon="o-trash" wire:click="delete({{ $category->id }})"
-                    wire:confirm="{{ __('Are you sure to delete this category?') }}" spinner
-                    class="text-red-500 btn-ghost btn-sm" />
-            </x-slot:trigger>
-            <x-slot:content class="pop-small">
-                @lang('Delete')
-            </x-slot:content>
-        </x-popover>
-    @endscope
-</x-table>
-```
+  ```html
+  <x-table striped :headers="$headers" :rows="$categories" :sort-by="$sortBy" link="#"
+      with-pagination>
+          @scope('actions', $category)
+          <x-popover>
+              <x-slot:trigger>
+                  <x-button icon="o-trash" wire:click="delete({{ $category->id }})"
+                      wire:confirm="{{ __('Are you sure to delete this category?') }}" spinner
+                      class="text-red-500 btn-ghost btn-sm" />
+              </x-slot:trigger>
+              <x-slot:content class="pop-small">
+                  @lang('Delete')
+              </x-slot:content>
+          </x-popover>
+      @endscope
+  </x-table>
+  ```
 
 ##### Logique Supprimer catégorie
 
-```php
-public function delete(Category $category): void {
-    $category->delete();
-    $this->success(__('Category deleted with success.'));
-}
-```
+  ```php
+  public function delete(Category $category): void {
+      $category->delete();
+      $this->success(__('Category deleted with success.'));
+  }
+  ```
 
 ##### Traduction Supprimer catégorie
 
-```json
-"Are you sure to delete this category?": "Êtes-vous sûr de vouloir supprimer cette catégorie ?",
-"Category deleted with success.": "Catégorie supprimée avec succès."
-```
+  ```json
+  "Are you sure to delete this category?": "Êtes-vous sûr de vouloir supprimer cette catégorie ?",
+  "Category deleted with success.": "Catégorie supprimée avec succès."
+  ```
 
-#### Formulaire catégorie \<!-- markmap: fold -->
+#### Formulaire catégorie <!-- markmap: fold -->
 
 ##### Composant formulaire creation/modification
 
-```php
-php artisan make:volt admin/categories/category-form
-```
+  ```bash
+  php artisan make:volt admin/categories/category-form
+  ```
 
-##### HTML admin/categories/category-form.blade.php
+##### HTML admin/categories/**category-form.blade.php**
 
-```php
-<x-form wire:submit="save">
-    <x-input label="{{ __('Title') }}" wire:model.debounce.500ms="title" wire:change="$refresh" />
-    <x-input type="text" wire:model="slug" label="{{ __('Slug') }}" />
-    <x-slot:actions>
-        <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit"
-            class="btn-primary" />
-    </x-slot:actions>
-</x-form>
-```
+  ```html
+  <x-form wire:submit="save">
+      <x-input label="{{ __('Title') }}" wire:model.debounce.500ms="title" wire:change="$refresh" />
+      <x-input type="text" wire:model="slug" label="{{ __('Slug') }}" />
+      <x-slot:actions>
+          <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit"
+              class="btn-primary" />
+      </x-slot:actions>
+  </x-form>
+  ```
 
 ##### Ajout du formulaire Créer catégorie (categories.index)
 
-```php
-    <x-card title="{{ __('Create a new category') }}">
-        @include('livewire.admin.categories.category-form')
-    </x-card>
-</div>
-```
+  ```html
+      <x-card title="{{ __('Create a new category') }}">
+          @include('livewire.admin.categories.category-form')
+      </x-card>
+  </div>
+  ```
 
 ##### Complément logique validation catégorie
 
-```php
-...
-use Mary\Traits\Toast;
-use Illuminate\Support\Str;
-use Livewire\Attributes\{Layout, Validate};
-
-new #[Layout('components.layouts.admin')] 
-class extends Component {
-    use Toast, WithPagination;
-    ...
-    #[Validate('required|max:255|unique:categories,title')]
-    public string $title = '';
+  ```php
+  ...
+  use Mary\Traits\Toast;
+  use Illuminate\Support\Str;
+  use Livewire\Attributes\{Layout, Validate};
   
-    #[Validate('required|max:255|unique:posts,slug|regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/')]
-    public string $slug = '';
-  
-    public function updatedTitle($value): void {
-        $this->generateSlug($value);
+  new #[Layout('components.layouts.admin')] 
+  class extends Component {
+      use Toast, WithPagination;
+      ...
+      #[Validate('required|max:255|unique:categories,title')]
+      public string $title = '';
+    
+      #[Validate('required|max:255|unique:posts,slug|regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/')]
+      public string $slug = '';
+    
+      public function updatedTitle($value): void {
+          $this->generateSlug($value);
+      }
+    
+      private function generateSlug(string $title): void {
+          $this->slug = Str::of($title)->slug('-');
+      }
+    
+      public function save(): void {
+          $data = $this->validate();
+          Category::create($data);
+          $this->success(__('Category created with success.'));
     }
-  
-    private function generateSlug(string $title): void {
-        $this->slug = Str::of($title)->slug('-');
-    }
-  
-    public function save(): void {
-        $data = $this->validate();
-        Category::create($data);
-        $this->success(__('Category created with success.'));
-  }
-```
+  ```
 
 ##### Traduction Créer catégorie
 
-```json
-"Create a new category": "Créer une nouvelle catégorie",
-"Category created with success.": "Catégorie créée avec succès."
-```
+  ```json
+  "Create a new category": "Créer une nouvelle catégorie",
+  "Category created with success.": "Catégorie créée avec succès."
+  ```
 
-### Modification d'une catégorie \<!-- markmap: fold -->
+### Modification d'une catégorie <!-- markmap: fold -->
 
 #### Route pour la modification de catégorie
 
-```php
-Route::middleware(IsAdmin::class)->group(function () {
-    ...
-    Volt::route('/categories/{category}/edit', 'admin.categories.edit')->name('categories.edit');
-});
-```
+  ```php
+  Route::middleware(IsAdmin::class)->group(function () {
+      ...
+      Volt::route('/categories/{category}/edit', 'admin.categories.edit')->name('categories.edit');
+  });
+  ```
 
 #### Lien dans tableau des catégories
 
-```php
-// admin/categories/index
-<x-table striped :headers="$headers" :rows="$categories" :sort-by="$sortBy" link="/admin/categories/{id}/edit" with-pagination>
-```
+  ```html
+  // admin/categories/index
+  <x-table striped :headers="$headers" :rows="$categories" :sort-by="$sortBy" link="/admin/categories/{id}/edit" with-pagination>
+  ```
 
 #### Création du composant modification
 
-```php
-php artisan make:volt admin/categories/edit --class
-```
+  ```bash
+  php artisan make:volt admin/categories/edit --class
+  ```
 
-#### Code du composant d'édition \<!-- markmap: fold -->
+#### Code du composant d'édition <!-- markmap: fold -->
 
-```php
-<?php
-use Mary\Traits\Toast;
-use App\Models\Category;
-use Illuminate\Support\Str;
-use Livewire\Volt\Component;
-use Livewire\Attributes\Layout;
-use Illuminate\Validation\Rule;
-
-new #[Layout('components.layouts.admin')] 
-class extends Component {
-  use Toast;
+  ```html
+  <?php
+  use Mary\Traits\Toast;
+  use App\Models\Category;
+  use Illuminate\Support\Str;
+  use Livewire\Volt\Component;
+  use Livewire\Attributes\Layout;
+  use Illuminate\Validation\Rule;
   
-  public Category $category;
-  public string $title = '';
-  public string $slug  = '';
+  new #[Layout('components.layouts.admin')] 
+  class extends Component {
+    use Toast;
+    
+    public Category $category;
+    public string $title = '';
+    public string $slug  = '';
+    
+    public function mount(Category $category): void {
+      $this->category = $category;
+      $this->fill($this->category->toArray());
+    }
+    
+    public function updatedTitle($value): void {
+      $this->generateSlug($value);
+    }
+    
+    public function save(): void {
+      $data = $this->validate($this->rules());
+      $this->category->update($data);
+      $this->success(__('Category updated successfully.'), redirectTo: '/admin/categories/index');
+    }
+    
+    protected function rules(): array {
+    return [
+        'title' => 'required|string|max:255',
+        'slug'  => ['required', 'string', 'max:255', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/', Rule::unique('categories')->ignore($this->category->id)],
+    ];
+    }
+    
+    private function generateSlug(string $title): void {
+      $this->slug = Str::of($title)->slug('-');
+    }
+  }; ?>
   
-  public function mount(Category $category): void {
-    $this->category = $category;
-    $this->fill($this->category->toArray());
-  }
-  
-  public function updatedTitle($value): void {
-    $this->generateSlug($value);
-  }
-  
-  public function save(): void {
-    $data = $this->validate($this->rules());
-    $this->category->update($data);
-    $this->success(__('Category updated successfully.'), redirectTo: '/admin/categories/index');
-  }
-  
-  protected function rules(): array {
-  return [
-      'title' => 'required|string|max:255',
-      'slug'  => ['required', 'string', 'max:255', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/', Rule::unique('categories')->ignore($this->category->id)],
-  ];
-  }
-  
-  private function generateSlug(string $title): void {
-    $this->slug = Str::of($title)->slug('-');
-  }
-}; ?>
-
-<div>
-    <x-header title="{{ __('Edit a category') }}" separator progress-indicator>
-        <x-slot:actions class="lg:hidden">
-            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline"
-                link="{{ route('admin') }}" />
-        </x-slot:actions>
-    </x-header>
-    <x-card>
-        @include('livewire.admin.categories.category-form')
-    </x-card>
-</div>
-```
+  <div>
+      <x-header title="{{ __('Edit a category') }}" separator progress-indicator>
+          <x-slot:actions class="lg:hidden">
+              <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline"
+                  link="{{ route('admin') }}" />
+          </x-slot:actions>
+      </x-header>
+      <x-card>
+          @include('livewire.admin.categories.category-form')
+      </x-card>
+  </div>
+  ```
 
 #### Traduction modification de catégorie
 
-```json
-"Category updated successfully.": "Catégorie mise à jour avec succès.",
-"Edit a category": "Modifier une catégorie"
-```
+  ```json
+  "Category updated successfully.": "Catégorie mise à jour avec succès.",
+  "Edit a category": "Modifier une catégorie"
+  ```
 
 ### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-categories](https://laravel.sillo.org/posts/mon-cms-les-categories)***
 
