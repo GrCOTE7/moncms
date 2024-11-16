@@ -14,7 +14,7 @@ mais avez besoin d'aide, n'hésitez-pas
 à nous contacter. Voir "AIDE & CONTACT" 
 en fin de ce mémo -->
 
-## MANUEL → Mode d'Emploi <!-- markmap: fold -->
+## MANUEL → Mode d'Emploi \<!-- markmap: fold -->
 
 ### Mode d'emploi
 
@@ -67,21 +67,24 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
 
 ##### *Bonne exploration et... Bon code !*
 
-### Philosophie <!-- markmap: fold -->
+### Philosophie \<!-- markmap: fold -->
 
 * Ce type de présentation peut vous sembler surprenante de prime abord...
 
     ... Mais passé le cap de la surprise et de la découverte... :
+    <br>
 
     Au delà de l'aspect qui peut sembler ludique, et plutôt sympa sur le plan esthétique,
     car étant coloré, animé et dynamique, ce Mémo peut vite devenir, au fil du temps,
-    votre allié le plus puissant pour avoir une vision quasi synoptique du sujet étudié.
-
+    **votre allié le plus puissant** pour avoir une **vision** quasi **synoptique du sujet étudié**.<br>
     Donc, si vous parvenez à réussir à l'utiliser, ne serait-ce dans un premier temps,
     pour découvrir, apprendre, voire réviser vos connaissances, vous observerez
-    en principe assez rapidement dans l'avenir que vous saurez y revenir, et y retrouver,
-    parce qu'organisées, facilement et rapidement, les infos dont vous aurez alors
-    ponctuellement besoin :-) ! Bon usage... Et bon code !
+    en principe assez rapidement dans l'avenir que vous saurez y revenir, et y **retrouver**,
+    parce qu'organisées, **facilement et rapidement**, les **infos dont vous aurez alors
+    ponctuellement besoin** :-) !
+    <br>
+
+    *Bon usage... Et bon code !*
 
 ## LARAVEL VOLT - Généralités <!-- markmap: fold -->
 
@@ -1475,10 +1478,10 @@ php artisan   make:volt auth/forgot-password --class
 
 ##### Création composant navbar <!-- markmap: fold -->
 
-```basdh
-php artisan make:volt navigation/navbar --class
-```
-
+  ```bash
+  php artisan make:volt navigation/navbar --class
+  ```
+  
 ##### Code composant navbar <!-- markmap: fold -->
 
   ```html
@@ -9292,9 +9295,10 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
 
 ### //2do Pour aller + loin <!-- markmap: fold -->
 
-* //2do txt (Quelques mots pour Git Sillo)
 * //2do txt (Quelques mots pour présenter Academy...)
+* //2do txt (Quelques mots pour présenter start & reset.bat...)
 * //2do Pour ce Mémo, settings markdown linter 2 règles à ignorer... et pour ex. vsc code dans optimisation (au début) ?
+* //2do txt (Quelques mots pour Git Sillo)
 
 ## III &nbsp;/ &nbsp; **A I D E &nbsp; & &nbsp; C O N T A C T** <!-- markmap: fold -->
 
