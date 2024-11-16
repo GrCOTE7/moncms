@@ -1783,7 +1783,7 @@ return [
 
 ### Référence: ***[https://laravel.sillo.org/posts/mon-cms-la-page-daccueil](https://laravel.sillo.org/posts/mon-cms-la-page-daccueil)***
 
-## - xLes articles & les pages <!-- markmap: fold -->
+## - xLes articles & les pages \<!-- markmap: fold -->
 
 ### Composant posts.show \<!-- markmap: fold -->
 
@@ -2383,15 +2383,15 @@ class extends Component {
 "Your message has been sent!": "Votre message a bien été envoyé !"
 ```
 
-## - xLes menus & le footer \<!-- markmap: fold -->
+## - Les menus & le footer <!-- markmap: fold -->
 
-### Les données pour menus et footer \<!-- markmap: fold -->
+### Les données pour menus et footer <!-- markmap: fold -->
 
-#### Structures \<!-- markmap: fold -->
+#### Structures <!-- markmap: fold -->
 
-##### Model & migration Menu \<!-- markmap: fold -->
+##### Model & migration Menu <!-- markmap: fold -->
 
-```php
+```bash
   php artisan make:model Menu --migration
 ```
 
@@ -2402,8 +2402,7 @@ class extends Component {
   use Illuminate\Database\Eloquent\Model;
   use Illuminate\Database\Eloquent\Relations\HasMany;
   
-  class Menu extends Model
-  {
+  class Menu extends Model {
     public $timestamps = false;
     
     protected $fillable = [
@@ -2430,24 +2429,23 @@ class extends Component {
   }
 ```
 
-##### Model & migration Submenu \<!-- markmap: fold -->
+##### Model & migration Submenu <!-- markmap: fold -->
 
-```php
-  php artisan make:model Submenu --migration
-```
+  ```bash
+    php artisan make:model Submenu --migration
+  ```
 
-```php
-  class Submenu extends Model
-  {
-    public $timestamps = false;
-    
-    protected $fillable = [
-      'label',
-      'link',
-      'order',
-    ];
-  }
-```
+  ```php
+    class Submenu extends Model {
+      public $timestamps = false;
+      
+      protected $fillable = [
+        'label',
+        'link',
+        'order',
+      ];
+    }
+  ```
 
 ```php
   public function up(): void {
@@ -2461,156 +2459,157 @@ class extends Component {
   }
 ```
 
-##### Model & migration Footer \<!-- markmap: fold -->
+##### Model & migration Footer <!-- markmap: fold -->
 
-```php
-  php artisan make:model Footer --migration
+  ```bash
+    php artisan make:model Footer --migration
 ```
 
-```php
-  class Footer extends Model
-  {
-    public $timestamps = false;
-
-    protected $fillable = [
-      'label',
-      'link',
-      'order',
-    ];
-  }
-```
-
-```php
-  public function up(): void {
-    Schema::create('footers', function (Blueprint $table) {
-      $table->id();
-      $table->string('label');
-      $table->string('link');
-      $table->integer('order');
-    });
-  }
-```
-
-#### Population (Seeders) \<!-- markmap: fold -->
-
-##### Rappel pour créer un seeder \<!-- markmap: fold -->
-
-    Exemple avec le seeder des menus :
-
-    php artisan make:seeder MenusSeeder
-
-    OU
-
-    Créer le fichier dans database/seeders
-
-##### MenusSeeder.php \<!-- markmap: fold -->
-
-```php
-  namespace database\seeders;
+  ```php
+    class Footer extends Model {
+      public $timestamps = false;
   
-  use Illuminate\Database\Seeder;
-  use Illuminate\Support\Facades\DB;
-  class MenusSeeder extends Seeder
-  {
-    public function run() {
-      $menus = [
-          ['label' => 'Catégorie 1', 'link' => null, 'order' => 3],
-          ['label' => 'Catégorie 2', 'link' => '/category/category-2', 'order' => 2],
-          ['label' => 'Catégorie 3', 'link' => '/category/category-3', 'order' => 1],
+      protected $fillable = [
+        'label',
+        'link',
+        'order',
       ];
-  
-      DB::table('menus')->insert($menus);
-  
-      $submenus = [
-          ['label' => 'Post 1', 'order' => 1, 'link' => '/posts/post-1', 'menu_id' => 1],
-          ['label' => 'Tout', 'order' => 3, 'link' => '/category/category-1', 'menu_id' => 1],
-      ];
-  
-      DB::table('submenus')->insert($submenus);
     }
-  }
-```
+  ```
 
-##### FooterSeeder.php \<!-- markmap: fold -->
-
-```php
-  <?php
-  namespace database\seeders;
-  
-  use Illuminate\Database\Seeder;
-  use Illuminate\Support\Facades\DB;
-  
-  class FooterSeeder extends Seeder
-  {
-    public function run() {
-      // Données des éléments du pied de page
-      $footers = [
-        ['label' => 'Accueil', 'order' => 1, 'link' => '/'],
-        ['label' => 'Terms', 'order' => 3, 'link' => '/pages/terms'],
-        ['label' => 'Policy', 'order' => 4, 'link' => '/pages/privacy-policy'],
-        ['label' => 'Contact', 'order' => 5, 'link' => '/contact'],
-      ];
-
-      // Insérer les données dans la table footers
-      DB::table('footers')->insert($footers);
-    }
-  }
-```
-
-##### DatabaseSeeder.php \<!-- markmap: fold -->
-
-```php
-  public function run(): void {
-    $this->call([
-      ...
-      MenusSeeder::class,
-      FooterSeeder::class, 
-    ]);
-  }
-```
-
-```php
-  php artisan migrate:fresh --seed
-```
-
-#### Nouveauté : app/Providers/AppServiceProvider.php \<!-- markmap: fold -->
-
-    Parce que les menus et submenus sont appelés systématiquement :
-
-```php
-  ...
-  use App\Models\Menu;
-  use Illuminate\View\View;
-  use Illuminate\Support\{Facades, ServiceProvider};
-  
-  class AppServiceProvider extends ServiceProvider {
-    ...
-    public function boot(): void {
-      Facades\View::composer(['components.layouts.app'], function (View $view) {
-        $view->with(
-          'menus',
-          Menu::with(['submenus' => function ($query) {
-            $query->orderBy('order');
-          }])->orderBy('order')->get()
-        );
+  ```php
+    public function up(): void {
+      Schema::create('footers', function (Blueprint $table) {
+        $table->id();
+        $table->string('label');
+        $table->string('link');
+        $table->integer('order');
       });
     }
-  }
+  ```
+
+#### Population (Seeders) <!-- markmap: fold -->
+
+##### Rappel pour créer un seeder <!-- markmap: fold -->
+
+* Exemple avec le seeder des menus :
+
+* ```bash
+    php artisan make:seeder MenusSeeder
+  ```
+  
+* OU :
+
+* Créer le fichier **MenusSeeder.php** dans database/seeders
+
+##### **MenusSeeder.php** <!-- markmap: fold -->
+
+  ```php
+    namespace database\seeders;
+    
+    use Illuminate\Database\Seeder;
+    use Illuminate\Support\Facades\DB;
+    class MenusSeeder extends Seeder
+    {
+      public function run() {
+        $menus = [
+            ['label' => 'Catégorie 1', 'link' => null, 'order' => 3],
+            ['label' => 'Catégorie 2', 'link' => '/category/category-2', 'order' => 2],
+            ['label' => 'Catégorie 3', 'link' => '/category/category-3', 'order' => 1],
+        ];
+    
+        DB::table('menus')->insert($menus);
+    
+        $submenus = [
+            ['label' => 'Post 1', 'order' => 1, 'link' => '/posts/post-1', 'menu_id' => 1],
+            ['label' => 'Tout', 'order' => 3, 'link' => '/category/category-1', 'menu_id' => 1],
+        ];
+    
+        DB::table('submenus')->insert($submenus);
+      }
+    }
 ```
 
-### Affichages des menus
+##### **FooterSeeder.php** <!-- markmap: fold -->
 
-#### Ajouter *:$menus* dans layouts/app.blade.php \<!-- markmap: fold -->
+  ```php
+    <?php
+    namespace database\seeders;
+    
+    use Illuminate\Database\Seeder;
+    use Illuminate\Support\Facades\DB;
+    
+    class FooterSeeder extends Seeder
+    {
+      public function run() {
+        // Données des éléments du pied de page
+        $footers = [
+          ['label' => 'Accueil', 'order' => 1, 'link' => '/'],
+          ['label' => 'Terms', 'order' => 3, 'link' => '/pages/terms'],
+          ['label' => 'Policy', 'order' => 4, 'link' => '/pages/privacy-policy'],
+          ['label' => 'Contact', 'order' => 5, 'link' => '/contact'],
+        ];
+  
+        // Insérer les données dans la table footers
+        DB::table('footers')->insert($footers);
+      }
+    }
+  ```
 
-```html
-  <livewire:navigation.navbar :$menus />
-  ...
-  <livewire:navigation.sidebar :$menus />
+##### **DatabaseSeeder.php** <!-- markmap: fold -->
+
+  ```php
+    public function run(): void {
+      $this->call([
+        ...
+        MenusSeeder::class,
+        FooterSeeder::class, 
+      ]);
+    }
 ```
 
-#### Barre de Navigation
+  ```bash
+    php artisan migrate:fresh --seed
+  ```
 
-##### navigation/navbar.blade.php <!-- markmap: fold -->
+#### Nouveauté : app/Providers/**AppServiceProvider.php** <!-- markmap: fold -->
+
+* Parce que les menus et submenus sont appelés systématiquement :
+
+  ```php
+    ...
+    use App\Models\Menu;
+    use Illuminate\View\View;
+    use Illuminate\Support\{Facades, ServiceProvider};
+    
+    class AppServiceProvider extends ServiceProvider {
+      ...
+      public function boot(): void {
+        Facades\View::composer(['components.layouts.app'], function (View $view) {
+          $view->with(
+            'menus',
+            Menu::with(['submenus' => function ($query) {
+              $query->orderBy('order');
+            }])->orderBy('order')->get()
+          );
+        });
+      }
+    }
+  ```
+
+### Affichages des menus <!-- markmap: fold -->
+
+#### Ajouter ***:$menus*** dans layouts/**app.blade.php** <!-- markmap: fold -->
+
+  ```html
+    <livewire:navigation.navbar :$menus />
+    ...
+    <livewire:navigation.sidebar :$menus />
+  ```
+  
+#### Barres de Navigation
+
+##### navigation/**navbar.blade.php** <!-- markmap: fold -->
 
 * Bloc PHP :
 
