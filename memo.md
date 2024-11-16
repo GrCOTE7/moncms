@@ -22,25 +22,38 @@ en fin de ce mémo -->
 
 * ... Successivement en mode étude.
 
-        Développer le noeud le plus haut que vous n'avez pas encore visité
-        (Si vous démarrez juste, c'est... Ce '**Manuel**' v1.0.1 ! ),
-        et aller jusqu'au bout de la branche avant de passer à la suivante.
-        (Vous êtes 'au bout' d'un flux lorsqu'il n'y a plus de ligne à la droite
-        du dernier sujet déployé.).
+  ```markdown
+    Développer le noeud le plus haut que vous n'avez pas encore visité
+    (Si vous démarrez juste, c'est... Ce **'Manuel'** v1.0.1 ! ),
+    et aller jusqu'au bout de la branche avant de passer à la suivante.
+    (Vous êtes 'au bout' d'un flux lorsqu'il n'y a plus de ligne à la droite
+    du dernier sujet déployé.).
 
 * ... Selon la thématique de la racine en mode recherche.
 
-* Et surtout: Utiliser une 'vraie' souris (Et pas le paddle si notebook)
-pour naviguer aisément (Molette pour zoomer/dé-zoomer)
-
-* Enfin, considérer que ce Mémo est optimisé pour être utilisé en mode 'Preview'
-* Bonne exploration, et... Bon code !
-
 #### Coder... Oui... Mais pas de suite
 
-    (Pour Momo, mais pas que... ;-) :) Commencer par survoler les généralités, simplement en les lisant toutes.
+##### * (Pour Momo, mais pas que... ;-) :) Commencer par survoler les généralités, simplement en les lisant toutes
 
-    Ne commencer à coder qu'à partir du noeud racine 'Le projet (Mon CMS)' !
+##### &nbsp; &nbsp;→ Ne commencer à coder qu'à partir du noeud racine 'Le projet (Mon CMS)' !
+
+##### Astuces
+
+* Considérer que ce Mémo est destiné à, et optimisé pour être utilisé en mode '[*Preview*](https://laravel.sillo.org/doc/memo)' ([Prévisualisation](https://laravel.sillo.org/doc/memo)) :
+* Surtout, utiliser une 'vraie' souris (Et pas le paddle si vous êtes sur un *notebook* (Ordinateur portable))
+pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoomer facilement.
+* Pour **Copier/Coller** de (s || longs) scripts dans la *Preview* :
+\- Cliquer tout à la fin du 'pavé' désiré,
+\- Si nécessaire, remonter au tout début en faisant un *drop & drag* (Glisser-déposer)
+&nbsp; en cliquant au départ sur 'rien' (un espace 'vide'), peut-être à l'aide d'un coup de "dé-zoom" si le fichier est
+&nbsp; vraiment très long pour vous y rendre rapidement...
+\- Cliquer juste avant le 1<sup>er</sup> caractère du bloc, en maintenant la touche *SHIFT* (Majuscule) enfoncée,
+&nbsp; → À ce stade, l'ensemble du texte doit apparaître sélectionné.
+\- Au clavier, faites  la combinaison '**Ctrl + C**' pour **C**opier,
+\- Puis '**Ctrl + V**' pour '**V**a !' dans votre éditeur, dans le fichier cible.
+&nbsp; *N'hésitez-pas à vous y entraîner et tester, ne serait-ce avec ce bloc...* ;-) *!*
+ 
+##### Bonne exploration, et... Bon code !
 
 ### Philosophie \<!-- markmap: fold -->
 
