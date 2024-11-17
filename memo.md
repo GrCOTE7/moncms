@@ -1400,7 +1400,7 @@ php artisan   make:volt auth/forgot-password --class
 * \- Lancer le serveur MailHog :
 &nbsp; → Exécuter le fichier exécutable récupéré
 
-###### **[URL du rendu des courriels avec MailHog](http://127.0.0.1:8025)**
+###### **<a href="http://127.0.0.1:8025" title="Ouvrir votre messarie locale" target="_blank">URL du rendu des courriels avec MailHog</a>**
 
 ### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-lauthentification](https://laravel.sillo.org/posts/mon-cms-lauthentification)***
 
@@ -3013,7 +3013,14 @@ php artisan make:volt pages/contact --class
               <div class="flex justify-center">
                   <x-button label="{{ $commentsCount > 1 ? __('View comments') : __('View comment') }}" class="btn-outline" spinner />
               </div>
+          @else
+              @auth
+                  <livewire:posts.commentBase :postId="$post->id" />
+              @endauth
           @endif
+          @guest
+              <div class="text-center mt-8 italic">{{ __('You must be logged in to comment') }}.</div>
+          @endguest
       </div>
   </div>
   ```
@@ -3025,7 +3032,8 @@ php artisan make:volt pages/contact --class
   "View comment": "Voir le commentaire",
   "View comments": "Voir les commentaires",
   "All comments": "Tous les commentaires",
-  "No comments": "Aucun commentaire"
+  "No comments": "Aucun commentaire",
+  "You must be logged in to comment": "Vous devez être connecté pour publier un commentaire"
   ```
 
 ### Voir les commentaires dans posts.show <!-- markmap: fold -->
@@ -3287,7 +3295,6 @@ php artisan make:volt pages/contact --class
       @else
           @include('livewire.posts.comment-form', ['formTitle' => __('Leave a comment'), 'formAction' => 'createComment', 'showForm' => true, 'message' => ''])
       @endif
-  
   </div>
   ```
 
@@ -3329,6 +3336,7 @@ php artisan make:volt pages/contact --class
                   @endauth
               @endif
           @endif
+          ...
       </div>
   </div>
   ```
@@ -9336,7 +9344,8 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
 
 ### **0 / Liens techniques clés**
 
-* **[MailHog](http://127.0.0.1:8025)** (*Le service doit être démarré...*)
+* **<a href="http://127.0.0.1:8000" title="Ouvrir votre rendu" target="_blank">MonCMS</a>** (*Les serveurs doivent être démarrés...*)
+* **<a href="http://127.0.0.1:8025" title="Ouvrir votre messagerie locale" target="_blank">MailHog</a>** (*Le service doit être démarré...*)
 
 ### **[1 / Le TOP: Le dépôt GIT officiel](https://github.com/bestmomo/sillo)**
 

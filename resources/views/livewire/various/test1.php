@@ -1,3 +1,4 @@
+-- Active: 1718059481547@@127.0.0.1@3306
 <?php
 
 /**
@@ -21,16 +22,15 @@ class extends Component {
 		// var_dump($post);
 		// dd($userEmail);
 
-		// 2do envoyer l'email d'un commentaire (Exemple avec le 1er commentaire récupéré) ici
-		$comment  = Comment::find(1);
-		$post     = $comment->post;
-		$user     = $comment->user->name;
-		$res      = $post->user->notify(new CommentCreated($comment));
+		$comment = Comment::find(1);
+		$post    = $comment->post;
+		$user    = $comment->user->name;
+		$res     = $post->user->notify(new CommentCreated($comment));
 
-		$data['user']    = $user;
-		$data['post']    = $post->title;
-		$data['resNotif'] = $res;
-		$this->data      = $data;
+		$data['user']         = $user;
+		$data['post']         = $post->title;
+		$data['notification'] = $res;
+		$this->data           = $data;
 
 		// public function with(){
 		//     $post = $this->post;

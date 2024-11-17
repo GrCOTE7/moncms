@@ -191,7 +191,7 @@ new class extends Component {
             @endif
         @endif
         @guest
-        //2do Être connecté pour poster un commentaire
+            <div class="text-center mt-8 italic">{{ __('You must be logged in to comment') }}.</div>
         @endguest
     </div>
 
@@ -206,5 +206,5 @@ new class extends Component {
         </x-popover>
     </div>
 
-    {{-- 2do fond couleur verdatre dans login à supprimer --}}
+    {{-- //2do fond couleur verdatre dans login à supprimer --}}
 </div>
