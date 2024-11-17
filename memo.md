@@ -5593,7 +5593,7 @@ php artisan make:volt pages/contact --class
 
 ### Réf.: ***<a href="https://laravel.sillo.org/posts/mon-cms-les-categories" title="Voir les détails" target="_blank">https://laravel.sillo.org/posts/mon-cms-les-categories</a>***
 
-## - Les Pages \<!-- markmap: fold -->
+## - Les Pages <!-- markmap: fold -->
 
 ### Liste des pages <!-- markmap: fold -->
 
@@ -5945,7 +5945,7 @@ php artisan make:volt pages/contact --class
 
 ### Page Contact \<!-- markmap: fold -->
 
-* uuu
+* //2do ici List admin.contacts component
 
 ## - Les Comptes (Users) <!-- markmap: fold -->
 
@@ -5968,6 +5968,7 @@ php artisan make:volt pages/contact --class
   @if (Auth::user()->isAdmin())
       ...
       <x-menu-item icon="s-user" title="{{ __('Accounts') }}" link="{{ route('users.index') }}" />
+      ... (Pages)
   @endif
   ```
 
@@ -6326,10 +6327,8 @@ Route::middleware('auth')->group(function () {
 #### Liens comments dans admin.sidebars <!-- markmap: fold -->
 
   ```html
-  @if (Auth::user()->isAdmin())
-    ...
-  @endif
-  <x-menu-item icon="c-chat-bubble-left" title="{{ __('Comments') }}" link="{{ route('comments.index') }}" />
+    ...(Posts) 
+    <x-menu-item icon="c-chat-bubble-left" title="{{ __('Comments') }}" link="{{ route('comments.index') }}" />
   ```
 
 #### Composant admin.comment <!-- markmap: fold -->
@@ -6694,7 +6693,7 @@ Route::middleware('auth')->group(function () {
     <x-menu-sub title="{{ __('Menus') }}" icon="m-list-bullet">
       <x-menu-item title="{{ __('Navbar') }}" link="{{ route('menus.index') }}" />
     </x-menu-sub>
-    ... Lien 'Allez sur le site' (/)
+    ... Lien 'Allez sur le site'
   @endif
   ```
 
@@ -7640,10 +7639,10 @@ Route::middleware('auth')->group(function () {
 #### Lien admin.images.index dans admin.sidebar <!-- markmap: fold -->
 
   ```html
-  ... Route Menus
+      ...  
     </x-menu-sub>
     @if (Auth::user()->isAdmin())
-      ...
+      ... (Pages)
       <x-menu-item icon="c-photo" title="{{ __('Images') }}" link="{{ route('images.index') }}" />
     @endif
   @endif
@@ -8411,7 +8410,7 @@ Route::middleware('auth')->group(function () {
 
   ```html
     @if (Auth::user()->isAdmin())
-      ... images.index
+      ... (Menus)
       <x-menu-item icon="m-cog-8-tooth" title="{{ __('Settings') }}"
       link="{{ route('settings') }}" :class="App::isDownForMaintenance() ? 'bg-red-300' : ''" />
     @endif
