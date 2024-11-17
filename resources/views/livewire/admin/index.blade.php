@@ -30,7 +30,7 @@ new #[Title('Dashboard')] #[Layout('components.layouts.admin')] class extends Co
         $user = Auth::user();
         $isRedac = $user->isRedac();
         $userId = $user->id;
-
+        
         return [
             'pages' => Page::select('id', 'title', 'slug')->get(),
             'posts' => Post::select('id', 'title', 'slug', 'user_id', 'created_at', 'updated_at')->when($isRedac, fn(Builder $q) => $q->where('user_id', $userId))->latest()->get(),
