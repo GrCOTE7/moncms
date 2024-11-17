@@ -54,9 +54,6 @@ Route::middleware('auth')->group(function () {
 			Volt::route('/pages/create', 'admin.pages.create')->name('pages.create');
 			Volt::route('/pages/{page:slug}/edit', 'admin.pages.edit')->name('pages.edit');
 
-			// 2do: Optimisations requête (Ici ou page test2)
-			// https://www.youtube.com/watch?v=dKexOXT0oso&ab_channel=LaravelJutsu
-            
 			Volt::route('/users/index', 'admin.users.index')->name('users.index');
 			Volt::route('/users/{user}/edit', 'admin.users.edit')->name('users.edit');
 
@@ -79,5 +76,3 @@ Route::middleware('auth')->group(function () {
 		});
 	});
 });
-
-// 2do voir pourquoi bouton sombre (submenu edit/create et menu/edit)

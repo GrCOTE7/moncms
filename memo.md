@@ -43,7 +43,7 @@ en fin de ce mémo -->
 
 * ... Selon la thématique de la racine en 'mode recherche'.
 
-#### Coder... Oui... Mais pas de suite ! <!-- markmap: fold -->
+#### Coder... Oui... Mais pas de suite ! \<!-- markmap: fold -->
 
 ##### (Pour Momo, mais pas que... ;-)) Commencer par survoler les généralités, simplement en les lisant toutes
 
@@ -51,7 +51,7 @@ en fin de ce mémo -->
 
 ##### Astuces
 
-* Considérer que ce Mémo est destiné à, et optimisé pour être utilisé en mode '[*Preview*](https://laravel.sillo.org/doc/memo)' ([Prévisualisation](https://laravel.sillo.org/doc/memo)) :
+* Considérer que ce Mémo est destiné à, et optimisé pour être utilisé en mode '<a href="https://laravel.sillo.org/doc/memo" title="See it !" target="_blank">*Preview*</a>' (<a href="https://laravel.sillo.org/doc/memo" title="La voir !" target="_blank">Prévisualisation</a>) :
 * Surtout, utiliser une 'vraie' souris (Et pas le paddle si vous êtes sur un *notebook* (Ordinateur portable))
 pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoomer facilement.
 * Pour **Copier/Coller** de (s || longs) scripts dans la *Preview* :
@@ -67,7 +67,7 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
 
 ##### *Bonne exploration et... Bon code !*
 
-### Philosophie <!-- markmap: fold -->
+### Philosophie \<!-- markmap: fold -->
 
 * Ce type de présentation peut de prime abord, vous sembler surprenante, mais...
 
@@ -88,7 +88,7 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
 
 ## LARAVEL VOLT - Généralités <!-- markmap: fold -->
 
-### 1 / Bases Laravel <!-- markmap: fold -->
+### 1 / Bases Laravel \<!-- markmap: fold -->
 
 * **composer  create-project laravel/laravel monapp --prefer-dist**
 * Paramètres .env file (APP_NAME, APP_URL & DB_DATABASE)
@@ -97,15 +97,15 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
   php artisan lang:update**
 * Ajout Debugbar : **composer require barryvdh/laravel-debugbar --dev**
 
-### 2 / Gestion des Models et Tables <!-- markmap: fold -->
+### 2 / Gestion des Models et Tables \<!-- markmap: fold -->
 
-#### Légendes <!-- markmap: fold -->
+#### Légendes \<!-- markmap: fold -->
 
 * Mmm : Nom d'un Model (ex. User)
 * Ttt : Nom d'une table (ex. users)
 * Ccc : Nom d'une colonne (ex. name)
 
-#### Tables <!-- markmap: fold -->
+#### Tables \<!-- markmap: fold -->
 
 * Migration seule : *php artisan make:migration create_nnn_table*
 * Factory : *php artisan make:factory MmmFactory*
@@ -122,7 +122,7 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
 
 * Puis à les exécuter : *php artisan db:seed*
 
-#### Models, relations & migrations <!-- markmap: fold -->
+#### Models, relations & migrations \<!-- markmap: fold -->
 
 * Model (Mmm) :
 \- **protected $timestamps = false;** *Si pas besoin des champs created_at & updated_at*
@@ -155,7 +155,7 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
 \- **php artisan migrate** *la 1ère fois*
 \- **php artisan migrate:refresh --seed** *pour reset complet*
 
-### 3 / Divers <!-- markmap: fold -->
+### 3 / Divers \<!-- markmap: fold -->
 
 * Les Helpers ( app/**helpers.php** )
   (*Y écrire les fonctions appelées souvent d'un peu n'importe où ensuite*)
@@ -180,11 +180,11 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     composer dumpautoload
   ```
 
-### Extrait de: ***[https://laravel.sillo.org/posts/mon-cms-les-donnees](https://laravel.sillo.org/posts/mon-cms-les-donnees)***
+### Extrait de: ***<a href="https://laravel.sillo.org/posts/mon-cms-les-donnees" title="Voir les détails" target="_blank">https://laravel.sillo.org/posts/mon-cms-les-donnees</a>***
 
 ### Technos
 
-#### MaryUI <!-- markmap: fold -->
+#### MaryUI \<!-- markmap: fold -->
 
 ##### Installation de MaryUI
 
@@ -196,9 +196,9 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
 * → **0** (livewire/Volt)
 * → **npm install --save-dev** (npm)
 
-##### Réf.: **[Doc complète MaryUI](https://mary-ui.com)**
+##### Réf.: **<a href="https://mary-ui.com" title="Voir les détails" target="_blank">Doc complète MaryUI</a>**
 
-#### Volt <!-- markmap: fold -->
+#### Volt \<!-- markmap: fold -->
 
 ##### Bases d'un composant VOLT
 
@@ -238,13 +238,13 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
   
 * &nbsp; &nbsp; &nbsp; → Définir les clés:valeurs pour le fichier de langue (ex.: lang/**fr.json**)
 
-##### Réf.: **[Doc complète LIVEWIRE, compris VOLT](https://livewire.laravel.com/docs/quickstart)**
+<a href="https://livewire.laravel.com/docs/quickstart" title="Voir tous les détails" target="_blank">Doc complète LIVEWIRE, compris VOLT</a>**
 
-#### Extraits de : ***[https://laravel.sillo.org/posts/mon-cms-lauthentification](https://laravel.sillo.org/posts/mon-cms-lauthentification)***
+#### Extraits de : ***<a href="https://laravel.sillo.org/posts/mon-cms-lauthentification" title="Voir la totale" target="_blank">https://laravel.sillo.org/posts/mon-cms-lauthentification</a>***
 
 ## Le projet (Mon CMS) <!-- markmap: fold -->
 
-### Installation de Laravel <!-- markmap: fold -->
+### Installation de Laravel \<!-- markmap: fold -->
 
 #### Commande de base
 
@@ -300,7 +300,7 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
  pour ne pas dire toujours, ignoré des **push**es... Donc, en cas de clone par un tier, ce fichier sert
  de matrice pour l'aider à recréer son ./**.env**
 
-### Exécuter votre script <!-- markmap: fold -->
+### Exécuter votre script \<!-- markmap: fold -->
 
 #### Start & & || Restart des serveurs
 
@@ -318,7 +318,7 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
 
 #### Ouvrir votre navigateur sur [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
-### Outil recommandé (La Debugbar) <!-- markmap: fold -->
+### Outil recommandé (La Debugbar) \<!-- markmap: fold -->
 
 * Installer la debugbar, active qu'en développement
 (Dans ./**.env** : **APP_DEBUG = true**) :
@@ -329,7 +329,7 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
 
 * *Restart* ([Re]démarrer) les serveurs
 
-### Package des langues <!-- markmap: fold -->
+### Package des langues \<!-- markmap: fold -->
 
 * ```bash
     composer require --dev laravel-lang/common
@@ -348,11 +348,11 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     "Home": "Accueil",
   ```
 
-### Les données <!-- markmap: fold -->
+### Les données \<!-- markmap: fold -->
 
-#### Tables users <!-- markmap: fold -->
+#### Tables users \<!-- markmap: fold -->
 
-##### database/migrations/**0001_01_01_000000_create_users_table.php** <!-- markmap: fold -->
+##### database/migrations/**0001_01_01_000000_create_users_table.php** \<!-- markmap: fold -->
 
   ```php
     public function up(): void {
@@ -370,7 +370,7 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     }
   ```
 
-##### database/factories/**UserFactory.php** <!-- markmap: fold -->
+##### database/factories/**UserFactory.php** \<!-- markmap: fold -->
 
   ```php
   public function definition(): array {
@@ -385,7 +385,7 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
   }
   ```
 
-##### app/Models/**User.php** <!-- markmap: fold -->
+##### app/Models/**User.php** \<!-- markmap: fold -->
 
   ```php
     ...
@@ -395,15 +395,15 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     }
   ```
 
-#### Tables categories <!-- markmap: fold -->
+#### Tables categories \<!-- markmap: fold -->
 
-##### Model & migration des categories <!-- markmap: fold -->
+##### Model & migration des categories \<!-- markmap: fold -->
 
 ```bash
   php artisan make:model Category --migration
 ```
 
-##### Migrations des categories <!-- markmap: fold -->
+##### Migrations des categories \<!-- markmap: fold -->
 
   ```php
     public function up(): void {
@@ -415,7 +415,7 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     }
   ```
 
-##### app/Models/Category <!-- markmap: fold -->
+##### app/Models/Category \<!-- markmap: fold -->
 
   ```php
     <?php
@@ -427,15 +427,15 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     }
   ```
 
-#### Tables posts (Articles) <!-- markmap: fold -->
+#### Tables posts (Articles) \<!-- markmap: fold -->
 
-##### Création model & migration des articles <!-- markmap: fold -->
+##### Création model & migration des articles \<!-- markmap: fold -->
 
   ```bash
     php artisan make:model Post --migration
   ```
 
-##### Migration des articles <!-- markmap: fold -->
+##### Migration des articles \<!-- markmap: fold -->
 
   ```php
     public function up(): void {
@@ -465,13 +465,13 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     }
   ```
 
-##### Création Factory des articles <!-- markmap: fold -->
+##### Création Factory des articles \<!-- markmap: fold -->
 
   ```bash
     php artisan make:factory PostFactory
   ```
 
-##### Code factory articles <!-- markmap: fold -->
+##### Code factory articles \<!-- markmap: fold -->
 
   ```php
     public function definition(): array {
@@ -484,7 +484,7 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     }
   ```
 
-##### app/Models/Post <!-- markmap: fold -->
+##### app/Models/Post \<!-- markmap: fold -->
 
   ```php
     ...
@@ -496,9 +496,9 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     }
   ```
 
-#### Les relations <!-- markmap: fold -->
+#### Les relations \<!-- markmap: fold -->
 
-##### Les relations dans Models/Post.php <!-- markmap: fold -->
+##### Les relations dans Models/Post.php \<!-- markmap: fold -->
 
   ```php
     use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -514,7 +514,7 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     }
   ```
 
-##### La relation dans Models/User.php <!-- markmap: fold -->
+##### La relation dans Models/User.php \<!-- markmap: fold -->
 
   ```php
     use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -528,7 +528,7 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     }
   ```
 
-##### La relation dans Models/Category.php <!-- markmap: fold -->
+##### La relation dans Models/Category.php \<!-- markmap: fold -->
 
   ```php
     use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -541,15 +541,15 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     }
   ```
 
-#### Exécution des migrations <!-- markmap: fold -->
+#### Exécution des migrations \<!-- markmap: fold -->
 
 * ```bash
   php artisan migrate
   ```
 
-##### **[Voir diagramme UML des 3 tables](https://laravel.sillo.org/storage/photos/2024/08/XIVfqMqmJ7OUNl9kwGWNk5duv0U0nweTIz2nbI1E.png)**
+##### **<a href="https://laravel.sillo.org/storage/photos/2024/08/XIVfqMqmJ7OUNl9kwGWNk5duv0U0nweTIz2nbI1E.png" title="Voir les détails" target="_blank">Voir diagramme UML des 3 tables</a>**
 
-#### Population de users <!-- markmap: fold -->
+#### Population de users \<!-- markmap: fold -->
 
 ##### Création du seeder User
 
@@ -607,7 +607,7 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     }
   ```
 
-#### Population de categories <!-- markmap: fold -->
+#### Population de categories \<!-- markmap: fold -->
 
 ##### Création du seeder Category
 
@@ -648,9 +648,9 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     }
   ```
 
-#### Population de posts <!-- markmap: fold -->
+#### Population de posts \<!-- markmap: fold -->
 
-##### Créer app/**helpers.php** <!-- markmap: fold -->
+##### Créer app/**helpers.php** \<!-- markmap: fold -->
 
 ###### Y copier : generateRandomDateInRange()
 
@@ -742,7 +742,7 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     }
   ```
 
-#### Activation des seeders <!-- markmap: fold -->
+#### Activation des seeders \<!-- markmap: fold -->
 
 * database/seeders/**DatabaseSeeder.php** :
 
@@ -771,15 +771,15 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     php artisan migrate:refresh --seed
   ```
 
-#### Les pages <!-- markmap: fold -->
+#### Les pages \<!-- markmap: fold -->
 
-##### Création Model & migration Page <!-- markmap: fold -->
+##### Création Model & migration Page \<!-- markmap: fold -->
 
   ```bash
     php artisan make:model Page --migration
   ```
 
-##### Code migration Page <!-- markmap: fold -->
+##### Code migration Page \<!-- markmap: fold -->
 
   ```php
     public function up(): void {
@@ -796,7 +796,7 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     }
   ```
 
-##### Code app/models/Page <!-- markmap: fold -->
+##### Code app/models/Page \<!-- markmap: fold -->
 
   ```php
     <?php
@@ -821,13 +821,13 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     }
   ```
 
-##### Création factory Page <!-- markmap: fold -->
+##### Création factory Page \<!-- markmap: fold -->
 
   ```bash
     php artisan make:factory PageFactory
   ```
 
-##### Code factory Page <!-- markmap: fold -->
+##### Code factory Page \<!-- markmap: fold -->
 
   ```php
     public function definition(): array {
@@ -839,13 +839,13 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     }
   ```
 
-##### Création seeder Page <!-- markmap: fold -->
+##### Création seeder Page \<!-- markmap: fold -->
 
   ```bash
     php artisan make:seeder PageSeeder
   ```
 
-##### Code du seeder Page <!-- markmap: fold -->
+##### Code du seeder Page \<!-- markmap: fold -->
 
   ```php
     <?php
@@ -873,7 +873,7 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     }
   ```
 
-##### Ajout de ce seeder dans **DatabaseSeeder.php** <!-- markmap: fold -->
+##### Ajout de ce seeder dans **DatabaseSeeder.php** \<!-- markmap: fold -->
 
   ```php
     public function run(): void {
@@ -885,19 +885,19 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     }
   ```
 
-##### Rafraîchissement de la base <!-- markmap: fold -->
+##### Rafraîchissement de la base \<!-- markmap: fold -->
 
   ```bash
     php artisan migrate:fresh --seed
   ```
 
-### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-donnees](https://laravel.sillo.org/posts/mon-cms-les-donnees)***
+### Réf.: ***<a href="https://laravel.sillo.org/posts/mon-cms-les-donnees" title="Voir les détails" target="_blank">https://laravel.sillo.org/posts/mon-cms-les-donnees</a>***
 
 ## &nbsp;**I &nbsp;/ &nbsp; F R O N T &nbsp;- &nbsp;E N D &nbsp;:**
 
 ## - L'authentification <!-- markmap: fold -->
 
-### Installer MaryUI (Avec Volt et npm) <!-- markmap: fold -->
+### Installer MaryUI (Avec Volt et npm) \<!-- markmap: fold -->
 
 #### Revoir ci-avant : ' Généralités / Technos / MaryUI ' pour l'installation
 
@@ -915,7 +915,7 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
 
 ##### **[URL du rendu](http://127.0.0.1:8000)**
 
-### Layout pour l'authentification <!-- markmap: fold -->
+### Layout pour l'authentification \<!-- markmap: fold -->
 
 * ./resources/views/components/layouts/**auth.blade.php** :
 
@@ -945,11 +945,11 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
   </html>
   ```
 
-### Composants VOLT pour authentification <!-- markmap: fold -->
+### Composants VOLT pour authentification \<!-- markmap: fold -->
 
-#### Composant Register <!-- markmap: fold -->
+#### Composant Register \<!-- markmap: fold -->
 
-##### Route pour Register <!-- markmap: fold -->
+##### Route pour Register \<!-- markmap: fold -->
 
 * ./routes/**web.php** :
 
@@ -961,13 +961,13 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
   });
   ```
 
-##### Création composant Register <!-- markmap: fold -->
+##### Création composant Register \<!-- markmap: fold -->
 
   ```bash
     php artisan make:volt auth/register --class
   ```
 
-##### Code register <!-- markmap: fold -->
+##### Code register \<!-- markmap: fold -->
 
   ```html
     <?php
@@ -1034,7 +1034,7 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     </div>
   ```
 
-##### Traduction pour formulaire Register <!-- markmap: fold -->
+##### Traduction pour formulaire Register \<!-- markmap: fold -->
 
 * ./lang/**fr.json** :
 
@@ -1049,16 +1049,16 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
   "Registration successful!": "Compte créé avec succès !"
   ```
 
-##### Particularité : Pot de miel <!-- markmap: fold -->
+##### Particularité : Pot de miel \<!-- markmap: fold -->
 
 * À noter: ∃ un champs caché (gender) pour identifier les robots...
 * Voir dans le code du composant : **if ($this->gender) abort(403);**
 
 ##### **[Rendu Register](http://127.0.0.1:8000/register)** (Tester la validation des champs)
 
-#### Composant Login <!-- markmap: fold -->
+#### Composant Login \<!-- markmap: fold -->
 
-##### Route pour Login <!-- markmap: fold -->
+##### Route pour Login \<!-- markmap: fold -->
 
   ```php
   ...
@@ -1068,13 +1068,13 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
   });
   ```
 
-##### Création composant Login <!-- markmap: fold -->
+##### Création composant Login \<!-- markmap: fold -->
 
   ```bash
     php artisan make:volt auth/login --class
   ```
 
-##### Code Login <!-- markmap: fold -->
+##### Code Login \<!-- markmap: fold -->
 
   ```html
   <?php
@@ -1163,7 +1163,7 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     </div>
   ```
 
-##### Traduction pour formulaire Login <!-- markmap: fold -->
+##### Traduction pour formulaire Login \<!-- markmap: fold -->
 
   ```json
 "Forgot your password?": "Mot de passe oublié ?",
@@ -1174,7 +1174,7 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
 
 #### Oubli et reset du mot de passe
 
-##### Gestion des sessions <!-- markmap: fold -->
+##### Gestion des sessions \<!-- markmap: fold -->
 
 ###### Création composant messages en session
 
@@ -1194,9 +1194,9 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
   @endif
   ```
 
-##### Gestion de l'oubli du mot de passe <!-- markmap: fold -->
+##### Gestion de l'oubli du mot de passe \<!-- markmap: fold -->
 
-###### Route pour forgot-password <!-- markmap: fold -->
+###### Route pour forgot-password \<!-- markmap: fold -->
 
   ```php
   Route::middleware('guest')->group(function () {
@@ -1205,13 +1205,13 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
   });
   ```
 
-###### Création composant oubli mot de passe <!-- markmap: fold -->
+###### Création composant oubli mot de passe \<!-- markmap: fold -->
 
   ```bash
 php artisan   make:volt auth/forgot-password --class
   ```
 
-###### Composant forgot-password <!-- markmap: fold -->
+###### Composant forgot-password \<!-- markmap: fold -->
 
   ```html
     <?php
@@ -1270,7 +1270,7 @@ php artisan   make:volt auth/forgot-password --class
   </div>
   ```
 
-###### Traduction pour forgot-password <!-- markmap: fold -->
+###### Traduction pour forgot-password \<!-- markmap: fold -->
 
   ```json
   "Password renewal": "Renouvellement du mot de passe",
@@ -1280,9 +1280,9 @@ php artisan   make:volt auth/forgot-password --class
 
 ###### **[Rendu forgot-password](http://127.0.0.1:8000/forgot-password)** (Tester la validation du champs - *Ne pas soumettre le Formulaire*)
 
-##### Gestion du reset du mot de passe <!-- markmap: fold -->
+##### Gestion du reset du mot de passe \<!-- markmap: fold -->
 
-###### Route pour reset-password <!-- markmap: fold -->
+###### Route pour reset-password \<!-- markmap: fold -->
 
   ```php
   Route::middleware('guest')->group(function () {
@@ -1291,13 +1291,13 @@ php artisan   make:volt auth/forgot-password --class
   });
   ```
 
-###### Création composant reset-password <!-- markmap: fold -->
+###### Création composant reset-password \<!-- markmap: fold -->
 
   ```bash
   php artisan make:volt auth/reset-password --class
   ```
 
-###### Composant reset-password <!-- markmap: fold -->
+###### Composant reset-password \<!-- markmap: fold -->
 
   ```html
     <?php
@@ -1372,15 +1372,15 @@ php artisan   make:volt auth/forgot-password --class
   </div>
   ```
 
-###### **[Rendu forgot-password](http://127.0.0.1:8000/forgot-password)** (Tester la soumission du Formulaire)
+<a href="http://127.0.0.1:8000/forgot-password" title="Tester la soumission du Formulaire" target="_blank">**Rendu forgot-password**</a>
 
-###### Voir le email reçu <!-- markmap: fold -->
+###### Voir le email reçu \<!-- markmap: fold -->
 
 * Par défaut: Dans storage\logs\laravel.log (Tout à la fin du fichier, le code HTML du courriel)
 
   OU, pour avoir le vrai rendu de ce courriel, une très bonne solution GRATUITE est MailHog :
 
-###### [Installer MailHog](https://github.com/mailhog/MailHog) <!-- markmap: fold -->
+<a href="https://github.com/mailhog/MailHog" title="Dépôt de MailHog" target="_blank">Installer MailHog</a> \<!-- markmap: fold -->
 
 * \- Dans .env :
 
@@ -1400,13 +1400,13 @@ php artisan   make:volt auth/forgot-password --class
 * \- Lancer le serveur MailHog :
 &nbsp; → Exécuter le fichier exécutable récupéré
 
-###### **<a href="http://127.0.0.1:8025" title="Ouvrir votre messarie locale" target="_blank">URL du rendu des courriels avec MailHog</a>**
+###### **<a href="http://127.0.0.1:8025" title="Ouvrir votre messagerie locale" target="_blank">URL du rendu des courriels avec MailHog</a>**
 
-### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-lauthentification](https://laravel.sillo.org/posts/mon-cms-lauthentification)***
+### Réf.: ***<a href="https://laravel.sillo.org/posts/mon-cms-lauthentification" title="Voir les détails" target="_blank">https://laravel.sillo.org/posts/mon-cms-lauthentification</a>***
 
 ## - La page d'accueil (*Homepage*) <!-- markmap: fold -->
 
-### Routes index & category <!-- markmap: fold -->
+### Routes index & category \<!-- markmap: fold -->
 
   ```php
     Volt::route('/', 'index');
@@ -1414,13 +1414,13 @@ php artisan   make:volt auth/forgot-password --class
     Volt::route('/category/{slug}', 'index');
   ```
 
-### Création composant index <!-- markmap: fold -->
+### Création composant index \<!-- markmap: fold -->
 
   ```bash
   php artisan make:volt index --class 
   ```
 
-### Les images <!-- markmap: fold -->
+### Les images \<!-- markmap: fold -->
 
 * ```bash
   php artisan storage:link
@@ -1432,7 +1432,7 @@ php artisan   make:volt auth/forgot-password --class
 \- storage/app/.gitignore
 \- storage/app/public/.gitignore
 
-### Layout app <!-- markmap: fold -->
+### Layout app \<!-- markmap: fold -->
 
 * resources/components/layouts/**app.blade.php** :
 
@@ -1472,17 +1472,17 @@ php artisan   make:volt auth/forgot-password --class
     </body>
   ```
 
-### La barre de navigation <!-- markmap: fold -->
+### La barre de navigation \<!-- markmap: fold -->
 
-#### La Navbar (Grand écran ou bouton burger) <!-- markmap: fold -->
+#### La Navbar (Grand écran ou bouton burger) \<!-- markmap: fold -->
 
-##### Création composant navbar <!-- markmap: fold -->
+##### Création composant navbar \<!-- markmap: fold -->
 
   ```bash
   php artisan make:volt navigation/navbar --class
   ```
   
-##### Code composant navbar <!-- markmap: fold -->
+##### Code composant navbar \<!-- markmap: fold -->
 
   ```html
   <?php
@@ -1523,7 +1523,7 @@ php artisan   make:volt auth/forgot-password --class
     </x-nav>
   ```
 
-##### Layout pour le composant navbar <!-- markmap: fold -->
+##### Layout pour le composant navbar \<!-- markmap: fold -->
 
 * Attention: À ce stade, se connecter fait apparaître une erreur...
 (Juste rafraîchir, et tester responsive - Ex.: Réduire la taille de l'écran...)
@@ -1548,15 +1548,15 @@ php artisan   make:volt auth/forgot-password --class
   </body>
   ```
 
-#### La Sidebar (Petit écran) <!-- markmap: fold -->
+#### La Sidebar (Petit écran) \<!-- markmap: fold -->
 
-##### Création composant sidebar <!-- markmap: fold -->
+##### Création composant sidebar \<!-- markmap: fold -->
 
   ```bash
     php artisan make:volt navigation/sidebar --class
   ```
 
-##### Code composant sidebar <!-- markmap: fold -->
+##### Code composant sidebar \<!-- markmap: fold -->
 
   ```html
     <?php
@@ -1591,7 +1591,7 @@ php artisan   make:volt auth/forgot-password --class
     </div>
   ```
 
-##### Layout pour le composant sidebar <!-- markmap: fold -->
+##### Layout pour le composant sidebar \<!-- markmap: fold -->
 
   ```html
     ...
@@ -1613,9 +1613,9 @@ php artisan   make:volt auth/forgot-password --class
   </body>
   ```
 
-### Bloc central : Les articles <!-- markmap: fold -->
+### Bloc central : Les articles \<!-- markmap: fold -->
 
-#### Création app/Repositories/**PostRepository.php** <!-- markmap: fold -->
+#### Création app/Repositories/**PostRepository.php** \<!-- markmap: fold -->
 
   ```php
     <?php
@@ -1664,7 +1664,7 @@ php artisan   make:volt auth/forgot-password --class
     }
   ```
 
-#### config/**app.php** <!-- markmap: fold -->
+#### config/**app.php** \<!-- markmap: fold -->
 
   ```php
   return [
@@ -1674,7 +1674,7 @@ php artisan   make:volt auth/forgot-password --class
   ]
   ```
 
-#### Code composant index <!-- markmap: fold -->
+#### Code composant index \<!-- markmap: fold -->
 
   ```html
     <?php
@@ -1782,7 +1782,7 @@ php artisan   make:volt auth/forgot-password --class
     </div>
   ```
 
-#### Traduction pour les articles <!-- markmap: fold -->
+#### Traduction pour les articles \<!-- markmap: fold -->
 
   ```json
     "Show this category": "Voir cette catégorie",
@@ -1793,7 +1793,7 @@ php artisan   make:volt auth/forgot-password --class
     "No Post found with these criteria": "Aucun article trouvé avec ces critères"
   ```
 
-### Styles pagination & popups <!-- markmap: fold -->
+### Styles pagination & popups \<!-- markmap: fold -->
 
 * \- Pour le menu pagination : ./**tailwind.config.js**
 
@@ -1816,19 +1816,19 @@ php artisan   make:volt auth/forgot-password --class
   }
   ```
 
-### Référence: ***[https://laravel.sillo.org/posts/mon-cms-la-page-daccueil](https://laravel.sillo.org/posts/mon-cms-la-page-daccueil)***
+### Réf.: ***<a href="https://laravel.sillo.org/posts/mon-cms-la-page-daccueil" title="Voir les détails" target="_blank">https://laravel.sillo.org/posts/mon-cms-la-page-daccueil</a>***
 
 ## - Les articles & les pages <!-- markmap: fold -->
 
-### Composant posts.show <!-- markmap: fold -->
+### Composant posts.show \<!-- markmap: fold -->
 
-#### Route posts.show <!-- markmap: fold -->
+#### Route posts.show \<!-- markmap: fold -->
 
   ```php
     Volt::route('/posts/{slug}', 'posts.show')->name('posts.show');
   ```
 
-#### PostRepository <!-- markmap: fold -->
+#### PostRepository \<!-- markmap: fold -->
 
 ```php
   public function getPostBySlug(string $slug): Post {
@@ -1837,13 +1837,13 @@ php artisan   make:volt auth/forgot-password --class
   }
 ```
 
-#### Création composant posts.show <!-- markmap: fold -->
+#### Création composant posts.show \<!-- markmap: fold -->
 
   ```bash
     php artisan make:volt posts/show --class
   ```
 
-#### Code composant posts.show <!-- markmap: fold -->
+#### Code composant posts.show \<!-- markmap: fold -->
 
   ```html
     <?php
@@ -1891,13 +1891,13 @@ php artisan   make:volt auth/forgot-password --class
     </div>
   ```
 
-#### Traduction posts.show <!-- markmap: fold -->
+#### Traduction posts.show \<!-- markmap: fold -->
 
   ```json
     "By": "Par"
   ```
 
-### Dynamic Title/Description/Keywords (S.E.O.) <!-- markmap: fold -->
+### Dynamic Title/Description/Keywords (S.E.O.) \<!-- markmap: fold -->
 
 #### Dans le **Layout**
 
@@ -1945,7 +1945,7 @@ php artisan   make:volt auth/forgot-password --class
     @section('keywords', $post->meta_keywords
   ```
 
-### Typographie: Plugin **prose** de Tailwind <!-- markmap: fold -->
+### Typographie: Plugin **prose** de Tailwind \<!-- markmap: fold -->
 
 * ```bash
   npm install -D @tailwindcss/typography
@@ -1964,11 +1964,11 @@ php artisan   make:volt auth/forgot-password --class
   
 * *Ex. d'utilisation : \<div class="relative items-center w-full py-5 mx-auto **prose** md:px-12 max-w-7xl">*
 
-### Style avec Librairie **prismjs** <!-- markmap: fold -->
+### Style avec Librairie **prismjs** \<!-- markmap: fold -->
 
 * Configurer **prism.css** et **prism.js** : [https://prismjs.com/download.html](https://prismjs.com/download.html)
   OU :
-  Récupérer ceux du site Sillo: [CSS](https://laravel.sillo.org/storage/css/prism.css) et [JS](https://laravel.sillo.org/storage/scripts/prism.js)
+  Récupérer ceux du site Sillo: <a href="https://laravel.sillo.org/storage/css/prism.css" title="pour obtenir exactement le même rendu" target="_blank">CSS</a> et <a href="https://laravel.sillo.org/storage/scripts/prism.js" title="pour obtenir exactement le même rendu" target="_blank">JS</a>
 
 * Quelque soit le choix, poser dans le layout :
 
@@ -1985,7 +1985,7 @@ php artisan   make:volt auth/forgot-password --class
     \</body>
   ```
 
-### Mode clair/sombre (MaryIU) <!-- markmap: fold -->
+### Mode clair/sombre (MaryIU) \<!-- markmap: fold -->
 
 * ./**tailwind.config.js** :
 
@@ -2013,11 +2013,11 @@ php artisan   make:volt auth/forgot-password --class
   "Toggle theme": "Basculer le thème"
   ```
 
-* Doc MaryUI ***[https://mary-ui.com/docs/components/theme-toggle](https://mary-ui.com/docs/components/theme-toggle)***
+* Doc MaryUI ***<a href="https://mary-ui.com/docs/components/theme-toggle" title="Voir les détails" target="_blank">https://mary-ui.com/docs/components/theme-toggle</a>***
 
-### Search bar <!-- markmap: fold -->
+### Search bar \<!-- markmap: fold -->
 
-#### La route (routes/**web.php**) <!-- markmap: fold -->
+#### La route (routes/**web.php**) \<!-- markmap: fold -->
 
 * ```php
     Volt::route('/search/{param}', 'index')->name('posts.search');
@@ -2025,7 +2025,7 @@ php artisan   make:volt auth/forgot-password --class
 
 * À noter sa particularité : Renvoie aussi sur la vue index
 
-#### Composant search <!-- markmap: fold -->
+#### Composant search \<!-- markmap: fold -->
 
 * Création composant Search :
 
@@ -2063,7 +2063,7 @@ php artisan   make:volt auth/forgot-password --class
     </div>
   ```
 
-#### Vue HTML - navigation/navbar.php <!-- markmap: fold -->
+#### Vue HTML - navigation/navbar.php \<!-- markmap: fold -->
 
   ```html
       ...
@@ -2072,7 +2072,7 @@ php artisan   make:volt auth/forgot-password --class
   </x-nav>
   ```
 
-#### Ajouter search() dans app/Repositories/**PostRepository.php** <!-- markmap: fold -->
+#### Ajouter search() dans app/Repositories/**PostRepository.php** \<!-- markmap: fold -->
 
 * search(), La fonction qui inclue la chaîne du formulaire pour gérer la recherche :
 
@@ -2089,9 +2089,9 @@ php artisan   make:volt auth/forgot-password --class
     }
   ```
 
-#### Composant index (Homepage (Page d'accueil)) <!-- markmap: fold -->
+#### Composant index (Homepage (Page d'accueil)) \<!-- markmap: fold -->
 
-##### **Bloc Logique PHP** : Quand on récupère les posts... <!-- markmap: fold -->
+##### **Bloc Logique PHP** : Quand on récupère les posts... \<!-- markmap: fold -->
 
 * ...On déclenche le composant search
 &nbsp; &nbsp; si l'URI comporte un paramètre (function getPosts()) :
@@ -2118,7 +2118,7 @@ php artisan   make:volt auth/forgot-password --class
     }
   ```
 
-##### **Bloc Vue Blade** : S'il y a une recherche... <!-- markmap: fold -->
+##### **Bloc Vue Blade** : S'il y a une recherche... \<!-- markmap: fold -->
 
 * ...Alors, on affiche le titre de la page adapté :
 
@@ -2130,14 +2130,14 @@ php artisan   make:volt auth/forgot-password --class
     @endif
   ```
 
-#### Traductions nécessaires (**lang/fr.json**) <!-- markmap: fold -->
+#### Traductions nécessaires (**lang/fr.json**) \<!-- markmap: fold -->
 
   ```json
     "Search...": "Rechercher...",
     "Posts for search ": "Articles pour la recherche",
   ```
 
-### Affichage d'une page <!-- markmap: fold -->
+### Affichage d'une page \<!-- markmap: fold -->
 
 #### Route pages.show
 
@@ -2204,13 +2204,13 @@ php artisan   make:volt auth/forgot-password --class
     "Edit this page": "Modifier cette page"
   ```
 
-### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-articles](https://laravel.sillo.org/posts/mon-cms-les-articles)***
+### Réf.: ***<a href="https://laravel.sillo.org/posts/mon-cms-les-articles" title="Voir les détails" target="_blank">https://laravel.sillo.org/posts/mon-cms-les-articles</a>***
 
-### La page Contact <!-- markmap: fold -->
+### La page Contact \<!-- markmap: fold -->
 
-#### Données Contact <!-- markmap: fold -->
+#### Données Contact \<!-- markmap: fold -->
 
-##### Model & Migration Contact <!-- markmap: fold -->
+##### Model & Migration Contact \<!-- markmap: fold -->
 
   ```bash
   php artisan make:model Contact -m
@@ -2262,7 +2262,7 @@ php artisan   make:volt auth/forgot-password --class
   }
   ```
 
-##### Seeder avec Factory Contact <!-- markmap: fold -->
+##### Seeder avec Factory Contact \<!-- markmap: fold -->
 
   ```bash
   php artisan make:factory Contact
@@ -2329,14 +2329,14 @@ php artisan   make:volt auth/forgot-password --class
   php artisan db:seed
   ```
 
-#### Route Contact <!-- markmap: fold -->
+#### Route Contact \<!-- markmap: fold -->
 
   ```php
   ... /pages/{page:slug} (Ndlr: Route pages.show)
   Volt::route('/contact', 'pages.contact')->name('pages.contact');
   ```
 
-#### Composant Contact (livewire/**contact.blade.php**) <!-- markmap: fold -->
+#### Composant Contact (livewire/**contact.blade.php**) \<!-- markmap: fold -->
 
 ```php
 php artisan make:volt pages/contact --class
@@ -2411,7 +2411,7 @@ php artisan make:volt pages/contact --class
   </div>
   ```
 
-#### Traductions Contact <!-- markmap: fold -->
+#### Traductions Contact \<!-- markmap: fold -->
 
   ```json
   "Use this form to contact me": "Utilisez ce formulaire pour me contacter",
@@ -2422,11 +2422,11 @@ php artisan make:volt pages/contact --class
 
 ## - Les menus & le footer <!-- markmap: fold -->
 
-### Les données pour menus et footer <!-- markmap: fold -->
+### Les données pour menus et footer \<!-- markmap: fold -->
 
-#### Structures <!-- markmap: fold -->
+#### Structures \<!-- markmap: fold -->
 
-##### Model & migration Menu <!-- markmap: fold -->
+##### Model & migration Menu \<!-- markmap: fold -->
 
 ```bash
   php artisan make:model Menu --migration
@@ -2466,7 +2466,7 @@ php artisan make:volt pages/contact --class
   }
 ```
 
-##### Model & migration Submenu <!-- markmap: fold -->
+##### Model & migration Submenu \<!-- markmap: fold -->
 
   ```bash
     php artisan make:model Submenu --migration
@@ -2496,7 +2496,7 @@ php artisan make:volt pages/contact --class
   }
 ```
 
-##### Model & migration Footer <!-- markmap: fold -->
+##### Model & migration Footer \<!-- markmap: fold -->
 
   ```bash
     php artisan make:model Footer --migration
@@ -2525,9 +2525,9 @@ php artisan make:volt pages/contact --class
     }
   ```
 
-#### Population (Seeders) <!-- markmap: fold -->
+#### Population (Seeders) \<!-- markmap: fold -->
 
-##### Rappel pour créer un seeder <!-- markmap: fold -->
+##### Rappel pour créer un seeder \<!-- markmap: fold -->
 
 * Exemple avec le seeder des menus :
 
@@ -2539,7 +2539,7 @@ php artisan make:volt pages/contact --class
 
 * Créer le fichier **MenusSeeder.php** dans database/seeders
 
-##### **MenusSeeder.php** <!-- markmap: fold -->
+##### **MenusSeeder.php** \<!-- markmap: fold -->
 
   ```php
     namespace database\seeders;
@@ -2567,7 +2567,7 @@ php artisan make:volt pages/contact --class
     }
 ```
 
-##### **FooterSeeder.php** <!-- markmap: fold -->
+##### **FooterSeeder.php** \<!-- markmap: fold -->
 
   ```php
     <?php
@@ -2593,7 +2593,7 @@ php artisan make:volt pages/contact --class
     }
   ```
 
-##### **DatabaseSeeder.php** <!-- markmap: fold -->
+##### **DatabaseSeeder.php** \<!-- markmap: fold -->
 
   ```php
     public function run(): void {
@@ -2609,7 +2609,7 @@ php artisan make:volt pages/contact --class
     php artisan migrate:fresh --seed
   ```
 
-#### Nouveauté : app/Providers/**AppServiceProvider.php** <!-- markmap: fold -->
+#### Nouveauté : app/Providers/**AppServiceProvider.php** \<!-- markmap: fold -->
 
 * Parce que les menus et submenus sont appelés systématiquement :
 
@@ -2634,9 +2634,9 @@ php artisan make:volt pages/contact --class
     }
   ```
 
-### Affichages des menus <!-- markmap: fold -->
+### Affichages des menus \<!-- markmap: fold -->
 
-#### Ajouter ***:$menus*** dans layouts/**app.blade.php** <!-- markmap: fold -->
+#### Ajouter ***:$menus*** dans layouts/**app.blade.php** \<!-- markmap: fold -->
 
   ```html
     <livewire:navigation.navbar :$menus />
@@ -2646,7 +2646,7 @@ php artisan make:volt pages/contact --class
   
 #### Barres de Navigation
 
-##### navigation/**navbar.blade.php** <!-- markmap: fold -->
+##### navigation/**navbar.blade.php** \<!-- markmap: fold -->
 
 * Bloc PHP :
 
@@ -2686,7 +2686,7 @@ php artisan make:volt pages/contact --class
   </span>
   ```
 
-##### navigation/**sidebar.blade.php** <!-- markmap: fold -->
+##### navigation/**sidebar.blade.php** \<!-- markmap: fold -->
 
   ```html
   ...
@@ -2723,7 +2723,7 @@ php artisan make:volt pages/contact --class
   </x-menu>
   ```
 
-#### Menu Pied de page <!-- markmap: fold -->
+#### Menu Pied de page \<!-- markmap: fold -->
 
 * Composant navigation/**footer.blade.php** :
 
@@ -2792,14 +2792,14 @@ php artisan make:volt pages/contact --class
   "Go to the GitHub repository and... Fork it": "Aller sur le dépôt GitHub et... Le cloner",
   "Go to the Discord channel": "Aller sur le canal Discord"
   ```
-  
-### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-menus](https://laravel.sillo.org/posts/mon-cms-les-menus)***
+
+### Réf.: ***<a href="https://laravel.sillo.org/posts/mon-cms-les-menus" title="Voir les détails" target="_blank">https://laravel.sillo.org/posts/mon-cms-les-menus</a>***
 
 ## - Les commentaires <!-- markmap: fold -->
 
-### Model & Migration et factory & seeder Comment <!-- markmap: fold -->
+### Model & Migration et factory & seeder Comment \<!-- markmap: fold -->
 
-#### Model Comment <!-- markmap: fold -->
+#### Model Comment \<!-- markmap: fold -->
 
   ```bash
   php artisan make:model Comment --migration
@@ -2842,7 +2842,7 @@ php artisan make:volt pages/contact --class
   }
   ```
 
-#### Structure Comment <!-- markmap: fold -->
+#### Structure Comment \<!-- markmap: fold -->
 
 * Migration de comments_table :
 
@@ -2863,7 +2863,7 @@ php artisan make:volt pages/contact --class
   }
   ```
 
-#### Relations avec Comment <!-- markmap: fold -->
+#### Relations avec Comment \<!-- markmap: fold -->
 
 * Model Post
 
@@ -2893,9 +2893,9 @@ php artisan make:volt pages/contact --class
   }
   ```
 
-* [Diagramme UML](https://laravel.sillo.org/storage/photos/2024/08/535DwpjTWsqCqM6Zut9mwt10mL0FeZp303J1W1Ef.png)
+<a href="https://laravel.sillo.org/storage/photos/2024/08/535DwpjTWsqCqM6Zut9mwt10mL0FeZp303J1W1Ef.png" title="Voir le diagramme" target="_blank">Diagramme UML</a>
 
-#### Population Comment <!-- markmap: fold -->
+#### Population Comment \<!-- markmap: fold -->
 
 * ```bash
   php artisan make:factory CommentFactory
@@ -2972,7 +2972,7 @@ php artisan make:volt pages/contact --class
   php artisan migrate:fresh --seed
   ```
 
-### Modifier dans PostRepository pour Comment <!-- markmap: fold -->
+### Modifier dans PostRepository pour Comment \<!-- markmap: fold -->
 
   ```php
   public function getPostBySlug(string $slug): Post {
@@ -2982,7 +2982,7 @@ php artisan make:volt pages/contact --class
   }
   ```
 
-### Ajouter & modifier dans posts.show pour Comment <!-- markmap: fold -->
+### Ajouter & modifier dans posts.show pour Comment \<!-- markmap: fold -->
 
 * Notons que le bouton pour voir le(s) commentaire(s) n'est pas encore opérationnel...
 
@@ -3019,7 +3019,10 @@ php artisan make:volt pages/contact --class
               @endauth
           @endif
           @guest
-              <div class="text-center mt-8 italic">{{ __('You must be logged in to comment') }}.</div>
+              <div class="text-center mt-8 italic">
+                <a href="{{ route('login') }}" title="{{ __('Click here to log in') }} !">
+                {{ __('You must be logged in to comment') }}</a>.
+              </div>
           @endguest
       </div>
   </div>
@@ -3033,10 +3036,11 @@ php artisan make:volt pages/contact --class
   "View comments": "Voir les commentaires",
   "All comments": "Tous les commentaires",
   "No comments": "Aucun commentaire",
-  "You must be logged in to comment": "Vous devez être connecté pour publier un commentaire"
+  "You must be logged in to comment": "Vous devez être connecté pour publier un commentaire",
+  "Click here to log in": "Cliquez ici pour vous connecter"
   ```
 
-### Voir les commentaires dans posts.show <!-- markmap: fold -->
+### Voir les commentaires dans posts.show \<!-- markmap: fold -->
 
 * ```php
   <?php
@@ -3092,9 +3096,9 @@ php artisan make:volt pages/contact --class
   ...
   ```
 
-### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-commentaires-1-2](https://laravel.sillo.org/posts/mon-cms-les-commentaires-1-2)***
+### Réf.: ***<a href="https://laravel.sillo.org/posts/mon-cms-les-commentaires-1-2" title="Voir les détails" target="_blank">https://laravel.sillo.org/posts/mon-cms-les-commentaires-1-2</a>***
 
-### Le formulaire (Composant posts/comment-form) <!-- markmap: fold -->
+### Le formulaire (Composant posts/comment-form) \<!-- markmap: fold -->
 
   ```bash
   php artisan make:volt posts/comment-form --class
@@ -3119,24 +3123,25 @@ php artisan make:volt pages/contact --class
   @endif
   ```
 
-### Gravatar <!-- markmap: fold -->
+### Gravatar \<!-- markmap: fold -->
 
 #### Installer Gravatar
 
 * ```bash
   composer require creativeorange/gravatar ~1.0
   ```
+
 * Usage:
 
   ```php
   Gravatar::get('email@example.com');
   ```
 
-#### [Créer son Gravatar](https://gravatar.com/)
+#### <a href="https://gravatar.com" title="Aller sur le site de Gravatar" target="_blank">Créer son Gravatar</a
 
-### Les notifications <!-- markmap: fold -->
+### Les notifications \<!-- markmap: fold -->
 
-#### Création de commentaire <!-- markmap: fold -->
+#### Création de commentaire \<!-- markmap: fold -->
 
 * ```bash
   php artisan make:notification CommentCreated
@@ -3189,7 +3194,7 @@ php artisan make:volt pages/contact --class
   "by": "par"
   ```
 
-#### Affichage des commentaires 1er niveau <!-- markmap: fold -->
+#### Affichage des commentaires 1er niveau \<!-- markmap: fold -->
 
 * ```bash
   php artisan make:volt posts/commentBase --class
@@ -3341,7 +3346,7 @@ php artisan make:volt pages/contact --class
   </div>
   ```
 
-#### Notification de réponse à un commentaire <!-- markmap: fold -->
+#### Notification de réponse à un commentaire \<!-- markmap: fold -->
 
   ```bash
   php artisan make:notification CommentAnswerCreated
@@ -3389,7 +3394,7 @@ php artisan make:volt pages/contact --class
   "Show this comment": "Voir ce commentaire"
   ```
 
-### Composant pour l'affichage des commentaires <!-- markmap: fold -->
+### Composant pour l'affichage des commentaires \<!-- markmap: fold -->
 
   ```bash
   php artisan make:volt posts/comment --class
@@ -3591,7 +3596,7 @@ php artisan make:volt pages/contact --class
       @endforeach
   ```
 
-### Sécurité // {!! $uneVariabledansDuCodeBladeQuiContientDuCodeDestinéÀLaVue !!} <!-- markmap: fold -->
+### Sécurité // {!! $uneVariabledansDuCodeBladeQuiContientDuCodeDestinéÀLaVue !!} \<!-- markmap: fold -->
 
   ```bash
   composer require mews/purifier
@@ -3609,11 +3614,11 @@ php artisan make:volt pages/contact --class
   }
   ```
 
-### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-commentaires-2-2](https://laravel.sillo.org/posts/mon-cms-les-commentaires-2-2)***
+### Réf.: ***<a href="https://laravel.sillo.org/posts/mon-cms-les-commentaires-2-2" title="Voir les détails" target="_blank">https://laravel.sillo.org/posts/mon-cms-les-commentaires-2-2</a>***
 
 ## - Le profil <!-- markmap: fold -->
 
-### Route du profil <!-- markmap: fold -->
+### Route du profil \<!-- markmap: fold -->
 
 * Considérer que ce n'est que pour les *users* "autorisés"
     → **Middleware('auth')**) et comme il y aura d'autres routes
@@ -3625,7 +3630,7 @@ php artisan make:volt pages/contact --class
   });
   ```
 
-### Liens dans les vues adhoc <!-- markmap: fold -->
+### Liens dans les vues adhoc \<!-- markmap: fold -->
 
 * \- Pour les grands écrans, dans **navigation.navbar** :
 
@@ -3651,7 +3656,7 @@ php artisan make:volt pages/contact --class
           <x-menu-item title="{{ __('Profile') }}" icon="o-user" link="{{ route('profile') }}" />
   ```
 
-### Composant Profile <!-- markmap: fold -->
+### Composant Profile \<!-- markmap: fold -->
 
   ```bash
   php artisan make:volt auth/profile --class
@@ -3748,7 +3753,7 @@ php artisan make:volt pages/contact --class
   </div>
   ```
 
-### Traductions pour Profile <!-- markmap: fold -->
+### Traductions pour Profile \<!-- markmap: fold -->
 
   ```json
   "Update profile": "Modifier le profil",
@@ -3764,13 +3769,13 @@ php artisan make:volt pages/contact --class
   "Return on site": "Retourner sur le site"
   ```
 
-### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-le-profil](https://laravel.sillo.org/posts/mon-cms-le-profil)***
+### Réf.: ***<a href="https://laravel.sillo.org/posts/mon-cms-le-profil">" title="Voir les détails" target="_blank">https://laravel.sillo.org/posts/mon-cms-le-profil</a>***
 
 ## - Les favoris <!-- markmap: fold -->
 
-### Fonctionnalité des Favoris <!-- markmap: fold -->
+### Fonctionnalité des Favoris \<!-- markmap: fold -->
 
-#### Migration Favoris <!-- markmap: fold -->
+#### Migration Favoris \<!-- markmap: fold -->
 
   ```bash
   php artisan make:migration create_favorites_table
@@ -3790,7 +3795,7 @@ php artisan make:volt pages/contact --class
   php artisan migrate
   ```
 
-#### Relation n:n (User & Post) <!-- markmap: fold -->
+#### Relation n:n (User & Post) \<!-- markmap: fold -->
 
 * À noter :
     Comme la convention de nommage de table pivot n'est pas respectée
@@ -3817,7 +3822,7 @@ php artisan make:volt pages/contact --class
   }
   ```
 
-#### PostRepository: getPostBySlug() <!-- markmap: fold -->
+#### PostRepository: getPostBySlug() \<!-- markmap: fold -->
 
 * Vérifier en plus si l'user a mis le post en favori :
 
@@ -3836,7 +3841,7 @@ php artisan make:volt pages/contact --class
   }
   ```
 
-#### Route Favoris <!-- markmap: fold -->
+#### Route Favoris \<!-- markmap: fold -->
 
   ```php
   Route::middleware('auth')->group(function () {
@@ -3845,7 +3850,7 @@ php artisan make:volt pages/contact --class
   });
   ```
 
-#### Lien Favoris dans posts.show <!-- markmap: fold -->
+#### Lien Favoris dans posts.show \<!-- markmap: fold -->
 
 * On affiche l'icône étoile pour mettre en favoris ou retirer l'article des favoris :
 
@@ -3897,7 +3902,7 @@ php artisan make:volt pages/contact --class
   "Remove from favorites": "Supprimer de vos favoris"
   ```
 
-#### PostRepository pour "is_favorited" <!-- markmap: fold -->
+#### PostRepository pour "is_favorited" \<!-- markmap: fold -->
 
 * Si connecté, trouver ses articles favoris :
 
@@ -3921,7 +3926,7 @@ php artisan make:volt pages/contact --class
   }
   ```
 
-#### Page d'accueil (Homepage) <!-- markmap: fold -->
+#### Page d'accueil (Homepage) \<!-- markmap: fold -->
 
   ```html
   <x-slot:menu>
@@ -3936,7 +3941,7 @@ php artisan make:volt pages/contact --class
   </x-slot:menu>
   ```
 
-#### Logique & lien des favoris <!-- markmap: fold -->
+#### Logique & lien des favoris \<!-- markmap: fold -->
 
 * Ajout de getFavoritePosts() dans PostRepository
 
@@ -3970,7 +3975,7 @@ php artisan make:volt pages/contact --class
   </x-nav>
   ```
 
-#### Afficher la page Favoris <!-- markmap: fold -->
+#### Afficher la page Favoris \<!-- markmap: fold -->
 
 * Composant index :
 
@@ -4016,7 +4021,7 @@ php artisan make:volt pages/contact --class
   "Toggle theme": "Basculer le thème",
   ```
 
-### Boutons pour scroller (Aller en bas et en haut) <!-- markmap: fold -->
+### Boutons pour scroller (Aller en bas et en haut) \<!-- markmap: fold -->
 
 * resources/css/**app.css** :
 
@@ -4067,7 +4072,7 @@ php artisan make:volt pages/contact --class
   "To bottom": "Vers le bas"
   ```
 
-### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-favoris](https://laravel.sillo.org/posts/mon-cms-les-favoris)***
+### Réf.: ***<a href="https://laravel.sillo.org/posts/mon-cms-les-favoris" title="Voir les détails" target="_blank">https://laravel.sillo.org/posts/mon-cms-les-favoris</a>***
 
 ## &nbsp;**II &nbsp;/ &nbsp; B A C K &nbsp;- &nbsp;O F F I C E &nbsp;:**
 
@@ -4075,7 +4080,7 @@ php artisan make:volt pages/contact --class
 
 ### Gestion des rôles
 
-#### Model User : Admin ou Redac <!-- markmap: fold -->
+#### Model User : Admin ou Redac \<!-- markmap: fold -->
 
   ```php
   public function isAdmin(): bool {
@@ -4091,7 +4096,7 @@ php artisan make:volt pages/contact --class
   }
 ```
 
-#### Middlewares <!-- markmap: fold -->
+#### Middlewares \<!-- markmap: fold -->
 
 ##### **admin**
 
@@ -4127,7 +4132,7 @@ php artisan make:volt pages/contact --class
 
 ### Tableau de Bord
 
-#### Route <!-- markmap: fold -->
+#### Route \<!-- markmap: fold -->
 
   ```php
   use App\Http\Middleware\IsAdminOrRedac;
@@ -4142,7 +4147,7 @@ php artisan make:volt pages/contact --class
   });
 ```
 
-#### SideBar <!-- markmap: fold -->
+#### SideBar \<!-- markmap: fold -->
 
 ##### Création Sidebar de l'admin
 
@@ -4185,7 +4190,7 @@ php artisan make:volt pages/contact --class
   </div>
   ```
 
-#### Layout <!-- markmap: fold -->
+#### Layout \<!-- markmap: fold -->
 
 * Créer views/layouts/admin.blade.php :
 
@@ -4230,7 +4235,7 @@ php artisan make:volt pages/contact --class
   </html>
   ```
 
-#### Composant <!-- markmap: fold -->
+#### Composant \<!-- markmap: fold -->
 
   ```bash
   php artisan make:volt admin/index --class
@@ -4402,7 +4407,7 @@ php artisan make:volt pages/contact --class
   </div>
   ```
 
-#### Traductions Dashboard <!-- markmap: fold -->
+#### Traductions Dashboard \<!-- markmap: fold -->
 
   ```json
   "In a glance": "En un coup d'oeil",
@@ -4417,7 +4422,7 @@ php artisan make:volt pages/contact --class
   "Comment to valid from ": "Commentaire à valider de "
   ```
 
-#### Lien dans les menus <!-- markmap: fold -->
+#### Lien dans les menus \<!-- markmap: fold -->
 
 ##### Dans navigation.navbar
 
@@ -4451,7 +4456,7 @@ php artisan make:volt pages/contact --class
       ... Profile
   ```
 
-#### Redac & Admin: Redirection lors du login <!-- markmap: fold -->
+#### Redac & Admin: Redirection lors du login \<!-- markmap: fold -->
 
 * Composant auth.login :
 
@@ -4465,13 +4470,13 @@ php artisan make:volt pages/contact --class
   }
   ```
 
-### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-ladministration](https://laravel.sillo.org/posts/mon-cms-ladministration)***
+### Réf.: ***<a href="https://laravel.sillo.org/posts/mon-cms-ladministration" title="Voir les détails" target="_blank">https://laravel.sillo.org/posts/mon-cms-ladministration</a>***
 
 ## - Les Articles <!-- markmap: fold -->
 
-### Tableau des articles <!-- markmap: fold -->
+### Tableau des articles \<!-- markmap: fold -->
 
-#### Route Articles <!-- markmap: fold -->
+#### Route Articles \<!-- markmap: fold -->
 
   ```php
   Route::middleware('auth')->group(function () {
@@ -4483,7 +4488,7 @@ php artisan make:volt pages/contact --class
   });
   ```
 
-#### Navigation Articles <!-- markmap: fold -->
+#### Navigation Articles \<!-- markmap: fold -->
 
 * Lien des articles dans dashboard (Pavé 'En un coup d'oeil') :
 
@@ -4509,7 +4514,7 @@ php artisan make:volt pages/contact --class
   "All posts": "Tous les articles",
   ```
 
-#### Composant Articles <!-- markmap: fold -->
+#### Composant Articles \<!-- markmap: fold -->
 
 ##### CLI 
 <!-- markmap: fold -->
@@ -4518,7 +4523,7 @@ php artisan make:volt pages/contact --class
   php artisan make:volt admin/posts/index --class
   ```
 
-##### Code admin.posts.index <!-- markmap: fold -->
+##### Code admin.posts.index \<!-- markmap: fold -->
 
   ```html
   <?php
@@ -4692,7 +4697,7 @@ php artisan make:volt pages/contact --class
   </div>
   ```
 
-##### Dans PostRepository <!-- markmap: fold -->
+##### Dans PostRepository \<!-- markmap: fold -->
 
   ```php
   public function generateUniqueSlug(string $slug): string {
@@ -4706,7 +4711,7 @@ php artisan make:volt pages/contact --class
   }
   ```
 
-##### Traductions admin posts list <!-- markmap: fold -->
+##### Traductions admin posts list \<!-- markmap: fold -->
 
   ```json
   "Title": "Titre",
@@ -4721,11 +4726,11 @@ php artisan make:volt pages/contact --class
   "Filters": "Filtres"
   ```
 
-#### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-tableau-des-articles](https://laravel.sillo.org/posts/mon-cms-tableau-des-articles)***
+#### Réf.: ***<a href="https://laravel.sillo.org/posts/mon-cms-tableau-des-articles" title="Voir les détails" target="_blank">https://laravel.sillo.org/posts/mon-cms-tableau-des-articles</a>***
 
-### Créer un article <!-- markmap: fold -->
+### Créer un article \<!-- markmap: fold -->
 
-#### Route admin/posts/create <!-- markmap: fold -->
+#### Route admin/posts/create \<!-- markmap: fold -->
 
   ```php
   Route::middleware('auth')->group(function () {
@@ -4737,7 +4742,7 @@ php artisan make:volt pages/contact --class
   });
   ```
 
-#### Menu (admin.sidebar) <!-- markmap: fold -->
+#### Menu (admin.sidebar) \<!-- markmap: fold -->
 
   ```html
   <x-menu-sub title="{{ __('Posts') }}" icon="s-document-text">
@@ -4746,9 +4751,9 @@ php artisan make:volt pages/contact --class
   </x-menu-sub>
   ```
 
-#### Composant (Formulaire) <!-- markmap: fold -->
+#### Composant (Formulaire) \<!-- markmap: fold -->
 
-##### CLI admin.posts.create <!-- markmap: fold -->
+##### CLI admin.posts.create \<!-- markmap: fold -->
 
   ```bash
   php artisan make:volt admin/posts/create --class
@@ -4756,7 +4761,7 @@ php artisan make:volt pages/contact --class
 
 ##### Code Création article
 
-###### Base du code <!-- markmap: fold -->
+###### Base du code \<!-- markmap: fold -->
 
   ```html
   <?php
@@ -4811,7 +4816,7 @@ php artisan make:volt pages/contact --class
   </div>
   ```
 
-###### Propriétés - Validation <!-- markmap: fold -->
+###### Propriétés - Validation \<!-- markmap: fold -->
 
   ```php
   use Livewire\Attributes\{Layout, Validate};
@@ -4848,7 +4853,7 @@ php artisan make:volt pages/contact --class
   }
 ```
 
-###### Update du slug du title <!-- markmap: fold -->
+###### Update du slug du title \<!-- markmap: fold -->
 
   ```php
   public function updatedTitle($value) {
@@ -4857,7 +4862,7 @@ php artisan make:volt pages/contact --class
   }
   ```
 
-###### Enregistrement <!-- markmap: fold -->
+###### Enregistrement \<!-- markmap: fold -->
 
   ```php
   ...
@@ -4882,7 +4887,7 @@ php artisan make:volt pages/contact --class
   }
   ```
 
-##### Traductions admin.posts.create <!-- markmap: fold -->
+##### Traductions admin.posts.create \<!-- markmap: fold -->
 
   ```json
   "Select a category": "Sélectionnez une catégorie",
@@ -4896,11 +4901,11 @@ php artisan make:volt pages/contact --class
   "Post added with success.": "Article ajouté avec succès."
   ```
 
-#### Éditeur (TinyMCE) <!-- markmap: fold -->
+#### Éditeur (TinyMCE) \<!-- markmap: fold -->
 
-##### Installation hébergée (Usage Illimité → Notre choix) <!-- markmap: fold -->
+##### Installation hébergée (Usage Illimité → Notre choix) \<!-- markmap: fold -->
 
-###### <a href="https://www.tiny.cloud/get-tiny">Télécharger Free TinyMCE</a>
+###### <a href="https://www.tiny.cloud/get-tiny" title="Sur le site !" target="_blank">Télécharger Free TinyMCE</a>
 
 ###### À décompresser dans : ./storage/app/public/scripts
 
@@ -4931,7 +4936,7 @@ php artisan make:volt pages/contact --class
 
 ###### Traductions TinyMCE
 
-* <a href="https://www.tiny.cloud/get-tiny/language-packages">Récupérer les fichiers de traduction</a>
+* <a href="https://www.tiny.cloud/get-tiny/language-packages" title="Sur le site !" target="_blank">Récupérer les fichiers de traduction</a>
 * Les copier dans : ./storage/app/public/scripts/**fr_FR.js**
 
 ###### Activation de TinyMCE
@@ -4949,7 +4954,7 @@ php artisan make:volt pages/contact --class
   <x-editor wire:model="body" label="{{ __('Content') }}" :config="config('tinymce.config')" folder="{{ 'photos/' . now()->format('Y/m') }}" />
   ```
 
-##### Installation CDN (Usage limité: 1000 appels/mois - Mise à jour auto) <!-- markmap: fold -->
+##### Installation CDN (Usage limité: 1000 appels/mois - Mise à jour auto) \<!-- markmap: fold -->
 
 * Fichier ./resources\views\components\layouts\**admin.blade.php** :
 
@@ -4958,11 +4963,11 @@ php artisan make:volt pages/contact --class
   ... @vite(...)
   ```
 
-##### Réf.: ***[https://mary-ui.com/docs/components/editor](https://mary-ui.com/docs/components/editor)***
+##### Réf.: ***<a href="https://mary-ui.com/docs/components/editor" title="Voir les détails" target="_blank">https://mary-ui.com/docs/components/editor</a>***
 
-#### Gestion de l'image <!-- markmap: fold -->
+#### Gestion de l'image \<!-- markmap: fold -->
 
-###### Ajout du trait Livewire WithFileUploads <!-- markmap: fold -->
+###### Ajout du trait Livewire WithFileUploads \<!-- markmap: fold -->
 
 * admin.posts.create :
 
@@ -4978,12 +4983,12 @@ php artisan make:volt pages/contact --class
       public ?TemporaryUploadedFile $photo = null;
   ```
 
-###### Image / défaut <!-- markmap: fold -->
+###### Image / défaut \<!-- markmap: fold -->
 
-* <a href="https://laravel.sillo.org/ask.jpg">Récupérer l'image</a>
-* À poser dans : ./public/storage/ask.jpg
+* <a href="https://laravel.sillo.org/ask.jpg" target="_blank">Récupérer l'image</a>
+* À poser dans : ./public/storage/**ask.jpg**
 
-###### Composant de MaryUI dans le formulaire <!-- markmap: fold -->
+###### Composant de MaryUI dans le formulaire \<!-- markmap: fold -->
 
   ```html
               <x-file wire:model="photo" label="{{ __('Featured image') }}"
@@ -4998,14 +5003,14 @@ php artisan make:volt pages/contact --class
   </div>
   ```
 
-###### Traductions pour Image <!-- markmap: fold -->
+###### Traductions pour Image \<!-- markmap: fold -->
 
   ```json
   "Featured image": "Image mise en avant",
   "Click on the image to modify": "Cliquez sur cette image pour la modifier",
   ```
 
-###### Save Image <!-- markmap: fold -->
+###### Save Image \<!-- markmap: fold -->
 
 * Par défaut, image temporaire → ./storage/app/livewire-tmp/
 * → Pour poser dans le dossier **photos/**, adapter la fonction save() :
@@ -5029,7 +5034,7 @@ php artisan make:volt pages/contact --class
   }
   ```
 
-###### Url des images <!-- markmap: fold -->
+###### Url des images \<!-- markmap: fold -->
 
 * Ajout dans app/helpers.php :
 
@@ -5062,11 +5067,11 @@ php artisan make:volt pages/contact --class
   }
   ```
 
-#### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-creer-un-article](https://laravel.sillo.org/posts/mon-cms-creer-un-article)***
+#### Réf.: ***<a href="https://laravel.sillo.org/posts/mon-cms-creer-un-article" title="Voir les détails" target="_blank">https://laravel.sillo.org/posts/mon-cms-creer-un-article</a>***
 
-### Modifier un article <!-- markmap: fold -->
+### Modifier un article \<!-- markmap: fold -->
 
-#### Route posts.edit <!-- markmap: fold -->
+#### Route posts.edit \<!-- markmap: fold -->
 
 * Dans le groupe du middleware 'IsAdminOrRedac' :
 
@@ -5074,19 +5079,19 @@ php artisan make:volt pages/contact --class
   Volt::route('/posts/{post:slug}/edit', 'admin.posts.edit')->name('posts.edit');
   ```
 
-#### Lien dans tableau des articles (admin.posts.index) <!-- markmap: fold -->
+#### Lien dans tableau des articles (admin.posts.index) \<!-- markmap: fold -->
 
 ```html
 <x-table striped :headers="$headers" :rows="$posts" :sort-by="$sortBy" link="/admin/posts/{slug}/edit" with-pagination>
 ```
 
-#### Composant édition articles admin.posts.edit <!-- markmap: fold -->
+#### Composant édition articles admin.posts.edit \<!-- markmap: fold -->
 
   ```bash
   php artisan make:volt admin/posts/edit --class
   ```
 
-#### La logique admin.posts.edit <!-- markmap: fold -->
+#### La logique admin.posts.edit \<!-- markmap: fold -->
 
   ```php
   <?php
@@ -5167,7 +5172,7 @@ php artisan make:volt pages/contact --class
   }; ?>
   ```
 
-#### Formulaire d'édition <!-- markmap: fold -->
+#### Formulaire d'édition \<!-- markmap: fold -->
 
   ```html
   <div>
@@ -5215,14 +5220,14 @@ php artisan make:volt pages/contact --class
   </div>
   ```
 
-#### Traductions Édition <!-- markmap: fold -->
+#### Traductions Édition \<!-- markmap: fold -->
 
   ```json
   "Edit a post": "Modifier un article",
   "Post updated with success.": "Article mis à jour avec succès."
   ```
 
-#### Bouton édition dans le posts.show <!-- markmap: fold -->
+#### Bouton édition dans le posts.show \<!-- markmap: fold -->
 
 ##### HTML
 
@@ -5251,9 +5256,9 @@ php artisan make:volt pages/contact --class
   "Edit this post": "Modifier cet article"
   ```
 
-#### Bouton clone dans le posts.show <!-- markmap: fold -->
+#### Bouton clone dans le posts.show \<!-- markmap: fold -->
 
-##### HTML Clone <!-- markmap: fold -->
+##### HTML Clone \<!-- markmap: fold -->
 
   ```html
   @if (Auth::user()->isAdmin() || Auth::user()->id == $post->user_id)
@@ -5272,13 +5277,13 @@ php artisan make:volt pages/contact --class
   @endif
   ```
 
-###### Traduction Clone <!-- markmap: fold -->
+###### Traduction Clone \<!-- markmap: fold -->
 
   ```json
   "Clone this post": "Dupliquer cet article"
   ```
 
-###### Logique du clonage  <!-- markmap: fold -->
+###### Logique du clonage  \<!-- markmap: fold -->
 
   ```php
   public function clonePost(int $postId): void
@@ -5294,11 +5299,11 @@ php artisan make:volt pages/contact --class
   }
   ```
 
-#### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-modifier-un-article](https://laravel.sillo.org/posts/mon-cms-modifier-un-article)***
+#### Réf.: ***<a href="https://laravel.sillo.org/posts/mon-cms-modifier-un-article" title="Voir les détails" target="_blank">https://laravel.sillo.org/posts/mon-cms-modifier-un-article</a>
 
 ## - Les Catégories <!-- markmap: fold -->
 
-### Route categories.index <!-- markmap: fold -->
+### Route categories.index \<!-- markmap: fold -->
 
   ```php
   use App\Http\Middleware\{IsAdmin, IsAdminOrRedac};
@@ -5309,7 +5314,7 @@ php artisan make:volt pages/contact --class
   });
   ```
 
-### Item dans barre latérale <!-- markmap: fold -->
+### Item dans barre latérale \<!-- markmap: fold -->
 
 * HTML Item dans admin.sidebar :
 
@@ -5328,15 +5333,15 @@ php artisan make:volt pages/contact --class
   "Categories": "Catégories"
   ```
 
-### Création composant category.index <!-- markmap: fold -->
+### Création composant category.index \<!-- markmap: fold -->
 
   ```bash
   php artisan make:volt admin/categories/index --class
   ```
 
-### Code composant categories.index <!-- markmap: fold -->
+### Code composant categories.index \<!-- markmap: fold -->
 
-#### Code de base <!-- markmap: fold -->
+#### Code de base \<!-- markmap: fold -->
 
   ```html
   <?php
@@ -5379,7 +5384,7 @@ php artisan make:volt pages/contact --class
   </div>
   ```
 
-#### Ajout bouton supprimer catégorie <!-- markmap: fold -->
+#### Ajout bouton supprimer catégorie \<!-- markmap: fold -->
 
 ##### HTML Supprimer catégorie
 
@@ -5417,7 +5422,7 @@ php artisan make:volt pages/contact --class
   "Category deleted with success.": "Catégorie supprimée avec succès."
   ```
 
-#### Formulaire catégorie <!-- markmap: fold -->
+#### Formulaire catégorie \<!-- markmap: fold -->
 
 ##### Composant formulaire creation/modification
 
@@ -5487,7 +5492,7 @@ php artisan make:volt pages/contact --class
   "Category created with success.": "Catégorie créée avec succès."
   ```
 
-### Modification d'une catégorie <!-- markmap: fold -->
+### Modification d'une catégorie \<!-- markmap: fold -->
 
 #### Route pour la modification de catégorie
 
@@ -5511,7 +5516,7 @@ php artisan make:volt pages/contact --class
   php artisan make:volt admin/categories/edit --class
   ```
 
-#### Code du composant d'édition <!-- markmap: fold -->
+#### Code du composant d'édition \<!-- markmap: fold -->
 
   ```html
   <?php
@@ -5577,13 +5582,13 @@ php artisan make:volt pages/contact --class
   "Edit a category": "Modifier une catégorie"
   ```
 
-### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-categories](https://laravel.sillo.org/posts/mon-cms-les-categories)***
+### Réf.: ***<a href="https://laravel.sillo.org/posts/mon-cms-les-categories" title="Voir les détails" target="_blank">https://laravel.sillo.org/posts/mon-cms-les-categories</a>***
 
 ## - Les Pages <!-- markmap: fold -->
 
-### Liste des pages <!-- markmap: fold -->
+### Liste des pages \<!-- markmap: fold -->
 
-#### Route Pages <!-- markmap: fold -->
+#### Route Pages \<!-- markmap: fold -->
 
 * Groupe middleware IsAdminOrRedac > IsAdmin :
 
@@ -5591,7 +5596,7 @@ php artisan make:volt pages/contact --class
   Volt::route('/pages/index', 'admin.pages.index')->name('pages.index');
   ```
 
-#### Navigation Pages <!-- markmap: fold -->
+#### Navigation Pages \<!-- markmap: fold -->
 
 * Lien Pages dans le pavé en haut du dashboard (admin.index) :
 
@@ -5619,7 +5624,7 @@ php artisan make:volt pages/contact --class
   "All pages": "Toutes les pages",
   ```
 
-#### Composant Pages <!-- markmap: fold -->
+#### Composant Pages \<!-- markmap: fold -->
 
   ```php
   php artisan make:volt admin/pages/index --class
@@ -5699,16 +5704,16 @@ php artisan make:volt pages/contact --class
   "Page deleted": "Page effacée avec succès."
   ```
 
-### Création pages <!-- markmap: fold -->
+### Création pages \<!-- markmap: fold -->
 
-#### Route Ajouter Pages <!-- markmap: fold -->
+#### Route Ajouter Pages \<!-- markmap: fold -->
 
   ```php
   // Groupe middleware IsAdminOrRedac > IsAdmin
   Volt::route('/pages/create', 'admin.pages.create')->name('pages.create');
   ```
 
-#### Liens Ajouter Pages <!-- markmap: fold -->
+#### Liens Ajouter Pages \<!-- markmap: fold -->
 
 * admin.pages.index :
 
@@ -5727,7 +5732,7 @@ php artisan make:volt pages/contact --class
   @endif
   ```
 
-#### Formulaire Pages (Création & modification) <!-- markmap: fold -->
+#### Formulaire Pages (Création & modification) \<!-- markmap: fold -->
 
 * Créer pages/**page-form.blade.php** :
   
@@ -5757,13 +5762,13 @@ php artisan make:volt pages/contact --class
   </x-card>
   ```
 
-#### CLI Creation Pages <!-- markmap: fold -->
+#### CLI Creation Pages \<!-- markmap: fold -->
 
   ```bash
   php artisan make:volt admin/pages/create --class
   ```
 
-#### Code composant Créer Pages <!-- markmap: fold -->
+#### Code composant Créer Pages \<!-- markmap: fold -->
 
   ```html
   <?php
@@ -5825,15 +5830,15 @@ php artisan make:volt pages/contact --class
   </div>
   ```
 
-#### Traduction Ajouter Pages <!-- markmap: fold -->
+#### Traduction Ajouter Pages \<!-- markmap: fold -->
 
   ```json
   "Page added with success.": "Page ajoutée avec succès."
   ```
 
-### Modification (→ Édition) Pages <!-- markmap: fold -->
+### Modification (→ Édition) Pages \<!-- markmap: fold -->
 
-#### Route Éditer Pages <!-- markmap: fold -->
+#### Route Éditer Pages \<!-- markmap: fold -->
 
 * Groupe middleware IsAdminOrRedac > IsAdmin :
 
@@ -5841,7 +5846,7 @@ php artisan make:volt pages/contact --class
   Volt::route('/pages/{page:slug}/edit', 'admin.pages.edit')->name('pages.edit');
   ```
 
-#### Lien Éditer Pages <!-- markmap: fold -->
+#### Lien Éditer Pages \<!-- markmap: fold -->
 
 * admin.pages.index :
 
@@ -5849,13 +5854,13 @@ php artisan make:volt pages/contact --class
   <x-table striped :headers="$headers" :rows="$pages" link="/admin/pages/{slug}/edit">
   ```
 
-#### CLI édition Pages <!-- markmap: fold -->
+#### CLI édition Pages \<!-- markmap: fold -->
 
   ```bash
   php artisan make:volt admin/pages/edit --class
   ```
 
-#### Code Éditer Pages <!-- markmap: fold -->
+#### Code Éditer Pages \<!-- markmap: fold -->
 
   ```html
   <?php
@@ -5920,20 +5925,20 @@ php artisan make:volt pages/contact --class
   </div>
   ```
 
-#### Traduction Éditer Pages <!-- markmap: fold -->
+#### Traduction Éditer Pages \<!-- markmap: fold -->
 
   ```json
   "Page edited with success.": "Page mise à jour avec succès.",
   "Edit a page": "Modifier une page"
   ```
 
-### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-pages](https://laravel.sillo.org/posts/mon-cms-les-pages)***
+### Réf.: ***<a href="https://laravel.sillo.org/posts/mon-cms-les-pages" title="Voir les détails" target="_blank">https://laravel.sillo.org/posts/mon-cms-les-pages</a>***
 
 ## - Les Comptes (Users) <!-- markmap: fold -->
 
-### Liste des comptes <!-- markmap: fold -->
+### Liste des comptes \<!-- markmap: fold -->
 
-#### Route Comptes <!-- markmap: fold -->
+#### Route Comptes \<!-- markmap: fold -->
 
   ```php
   Route::middleware(IsAdmin::class)->group(function () {
@@ -5942,7 +5947,7 @@ php artisan make:volt pages/contact --class
   });
 ```
 
-#### Liens Comptes <!-- markmap: fold -->
+#### Liens Comptes \<!-- markmap: fold -->
 
 * admin.sidebar :
 
@@ -5970,15 +5975,15 @@ php artisan make:volt pages/contact --class
   "Users list":"Tous les utilisateurs"
   ```
 
-#### Composant Comptes <!-- markmap: fold -->
+#### Composant Comptes \<!-- markmap: fold -->
 
-##### Création composant Comptes <!-- markmap: fold -->
+##### Création composant Comptes \<!-- markmap: fold -->
 
   ```php
   php artisan make:volt admin/users/index --class
   ```
 
-##### Code Comptes <!-- markmap: fold -->
+##### Code Comptes \<!-- markmap: fold -->
 
   ```php
   <?php
@@ -6159,7 +6164,7 @@ php artisan make:volt pages/contact --class
   </div>
   ```
 
-##### Traductions Comptes <!-- markmap: fold -->
+##### Traductions Comptes \<!-- markmap: fold -->
 
   ```json
   "Accounts": "Comptes",
@@ -6179,31 +6184,31 @@ php artisan make:volt pages/contact --class
   "Back to Dashboard": "Retour sur le Tableau de Bord"
   ```
 
-### Modification de comptes <!-- markmap: fold -->
+### Modification de comptes \<!-- markmap: fold -->
 
-#### Route Modification Comptes <!-- markmap: fold -->
+#### Route Modification Comptes \<!-- markmap: fold -->
 
   ```php
   // Groupe middleware IsAdminOrRedac > IsAdmin
   Volt::route('/users/{user}/edit', 'admin.users.edit')->name('users.edit');
   ```
 
-#### Lien Modification Comptes <!-- markmap: fold -->
+#### Lien Modification Comptes \<!-- markmap: fold -->
 
   ```php
   // Déjà fait dans affichage de la liste (Composant Comptes) :
   // (<x-table striped :headers="$headers" :rows="$users" :sort-by="$sortBy" link="/admin/users/{id}/edit" with-pagination>)
   ```
 
-#### Composant Modification Comptes <!-- markmap: fold -->
+#### Composant Modification Comptes \<!-- markmap: fold -->
 
-##### CLI Modification Comptes <!-- markmap: fold -->
+##### CLI Modification Comptes \<!-- markmap: fold -->
 
   ```html
   php artisan make:volt admin/users/edit --class
   ```
 
-##### Code Modification Comptes <!-- markmap: fold -->
+##### Code Modification Comptes \<!-- markmap: fold -->
 
   ```html
   <?php
@@ -6279,7 +6284,7 @@ php artisan make:volt pages/contact --class
   </div>
   ```
 
-##### Traduction Modification Comptes <!-- markmap: fold -->
+##### Traduction Modification Comptes \<!-- markmap: fold -->
 
   ```json
   "Edit an account": "Modifier un compte",
@@ -6287,13 +6292,13 @@ php artisan make:volt pages/contact --class
   "User edited with success.": "Utilisateur mis à jour avec succès."
   ```
 
-### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-comptes](https://laravel.sillo.org/posts/mon-cms-les-comptes)***
+### Réf.: ***<a href="https://laravel.sillo.org/posts/mon-cms-les-comptes" title="Voir les détails" target="_blank">https://laravel.sillo.org/posts/mon-cms-les-comptes</a>***
 
 ## - Les Commentaires <!-- markmap: fold -->
 
-### Liste admin.comments <!-- markmap: fold -->
+### Liste admin.comments \<!-- markmap: fold -->
 
-#### Route admin.comments.index <!-- markmap: fold -->
+#### Route admin.comments.index \<!-- markmap: fold -->
 
 ```php
 Route::middleware('auth')->group(function () {
@@ -6305,7 +6310,7 @@ Route::middleware('auth')->group(function () {
 })
 ```
 
-#### Liens comments dans admin.sidebars <!-- markmap: fold -->
+#### Liens comments dans admin.sidebars \<!-- markmap: fold -->
 
   ```html
   @if (Auth::user()->isAdmin())
@@ -6314,7 +6319,7 @@ Route::middleware('auth')->group(function () {
   <x-menu-item icon="c-chat-bubble-left" title="{{ __('Comments') }}" link="{{ route('comments.index') }}" />
   ```
 
-#### Composant admin.comment <!-- markmap: fold -->
+#### Composant admin.comment \<!-- markmap: fold -->
 
   ```php
   php artisan make:volt admin/comments/index --class
@@ -6452,9 +6457,9 @@ Route::middleware('auth')->group(function () {
   "Validate the user": "Valider l'utilisateur"
   ```
 
-### Modifier admin.comments <!-- markmap: fold -->
+### Modifier admin.comments \<!-- markmap: fold -->
 
-#### Route admin.comments.edit <!-- markmap: fold -->
+#### Route admin.comments.edit \<!-- markmap: fold -->
 
   ```php
   Route::middleware('auth')->group(function () {
@@ -6466,7 +6471,7 @@ Route::middleware('auth')->group(function () {
   })
 ```
 
-#### Liens modif. admin. Comment <!-- markmap: fold -->
+#### Liens modif. admin. Comment \<!-- markmap: fold -->
 
 * Pour pavé Commentaires de Dashboard :
 
@@ -6508,7 +6513,7 @@ Route::middleware('auth')->group(function () {
   ... Bloc 'Recent posts'
   ```
 
-#### Pré-requis <!-- markmap: fold -->
+#### Pré-requis \<!-- markmap: fold -->
 
 * Models/Comment - Ajout de :
 
@@ -6536,7 +6541,7 @@ Route::middleware('auth')->group(function () {
   ];
   ```
 
-#### Composant admin.comments.edit <!-- markmap: fold -->
+#### Composant admin.comments.edit \<!-- markmap: fold -->
 
 * Création composant admin des commentaires :
 
@@ -6645,15 +6650,15 @@ Route::middleware('auth')->group(function () {
   "Answer created with success.": "Réponse ajoutée avec succès."
   ```
 
-### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-commentaires](https://laravel.sillo.org/posts/mon-cms-les-commentaires)***
+### Réf.: ***<a href="https://laravel.sillo.org/posts/mon-cms-les-commentaires" title="Voir les détails" target="_blank">https://laravel.sillo.org/posts/mon-cms-les-commentaires</a>***
 
 ### //2do admin.contact
 
 ## - Les Menus <!-- markmap: fold -->
 
-### Liste des Menus & Submenus <!-- markmap: fold -->
+### Liste des Menus & Submenus \<!-- markmap: fold -->
 
-#### Route admin.menus.index <!-- markmap: fold -->
+#### Route admin.menus.index \<!-- markmap: fold -->
 
   ```php
   Route::middleware('auth')->group(function () {
@@ -6668,7 +6673,7 @@ Route::middleware('auth')->group(function () {
   });
   ```
 
-#### Lien Menus dans admin.sidebar <!-- markmap: fold -->
+#### Lien Menus dans admin.sidebar \<!-- markmap: fold -->
 
   ```html
   ... Lien de comments.index
@@ -6684,7 +6689,7 @@ Route::middleware('auth')->group(function () {
   "Navbar": "Navigation"
   ```
 
-#### Trait ManageMenus (Menus & submenus) <!-- markmap: fold -->
+#### Trait ManageMenus (Menus & submenus) \<!-- markmap: fold -->
 
 * Créer un trait ./app/Traits/**ManageMenus.php** :
 
@@ -6763,7 +6768,7 @@ Route::middleware('auth')->group(function () {
 
   ```
 
-#### Formulaire submenus (Création & Modification) <!-- markmap: fold -->
+#### Formulaire submenus (Création & Modification) \<!-- markmap: fold -->
 
 * Créer admin.menus.**submenu-form.blade.php** :
 
@@ -6792,15 +6797,15 @@ Route::middleware('auth')->group(function () {
   </x-form>
   ```
 
-#### Composant Liste des Menus (admin.menus.index) <!-- markmap: fold -->
+#### Composant Liste des Menus (admin.menus.index) \<!-- markmap: fold -->
 
-##### Création admin.menus.index <!-- markmap: fold -->
+##### Création admin.menus.index \<!-- markmap: fold -->
 
   ```bash
   php artisan make:volt admin/menus/index --class
   ```
 
-##### Code admin.menus.index <!-- markmap: fold -->
+##### Code admin.menus.index \<!-- markmap: fold -->
 
   ```html
   <?php
@@ -7102,7 +7107,7 @@ Route::middleware('auth')->group(function () {
   </div>
   ```
 
-##### Traductions Liste Menus <!-- markmap: fold -->
+##### Traductions Liste Menus \<!-- markmap: fold -->
 
 * N.B.: "Edit" existe déjà, mais remplacé ici
 
@@ -7124,11 +7129,11 @@ Route::middleware('auth')->group(function () {
   "Select a post, type to search": "Sélectionnez un article, tapez pour rechercher"
   ```
 
-### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-menus-partie-1](https://laravel.sillo.org/posts/mon-cms-les-menus-partie-1)***
+### Réf.: ***<a href="https://laravel.sillo.org/posts/mon-cms-les-menus-partie-1" title="Voir les détails" target="_blank">https://laravel.sillo.org/posts/mon-cms-les-menus-partie-1</a>***
 
-### Modification d'un menu <!-- markmap: fold -->
+### Modification d'un menu \<!-- markmap: fold -->
 
-#### Route admin.menus.edit <!-- markmap: fold -->
+#### Route admin.menus.edit \<!-- markmap: fold -->
 
   ```php
   Route::middleware('auth')->group(function () {
@@ -7143,7 +7148,7 @@ Route::middleware('auth')->group(function () {
   });
 ```
 
-#### Lien Modification de Menus dans la liste (admin.menus.index) <!-- markmap: fold -->
+#### Lien Modification de Menus dans la liste (admin.menus.index) \<!-- markmap: fold -->
 
   ```html
   @if ($menu->order < $menus->count())
@@ -7158,15 +7163,15 @@ Route::middleware('auth')->group(function () {
     ...
   ```
 
-#### Composant modification d'un menu (admin.menus.edit) <!-- markmap: fold -->
+#### Composant modification d'un menu (admin.menus.edit) \<!-- markmap: fold -->
 
-##### Création admin.menus.edit <!-- markmap: fold -->
+##### Création admin.menus.edit \<!-- markmap: fold -->
 
   ```bash
   php artisan make:volt admin/menus/edit --class
   ```
 
-##### Code admin.menus.edit <!-- markmap: fold -->
+##### Code admin.menus.edit \<!-- markmap: fold -->
 
   ```html
   <?php
@@ -7221,15 +7226,15 @@ Route::middleware('auth')->group(function () {
   </div>
   ```
 
-### Modification d'un submenu <!-- markmap: fold -->
+### Modification d'un submenu \<!-- markmap: fold -->
 
-#### Route admin.menus.editsub <!-- markmap: fold -->
+#### Route admin.menus.editsub \<!-- markmap: fold -->
 
   ```php
   Volt::route('/submenus/{submenu}/edit', 'admin.menus.editsub')->name('submenus.edit');
   ```
 
-#### Lien Modification d'un submenu dans la liste (admin.menus.index) <!-- markmap: fold -->
+#### Lien Modification d'un submenu dans la liste (admin.menus.index) \<!-- markmap: fold -->
 
   ```html
   @if ($submenu->order < $menu->submenus->count())
@@ -7243,15 +7248,15 @@ Route::middleware('auth')->group(function () {
     ...
   ```
 
-#### Composant modification d'un sous-menu (admin.menus.editsub) <!-- markmap: fold -->
+#### Composant modification d'un sous-menu (admin.menus.editsub) \<!-- markmap: fold -->
 
-##### Création admin.menus.editsub <!-- markmap: fold -->
+##### Création admin.menus.editsub \<!-- markmap: fold -->
 
   ```bash
   php artisan make:volt admin/menus/editsub --class
   ```
 
-##### Code admin.menus.editsub <!-- markmap: fold -->
+##### Code admin.menus.editsub \<!-- markmap: fold -->
 
   ```html
   <?php
@@ -7307,7 +7312,7 @@ Route::middleware('auth')->group(function () {
   </div>
   ```
 
-### Le menu du footer <!-- markmap: fold -->
+### Le menu du footer \<!-- markmap: fold -->
 
 #### Route admin.menus.footers
 
@@ -7330,13 +7335,13 @@ Route::middleware('auth')->group(function () {
 
 #### Composant menu du footer (admin.menus.footers)
 
-##### Création admin.menus.footers <!-- markmap: fold -->
+##### Création admin.menus.footers \<!-- markmap: fold -->
 
   ```bash
   php artisan make:volt admin/menus/footers --class
   ```
 
-##### Code admin.menus.footers <!-- markmap: fold -->
+##### Code admin.menus.footers \<!-- markmap: fold -->
 
   ```html
   <?php
@@ -7501,7 +7506,7 @@ Route::middleware('auth')->group(function () {
   "Are you sure to delete this footer?": "Êtes-vous sûr de vouloir supprimer ce menu de pied de page ?"
   ```
 
-##### Traductions admin.menus.footers <!-- markmap: fold -->
+##### Traductions admin.menus.footers \<!-- markmap: fold -->
 
   ```json
   "Edit a footer": "Modifier le pied de page",
@@ -7514,7 +7519,7 @@ Route::middleware('auth')->group(function () {
   "Folder": "Dossier"
   ```
 
-### Modification du menu du footer <!-- markmap: fold -->
+### Modification du menu du footer \<!-- markmap: fold -->
 
 #### Route admin.menus.editfooter
 
@@ -7532,13 +7537,13 @@ Route::middleware('auth')->group(function () {
 
 #### Composant modification d'un menu footer (admin.menus.editfooter)
 
-##### Création admin.menus.editfooter <!-- markmap: fold -->
+##### Création admin.menus.editfooter \<!-- markmap: fold -->
 
   ```bash
   php artisan make:volt admin/menus/editfooter --class
   ```
 
-##### Code admin.menus.editfooter <!-- markmap: fold -->
+##### Code admin.menus.editfooter \<!-- markmap: fold -->
 
   ```html
   <?php
@@ -7597,13 +7602,13 @@ Route::middleware('auth')->group(function () {
   "Footer updated with success.": "Pied de page mis à jour avec succès"
   ```
 
-### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-menus-partie-2](https://laravel.sillo.org/posts/mon-cms-les-menus-partie-2)***
+### Réf.: ***<a href="https://laravel.sillo.org/posts/mon-cms-les-menus-partie-2" title="Voir les détails" target="_blank">https://laravel.sillo.org/posts/mon-cms-les-menus-partie-2</a>***
 
 ## - Les Médias <!-- markmap: fold -->
 
-### 1 ) &nbsp;Gestion des Images <!-- markmap: fold -->
+### 1 ) &nbsp;Gestion des Images \<!-- markmap: fold -->
 
-#### Route admin.images.index <!-- markmap: fold -->
+#### Route admin.images.index \<!-- markmap: fold -->
 
 * À noter : La route images.edit est créée 'en avance' car nécessaire dans la vue images.index
 (*Cela évite une erreur à l'affichage si on clique maintenant sur le lien de la sidebar...*)
@@ -7619,7 +7624,7 @@ Route::middleware('auth')->group(function () {
         Volt::route('/images/{year}/{month}/{id}/edit', 'admin.images.edit')->name('images.edit');
   ```
 
-#### Lien admin.images.index dans admin.sidebar <!-- markmap: fold -->
+#### Lien admin.images.index dans admin.sidebar \<!-- markmap: fold -->
 
   ```html
   ... Route Menus
@@ -7631,21 +7636,21 @@ Route::middleware('auth')->group(function () {
   @endif
   ```
 
-#### Composant admin.images.index <!-- markmap: fold -->
+#### Composant admin.images.index \<!-- markmap: fold -->
 
-##### Création composant admin.images.index <!-- markmap: fold -->
+##### Création composant admin.images.index \<!-- markmap: fold -->
 
   ```bash
   php artisan make:volt admin/images/index --class
   ```
 
-##### Code composant admin.images.index <!-- markmap: fold -->
+##### Code composant admin.images.index \<!-- markmap: fold -->
 
 ###### À noter : La fonction "Gérer l'image" n'est pas encore codée
 
 ###### *Le code étant un peu long, il est scindé en 2 fichiers* **:**
 
-###### **PHP** : Créer admin/images/**index_images.php** <!-- markmap: fold -->
+###### **PHP** : Créer admin/images/**index_images.php** \<!-- markmap: fold -->
 
   ```php
   <?php
@@ -7789,7 +7794,7 @@ Route::middleware('auth')->group(function () {
   };
   ```
 
-###### **BLADE** (Le fichier créé par la commande en CLI) - admin/images/**index.blade.php** <!-- markmap: fold -->
+###### **BLADE** (Le fichier créé par la commande en CLI) - admin/images/**index.blade.php** \<!-- markmap: fold -->
 
   ```html
   <?php
@@ -7899,7 +7904,7 @@ Route::middleware('auth')->group(function () {
   </div>
   ```
 
-##### Traduction code composant admin.images.index <!-- markmap: fold -->
+##### Traduction code composant admin.images.index \<!-- markmap: fold -->
 
   ```json
   "Select year and month": "Sélectionner l'année et le mois",
@@ -7914,13 +7919,13 @@ Route::middleware('auth')->group(function () {
   "Image and empty directory deleted with success.":"Image et dossier (vide) supprimés avec succès."
   ```
 
-### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-medias-partie-1](https://laravel.sillo.org/posts/mon-cms-les-medias-partie-1)***
+### Réf.: ***<a href="https://laravel.sillo.org/posts/mon-cms-les-medias-partie-1" title="Voir les détails" target="_blank">https://laravel.sillo.org/posts/mon-cms-les-medias-partie-1</a>***
 
-### 2 ) &nbsp;Modification des Images <!-- markmap: fold -->
+### 2 ) &nbsp;Modification des Images \<!-- markmap: fold -->
 
 #### Route admin.images.edit (*Déjà créée à l'étape précédente, gestion des Images*)
 
-#### Lien admin.images.edit dans admin.images.index (Partie Blade) <!-- markmap: fold -->
+#### Lien admin.images.edit dans admin.images.index (Partie Blade) \<!-- markmap: fold -->
 
 * (*Aussi déjà posé*)
 
@@ -7931,7 +7936,7 @@ Route::middleware('auth')->group(function () {
       link="{{ route('images.edit', ['year' => $selectedYear, 'month' => $selectedMonth, 'id' => $loop->index + ($page - 1) * $perPage]) }}"...
   ```
 
-#### Package Intervention Image <!-- markmap: fold -->
+#### Package Intervention Image \<!-- markmap: fold -->
 
 ##### Installation Intervention Image
 
@@ -7945,21 +7950,21 @@ Route::middleware('auth')->group(function () {
   php artisan vendor:publish --provider="Intervention\Image\Laravel\ServiceProvider"
   ```
 
-##### Réf.: [https://image.intervention.io](https://image.intervention.io/v3/introduction/frameworks)
+##### Réf.: <a href="https://image.intervention.io/v3/introduction/frameworks" title="Voir les détails" target="_blank">https://image.intervention.io</a>
 
-#### Composant admin.images.edit <!-- markmap: fold -->
+#### Composant admin.images.edit \<!-- markmap: fold -->
 
-##### Création composant admin.images.edit <!-- markmap: fold -->
+##### Création composant admin.images.edit \<!-- markmap: fold -->
 
   ```php
   php artisan make:volt admin/images/edit --class
   ```
 
-##### Code composant admin.images.edit <!-- markmap: fold -->
+##### Code composant admin.images.edit \<!-- markmap: fold -->
 
 ###### *Le code étant long, il est scindé en 2 fichiers* **:**
 
-###### PHP : Créer admin/images/**edit_image.php** <!-- markmap: fold -->
+###### PHP : Créer admin/images/**edit_image.php** \<!-- markmap: fold -->
 
   ```php
   <?php
@@ -8196,7 +8201,7 @@ Route::middleware('auth')->group(function () {
   };
   ```
 
-###### BLADE : admin/images/**edit.blade.php** <!-- markmap: fold -->
+###### BLADE : admin/images/**edit.blade.php** \<!-- markmap: fold -->
 
   ```html
   <?php
@@ -8335,7 +8340,7 @@ Route::middleware('auth')->group(function () {
   </div>
   ```
 
-##### Traduction code composant admin.images.edit <!-- markmap: fold -->
+##### Traduction code composant admin.images.edit \<!-- markmap: fold -->
 
   ```json
   "Manage an image": "Gérer une image",
@@ -8366,11 +8371,11 @@ Route::middleware('auth')->group(function () {
   "Image changes applied successfully": "Modifications de l'image appliquées avec succès"
   ```
 
-### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-medias-partie-2](https://laravel.sillo.org/posts/mon-cms-les-medias-partie-2)***
+### Réf.: ***<a href="https://laravel.sillo.org/posts/mon-cms-les-medias-partie-2" title="Voir les détails" target="_blank">https://laravel.sillo.org/posts/mon-cms-les-medias-partie-2</a>***
 
 ## - Les Paramètres (*Setting*) <!-- markmap: fold -->
 
-### Route Setting <!-- markmap: fold -->
+### Route Setting \<!-- markmap: fold -->
 
   ```php
     Route::middleware('auth')->group(function () {
@@ -8383,13 +8388,13 @@ Route::middleware('auth')->group(function () {
         ...
   ```
 
-### Création composant Setting <!-- markmap: fold -->
+### Création composant Setting \<!-- markmap: fold -->
 
   ```php
     php artisan make:volt admin/settings --class
   ```
 
-### Lien Setting dans admin.sidebar <!-- markmap: fold -->
+### Lien Setting dans admin.sidebar \<!-- markmap: fold -->
 
   ```html
     @if (Auth::user()->isAdmin())
@@ -8399,7 +8404,7 @@ Route::middleware('auth')->group(function () {
     @endif
   ```
 
-### Variables Setting ( ./.env ) <!-- markmap: fold -->
+### Variables Setting ( ./.env ) \<!-- markmap: fold -->
 
   ```json
     APP_MAINTENANCE_DRIVER=file
@@ -8407,7 +8412,7 @@ Route::middleware('auth')->group(function () {
     APP_MAINTENANCE_SECRET=230542a-177b-4b66-ffb1-dd77g4c93515
   ```
 
-### Le rendu Front-End de Setting <!-- markmap: fold -->
+### Le rendu Front-End de Setting \<!-- markmap: fold -->
 
 #### layout.app
 
@@ -8434,9 +8439,9 @@ Route::middleware('auth')->group(function () {
     @endif
   ```
 
-### Les données pour Setting <!-- markmap: fold -->
+### Les données pour Setting \<!-- markmap: fold -->
 
-#### Model & Migration Setting <!-- markmap: fold -->
+#### Model & Migration Setting \<!-- markmap: fold -->
 
   ```bash
     php artisan make:model Setting -m
@@ -8459,7 +8464,7 @@ Route::middleware('auth')->group(function () {
   }
 ```
 
-#### Seeder Setting <!-- markmap: fold -->
+#### Seeder Setting \<!-- markmap: fold -->
 
   ```php
     php artisan make:seeder SettingSeeder
@@ -8485,7 +8490,7 @@ Route::middleware('auth')->group(function () {
     }
   ```
 
-#### DatabaseSeeder Setting <!-- markmap: fold -->
+#### DatabaseSeeder Setting \<!-- markmap: fold -->
 
   ```php
     public function run(): void {
@@ -8500,7 +8505,7 @@ Route::middleware('auth')->group(function () {
     php artisan migrate:fresh --seed
   ```
 
-### Chargement systématique des paramètres <!-- markmap: fold -->
+### Chargement systématique des paramètres \<!-- markmap: fold -->
 
 * Dans **AppServiceProvider.php** :
 
@@ -8518,7 +8523,7 @@ Route::middleware('auth')->group(function () {
     }
   ```
 
-### Code composant Setting <!-- markmap: fold -->
+### Code composant Setting \<!-- markmap: fold -->
 
   ```html
   <?php
@@ -8630,7 +8635,7 @@ Route::middleware('auth')->group(function () {
   </div>
   ```
 
-### Nettoyage code (Code cleaning) <!-- markmap: fold -->
+### Nettoyage code (Code cleaning) \<!-- markmap: fold -->
 
 * Suppression de code (Devenu inutile) dans config/**app.php** :
 
@@ -8654,21 +8659,21 @@ Route::middleware('auth')->group(function () {
   "Go to bypass page": "Aller sur la page de bypass"
   ```
 
-### Réf. Maintenance : [Doc Laravel // Maintenance](https://laravel.com/docs/11.x/configuration#maintenance-mode)
+### Réf. Maintenance : <a href="https://laravel.com/docs/11.x/configuration#maintenance-mode" title="Doc officielle" target="_blank">Doc Laravel // Maintenance</a>
 
-### Réf.: ***[https://laravel.sillo.org/posts/mon-cms-les-parametres](https://laravel.sillo.org/posts/mon-cms-les-parametres)***
+### Réf.: ***<a href="https://laravel.sillo.org/posts/mon-cms-les-parametres" title="Voir les détails" target="_blank">https://laravel.sillo.org/posts/mon-cms-les-parametres</a>***
 
 ### Fin du tutoriel - Vérifications <!-- markmap: fold -->
 
 * Si tout s'est bien passé, voilà l'admin sidebar obtenue :
 
-* \- [Pour les'Admin'](https://prnt.sc/eiWO3i8mkUwz)
+* \- <a href="https://prnt.sc/eiWO3i8mkUwz" title="Voir... Ce qu'ils voient !" target="_blank">Pour les'Admin'</a>
 
-* \- [Pour les 'Redac'](https://prnt.sc/2xoEMOFJF-ZT)
+* \- <a href="https://prnt.sc/2xoEMOFJF-ZT" title="Voir... Ce qu'ils voient !" target="_blank">Pour les 'Redac'</a>
 
 ## - Et après ? Optimisations diverses <!-- markmap: fold -->
 
-### Bien évidemment, ce qui suit n'est en rien exhaustif ! <!-- markmap: fold -->
+### Bien évidemment, ce qui suit n'est en rien exhaustif ! \<!-- markmap: fold -->
 
 * ...Car ON PEUT TOUJOURS TOUT AMÉLIORER !
 
@@ -8676,17 +8681,17 @@ Route::middleware('auth')->group(function () {
 ... Reportez-vous au point 1 de AIDE & CONTACT ;-) !
 ( *Le faible critique... Le FORT agit !* :-) )
 
-### Données <!-- markmap: fold -->
+### Données \<!-- markmap: fold -->
 
-#### DataBaseSeeder <!-- markmap: fold -->
+#### DataBaseSeeder \<!-- markmap: fold -->
 
-##### Principe: Pour l'instant, nous avons beaucoup (trop) de seeders dans la racine du dossier **seeders/** <!-- markmap: fold -->
+##### Principe: Pour l'instant, nous avons beaucoup (trop) de seeders dans la racine du dossier **seeders/** \<!-- markmap: fold -->
 
 * Aussi, comme il est possible qu'à l'avenir, notre application s'étoffe, et recèle d'autres parties très distinctes...
 Alors, pour plus de clarté, isolons les seeders propres à la base de l'app., pour ultérieurement pouvoir,
 selon le même principe, isoler dans d'autres dossiers, des seeders qui seront plus spécifiques...
 
-##### Modus operandi <!-- markmap: fold -->
+##### Modus operandi \<!-- markmap: fold -->
 
 * 1 ) &nbsp; Créer un dossier **database/seeders/main**
 
@@ -8720,15 +8725,15 @@ selon le même principe, isoler dans d'autres dossiers, des seeders qui seront p
     ]);
   ```
 
-##### Résultat *(L'instant de vérité...)* <!-- markmap: fold -->
+##### Résultat *(L'instant de vérité...)* \<!-- markmap: fold -->
 
   ```bash
     php artisan migrate:refresh --seed
   ```
 
-#### Modification du ContactSeeder <!-- markmap: fold -->
+#### Modification du ContactSeeder \<!-- markmap: fold -->
 
-##### Problème & Solution <!-- markmap: fold -->
+##### Problème & Solution \<!-- markmap: fold -->
 
 * Situation actuelle :
 
@@ -8748,7 +8753,7 @@ selon le même principe, isoler dans d'autres dossiers, des seeders qui seront p
 * \* : <small><i>Cependant, comme ceci n'a pas besoin d'être chargé systématiquement par l'appli, puisque juste
 nécessaire à priori que pour la population (*seed*) de la table 'contacts', nous le ferons en dehors des 'vrais' helpers...</i></small>
 
-##### Création d'outils (*Tools*) <!-- markmap: fold -->
+##### Création d'outils (*Tools*) \<!-- markmap: fold -->
 
 * → Créer app/Http/Tools/**Fakers.php** :
 
@@ -8842,7 +8847,7 @@ nécessaire à priori que pour la population (*seed*) de la table 'contacts', no
   }
   ```
 
-##### Modification de ContactFactory <!-- markmap: fold -->
+##### Modification de ContactFactory \<!-- markmap: fold -->
 
   ```php
   <?php
@@ -8870,11 +8875,11 @@ nécessaire à priori que pour la population (*seed*) de la table 'contacts', no
   }
   ```
 
-### Front-End <!-- markmap: fold -->
+### Front-End \<!-- markmap: fold -->
 
-#### Espace de test <!-- markmap: fold -->
+#### Espace de test \<!-- markmap: fold -->
 
-##### Objectif <!-- markmap: fold -->
+##### Objectif \<!-- markmap: fold -->
 
 * En phase de dev, on a fréquemment besoin de tester une fonction native ou perso, bref, un bout de code...
 <br>
@@ -8890,7 +8895,7 @@ et aussi éviter ainsi de s'immiscer dans le script principal...<br>
 Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
 * Voyons ci-après comment cela a été réalisé ici, grâce à un nouveau composant spécifique :
 
-##### Exemple de Test avec et pour **cutSentence()** <!-- markmap: fold -->
+##### Exemple de Test avec et pour **cutSentence()** \<!-- markmap: fold -->
 
 * 1 / **Route Test** : *Pour des raisons de sécurité, cette page ne sera accessible qu'aux admins.
 (Cette route sera donc par exemple juste après celle nommée* **settings** *). Et bien-sûr, rien ne vous empêche d'ajouter
@@ -9036,7 +9041,7 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
 
 ### Back-End-End //2fix: deploy \<!-- markmap: fold -->
 
-#### //2do Ajout d'un lien Front-End & bouton Annuler (BLADE) <!-- markmap: fold -->
+#### //2do Ajout d'un lien Front-End & bouton Annuler (BLADE) \<!-- markmap: fold -->
 
 ##### admin.posts \<!-- markmap: fold -->
 
@@ -9333,7 +9338,7 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
 
 ### //2do tester sidebar // categories
 
-### //2do Pour aller + loin <!-- markmap: fold -->
+### //2do Pour aller + loin \<!-- markmap: fold -->
 
 * //2do txt (Quelques mots pour présenter Academy...)
 * //2do txt (Quelques mots pour présenter start & reset.bat...)
@@ -9347,22 +9352,22 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
 * **<a href="http://127.0.0.1:8000" title="Ouvrir votre rendu" target="_blank">MonCMS</a>** (*Les serveurs doivent être démarrés...*)
 * **<a href="http://127.0.0.1:8025" title="Ouvrir votre messagerie locale" target="_blank">MailHog</a>** (*Le service doit être démarré...*)
 
-### **[1 / Le TOP: Le dépôt GIT officiel](https://github.com/bestmomo/sillo)**
+### 1 / **<a href="https://github.com/bestmomo/sillo" title="Voir le dépôt officiel du projet" target="_blank">Le TOP: Le dépôt GIT officiel</a>**
 
-* En [récupérant le code complet du projet](https://github.com/bestmomo/sillo/blob/master/doc/installation.md)
+* En <a href="https://github.com/bestmomo/sillo/blob/master/doc/installation.md" title="' Fork & Clone THE ' dépôt !" target="_blank">récupérant le code complet du projet</a>
 * Puis, en y faisant un Pull Request (Et là... : BRAVOs (*Mabrouk*) !!!)
 * Ou au pire, en y levant une issue... Mais pas si gravissime (*Malich*) ;-)
 
-### **[2 / Le site officiel](https://laravel.sillo.org/login)**
+### 2 / **<a href="https://laravel.sillo.org/login" title="Voir le site officiel" target="_blank">Le site officiel</a>**
 
 * Message possible en bas de chaque article
 (*Vous devez alors y être logué ou créer un compte...*)
 
-### **[3 / Le canal officiel DISCORD](https://discord.com/channels/1258750464800063640/1258750464800063646)**
+### 3 / **<a href="https://discord.com/channels/1258750464800063640/1258750464800063646" title="Dial EN LIVE avec la communauté" target="_blank">Le canal officiel DISCORD</a>**
 
 * Pour discuter en LIVE
 
-### **[4 / Un message personnel](https://laravel.sillo.org/contact)**
+### 4 / **<a href="https://laravel.sillo.org/contact" title="Communiquer plus discrètement..." target="_blank">Un message personnel</a>**
 
 ## //2do PR dès que Complete & plus d'autres 2dos ou 2fix <!-- markmap: fold -->
 

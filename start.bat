@@ -46,7 +46,7 @@ REM Envoi de l'email de Test
 @REM php send_email.php
 
 echo.
-echo Les serveurs sont démarrés.
+echo Les serveurs MonCMS sont démarrés.
 echo.
 
 pause

@@ -191,7 +191,7 @@ new class extends Component {
             @endif
         @endif
         @guest
-            <div class="text-center mt-8 italic">{{ __('You must be logged in to comment') }}.</div>
+            <div class="text-center mt-8 italic"><a href="{{ route('login') }}" title="{{ __('Click here to log in') }} !">{{ __('You must be logged in to comment') }}</a>.</div>
         @endguest
     </div>
 
@@ -206,5 +206,4 @@ new class extends Component {
         </x-popover>
     </div>
 
-    {{-- //2do fond couleur verdatre dans login à supprimer --}}
 </div>
