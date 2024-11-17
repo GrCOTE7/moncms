@@ -4422,6 +4422,15 @@ php artisan make:volt pages/contact --class
   "Comment to valid from ": "Commentaire à valider de "
   ```
 
+#### Style Valeurs dans les pavés du *Dashboard* <!-- markmap: fold -->
+
+  ```css
+  .shadow-hover {
+      @apply transition duration-500 ease-in-out shadow shadow-gray-500
+      hover:shadow-md hover:shadow-gray-500 hover:text-orange-500;
+  }
+  ```
+  
 #### Lien dans les menus <!-- markmap: fold -->
 
 ##### Dans navigation.navbar
@@ -5584,7 +5593,7 @@ php artisan make:volt pages/contact --class
 
 ### Réf.: ***<a href="https://laravel.sillo.org/posts/mon-cms-les-categories" title="Voir les détails" target="_blank">https://laravel.sillo.org/posts/mon-cms-les-categories</a>***
 
-## - Les Pages <!-- markmap: fold -->
+## - Les Pages \<!-- markmap: fold -->
 
 ### Liste des pages <!-- markmap: fold -->
 
@@ -5933,6 +5942,10 @@ php artisan make:volt pages/contact --class
   ```
 
 ### Réf.: ***<a href="https://laravel.sillo.org/posts/mon-cms-les-pages" title="Voir les détails" target="_blank">https://laravel.sillo.org/posts/mon-cms-les-pages</a>***
+
+### Page Contact \<!-- markmap: fold -->
+
+* uuu
 
 ## - Les Comptes (Users) <!-- markmap: fold -->
 
@@ -9039,7 +9052,7 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
     </div>
   ```
 
-### Back-End-End //2fix: deploy <!-- markmap: fold -->
+### Back-End-End \<!-- markmap: fold -->
 
 #### //2do Ajout d'un lien Front-End & bouton Annuler (BLADE) <!-- markmap: fold -->
 
@@ -9345,6 +9358,7 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
 * //2do Pour ce Mémo, settings markdown linter 2 règles à ignorer... et pour ex. vsc code dans optimisation (au début) ?
 * //2do txt (Quelques mots pour Git Sillo)
 * //2do txt (Quelques mots pour LaDoc) → Contribuez !
+* //2do Réc dans tablo users icone non 'valid'
 
 ## III &nbsp;/ &nbsp; **A I D E &nbsp; & &nbsp; C O N T A C T** <!-- markmap: fold -->
 
