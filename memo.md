@@ -204,39 +204,45 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
 
 * UNE FONCTIONNALITÉ avec UN COMPOSANT VOLT (LOGIQUE + VUE) :
   
-* 1 / Définir une route ( ./route/web.php ) :
+* 1 / Définir une route ( ./route/**web.php** ) :
 
-* ```php
+  ```php
     use Livewire\Volt\Volt
     ...
     Volt::route('/url', 'dossier(s).fichier')->name('dossier.fichier');
   ```
 
-* → Recommandé à chaque changement des routes :
+  → Recommandé à chaque changement des routes :
 
   ```bash
     php artisan view:clear & php artisan route:clear
   ```
 
-* → Pour contrôle, liste de toutes les routes :
+  → Pour contrôle, liste de toutes les routes :
 
   ```bash
     php artisan route:list
   ```
 
-* 2 / Créer le composant :
+* 2 / Créer un lien quelque part (NavBar, SideBar, Menus, Autres...)
+
+* 3 / Créer le composant :
 
   ```bash
     php artisan make:volt dossier/fichier --class
   ```
 
-* &nbsp; &nbsp; &nbsp;Y définir :
-* &nbsp; &nbsp; &nbsp; - La Logique (La classe **PHP**)
-* &nbsp; &nbsp; &nbsp; - La Vue (HTML - Template **Blade**)
+  &nbsp; &nbsp; &nbsp;Y définir :
+  &nbsp; &nbsp; &nbsp; - La Logique (La classe **PHP**)
+  &nbsp; &nbsp; &nbsp; - La Vue (HTML - Template **Blade**)
 
-* 3 / Souvent, besoin de traduire quelques termes :
+* 4 / Parfois, besoin de styliser quelques balises :
   
-* &nbsp; &nbsp; &nbsp; → Définir les clés:valeurs pour le fichier de langue (ex.: lang/**fr.json**)
+  &nbsp; &nbsp; &nbsp; → Créer/Compléter le fichier **.css** dans le dossier **resources/css**
+
+* 5 / Souvent, besoin de traduire quelques termes :
+  
+  &nbsp; &nbsp; &nbsp; → Définir les clés:valeurs pour le fichier de langue (ex.: lang/**fr.json**)
 
 <a href="https://livewire.laravel.com/docs/quickstart" title="Voir tous les détails" target="_blank">Doc complète LIVEWIRE, compris VOLT</a>**
 
@@ -5593,7 +5599,7 @@ php artisan make:volt pages/contact --class
 
 ### Réf.: ***<a href="https://laravel.sillo.org/posts/mon-cms-les-categories" title="Voir les détails" target="_blank">https://laravel.sillo.org/posts/mon-cms-les-categories</a>***
 
-## - Les Pages <!-- markmap: fold -->
+## - Les Pages \<!-- markmap: fold -->
 
 ### Liste des pages <!-- markmap: fold -->
 
@@ -5943,9 +5949,72 @@ php artisan make:volt pages/contact --class
 
 ### Réf.: ***<a href="https://laravel.sillo.org/posts/mon-cms-les-pages" title="Voir les détails" target="_blank">https://laravel.sillo.org/posts/mon-cms-les-pages</a>***
 
-### Page Contact \<!-- markmap: fold -->
+### //2do Liste des contacts \<!-- markmap: fold -->
 
-* //2do ici List admin.contacts component
+#### Route Index Contact <!-- markmap: fold -->
+
+* Groupe middleware IsAdminOrRedac > IsAdmin :
+
+  ```php
+  ... Route Catégories
+  Volt::route('/contacts/index', 'admin.contacts.index')->name('contacts.index');
+  ```
+
+#### Liens Index Contact \<!-- markmap: fold -->
+
+* admin.sidebar :
+
+  ```html
+  <x-menu-item icon="s-pencil-square" title="{{ __('Contacts') }}" link="{{ route('contacts.index') }}" />
+  ... Liens Pages
+  ```
+
+* admin.index :
+
+  ```html
+  use App\Models\{Comment, Contact, Page, Post, User};
+  ...
+  return [
+    'users'          => User::count(),
+    'contacts'       => Contact::whereHandled(false)->get(),
+  ]
+  ...
+  </x-collapse>
+  <br>
+    @if (Auth::user()->isAdmin())
+      @foreach ($contacts as $contact)
+          <x-alert title="{!! __('Contact to handle from ') . html_entity_decode($contact->name) !!}" description="{!! html_entity_decode($contact->message) !!}" icon="s-pencil-square"
+              class="shadow-md alert-info">
+              <x-slot:actions>
+                  <x-button link="{{ route('contacts.index') }}" label="{!! __('Show the contacts') !!}" />
+              </x-slot:actions>
+          </x-alert>
+          <br>
+      @endforeach
+  @endif
+  ```
+
+#### CLI Index Contact <!-- markmap: fold -->
+
+  ```bash
+  php artisan make:volt admin/contacts/index --class
+  ```
+
+#### Code Index Contact \<!-- markmap: fold -->
+
+  ```html
+  //2fix mailto avant de le copier ici
+  ```
+
+#### Traductions Index Contact <!-- markmap: fold -->
+
+  ```json
+    ... "Use this form to contact me": "Utilisez ce formulaire pour me contacter",
+    "Contact to handle from ": "Contact à traiter de ",
+    "Show the contacts": "Voir les contacts",
+    "Contact deleted": "Contact supprimé",
+    "Are you sure to delete this contact?": "Êtes-vous sûr de vouloir supprimer ce contact ?",
+  ```
 
 ## - Les Comptes (Users) <!-- markmap: fold -->
 
@@ -6663,8 +6732,6 @@ Route::middleware('auth')->group(function () {
   ```
 
 ### Réf.: ***<a href="https://laravel.sillo.org/posts/mon-cms-les-commentaires" title="Voir les détails" target="_blank">https://laravel.sillo.org/posts/mon-cms-les-commentaires</a>***
-
-### //2do admin.contact
 
 ## - Les Menus <!-- markmap: fold -->
 
@@ -9051,7 +9118,7 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
     </div>
   ```
 
-### Back-End-End \<!-- markmap: fold -->
+### Back-End-End <!-- markmap: fold -->
 
 #### //2do Ajout d'un lien Front-End & bouton Annuler (BLADE) <!-- markmap: fold -->
 
@@ -9061,7 +9128,7 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
 <br>
   ```html
     ...
-    uuu tt → //2do component x-headerLk ?
+    uuu tt → //2do component x-headerLk ? utiliser settings page
     ...
   ```
 
@@ -9115,6 +9182,38 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
   ```
 
 ##### admin.pages <!-- markmap: fold -->
+
+* \- index :
+<br>
+  ```html
+    ...
+    uuu tt
+    ...
+    uuu cc
+    ...
+  ```
+
+* \- edit :
+<br>
+  ```html
+    ...
+    uuu tt
+    ...
+    uuu cc
+    ...
+  ```
+
+* \- create :
+<br>
+  ```html
+    ...
+    uuu tt
+    ...
+    uuu cc
+    ...
+  ```
+
+##### admin.contact <!-- markmap: fold -->
 
 * \- index :
 <br>
@@ -9340,6 +9439,8 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
 
 ### //2fix link ie category-2 in FE
 
+### //2fix faker email fr parfois avec espace, filter avec preg_replace space → _
+
 ### //2fix Edit menu si 'Autre' : Pas besoin du 1er champs (Article, Page, Category)
 
 ### //2do admin contact cf Sillo
@@ -9348,7 +9449,7 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
 
 ### //2do Lien menus list (admin.menu.index) dans header de editsub
 
-### //2do tester sidebar // categories
+### //2do tester sidebar // categories & new captures
 
 ### //2do Pour aller + loin <!-- markmap: fold -->
 
@@ -9382,6 +9483,8 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
 * Pour discuter en LIVE
 
 ### 4 / **<a href="https://laravel.sillo.org/contact" title="Communiquer plus discrètement..." target="_blank">Un message personnel</a>**
+
+## //2do refaire suivi de l'enchainement des liens (sidebart + admin.index)
 
 ## //2do PR dès que Complete & plus d'autres 2dos ou 2fix <!-- markmap: fold -->
 

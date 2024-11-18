@@ -4,6 +4,8 @@
 @REM call start.bat
 
 cd ../sillo/
-echo Passe sur sillo
+echo.
+echo Passe sur Sillo
+echo.
 
 call start.bat

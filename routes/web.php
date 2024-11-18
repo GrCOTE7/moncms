@@ -49,15 +49,15 @@ Route::middleware('auth')->group(function () {
 		Route::middleware(IsAdmin::class)->group(function () {
 			Volt::route('/categories/index', 'admin.categories.index')->name('categories.index');
 			Volt::route('/categories/{category}/edit', 'admin.categories.edit')->name('categories.edit');
-            
-            // contacts
+
+			Volt::route('/contacts/index', 'admin.contacts.index')->name('contacts.index');
+
+			Volt::route('/users/index', 'admin.users.index')->name('users.index');
+			Volt::route('/users/{user}/edit', 'admin.users.edit')->name('users.edit');
 
 			Volt::route('/pages/index', 'admin.pages.index')->name('pages.index');
 			Volt::route('/pages/create', 'admin.pages.create')->name('pages.create');
 			Volt::route('/pages/{page:slug}/edit', 'admin.pages.edit')->name('pages.edit');
-
-			Volt::route('/users/index', 'admin.users.index')->name('users.index');
-			Volt::route('/users/{user}/edit', 'admin.users.edit')->name('users.edit');
 
 			Volt::route('/menus/index', 'admin.menus.index')->name('menus.index');
 			Volt::route('/menus/{menu}/edit', 'admin.menus.edit')->name('menus.edit');

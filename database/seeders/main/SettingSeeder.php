@@ -16,8 +16,8 @@ class SettingSeeder extends Seeder
 		$settings = [
 			['key' => 'pagination', 'value' => 6],
 			['key' => 'excerptSize', 'value' => 30],
-			['key' => 'title', 'value' => 'Mon titre'],
-			['key' => 'subTitle', 'value' => 'Mon sous-titre'],
+			['key' => 'title', 'value' => 'Mon CMS'],
+			['key' => 'subTitle', 'value' => 'Mon Blog pour apprendre LARAVEL'],
 			['key' => 'newPost', 'value' => 4],
 		];
 
