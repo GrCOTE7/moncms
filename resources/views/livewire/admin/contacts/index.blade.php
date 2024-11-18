@@ -81,7 +81,6 @@ new #[Title('Contacts')] #[Layout('components.layouts.admin')] class extends Com
                     @endif
                     <x-popover>
                         <x-slot:trigger>
-                            //2fix lien mailto
                             <x-button icon="o-envelope"
                                 link="mailto:{{ $contact->email }}?subject={{ __('Contact') }}&body={{ $contact->message }}"
                                 no-wire-navigate spinner class="text-blue-500 btn-ghost btn-sm" />

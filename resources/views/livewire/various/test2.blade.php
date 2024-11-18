@@ -3,19 +3,19 @@ include_once 'test2.php';
 ?>
 
 <div>
-    <a href="/" title="{{ __('Return on site') }}">
-        <x-header class="text-lg m-0" title="{{ __('Test page') }} 2" shadow separator progress-indicator />
-    </a>
+    <a href="/" title="{{ __('Return on site') }}"><x-header class="text-lg m-0" title="{{ __('Test page') }} 2" shadow separator progress-indicator /></a>
+    <p class="text-2xl mb-5">{{ __('Study') }} {{ __('of') }} <b>Lien mailto</b></p>
 
-    <p class="mt-[-15px] mb-3">{{ number_format($members->total(), 0, ',', ' ') }} résults</p>
+    <div class="w-full text-justify">
 
-    {{ $members->links() }}
-    {{-- {{  dd($members) }} --}}
+        <a href="mailto:{{ env('MAIL_FROM_ADDRESS') }}">{{ env('MAIL_FROM_ADDRESS') }}</a>
 
-    <x-card>
-        <x-table :headers="$headers" :rows="$members" with-pagination>
-        </x-table>
-    </x-card>
+        <br>
 
-    <hr class="my-1">
+        <a href="mailto:example@example.com">example@example.com</a>
+
+
+
+        
+    </div>
 </div>
