@@ -10,7 +10,7 @@ use Livewire\Volt\Volt;
 
 // À chaque changement: php artisan view:clear & php artisan route:clear
 
-Volt::route('/', 'index');
+Volt::route('/', 'index')->name('home');
 
 Route::get('/memo', function () {
 	return view('memo');
@@ -74,6 +74,7 @@ Route::middleware('auth')->group(function () {
 			Volt::route('/test1', 'various.test1')->name('various.test1'); // Ready...
 			Volt::route('/test2', 'various.test2')->name('various.test2'); // Simple members list
 			Volt::route('/test3', 'various.test3')->name('various.test3'); // Members list with birthday
+			Volt::route('/test4', 'various.test4')->name('various.test4'); // Members list with birthday
 			Volt::route('/users', 'users.index');
 		});
 	});
