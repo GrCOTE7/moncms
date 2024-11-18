@@ -4,8 +4,8 @@ use Illuminate\Support\Facades\Password;
 use Livewire\Attributes\{Layout, Title};
 use Livewire\Volt\Component;
 
-new 
-#[Layout('components.layouts.auth')] 
+new
+#[Layout('components.layouts.auth')]
 class extends Component {
     public string $email = '';
 
@@ -31,7 +31,7 @@ class extends Component {
 
 @section('title', __('Password renewal'))
 <div>
-    <x-card class="flex items-center justify-center h-[96vh]" data-link='/' data-tip="{{  __('Return on site') }}" title="{{ __('Password renewal') }}" subtitle="{{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}" shadow separator progress-indicator id='my-title'>
+    <x-card class="flex items-center justify-center h-[96vh]" data-link='/' data-tip="{{  __('Back to site') }}" title="{{ __('Password renewal') }}" subtitle="{{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}" shadow separator progress-indicator id='my-title'>
         <x-session-status class="mb-4" :status="session('status')" />
         <x-form wire:submit="sendPasswordResetLink">
             <x-input label="{{ __('E-mail') }} *" wire:model="email" icon="o-envelope" inline required />

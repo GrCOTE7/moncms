@@ -251,7 +251,6 @@ return [
 		'short_text'               => 'texte court',
 		'size'                     => 'taille',
 		'skills'                   => 'compétences',
-		'slug'                     => 'limace',
 		'specialization'           => 'spécialisation',
 		'started_at'               => 'commencé à',
 		'state'                    => 'état',

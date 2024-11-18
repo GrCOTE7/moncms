@@ -7,7 +7,7 @@ use Illuminate\Support\Collection;
 use Livewire\Attributes\{Layout, Title, Validate};
 use Illuminate\Contracts\Database\Eloquent\Builder;
 
-new #[Title('Nav Menu'), Layout('components.layouts.admin')] class extends Component {
+new #[Layout('components.layouts.admin')] class extends Component {
     use Toast;
     use ManageMenus;
 
@@ -163,14 +163,9 @@ new #[Title('Nav Menu'), Layout('components.layouts.admin')] class extends Compo
     }
 }; ?>
 
+@section('title', __('Navbar'))
 <div>
-
-    <x-header title="{{ __('Navbar') }}" separator progress-indicator>
-        <x-slot:actions class="lg:hidden">
-            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline"
-                link="{{ route('admin') }}" />
-        </x-slot:actions>
-    </x-header>
+    <x-helpers.header-lk title="{{ __('Navbar') }}" />
     <x-card>
         @foreach ($menus as $menu)
             <x-list-item :item="$menu" no-separator no-hover>
@@ -308,10 +303,11 @@ new #[Title('Nav Menu'), Layout('components.layouts.admin')] class extends Compo
             <x-input label="{{ __('Title') }}" wire:model="label" />
             <x-input type="text" wire:model="link" label="{{ __('Link') }}" />
             <x-slot:actions>
-                <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit"
-                    class="btn-primary" />
+                <x-helpers.cancel-btn :lk="route('menus.index')" />
+                <x-helpers.save-btn />
             </x-slot:actions>
         </x-form>
 
     </x-card>
+    <x-helpers.progress-bar />
 </div>

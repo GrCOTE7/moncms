@@ -5,7 +5,7 @@ use Livewire\Attributes\{Layout, Title};
 use Livewire\Volt\Component;
 use Mary\Traits\Toast;
 
-new #[Title('Edit menu'), Layout('components.layouts.admin')] class extends Component {
+new #[Layout('components.layouts.admin')] class extends Component {
     use Toast;
 
     public Menu $menu;
@@ -31,21 +31,17 @@ new #[Title('Edit menu'), Layout('components.layouts.admin')] class extends Comp
     }
 }; ?>
 
+@section('title', __('Edit a menu'))
 <div>
-    <x-header title="{{ __('Edit a menu') }}" separator progress-indicator>
-        <x-slot:actions class="lg:hidden">
-            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline"
-                link="{{ route('admin') }}" />
-        </x-slot:actions>
-    </x-header>
-    
+    <x-helpers.header-lk title="{{ __('Edit a menu') }}" />
+
     <x-card>
         <x-form wire:submit="save">
             <x-input label="{{ __('Title') }}" wire:model="label" />
             <x-input type="text" wire:model="link" label="{{ __('Link') }}" />
             <x-slot:actions>
-                <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit"
-                    class="btn-primary" />
+                <x-helpers.cancel-btn :lk="route('menus.index')" />
+                <x-helpers.save-btn />
             </x-slot:actions>
         </x-form>
     </x-card>

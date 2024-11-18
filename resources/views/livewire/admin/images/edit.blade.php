@@ -1,15 +1,10 @@
 <?php
 include_once 'edit_image.php';
 ?>
-
+@section('title', __('Manage an image'))
 <div class="flex flex-col h-full lg:flex-row">
+    <x-helpers.header-lk title="{{ __('Manage an image') }}" />
     <div class="w-full p-4 lg:w-3/4">
-        <x-header title="{{ __('Manage an image') }}" separator progress-indicator>
-            <x-slot:actions class="lg:hidden">
-                <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline"
-                    link="{{ route('admin') }}" />
-            </x-slot:actions>
-        </x-header>
         <x-card>
             <div class="flex items-center justify-between h-full">
                 <p>@lang('The url of this image is :') <i>{{ $this->displayImage }}</i></p>
@@ -22,10 +17,12 @@ include_once 'edit_image.php';
             @else
                 @foreach ($this->usage as $use)
                     @if ($use['type'] == 'post')
-                        <p>@lang('This image is in the post ') : <b><a href="{{ route('posts.show', $use['slug']) }}" target="_blank">{{ $use['title'] }}</a></b></p>
+                        <p>@lang('This image is in the post ') : <b><a href="{{ route('posts.show', $use['slug']) }}"
+                                    target="_blank">{{ $use['title'] }}</a></b></p>
                     @else
                         <p>@lang('This image is in the page ') :
-                            <b><a href="{{ route('pages.show', $use['slug']) }}" target="_blank">{{ $use['title'] }}</a></b>
+                            <b><a href="{{ route('pages.show', $use['slug']) }}"
+                                    target="_blank">{{ $use['title'] }}</a></b>
                         </p>
                     @endif
                 @endforeach
@@ -132,4 +129,5 @@ include_once 'edit_image.php';
             document.body.removeChild(textArea);
         }
     </script>
+    <x-helpers.progress-bar />
 </div>

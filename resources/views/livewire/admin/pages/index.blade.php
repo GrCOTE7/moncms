@@ -6,7 +6,7 @@ use Livewire\Volt\Component;
 use Livewire\WithPagination;
 use Mary\Traits\Toast;
 
-new #[Title('Pages'), Layout('components.layouts.admin')] class extends Component {
+new #[Layout('components.layouts.admin')] class extends Component {
     use Toast, WithPagination;
 
     public array $sortBy = ['column' => 'title', 'direction' => 'asc'];
@@ -26,20 +26,23 @@ new #[Title('Pages'), Layout('components.layouts.admin')] class extends Componen
     {
         return [
             'pages' => Page::select('id', 'title', 'slug', 'active')
-            ->orderBy($this->sortBy['column'], $this->sortBy['direction'])
-            ->get(),
+                ->orderBy($this->sortBy['column'], $this->sortBy['direction'])
+                ->get(),
             'headers' => $this->headers(),
         ];
     }
 }; ?>
-
+@section('title', __('Pages'))
 <div>
-    <x-header title="{{ __('Pages') }}" separator progress-indicator>
-        <x-slot:actions class="lg:hidden">
-            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline"
-                link="{{ route('admin') }}" />
-            <x-button icon="c-document-plus" label="{{ __('Add a page') }}" class="btn-outline"
+    <x-header separator progress-indicator>
+        <x-slot:title>
+            <a href="{{ route('home') }}" title="{{ __('Go to site') }}">{{ __('Pages') }}</a>
+        </x-slot:title>
+        <x-slot:actions>
+            <x-button icon="c-document-plus" label="{{ __('Add a page') }}" class="btn-outline lg:hidden"
                 link="{{ route('pages.create') }}" />
+            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline lg:hidden"
+                link="{{ route('admin') }}" />
         </x-slot:actions>
     </x-header>
 

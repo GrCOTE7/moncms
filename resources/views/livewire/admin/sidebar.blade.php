@@ -58,7 +58,7 @@ new class extends Component {
             <x-menu-item icon="m-cog-8-tooth" title="{{ __('Settings') }}" link="{{ route('settings') }}"
                 :class="App::isDownForMaintenance() ? 'bg-red-300' : ''" />
         @endif
-        <x-menu-item icon="m-arrow-right-end-on-rectangle" title="{{ __('Go on site') }}" link="/" />
+        <x-menu-item icon="m-arrow-right-end-on-rectangle" title="{{ __('Go to site') }}" link="/" />
         <x-menu-item>
             <x-theme-toggle />
         </x-menu-item>

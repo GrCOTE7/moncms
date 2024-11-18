@@ -6,7 +6,7 @@ use Livewire\WithPagination;
 use Livewire\Attributes\{Layout, Title};
 use Illuminate\Pagination\LengthAwarePaginator;
 
-new #[Title('Comments'), Layout('components.layouts.admin')]
+new #[Layout('components.layouts.admin')]
 class extends Component {
     use Toast, WithPagination;
 
@@ -53,15 +53,9 @@ class extends Component {
     }
 }; ?>
 
+@section('title', __('Comments'))
 <div>
-    <x-header title="{{ __('Comments') }}" separator progress-indicator>
-        <x-slot:actions>
-            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline lg:hidden"
-                link="{{ route('admin') }}" />
-            <x-input placeholder="{{ __('Search') }}..." wire:model.live.debounce="search" clearable
-                icon="o-magnifying-glass" />
-        </x-slot:actions>
-    </x-header>
+    <x-helpers.header-lk title="{{ __('Comments') }}" search='true' />
     <x-card>
         <x-table striped :headers="$headers" :rows="$comments" link="/admin/comments/{id}/edit" :sort-by="$sortBy"
             with-pagination>

@@ -6,7 +6,7 @@ use Livewire\Volt\Component;
 use Livewire\WithPagination;
 use Mary\Traits\Toast;
 
-new #[Title('Contacts')] #[Layout('components.layouts.admin')] class extends Component {
+new #[Layout('components.layouts.admin')] class extends Component {
     use Toast;
     use WithPagination;
 
@@ -43,13 +43,10 @@ new #[Title('Contacts')] #[Layout('components.layouts.admin')] class extends Com
     }
 }; ?>
 
+@section('title', __('Contacts'))
 <div>
-    <x-header title="{{ __('Contacts') }}" separator progress-indicator>
-        <x-slot:actions class="lg:hidden">
-            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline"
-                link="{{ route('admin') }}" />
-        </x-slot:actions>
-    </x-header>
+    <x-helpers.header-lk title="{{ __('Contacts') }}" />
+
     <x-card>
         <x-table :headers="$headers" :rows="$contacts" :row-decoration="$row_decoration">
             @scope('cell_created_at', $contact)

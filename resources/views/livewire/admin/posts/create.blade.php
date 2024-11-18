@@ -3,12 +3,10 @@ include_once 'create.php';
 ?>
 
 <div>
-    <x-header title="{{ __('Add a post') }}" separator progress-indicator>
-        <x-slot:actions>
-            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline lg:hidden"
-                link="{{ route('admin') }}" />
-        </x-slot:actions>
-    </x-header>
+    @section('title', __('Add a post'))
+
+    <x-helpers.header-lk title="{{ __('Add a post') }}" />
+
     <x-card>
         <x-form wire:submit="save">
             <x-select label="{{ __('Category') }}" option-label="title" :options="$categories" wire:model="category_id"
@@ -32,17 +30,15 @@ include_once 'create.php';
                 <x-textarea label="{{ __('META Keywords') }}" wire:model="meta_keywords"
                     hint="{{ __('Keywords separated by comma') }}" rows="1" inline />
             </x-card>
-            <hr>
             <x-file wire:model="photo" label="{{ __('Featured image') }}"
                 hint="{{ __('Click on the image to modify') }}" accept="image/png, image/jpeg">
                 <img src="{{ $photo == '' ? '/storage/ask.jpg' : $photo }}" class="h-40" />
             </x-file>
             <x-slot:actions>
-                <x-button label="{{ __('Cancel') }}" icon="o-hand-thumb-down" class="btn-outline"
-                    link="/admin/posts/index" />
-                <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit"
-                    class="btn-primary" />
+                <x-helpers.cancel-btn :lk="route('posts.index')" />
+                <x-helpers.save-btn />
             </x-slot:actions>
         </x-form>
     </x-card>
+    <x-helpers.progress-bar />
 </div>

@@ -5,7 +5,7 @@ use Livewire\Volt\Component;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\{Layout, Title};
 
-new #[Title('Edit Footer'), Layout('components.layouts.admin')] 
+new #[Layout('components.layouts.admin')] 
 class extends Component {
     use Toast;
     
@@ -30,13 +30,9 @@ class extends Component {
   }
 }; ?>
 
-<div>
-    <x-header title="{{ __('Edit a footer') }}" separator progress-indicator>
-        <x-slot:actions class="lg:hidden">
-            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline"
-                link="{{ route('admin') }}" />
-        </x-slot:actions>
-    </x-header>
+  @section('title', __('Edit a footer'))
+  <div>
+    <x-helpers.header-lk title="{{ __('Edit a footer') }}" />
     <x-card>
         <x-form wire:submit="save">
             <x-input label="{{ __('Title') }}" wire:model="label" />

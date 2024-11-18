@@ -12,7 +12,7 @@ use Livewire\Volt\Component;
 use Livewire\WithPagination;
 use Mary\Traits\Toast;
 
-new #[Title('Images')] #[Layout('components.layouts.admin')]
+new #[Layout('components.layouts.admin')]
 class extends Component {
 	use Toast;
 	use WithPagination;

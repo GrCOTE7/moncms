@@ -2,19 +2,9 @@
 include_once 'index_users.php';
 ?>
 
+@section('title', __('Users'))
 <div>
-    <x-header separator progress-indicator>
-        <x-slot:title>
-            <a href="/admin/dashboard" title="{{ __('Back to Dashboard') }}">
-                {{ __('Users') }}
-            </a>
-        </x-slot:title>
-        <x-slot:middle class="!justify-end">
-            <x-input placeholder="{{ __('Search') }}..." wire:model.live.debounce="search" clearable
-                icon="o-magnifying-glass" />
-        </x-slot:middle>
-    </x-header>
-
+    <x-helpers.header-lk title="{{ __('Users') }}" search='true' />
 
     <x-radio inline :options="$roles" wire:model="role" wire:change="$refresh" />
     <br>

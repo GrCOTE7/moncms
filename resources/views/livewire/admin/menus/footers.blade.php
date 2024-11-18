@@ -5,7 +5,7 @@ use Livewire\Volt\Component;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\{Layout, Validate, Title};
 
-new #[Title('Footer Menu'), Layout('components.layouts.admin')] class extends Component {
+new #[Layout('components.layouts.admin')] class extends Component {
     use Toast;
 
     public Collection $footers;
@@ -82,13 +82,9 @@ new #[Title('Footer Menu'), Layout('components.layouts.admin')] class extends Co
     }
 }; ?>
 
+@section('title', __('Footer'))
 <div>
-    <x-header title="{{ __('Footer') }}" separator progress-indicator>
-        <x-slot:actions class="lg:hidden">
-            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline"
-                link="{{ route('admin') }}" />
-        </x-slot:actions>
-    </x-header>
+    <x-helpers.header-lk title="{{ __('Footer') }}" />
     <x-card>
 
         @foreach ($footers as $footer)
@@ -159,4 +155,5 @@ new #[Title('Footer Menu'), Layout('components.layouts.admin')] class extends Co
             </x-slot:actions>
         </x-form>
     </x-card>
+    <x-helpers.progress-bar />
 </div>

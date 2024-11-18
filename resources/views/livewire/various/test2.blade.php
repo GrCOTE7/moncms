@@ -3,7 +3,7 @@ include_once 'test2.php';
 ?>
 
 <div>
-    <a href="/" title="{{ __('Return on site') }}"><x-header class="text-lg m-0" title="{{ __('Test page') }} 2" shadow separator progress-indicator /></a>
+    <a href="/" title="{{ __('Back to site') }}"><x-header class="text-lg m-0" title="{{ __('Test page') }} 2" shadow separator progress-indicator /></a>
     <p class="text-2xl mb-5">{{ __('Study') }} {{ __('of') }} <b>Lien mailto</b></p>
 
     <div class="w-full text-justify">
@@ -16,6 +16,6 @@ include_once 'test2.php';
 
 
 
-        
+
     </div>
 </div>

@@ -1019,7 +1019,7 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     @section('title', __('Register'))
     <div>
       <x-card class="flex items-center justify-center h-[96vh]">
-        <a href="/" title="{{ __('Return on site') }}">
+        <a href="/" title="{{ __('Back to site') }}">
           <x-card class="items-center" title="{{ __('Register') }}" shadow separator progress-indicator />
         </a>
         <x-form wire:submit="register" class="w-full sm:min-w-[30vw]">
@@ -1147,7 +1147,7 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     @section('title', __('Login'))
     <div>
       <x-card class="flex items-center justify-center h-screen">
-        <a href="/" title="{{ __('Return on site') }}">
+        <a href="/" title="{{ __('Back to site') }}">
           <x-card class="items-center" title="{{ __('Login') }}" shadow separator progress-indicator />
         </a>
         <x-form wire:submit="login">
@@ -1250,7 +1250,7 @@ php artisan   make:volt auth/forgot-password --class
     
   @section('title', __('Password renewal'))
   <div>
-    <x-card class="flex items-center justify-center h-[96vh]" data-link='/' data-tip="{{  __('Return on site') }}" title="{{ __('Password renewal') }}" subtitle="{{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}" shadow separator progress-indicator id='my-title'>
+    <x-card class="flex items-center justify-center h-[96vh]" data-link='/' data-tip="{{  __('Back to site') }}" title="{{ __('Password renewal') }}" subtitle="{{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}" shadow separator progress-indicator id='my-title'>
       <x-session-status class="mb-4" :status="session('status')" />
       <x-form wire:submit="sendPasswordResetLink">
         <x-input label="{{ __('E-mail') }} *" wire:model="email" icon="o-envelope" inline required />
@@ -1361,7 +1361,7 @@ php artisan   make:volt auth/forgot-password --class
     @section('title', __('Reset Password'))
     <div>
       <x-card class="flex items-center justify-center h-[96vh]" shadow separator progress-indicator>
-        <a href="/" title="{{ __('Return on site') }}">
+        <a href="/" title="{{ __('Back to site') }}">
             <x-card class="items-center" title="{{__('Reset Password')}}" shadow separator progress-indicator />
         </a>
         <x-session-status class="mb-4" :status="session('status')" />
@@ -1917,7 +1917,7 @@ php artisan   make:volt auth/forgot-password --class
     <meta name="keywords" content="@yield('keywords')">
   ```
 
-#### Dans la Vue
+#### Dans la **Vue**
 
 ##### Bloc PHP
 
@@ -1950,6 +1950,15 @@ php artisan   make:volt auth/forgot-password --class
     @section('description', $post->meta_description)
     @section('keywords', $post->meta_keywords
   ```
+
+* À noter que ces méthodes permettent par exemple
+de traduire le titre dans l'onglet :
+
+* ```html
+  @section('title', __('Add a post'))
+  ```
+
+  Fera apparaître : "Ajouter un article | Mon CMS"
 
 ### Typographie: Plugin **prose** de Tailwind <!-- markmap: fold -->
 
@@ -3720,7 +3729,7 @@ php artisan make:volt pages/contact --class
   <div>
       <x-card class="flex items-center justify-center h-[96vh]">
   
-          <a href="/" title="{{ __('Go on site') }}">
+          <a href="/" title="{{ __('Go to site') }}">
               <x-card class="items-center py-0" title="{{ __('Update profile') }}" shadow separator
                   progress-indicator></x-card>
           </a>
@@ -3746,7 +3755,7 @@ php artisan make:volt pages/contact --class
                   class="btn-outline btn-sm" />
   
               <x-slot:actions>
-                  <x-button label="{{ __('Cancel') }}" link="/" class="btn-ghost" title=" {{ __('Return on site') }} "/>
+                  <x-button label="{{ __('Cancel') }}" link="/" class="btn-ghost" title=" {{ __('Back to site') }} "/>
                   <x-button label="{{ __('Delete account') }}" icon="c-hand-thumb-down"
                       wire:confirm="{{ __('Are you sure to delete your account?') }}" wire:click="deleteAccount"
                       class="btn-warning" />
@@ -3771,8 +3780,8 @@ php artisan make:volt pages/contact --class
   "Delete account": "Supprimer le compte",
   "Are you sure to delete your account?": "Êtes-vous sûr de vouloir supprimer votre compte ?",
   "Profile": "Profil",
-  "Go on site": "Allez sur le site",
-  "Return on site": "Retourner sur le site"
+  "Go to site": "Allez sur le site",
+  "Back to site": "Retourner sur le site"
   ```
 
 ### Réf.: ***<a href="https://laravel.sillo.org/posts/mon-cms-le-profil">" title="Voir les détails" target="_blank">https://laravel.sillo.org/posts/mon-cms-le-profil</a>***
@@ -4188,7 +4197,7 @@ php artisan make:volt pages/contact --class
           </x-list-item>
           <x-menu-separator />
           <x-menu-item title="{{ __('Dashboard') }}" icon="s-building-office-2" link="{{ route('admin') }}" />      
-          <x-menu-item icon="m-arrow-right-end-on-rectangle" title="{{ __('Go on site') }}" link="/" />
+          <x-menu-item icon="m-arrow-right-end-on-rectangle" title="{{ __('Go to site') }}" link="/" />
           <x-menu-item>
               <x-theme-toggle />
           </x-menu-item>
@@ -4208,7 +4217,10 @@ php artisan make:volt pages/contact --class
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
       <meta name="csrf-token" content="{{ csrf_token() }}">
-      <title>{{ isset($title) ? $title . ' | ' . config('app.name') : config('app.name') }}</title>
+
+      <title>
+        {{ (isset($title) ? $title . ' | ' : (View::hasSection('title') ? View::getSection('title') . ' | ' : '')) . config('app.name') }}
+      </title>
   
       @vite(['resources/css/app.css', 'resources/js/app.js'])
   </head>
@@ -4631,19 +4643,20 @@ php artisan make:volt pages/contact --class
   }; ?>
   
   <div>
-      <x-header title="{{ __('Posts') }}" separator progress-indicator>
-          <x-slot:actions>
-              <x-input placeholder="{{ __('Search...') }}" wire:model.live.debounce="search" clearable icon="o-magnifying-glass" />
-              <x-button label="{{ __('Add a post') }}" class="btn-outline lg:hidden" link="{{ route('posts.create') }}" />
-              <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline lg:hidden"
-                  link="{{ route('admin') }}" />
-          </x-slot:actions>
-      </x-header>
+    <x-header separator progress-indicator>
+        <x-slot:title><a href="{{ route('home') }}" title="{{ __('Go to site') }}">{{ __('Posts') }}</a></x-slot:title>
+        <x-slot:actions>
+            <x-input placeholder="{{ __('Search...') }}" wire:model.live.debounce="search" clearable
+                icon="o-magnifying-glass" />
+            <x-button label="{{ __('Add a post') }}" class="btn-outline lg:hidden"
+                link="{{ route('posts.create') }}" />
+            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline lg:hidden"
+                link="{{ route('admin') }}" />
+        </x-slot:actions>
+    </x-header>
   
       <x-collapse>
-          <x-slot:heading>
-              @lang(__('Filters'))
-          </x-slot:heading>
+          <x-slot:heading>@lang(__('Filters'))</x-slot:heading>
           <x-slot:content>
               <x-select label="{{ __('Category') }}" :options="$categories" placeholder="{{ __('Select a category') }}"
                   option-label="title" wire:model="category_id" wire:change="$refresh" />
@@ -4699,9 +4712,7 @@ php artisan make:volt pages/contact --class
                                       wire:confirm="{{ __('Are you sure to delete this post?') }}" spinner
                                       class="text-red-500 btn-ghost btn-sm" />
                               </x-slot:trigger>
-                              <x-slot:content class="pop-small">
-                                  @lang('Delete')
-                              </x-slot:content>
+                              <x-slot:content class="pop-small">@lang('Delete')</x-slot:content>
                           </x-popover>
                       </div>
                   @endscope
@@ -8850,7 +8861,7 @@ Route::middleware('auth')->group(function () {
 
 * \- <a href="https://prnt.sc/2xoEMOFJF-ZT" title="Voir... Ce qu'ils voient !" target="_blank">Pour les 'Redac'</a>
 
-## - Et après ? Optimisations diverses <!-- markmap: fold -->
+## - Et après ? Optimisations diverses \<!-- markmap: fold -->
 
 ### Bien évidemment, ce qui suit n'est en rien exhaustif ! <!-- markmap: fold -->
 
@@ -8860,7 +8871,7 @@ Route::middleware('auth')->group(function () {
 ... Reportez-vous au point 1 de AIDE & CONTACT ;-) !
 ( *Le faible critique... Le FORT agit !* :-) )
 
-### Données <!-- markmap: fold -->
+### Données \<!-- markmap: fold -->
 
 #### DataBaseSeeder <!-- markmap: fold -->
 
@@ -9054,7 +9065,7 @@ nécessaire à priori que pour la population (*seed*) de la table 'contacts', no
   }
   ```
 
-### Front-End <!-- markmap: fold -->
+### Front-End \<!-- markmap: fold -->
 
 #### Espace de test <!-- markmap: fold -->
 
@@ -9207,7 +9218,7 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
     ?>
 
     <div>
-      <a href="/" title="{{ __('Return on site') }}"><x-header class="text-lg m-0" title="{{ __('Test page') }}" shadow separator progress-indicator /></a>
+      <a href="/" title="{{ __('Back to site') }}"><x-header class="text-lg m-0" title="{{ __('Test page') }}" shadow separator progress-indicator /></a>
 
       <p class="text-2xl mb-5">{{ __('Study') }} {{ __('of') }} app/Http/Tools/Fakers.php-><b>cutSentence()</b></p>
       <div class="w-full text-justify">
@@ -9218,45 +9229,88 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
     </div>
   ```
 
-### Back-End-End <!-- markmap: fold -->
+### Back-End-End \<!-- markmap: fold -->
 
-#### //2do Ajout d'un lien Front-End & bouton Annuler (BLADE) <!-- markmap: fold -->
+#### Ajout d'un lien Front-End & bouton Annuler (BLADE) <!-- markmap: fold -->
+
+##### Réalisation d'helpers de vues <!-- markmap: fold -->
+
+* Créer views/components/helpers/**header-lk.blade.php** :
+
+  ```html
+  @props(['title', 'dashboardBtn' => true, 'search' => false])
+  
+  <div>
+      <x-header separator progress-indicator>
+          <x-slot:title><a href="{{ route('home') }}" title="{{ __('Go to site') }}">{{ $title }}</a></x-slot:title>
+          <x-slot:actions>
+              @if ($search)
+                  <x-slot:middle class="!justify-end">
+                      <x-input placeholder="{{ __('Search') }}..." wire:model.live.debounce="search" clearable icon="o-magnifying-glass" />
+                  </x-slot:middle>
+              @endif
+              @if ($dashboardBtn)
+                  <x-button icon="s-building-office-2" :label="__('Dashboard')" class="btn-outline lg:hidden"
+                      link="{{ route('admin') }}" />
+              @endif
+          </x-slot:actions>
+      </x-header>
+  </div>
+  ```
+
+* Et views/components/helpers/**progress-bar.blade.php** :
+
+  ```html
+  <x-header class="-mt-5 -mb-4" separator progress-indicator />
+  ```
+
+* Et views/components/helpers/**cancel-btn.blade.php** :
+
+  ```html
+  @props(['lk'])
+
+  <x-button label="{{ __('Cancel') }}" icon="o-hand-thumb-down" class="btn-outline" link="{{ $lk }}" />
+  ```
+
+* Et views/components/helpers/**save-btn.blade.php** :
+
+  ```html
+  <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit" class="btn-primary" />
+  ```
 
 ##### admin.posts <!-- markmap: fold -->
-
-* \- index :
-<br>
-  ```html
-    ...
-    uuu tt → //2do component x-headerLk ? utiliser settings page
-    ...
-  ```
 
 * \- edit :
 <br>
   ```html
-    uuu tt7
+  @section('title', __('Edit a post'))
+  <div>
+    <x-helpers.header-lk title="{{ __('Edit a post') }}" />
     ...
-    <x-slot:actions>
-      <x-button label="{{ __('Cancel') }}" icon="o-hand-thumb-down" class="btn-outline" link="/admin/posts/index" />
-      <x-button label="{{ __('Preview') }}" icon="m-sun" link="{{ '/posts/' . $post->slug }}" external class="btn-outline" />
-      ...
-    ...//2do component x-cancelLk
-    <x-slot:actions>
-      <x-button label="{{ __('Cancel') }}" icon="o-hand-thumb-down" class="btn-outline" link="/admin/posts/index" />
-      <x-button label="{{ __('Preview') }}" icon="m-sun" link="{{ '/posts/' . $post->slug }}" external class="btn-outline" />
-      ...
+      <x-helpers.cancel-btn :lk="route('posts.index')" />
+      <x-button label="{{ __('Preview') }}" icon="m-sun" :link="route('posts.show', $post->slug)"
+        external class="btn-outline" />
+      <x-helpers.save-btn />
+    </x-slot:actions>
+    ...
+    </x-card>
+  <x-helpers.progress-bar />
+  ...
   ```
 
 * \- create :
 <br>
-  ```html
-      uuu tt
-      ...
-      <x-slot:actions>
-        <x-button label="{{ __('Cancel') }}" icon="o-hand-thumb-down" class="btn-outline" link="/admin/posts/index" />
-        <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit" class="btn-primary" />
-      ...
+  ```htm
+  @section('title', __('Add a post'))
+  <div>
+    <x-helpers.header-lk title="{{ __('Add a post') }}" />
+    ...
+    <x-slot:actions>
+      <x-helpers.cancel-btn :lk="route('posts.index')" />
+      <x-helpers.save-btn />
+    ...
+    </x-card>
+    <x-helpers.progress-bar />
   ```
 
 ##### admin.categories <!-- markmap: fold -->
@@ -9264,85 +9318,99 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
 * \- admin.categories.index :
 <br>
   ```html
+  @section('title', __('Categories'))
+  <div>
+    <x-helpers.header-lk title="{{ __('Categories') }}" />
     ...
-    uuu tt
-    ...
-    uuu cc
-    ...
+    <x-helpers.progress-bar />
+  </div>
   ```
 
-* \- admin.categories.edit :
+* \- admin.category-form :
 <br>
   ```html
+    <x-slot:actions>
+      <x-helpers.cancel-btn lk="{{ route('categories.index') }}"/>
+      <x-helpers.save-btn />
+    </x-slot:actions>
+  </x-form>
+  ```
+
+* \- admin.category.edit :
+<br>
+  ```html
+  @section('title', __('Edit a category'))
+  <div>
+    <x-helpers.header-lk title="{{ __('Edit a category') }}" />
     ...
-    uuu tt
-    ...
-    uuu cc
-    ...
+    <x-helpers.progress-bar />
+  </div>
   ```
 
 ##### admin.pages <!-- markmap: fold -->
 
 * \- index :
+
+* Supprimer l'attribut *Title* de la classe pour *n*'avoir *que* :
+  <br>
+
+  ```php
+  new #[Layout('components.layouts.admin')] class extends Component {
+  ```
+  (*Penser à faire pareil pour toutes les pages suivantes*...
+  ...Car si pour anglais & français, c'est '*kif-kif*', en allemand, par exemple, c'est '*Seite*'...)
+
+  <br>
+
+  ```html
+  @section('title', __('Pages'))
+  <div>
+  <x-header separator progress-indicator>
+    <x-slot:title>
+      <a href="{{ route('home') }}" title="{{ __('Go to site') }}">{{ __('Pages') }}</a>
+    </x-slot:title>
+    <x-slot:actions>
+      <x-button icon="c-document-plus" label="{{ __('Add a page') }}" class="btn-outline lg:hidden"
+          link="{{ route('pages.create') }}" />
+      <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline lg:hidden"
+          link="{{ route('admin') }}" />
+    </x-slot:actions>
+  </x-header>
+  ```
+
+* \- create (Penser à l'attribut'title' de la classe...):
 <br>
   ```html
-    ...
-    uuu tt
-    ...
-    uuu cc
-    ...
+  @section('title', __('Add a page'))
+  <div>
+      <x-helpers.header-lk title="{{ __('Add a page') }}" />
+  ```
+
+* \- page-form :
+<br>
+
+  ```html
+  </x-card>
+  <x-helpers.progress-bar/>
   ```
 
 * \- edit :
-<br>
+Supp. dans les attributs de la classe: **Title('Edit Page')** (*Dernier rappel...*),
+  <br>
   ```html
-    ...
-    uuu tt
-    ...
-    uuu cc
-    ...
-  ```
-
-* \- create :
-<br>
-  ```html
-    ...
-    uuu tt
-    ...
-    uuu cc
-    ...
+  <x-helpers.header-lk title="{{ __('Edit a page') }}" />
   ```
 
 ##### admin.contact <!-- markmap: fold -->
 
 * \- index :
+(*Est-ce utile...: La Classe, l'attribut "title"...?*)
 <br>
   ```html
-    ...
-    uuu tt
-    ...
-    uuu cc
-    ...
-  ```
-
-* \- edit :
-<br>
-  ```html
-    ...
-    uuu tt
-    ...
-    uuu cc
-    ...
-  ```
-
-* \- create :
-<br>
-  ```html
-    ...
-    uuu tt
-    ...
-    uuu cc
-    ...
+  @section('title', __('Contacts'))
+  <div>
+    <x-helpers.header-lk title="{{ __('Contacts') }}" />
+    <x-card>
   ```
 
 ##### admin.users <!-- markmap: fold -->
@@ -9350,21 +9418,17 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
 * \- index :
 <br>
   ```html
-    ...
-    uuu tt
-    ...
-    uuu cc
-    ...
+  @section('title', __('Users'))
+  <div>
+    <x-helpers.header-lk title="{{ __('Users') }}" search='true' />
   ```
 
 * \- edit :
 <br>
   ```html
-    ...
-    uuu tt
-    ...
-    uuu cc
-    ...
+  <div>
+    <x-helpers.header-lk title="{{ __('Edit an account') }}" />
+    <x-card>
   ```
 
 ##### admin.comments <!-- markmap: fold -->
@@ -9372,31 +9436,23 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
 * \- index :
 <br>
   ```html
-    ...
-    uuu tt
-    ...
-    uuu cc
-    ...
+  @section('title', __('Comments'))
+  <div>
+    <x-helpers.header-lk title="{{ __('Comments') }}" search='true' />
+    <x-card>
   ```
 
 * \- edit :
 <br>
   ```html
+  @section('title', __('Edit a comment'))
+  <div>
+    <x-helpers.header-lk title="{{ __('Edit a comment') }}" />
+    <x-card>
     ...
-    uuu tt
-    ...
-    uuu cc
-    ...
-  ```
-
-* \- create :
-<br>
-  ```html
-    ...
-    uuu tt
-    ...
-    uuu cc
-    ...
+    </x-card>
+    <x-helpers.progress-bar />
+  </div>
   ```
 
 ##### admin.menus <!-- markmap: fold -->
@@ -9404,60 +9460,70 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
 * \- index :
 <br>
   ```html
+  @section('title', __('Navbar'))
+  <div>
+    <x-helpers.header-lk title="{{ __('Navbar') }}" />
     ...
-    uuu tt
-    ...
-    uuu cc
-    ...
+    </x-card>
+    <x-helpers.progress-bar />
+  </div>
+  ...
+  <x-slot:actions>
+      <x-helpers.cancel-btn :lk="route('menus.index')" />
+      <x-helpers.save-btn />
   ```
 
 * \- edit :
 <br>
   ```html
+  @section('title', __('Edit a menu'))
+  <div>
+    <x-helpers.header-lk title="{{ __('Edit a menu') }}" />
+    <x-card>
     ...
-    uuu tt
-    ...
-    uuu cc
-    ...
+    <x-slot:actions>
+      <x-helpers.cancel-btn :lk="route('menus.index')" />
+      <x-helpers.save-btn />
   ```
 
-* \- create :
+* \- submenu-form :
 <br>
   ```html
-    ...
-    uuu tt
-    ...
-    uuu cc
-    ...
+      <x-helpers.cancel-btn :lk="route('menus.index')" />
+      <x-helpers.save-btn />
+    </x-slot:actions>
+  </x-form>
+  <br>
+  <x-helpers.progress-bar />
   ```
 
-##### admin.submenus-form <!-- markmap: fold -->
-
-* \- index :
+* \- editsub :
 <br>
   ```html
-    ...
-    uuu tt
-    ...
-    uuu cc
-    ...
+  @section('title', __('Edit a submenu'))
+    <div>
+      <x-helpers.header-lk title="{{ __('Edit a submenu') }}" />
   ```
 
-* \- edit :
+* \- footers :
 <br>
   ```html
+  @section('title', __('Footer'))
+  <div>
+    <x-helpers.header-lk title="{{ __('Footer') }}" />
+    <x-card>
     ...
-    uuu tt
-    ...
-    uuu cc
-    ...
+    </x-card>
+    <x-helpers.progress-bar />
+  </div>
   ```
 
-* \- create :
+* \- editfooter :
 <br>
   ```html
-    ...
-    uuu tt
+  @section('title', __('Footer'))
+  <div>
+    <x-helpers.header-lk title="{{ __('Footer') }}" />
     ...
     uuu cc
     ...
@@ -9466,33 +9532,25 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
 ##### admin.images <!-- markmap: fold -->
 
 * \- index :
-<br>
+  <br>
+
   ```html
-    ...
-    uuu tt
-    ...
-    uuu cc
-    ...
+  @section('title', __('Images'))
+  <div>
+    <x-helpers.header-lk title="{{ __('Images') }}" />
   ```
 
 * \- edit :
 <br>
-  ```html
-    ...
-    uuu tt
-    ...
-    uuu cc
-    ...
-  ```
 
-* \- create :
-<br>
   ```html
+  @section('title', __('Manage an image'))
+  <div class="flex flex-col h-full lg:flex-row">
+    <x-helpers.header-lk title="{{ __('Manage an image') }}" />
     ...
-    uuu tt
-    ...
-    uuu cc
-    ...
+    </script>
+    <x-helpers.progress-bar />
+  </div>
   ```
 
 ##### admin.settings <!-- markmap: fold -->
@@ -9500,46 +9558,35 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
 * \- index :
 <br>
   ```html
+  @section('title', __('Settings'))
+  <div>
+    <x-helpers.header-lk title="{{ __('Settings') }}" />
     ...
-    uuu tt
-    ...
-    uuu cc
-    ...
-    uuu AVEC progressbar en + en bas
-          ...
-          </x-form>
-        <x-header separator progress-indicator />
-      </x-card>
-    </div>
+      <x-helpers.progress-bar />
+  </div>
   ```
 
-* \- edit :
-<br>
-  ```html
-    ...
-    uuu tt
-    ...
-    uuu cc
-    ...
-  ```
+##### various/**test1.blade.php** <!-- markmap: fold -->
 
-* \- create :
-<br>
+* &nbsp; <small>*Du coup, on peut aussi changer nos pages de test... :
+   &nbsp; (Et n'oublions pas l'attribut de la classe à supprimer...)*</small>
+  <br>
+
   ```html
-    ...
-    uuu tt
-    ...
-    uuu cc
-    ...
-  ```  
+  @section('title', __('Test page').' 1')
+  <div>
+    <x-helpers.header-lk title="{{ __('Test page') }} 1"/>
+  ```
 
 ### //2do cf si meilleur icône pour tests
+
+### //2do admin.menus.editsub : manquent translations dans 1er champs et en cas d'erreur pour Page et article si recherche
 
 ### //2do admin.posts.index → paginate selon config <!-- markmap: fold -->
 
 ### //2fix link ie category-2 in FE
 
-### //2fix faker email fr parfois avec espace, filter avec preg_replace space → _
+### //2fix faker email fr parfois avec espace, filtrer avec preg_replace space → \_
 
 ### //2fix Edit menu si 'Autre' : Pas besoin du 1er champs (Article, Page, Category)
 
@@ -9548,6 +9595,8 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
 ### //2do Dans optimisation Sub-Menus 'Autre' → Vu Ajouté dans Traits/ManageMenus.php + traduction
 
 ### //2do Lien menus list (admin.menu.index) dans header de editsub
+
+### //2do translation submenu created with success
 
 ### //2do tester sidebar // categories & new captures
 

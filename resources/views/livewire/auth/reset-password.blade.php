@@ -59,7 +59,7 @@ class extends Component {
 @section('title', __('Reset Password'))
 <div>
     <x-card class="flex items-center justify-center h-[96vh]" shadow separator progress-indicator>
-    <a href="/" title="{{ __('Return on site') }}">
+    <a href="/" title="{{ __('Back to site') }}">
         <x-card class="items-center" title="{{__('Reset Password')}}" shadow separator progress-indicator />
     </a>
         <x-session-status class="mb-4" :status="session('status')" />

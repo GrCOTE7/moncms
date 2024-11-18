@@ -41,13 +41,10 @@ class extends Component {
     }
 }; ?>
 
-<div>
-    <x-header title="{{ __('Edit a submenu') }}" separator progress-indicator>
-        <x-slot:actions class="lg:hidden">
-            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline"
-                link="{{ route('admin') }}" />
-        </x-slot:actions>
-    </x-header>
+@section('title', __('Edit a submenu'))
+  <div>
+    <x-helpers.header-lk title="{{ __('Edit a submenu') }}" />
+
     <x-card>
         @include('livewire.admin.menus.submenu-form')
     </x-card>

@@ -33,7 +33,7 @@ class extends Component {
 @section('title', __('Login'))
 <div>
     <x-card class="flex items-center justify-center h-[96vh]">
-        <a href="/" title="{{ __('Return on site') }}">
+        <a href="/" title="{{ __('Back to site') }}">
             <x-card class="items-center" title="{{ __('Login') }}" shadow separator progress-indicator />
         </a>
         <x-form wire:submit="login">

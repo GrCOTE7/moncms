@@ -16,6 +16,9 @@
     <x-input label="{{ __('Title') }}" wire:model="sublabel" />
     <x-input type="text" wire:model="sublink" label="{{ __('Link') }}" />
     <x-slot:actions>
-        <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit" class="btn-primary" />
+        <x-helpers.cancel-btn :lk="route('menus.index')" />
+        <x-helpers.save-btn />
     </x-slot:actions>
 </x-form>
+<br>
+<x-helpers.progress-bar />

@@ -67,14 +67,9 @@ new #[Title('Settings')] #[Layout('components.layouts.admin')] class extends Com
     }
 }; ?>
 
+@section('title', __('Settings'))
 <div>
- <x-header title="{{ __('Settings') }}" separator progress-indicator>
-        <x-slot:actions>
-            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline lg:hidden"
-                link="{{ route('admin') }}" />
-        </x-slot:actions>
-    </x-header>
-
+    <x-helpers.header-lk title="{{ __('Settings') }}" />
     <x-card>
         <x-card separator class="mb-6 border-4 {{ $maintenance ? 'bg-red-300' : 'bg-zinc-100' }} border-zinc-950">
             <div class="flex items-center justify-between">
@@ -112,6 +107,6 @@ new #[Title('Settings')] #[Layout('components.layouts.admin')] class extends Com
                     class="btn-primary" />
             </x-slot:actions>
         </x-form>
-        <x-header separator progress-indicator />
     </x-card>
+    <x-header separator progress-indicator />
 </div>

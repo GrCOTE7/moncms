@@ -2,14 +2,9 @@
 include_once 'index_images.php';
 ?>
 
-<div>
-    <x-header title="{{ __('Images') }}" separator progress-indicator>
-        <x-slot:actions class="lg:hidden">
-            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline"
-                link="{{ route('admin') }}" />
-        </x-slot:actions>
-    </x-header>
-
+  @section('title', __('Images'))
+  <div>
+    <x-helpers.header-lk title="{{ __('Images') }}" />
     <x-card title="{!! __('Select year and month') !!}" class="shadow-md">
         <x-select label="{{ __('Year') }}" :options="$years" wire:model="selectedYear" wire:change="$refresh" />
         <br>

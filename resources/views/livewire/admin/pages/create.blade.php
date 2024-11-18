@@ -6,7 +6,7 @@ use Livewire\Attributes\{Layout, Validate, Title};
 use Livewire\Volt\Component;
 use Mary\Traits\Toast;
 
-new #[Title('Create Page'), Layout('components.layouts.admin')] class extends Component {
+new #[Layout('components.layouts.admin')] class extends Component {
     use Toast;
 
     #[Validate('required|max:65000')]
@@ -51,12 +51,9 @@ new #[Title('Create Page'), Layout('components.layouts.admin')] class extends Co
     }
 }; ?>
 
+@section('title', __('Add a page'))
 <div>
-    <x-header title="{{ __('Add a page') }}" separator progress-indicator>
-        <x-slot:actions class="lg:hidden">
-            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline"
-                link="{{ route('admin') }}" />
-        </x-slot:actions>
-    </x-header>
+    <x-helpers.header-lk title="{{ __('Add a page') }}" />
+
     @include('livewire.admin.pages.page-form')
 </div>

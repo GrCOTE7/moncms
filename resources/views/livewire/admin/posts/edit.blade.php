@@ -11,7 +11,7 @@ use Livewire\Volt\Component;
 use Livewire\WithFileUploads;
 use Mary\Traits\Toast;
 
-new #[Title('Edit Post'), Layout('components.layouts.admin')] class extends Component {
+new #[Layout('components.layouts.admin')] class extends Component {
     use WithFileUploads, Toast;
 
     public int $postId;
@@ -79,12 +79,8 @@ new #[Title('Edit Post'), Layout('components.layouts.admin')] class extends Comp
 }; ?>
 
 <div>
-    <x-header title="{{ __('Edit a post') }}" separator progress-indicator>
-        <x-slot:actions>
-            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline lg:hidden"
-                link="{{ route('admin') }}" />
-        </x-slot:actions>
-    </x-header>
+    @section('title', __('Edit a post'))
+    <x-helpers.header-lk title="{{ __('Edit a post') }}" />
 
     <x-card>
         <x-form wire:submit="save">
@@ -113,14 +109,13 @@ new #[Title('Edit Post'), Layout('components.layouts.admin')] class extends Comp
                 hint="{{ __('Click on the image to modify') }}" accept="image/png, image/jpeg">
                 <img src="{{ asset('storage/photos/' . $post->image) }}" class="h-40" />
             </x-file>
+
             <x-slot:actions>
-                <x-button label="{{ __('Cancel') }}" icon="o-hand-thumb-down" class="btn-outline"
-                    link="/admin/posts/index" />
-                <x-button label="{{ __('Preview') }}" icon="m-sun" link="{{ '/posts/' . $post->slug }}" external
-                    class="btn-outline" />
-                <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit"
-                    class="btn-primary" />
+                <x-helpers.cancel-btn :lk="route('posts.index')" />
+                <x-button label="{{ __('Preview') }}" icon="m-sun" :link="route('posts.show', $post->slug)" external class="btn-outline" />
+                <x-helpers.save-btn />
             </x-slot:actions>
         </x-form>
     </x-card>
+    <x-helpers.progress-bar />
 </div>

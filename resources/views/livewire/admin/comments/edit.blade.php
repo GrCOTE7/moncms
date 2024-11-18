@@ -4,8 +4,7 @@ use Livewire\Attributes\{Layout, Title};
 use Livewire\Volt\Component;
 use Mary\Traits\Toast;
 
-new #[Title('Edit Comment'), Layout('components.layouts.admin')]
-class extends Component {
+new #[Layout('components.layouts.admin')] class extends Component {
     use Toast;
 
     public Comment $comment;
@@ -56,14 +55,9 @@ class extends Component {
         }
     }
 }; ?>
-
+@section('title', __('Edit a comment'))
 <div>
-    <x-header title="{{ __('Edit a comment') }}" separator progress-indicator>
-        <x-slot:actions class="lg:hidden">
-            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline"
-                link="{{ route('admin') }}" />
-        </x-slot:actions>
-    </x-header>
+    <x-helpers.header-lk title="{{ __('Edit a comment') }}" />
     <x-card>
         <x-form wire:submit="save">
             <x-textarea wire:model="body" label="{{ __('Content') }}" hint="{{ __('Max 10000 chars') }}" rows="5"
@@ -88,4 +82,5 @@ class extends Component {
             </x-card>
         @endif
     </x-card>
+    <x-helpers.progress-bar />
 </div>

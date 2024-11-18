@@ -7,7 +7,7 @@ use Livewire\Attributes\{Layout, Title};
 use Livewire\Volt\Component;
 use Mary\Traits\Toast;
 
-new #[Title('Edit Page'), Layout('components.layouts.admin')] class extends Component {
+new #[Layout('components.layouts.admin')] class extends Component {
     use Toast;
 
     public Page $page;
@@ -53,12 +53,9 @@ new #[Title('Edit Page'), Layout('components.layouts.admin')] class extends Comp
     }
 }; ?>
 
+@section('title', __('Edit a page'))
 <div>
-    <x-header title="{{ __('Edit a page') }}" shadow separator progress-indicator>
-        <x-slot:actions class="lg:hidden">
-            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline"
-                link="{{ route('admin') }}" />
-        </x-slot:actions>
-    </x-header>
+    <x-helpers.header-lk title="{{ __('Edit a page') }}" />
+    
     @include('livewire.admin.pages.page-form')
 </div>

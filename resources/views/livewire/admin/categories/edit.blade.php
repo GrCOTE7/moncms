@@ -7,54 +7,50 @@ use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 use Mary\Traits\Toast;
 
-new #[Layout('components.layouts.admin')]
-class extends Component {
-	use Toast;
+new #[Layout('components.layouts.admin')] class extends Component {
+    use Toast;
 
-	public Category $category;
-	public string $title = '';
-	public string $slug  = '';
+    public Category $category;
+    public string $title = '';
+    public string $slug = '';
 
-	public function mount(Category $category): void
-	{
-		$this->category = $category;
-		$this->fill($this->category->toArray());
-	}
+    public function mount(Category $category): void
+    {
+        $this->category = $category;
+        $this->fill($this->category->toArray());
+    }
 
-	public function updatedTitle($value): void
-	{
-		$this->generateSlug($value);
-	}
+    public function updatedTitle($value): void
+    {
+        $this->generateSlug($value);
+    }
 
-	public function save(): void
-	{
-		$data = $this->validate($this->rules());
-		$this->category->update($data);
-		$this->success(__('Category updated successfully.'), redirectTo: '/admin/categories/index');
-	}
+    public function save(): void
+    {
+        $data = $this->validate($this->rules());
+        $this->category->update($data);
+        $this->success(__('Category updated successfully.'), redirectTo: '/admin/categories/index');
+    }
 
-	protected function rules(): array
-	{
-		return [
-			'title' => 'required|string|max:255',
-			'slug'  => ['required', 'string', 'max:255', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/', Rule::unique('categories')->ignore($this->category->id)],
-		];
-	}
+    protected function rules(): array
+    {
+        return [
+            'title' => 'required|string|max:255',
+            'slug' => ['required', 'string', 'max:255', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/', Rule::unique('categories')->ignore($this->category->id)],
+        ];
+    }
 
-	private function generateSlug(string $title): void
-	{
-		$this->slug = Str::of($title)->slug('-');
-	}
+    private function generateSlug(string $title): void
+    {
+        $this->slug = Str::of($title)->slug('-');
+    }
 }; ?>
 
+@section('title', __('Edit a category'))
 <div>
-    <x-header title="{{ __('Edit a category') }}" separator progress-indicator>
-        <x-slot:actions class="lg:hidden">
-            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline"
-                link="{{ route('admin') }}" />
-        </x-slot:actions>
-    </x-header>
+    <x-helpers.header-lk title="{{ __('Edit a category') }}" />
     <x-card>
         @include('livewire.admin.categories.category-form')
     </x-card>
+    <x-helpers.progress-bar />
 </div>

@@ -53,7 +53,7 @@ new #[Title('Profile')] #[Layout('components.layouts.auth')] class extends Compo
 <div>
     <x-card class="flex items-center justify-center h-[96vh]">
 
-        <a href="/" title="{{ __('Go on site') }}">
+        <a href="/" title="{{ __('Go to site') }}">
             <x-card class="items-center py-0" title="{{ __('Update profile') }}" shadow separator
                 progress-indicator></x-card>
         </a>
@@ -79,7 +79,7 @@ new #[Title('Profile')] #[Layout('components.layouts.auth')] class extends Compo
                 class="btn-outline btn-sm" />
 
             <x-slot:actions>
-                <x-button label="{{ __('Cancel') }}" link="/" class="btn-ghost" title=" {{ __('Return on site') }} "/>
+                <x-button label="{{ __('Cancel') }}" link="/" class="btn-ghost" title=" {{ __('Back to site') }} "/>
                 <x-button label="{{ __('Delete account') }}" icon="c-hand-thumb-down"
                     wire:confirm="{{ __('Are you sure to delete your account?') }}" wire:click="deleteAccount"
                     class="btn-warning" />

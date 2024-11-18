@@ -3,11 +3,14 @@ include_once 'index_posts.php';
 ?>
 
 <div>
-    <x-header title="{{ __('Posts') }}" separator progress-indicator>
+
+    <x-header separator progress-indicator>
+        <x-slot:title><a href="{{ route('home') }}" title="{{ __('Go to site') }}">{{ __('Posts') }}</a></x-slot:title>
         <x-slot:actions>
             <x-input placeholder="{{ __('Search...') }}" wire:model.live.debounce="search" clearable
                 icon="o-magnifying-glass" />
-            <x-button label="{{ __('Add a post') }}" class="btn-outline lg:hidden" link="#" />
+            <x-button label="{{ __('Add a post') }}" class="btn-outline lg:hidden"
+                link="{{ route('posts.create') }}" />
             <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline lg:hidden"
                 link="{{ route('admin') }}" />
         </x-slot:actions>
@@ -27,7 +30,8 @@ include_once 'index_posts.php';
 
     @if ($posts->count() > 0)
         <x-card>
-            <x-table striped :headers="$headers" :rows="$posts" :sort-by="$sortBy" link="/admin/posts/{slug}/edit" with-pagination>
+            <x-table striped :headers="$headers" :rows="$posts" :sort-by="$sortBy" link="/admin/posts/{slug}/edit"
+                with-pagination>
                 @scope('header_comments_count', $header)
                     {{ $header['label'] }}
                     <x-icon name="c-chat-bubble-left" />

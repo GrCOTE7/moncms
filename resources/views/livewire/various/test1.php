@@ -11,7 +11,6 @@ use Livewire\Attributes\{Layout, Title};
 use Livewire\Volt\Component;
 
 new
-#[Title('Test 1')]
 #[Layout('components.layouts.test')]
 class extends Component {
 	public Post $post;

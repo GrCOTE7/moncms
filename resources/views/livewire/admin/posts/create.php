@@ -43,20 +43,17 @@ new #[Layout('components.layouts.admin')] class extends Component {
 	#[Validate('required|image|max:7000')]
 	public ?TemporaryUploadedFile $photo = null;
 
-	public function mount(): void
-	{
+	public function mount(): void {
 		$category          = Category::first();
 		$this->category_id = $category->id;
 	}
 
-	public function updatedTitle($value)
-	{
+	public function updatedTitle($value) {
 		$this->slug      = Str::slug($value);
 		$this->seo_title = $value;
 	}
 
-	public function save()
-	{
+	public function save() {
 		$data = $this->validate();
 
 		$date = now()->format('Y/m');
@@ -75,8 +72,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
 		$this->success(__('Post added with success.'), redirectTo: '/admin/posts/index');
 	}
 
-	public function with(): array
-	{
+	public function with(): array {
 		return [
 			'categories' => Category::orderBy('title')->get(),
 		];

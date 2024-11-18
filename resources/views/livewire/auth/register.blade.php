@@ -56,7 +56,7 @@ class extends Component {
 @section('title', __('Register'))
 <div>
     <x-card class="flex items-center justify-center h-[96vh]">
-        <a href="/" title="{{ __('Return on site') }}">
+        <a href="/" title="{{ __('Back to site') }}">
             <x-card class="items-center" title="{{ __('Register') }}" shadow separator progress-indicator />
         </a>
         <x-form wire:submit="register" class="w-full sm:min-w-[30vw]">

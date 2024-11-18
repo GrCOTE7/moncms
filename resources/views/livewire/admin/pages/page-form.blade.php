@@ -16,8 +16,23 @@
                 hint="{{ __('Keywords separated by comma') }}" rows="1" inline />
         </x-card>
         <x-slot:actions>
-            <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit"
-                class="btn-primary" />
+            <x-helpers.cancel-btn :lk="route('pages.index')" />
+            <x-helpers.save-btn />
         </x-slot:actions>
     </x-form>
 </x-card>
+<x-helpers.progress-bar />
+
+{{-- <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Sélectionne tous les éléments <hr> de la page
+        const hrElements = document.querySelectorAll('hr');
+        // Vérifie s'il y a au moins un <hr> sur la page
+        if (hrElements.length > 0) {
+            // Sélectionne le dernier <hr>
+            const lastHr = hrElements[hrElements.length - 1];
+            // Supprime le dernier <hr>
+            lastHr.remove();
+        }
+    });
+</script> --}}

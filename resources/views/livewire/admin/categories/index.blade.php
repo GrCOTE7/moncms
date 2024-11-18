@@ -53,15 +53,13 @@ new #[Layout('components.layouts.admin')] class extends Component {
     }
 }; ?>
 
+@section('title', __('Categories'))
 <div>
-    <x-header title="{{ __('Categories') }}" separator progress-indicator>
-        <x-slot:actions class="lg:hidden">
-            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline"
-                link="{{ route('admin') }}" />
-        </x-slot:actions>
-    </x-header>
+    <x-helpers.header-lk title="{{ __('Categories') }}" />
+
     <x-card>
-        <x-table striped :headers="$headers" :rows="$categories" :sort-by="$sortBy" link="/admin/categories/{id}/edit" with-pagination>
+        <x-table striped :headers="$headers" :rows="$categories" :sort-by="$sortBy" link="/admin/categories/{id}/edit"
+            with-pagination>
             @scope('actions', $category)
                 <x-popover>
                     <x-slot:trigger>
@@ -79,4 +77,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
     <x-card title="{{ __('Create a new category') }}">
         @include('livewire.admin.categories.category-form')
     </x-card>
+
+    <x-helpers.progress-bar />
+
 </div>
