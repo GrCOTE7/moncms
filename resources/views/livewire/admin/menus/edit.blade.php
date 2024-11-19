@@ -33,8 +33,6 @@ new #[Layout('components.layouts.admin')] class extends Component {
 
 @section('title', __('Edit a menu'))
 <div>
-    <x-helpers.header-lk title="{{ __('Edit a menu') }}" />
-
     <x-card>
         <x-form wire:submit="save">
             <x-input label="{{ __('Title') }}" wire:model="label" />

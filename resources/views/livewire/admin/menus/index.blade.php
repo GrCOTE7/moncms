@@ -4,7 +4,7 @@ use App\Traits\ManageMenus;
 use Livewire\Volt\Component;
 use App\Models\{Menu, Submenu};
 use Illuminate\Support\Collection;
-use Livewire\Attributes\{Layout, Title, Validate};
+use Livewire\Attributes\{Layout, Validate};
 use Illuminate\Contracts\Database\Eloquent\Builder;
 
 new #[Layout('components.layouts.admin')] class extends Component {

@@ -13,6 +13,7 @@
         <x-select label="{{ __('Category') }}" option-label="title" :options="$categories"
             placeholder="{{ __('Select a category') }}" wire:model="subCategory" wire:change="$refresh" />
     @endif
+    {{  $subOption }}
     <x-input label="{{ __('Title') }}" wire:model="sublabel" />
     <x-input type="text" wire:model="sublink" label="{{ __('Link') }}" />
     <x-slot:actions>

@@ -6846,9 +6846,9 @@ Route::middleware('auth')->group(function () {
 
 ### Réf.: ***<a href="https://laravel.sillo.org/posts/mon-cms-les-commentaires" title="Voir les détails" target="_blank">https://laravel.sillo.org/posts/mon-cms-les-commentaires</a>***
 
-## - Les Menus <!-- markmap: fold -->
+## - Les Menus \<!-- markmap: fold -->
 
-### Liste des Menus & Submenus <!-- markmap: fold -->
+### Liste des Menus & Submenus \<!-- markmap: fold -->
 
 #### Route admin.menus.index <!-- markmap: fold -->
 
@@ -6989,7 +6989,7 @@ Route::middleware('auth')->group(function () {
   </x-form>
   ```
 
-#### Composant Liste des Menus (admin.menus.index) <!-- markmap: fold -->
+#### Composant Liste des Menus (admin.menus.index) \<!-- markmap: fold -->
 
 ##### Création admin.menus.index <!-- markmap: fold -->
 
@@ -7299,9 +7299,9 @@ Route::middleware('auth')->group(function () {
   </div>
   ```
 
-##### Traductions Liste Menus <!-- markmap: fold -->
+##### Traductions Liste Menus \<!-- markmap: fold -->
 
-* N.B.: "Edit" existe déjà, mais remplacé ici
+* N.B.: *"Edit" existe déjà, mais est remplacé ici*
 
   ```json
   "Submenus": "Sous-menus",
@@ -7314,11 +7314,24 @@ Route::middleware('auth')->group(function () {
   "Create a new submenu": "Créer un nouveau sous-menu",
   "Are you sure to delete this submenu?": "Êtes-vous sûr de vouloir supprimer ce sous-menu ?",
   " deleted with success.": " supprimé avec succès.",
+  "Select a page": "Sélectionner une page",
   "Root menu": "Menu racine",
   "Submenu": "Sous-menu",
+  "sublink": "Lien",
+  "sublabel": "Titre",
   "Edit": "Modifier",
   "Link": "Lien",
   "Select a post, type to search": "Sélectionnez un article, tapez pour rechercher"
+  ```
+
+  <br>
+* Ajouter aussi dans lang/fr/**validation.php**, dans le tableau: 'attributes'  => [...] :
+
+  ```json
+    "label"    => "Titre",
+    "sublabel" => "Titre",
+    "lien"     => "Lien",
+    "sublink"  => "Lien",
   ```
 
 ### Réf.: ***<a href="https://laravel.sillo.org/posts/mon-cms-les-menus-partie-1" title="Voir les détails" target="_blank">https://laravel.sillo.org/posts/mon-cms-les-menus-partie-1</a>***
@@ -9417,6 +9430,7 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
 * \- index :
   Supprimer l'attribut *title** de la classe pour *n*'avoir *que* :
   <br>
+
   ```html
   use Livewire\Attributes\Layout;
   ...
@@ -9437,6 +9451,7 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
   (*: *Penser à faire pareil (Suppression de l'attribut title) pour toutes les pages suivantes*...
   ...Car si pour anglais & français, 'pages', c'est '*kif-kif*', en allemand, par exemple, c'est '*Seite*'...)
   <br>
+
   ```html
   @section('title', __('Pages'))
   <div>
@@ -9463,6 +9478,7 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
 * \- edit :
   *Supp. dans les attributs de la classe: **title('Edit Page')*** (*Dernier rappel...*),
   <br>
+
   ```html
   @section('title', __('Edit a page'))
   <div>
@@ -9571,7 +9587,6 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
   ```html
   @section('title', __('Edit a menu'))
   <div>
-    <x-helpers.header-lk title="{{ __('Edit a menu') }}" />
     <x-card>
     ...
           <x-helpers.cancel-save-btns :lk="route('menus.index')" />
@@ -9739,16 +9754,19 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
 
 ### 4 / **<a href="https://laravel.sillo.org/contact" title="Communiquer plus discrètement..." target="_blank">Un message personnel</a>**
 
-## //2do refaire suivi de l'enchainement des liens (sidebart + admin.index)
+## //2do refaire suivi de l’enchaînement des liens (sidebar + admin.index)
 
 ## //2do PR dès que Complete & plus d'autres 2dos ou 2fix <!-- markmap: fold -->
 
-* Upgrade Memo
+* Feat: Upgrade Memo
 
 * \- Complete overhaul of the design
 
-* \- All the tutorial code now included
+* \- All the tutorial's code is now included
 
-* \- Added 'Manuel', 'Et après ?' & 'AIDE & CONTACT' branches
+* \- Fix all external links in a new window if necessary
 
-* \- Fix external links in a new window if necessary
+* \- Added 'Manuel', 'Et après ?' & 'AIDE & CONTACT' mindmap 's branches
+
+* \- Intended to become, in the future, just a module of a larger Tool: LaDoc (TheTool)
+(Will be at: (After this merge, push to master branch (Means sended on server...? ;-) )) : https://laravel.sillo.org/doc/ladoc)
