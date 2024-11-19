@@ -82,7 +82,7 @@ new class extends Component {
             @endif
         @endauth
 
-        @if ($user->isAdmin())
+        @if (auth()->user() && $user->isAdmin())
             <a href="{{ route('various.test') }}" title=" {{ __('Test page') }} "><x-icon name="c-cog" /></a>
         @endif
 

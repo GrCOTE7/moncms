@@ -9098,8 +9098,8 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
 * 2 / Lien d'accès dans Navbar aisément, rapidement accessible et réservé aux 'admin' uniquement :
 
   ```html
-    @if ($user->isAdmin())
-        <a href="{{ route('various.test') }}" title=" {{ __('Test page') }} "><x-icon name="c-cog" /></a>
+    @if (auth()->user() && $user->isAdmin())
+      <a href="{{ route('various.test') }}" title=" {{ __  ('Test page') }} "><x-icon name="c-cog" /></a>
     @endif
     ... <x-theme-toggle ...
   ```
@@ -9570,6 +9570,8 @@ Supp. dans les attributs de la classe: **Title('Edit Page')** (*Dernier rappel..
   <div>
     <x-helpers.header-lk title="{{ __('Test page') }} 1"/>
   ```
+
+### //2do cf si meilleur icône pour tests
 
 ### //2do admin.menus.editsub : manquent translations dans 1er champs et en cas d'erreur pour Page et article si recherche
 
