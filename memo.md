@@ -6846,9 +6846,9 @@ Route::middleware('auth')->group(function () {
 
 ### Réf.: ***<a href="https://laravel.sillo.org/posts/mon-cms-les-commentaires" title="Voir les détails" target="_blank">https://laravel.sillo.org/posts/mon-cms-les-commentaires</a>***
 
-## - Les Menus \<!-- markmap: fold -->
+## - Les Menus <!-- markmap: fold -->
 
-### Liste des Menus & Submenus \<!-- markmap: fold -->
+### Liste des Menus & Submenus <!-- markmap: fold -->
 
 #### Route admin.menus.index <!-- markmap: fold -->
 
@@ -6989,7 +6989,7 @@ Route::middleware('auth')->group(function () {
   </x-form>
   ```
 
-#### Composant Liste des Menus (admin.menus.index) \<!-- markmap: fold -->
+#### Composant Liste des Menus (admin.menus.index) <!-- markmap: fold -->
 
 ##### Création admin.menus.index <!-- markmap: fold -->
 
@@ -7299,7 +7299,7 @@ Route::middleware('auth')->group(function () {
   </div>
   ```
 
-##### Traductions Liste Menus \<!-- markmap: fold -->
+##### Traductions Liste Menus <!-- markmap: fold -->
 
 * N.B.: *"Edit" existe déjà, mais est remplacé ici*
 
@@ -9700,10 +9700,6 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
   <div>
     <p class...
   ```
-
-### //2do admin.menus.editsub : manquent translations dans 1er champs et en cas d'erreur pour Page et article si recherche
-
-### //2do admin.posts.index → paginate selon config
 
 ### //2fix link ie category-2 in FE
 

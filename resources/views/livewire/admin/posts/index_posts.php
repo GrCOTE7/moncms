@@ -61,7 +61,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
 				fn (Builder $q) => $q->orderBy($this->sortBy['column'], $this->sortBy['direction'])
 			)
 			->latest()
-			->paginate(6);
+			->paginate(config('app.pagination', '10'));
 	}
 
 	public function deletePost(int $postId): void {
