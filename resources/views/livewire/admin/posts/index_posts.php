@@ -9,13 +9,12 @@ use App\Repositories\PostRepository;
 use Illuminate\Database\Eloquent\{Builder, Collection};
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
-use Livewire\Attributes\{Layout, Title};
+use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
 use Mary\Traits\Toast;
 
-new #[Title('List Posts'), Layout('components.layouts.admin')]
-class extends Component {
+new #[Layout('components.layouts.admin')] class extends Component {
 	use Toast;
 	use WithPagination;
 
@@ -24,13 +23,12 @@ class extends Component {
 	public Collection $categories;
 	public $category_id = 0;
 
-	public function mount(): void
-	{
+	public function mount(): void {
+		View::share('noHeader',true);
 		$this->categories = $this->getCategories();
 	}
 
-	public function getCategories(): Collection
-	{
+	public function getCategories(): Collection {
 		if (Auth::user()->isAdmin()) {
 			return Category::all();
 		}
@@ -38,8 +36,7 @@ class extends Component {
 		return Category::whereHas('posts', fn (Builder $q) => $q->where('user_id', Auth::id()))->get();
 	}
 
-	public function headers(): array
-	{
+	public function headers(): array {
 		$headers = [['key' => 'title', 'label' => __('Title')]];
 
 		if (Auth::user()->isAdmin()) {
@@ -49,8 +46,7 @@ class extends Component {
 		return array_merge($headers, [['key' => 'category_title', 'label' => __('Category')], ['key' => 'comments_count', 'label' => __('')], ['key' => 'active', 'label' => __('Published')], ['key' => 'date', 'label' => __('Date')]]);
 	}
 
-	public function posts(): LengthAwarePaginator
-	{
+	public function posts(): LengthAwarePaginator {
 		return Post::query()
 			->select('id', 'title', 'slug', 'category_id', 'active', 'user_id', 'created_at', 'updated_at')
 			->when(Auth::user()->isAdmin(), fn (Builder $q) => $q->withAggregate('user', 'name'))
@@ -68,15 +64,13 @@ class extends Component {
 			->paginate(6);
 	}
 
-	public function deletePost(int $postId): void
-	{
+	public function deletePost(int $postId): void {
 		$post = Post::findOrFail($postId);
 		$post->delete();
 		$this->success("{$post->title} " . __('deleted'));
 	}
 
-	public function clonePost(int $postId): void
-	{
+	public function clonePost(int $postId): void {
 		$originalPost       = Post::findOrFail($postId);
 		$clonedPost         = $originalPost->replicate();
 		$postRepository     = new PostRepository();
@@ -87,8 +81,7 @@ class extends Component {
 		// Ici on redirigera vers le formulaire de modification de l'article cloné
 	}
 
-	public function with(): array
-	{
+	public function with(): array {
 		return [
 			'posts'   => $this->posts(),
 			'headers' => $this->headers(),

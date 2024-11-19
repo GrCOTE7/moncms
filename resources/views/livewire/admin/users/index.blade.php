@@ -4,7 +4,7 @@ include_once 'index_users.php';
 
 @section('title', __('Users'))
 <div>
-    <x-helpers.header-lk title="{{ __('Users') }}" search='true' />
+    <x-helpers.header-lk title="{{ trim($__env->yieldContent('title')) }}" forceHeader=true search='true' />
 
     <x-radio inline :options="$roles" wire:model="role" wire:change="$refresh" />
     <br>

@@ -2,9 +2,8 @@
 include_once 'index_images.php';
 ?>
 
-  @section('title', __('Images'))
-  <div>
-    <x-helpers.header-lk title="{{ __('Images') }}" />
+@section('title', __('Images'))
+<div>
     <x-card title="{!! __('Select year and month') !!}" class="shadow-md">
         <x-select label="{{ __('Year') }}" :options="$years" wire:model="selectedYear" wire:change="$refresh" />
         <br>
@@ -64,8 +63,6 @@ include_once 'index_images.php';
             @endscope
         </x-table>
 
-        <x-header class="my-3 mb-0" separator progress-indicator />
-
         {{--
         <h3 class="text-xl font-bold">Exemple de débogage rapide :</h3>
         <pre>
@@ -87,6 +84,7 @@ include_once 'index_images.php';
         </pre>
         --}}
     </x-card>
+    <x-helpers.progress-bar />
 
     <script>
         function copyUrl(button) {

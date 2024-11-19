@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Contact;
-use Livewire\Attributes\{Layout, Title};
+use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
 use Mary\Traits\Toast;
@@ -45,8 +45,6 @@ new #[Layout('components.layouts.admin')] class extends Component {
 
 @section('title', __('Contacts'))
 <div>
-    <x-helpers.header-lk title="{{ __('Contacts') }}" />
-
     <x-card>
         <x-table :headers="$headers" :rows="$contacts" :row-decoration="$row_decoration">
             @scope('cell_created_at', $contact)

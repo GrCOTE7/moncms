@@ -9,7 +9,6 @@ use Livewire\Attributes\{Layout, Title};
 use Livewire\Volt\Component;
 
 new
-#[Title('Test')]
 #[Layout('components.layouts.test')]
 class extends Component {
 	public $sentence;
@@ -19,7 +18,7 @@ class extends Component {
 		$this->faker = new Fakers();
 		// À noter: Cette classe utilise un autre outil: TimeFcts()->getLocale() qui extrait le APP_LOCALE de votre .env
 		// Essayer d'y mettre 'de', 'es', 'it', 'nl', ou 'ru'... Tout en regardant: http://127.0.0.1:8000/test
-		$completeFakeSentence = $this->completeFixedOrRealSentence(2); // 1 param.: 0 ou rien pour avoir fake || Autre valeur pour avoir fixe
+		$completeFakeSentence = $this->completeFixedOrRealSentence(); // 1 param.: 0 ou rien pour avoir fake || Autre valeur pour avoir fixe
 		$this->sentence       = $this->faker->cutSentence($completeFakeSentence);
 	}
 

@@ -2,12 +2,12 @@
 include_once 'test4.php';
 ?>
 
+@section('title', __('Test page') . ' 4')
 <div>
-    <a href="/" title="{{ __('Back to site') }}"><x-header class="text-lg m-0" title="{{ __('Test page') }} 4" shadow
-            separator progress-indicator /></a>
+    <x-helpers.header-lk title="{{ __('Test page') }} 4" />
     <p class="text-2xl mb-5">{{ __('Study') }} {{ __('of') }} <b>Component Header</b></p>
-    <hr class="mt-5 my-5 border-orange-400 border-2" />
 
+    <hr class="mt-5 my-5 border-orange-400 border-2" />
 
     V normale (Sans btn Dashboard) :
     <hr class="mb-5">
@@ -38,9 +38,7 @@ include_once 'test4.php';
     <div class="w-full text-justify">
 
         Ready.
-        <x-heroicon-o-cog class="h-6 w-6 text-gray-500" />
 
-<x-icon name="c-cog-6-tooth" />
     </div>
 </div>
 {{-- <x-icon name="eye-dropper" class="text-gray-500" /> --}}

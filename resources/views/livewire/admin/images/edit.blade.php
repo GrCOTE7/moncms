@@ -3,7 +3,6 @@ include_once 'edit_image.php';
 ?>
 @section('title', __('Manage an image'))
 <div class="flex flex-col h-full lg:flex-row">
-    <x-helpers.header-lk title="{{ __('Manage an image') }}" />
     <div class="w-full p-4 lg:w-3/4">
         <x-card>
             <div class="flex items-center justify-between h-full">
@@ -48,8 +47,8 @@ include_once 'edit_image.php';
                     <x-badge value="{{ $this->height }}px" class="badge-primary" /><br>
                     @lang('Width') :
                     <x-badge value="{{ $this->width }}px" class="badge-primary" /><br><br>
-                    <x-radio inline label="{{ __('Select a rescale value') }}" :options="$selectValues"
-                        wire:model="imageScale" wire:change="$refresh" />
+                    <x-radio inline label="{{ __('Select a rescale value') }}" :options="$selectValues" wire:model="imageScale"
+                        wire:change="$refresh" />
                 </x-slot:content>
             </x-collapse>
             <x-collapse name="group2">
@@ -109,7 +108,8 @@ include_once 'edit_image.php';
             </x-button><br>
             <x-button wire:click="applyChanges" class="mt-2 btn-sm">@lang('Valid changes')</x-button><br>
             <x-button wire:click="restoreImage(true)" class="mt-2 btn-sm">@lang('Finish and discard this version')</x-button>
-        @endif
+            @endif
+        <x-helpers.cancel-btn :lk="route('images.index')" />
         <x-button wire:click="keepVersion" class="mt-2 btn-sm">@lang('Finish and keep this version')</x-button><br>
     </div>
 

@@ -4557,15 +4557,15 @@ php artisan make:volt pages/contact --class
   use Mary\Traits\Toast;
   use Livewire\Volt\Component;
   use Livewire\WithPagination;
+  use Livewire\Attributes\Layout;
   use App\Models\{Post, Category};
   use Illuminate\Support\Facades\Auth;
   use App\Repositories\PostRepository;
-  use Livewire\Attributes\{Layout, Title};
   use Illuminate\Pagination\LengthAwarePaginator;
   use Illuminate\Database\Eloquent\{Builder, Collection};
   
   new 
-  #[Layout('components.layouts.admin'), Title('List Posts')]
+  #[Layout('components.layouts.admin')]
   class extends Component {
       use Toast, WithPagination;
   
@@ -4641,7 +4641,8 @@ php artisan make:volt pages/contact --class
           ];
       }
   }; ?>
-  
+
+  @section('title', __('Posts'))
   <div>
     <x-header separator progress-indicator>
         <x-slot:title><a href="{{ route('home') }}" title="{{ __('Go to site') }}">{{ __('Posts') }}</a></x-slot:title>
@@ -5125,14 +5126,14 @@ php artisan make:volt pages/contact --class
   use illuminate\Support\Str;
   use Livewire\Volt\Component;
   use Livewire\WithFileUploads;
-  use App\Models\{Category, Post};
+  use Livewire\Attributes\Layout;
   use Illuminate\Validation\Rule;
+  use App\Models\{Category, Post};
   use Illuminate\Support\Collection;
   use Illuminate\Support\Facades\Storage;
-  use Livewire\Attributes\{Layout, Title};
   use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
   
-  new #[Title('Edit Post'), Layout('components.layouts.admin')] 
+  new #[Layout('components.layouts.admin')] 
   class extends Component {
     use WithFileUploads, Toast;
     
@@ -5201,6 +5202,7 @@ php artisan make:volt pages/contact --class
 #### Formulaire d'édition <!-- markmap: fold -->
 
   ```html
+  @section('title', __('Edit a post'))
   <div>
       <x-header title="{{ __('Edit a post') }}" separator progress-indicator>
           <x-slot:actions>
@@ -5662,9 +5664,9 @@ php artisan make:volt pages/contact --class
   use Mary\Traits\Toast;
   use Livewire\Volt\Component;
   use Livewire\WithPagination;
-  use Livewire\Attributes\{Layout, Title};
+  use Livewire\Attributes\Layout;
   
-  new #[Title('Pages'), Layout('components.layouts.admin')] 
+  new #[Layout('components.layouts.admin')] 
   class extends Component {
     use Toast, WithPagination;
     
@@ -6410,9 +6412,9 @@ php artisan make:volt pages/contact --class
   use Mary\Traits\Toast;
   use Livewire\Volt\Component;
   use Illuminate\Validation\Rule;
-  use Livewire\Attributes\{Layout, Title};
+  use Livewire\Attributes\Layout;
   
-  new #[Title('Edit User'), Layout('components.layouts.admin')]
+  new #[Layout('components.layouts.admin')]
   class extends Component {
       use Toast;
     
@@ -8871,7 +8873,7 @@ Route::middleware('auth')->group(function () {
 ... Reportez-vous au point 1 de AIDE & CONTACT ;-) !
 ( *Le faible critique... Le FORT agit !* :-) )
 
-### Données \<!-- markmap: fold -->
+### Données <!-- markmap: fold -->
 
 #### DataBaseSeeder <!-- markmap: fold -->
 
@@ -9065,7 +9067,7 @@ nécessaire à priori que pour la population (*seed*) de la table 'contacts', no
   }
   ```
 
-### Front-End \<!-- markmap: fold -->
+### Front-End <!-- markmap: fold -->
 
 #### Espace de test <!-- markmap: fold -->
 
@@ -9181,7 +9183,7 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
     use Livewire\Volt\Component;
     use Livewire\Attributes\{Layout, Title};
 
-    new #[Layout('components.layouts.test')] #[Title('Test')] class extends Component {
+    new #[Layout('components.layouts.test')] class extends Component {
       public $sentence;
       private $faker;
 
@@ -9210,6 +9212,7 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
       include_once 'test.php';
     ?>
 
+    @section('title', __('Test page'))
     <div>
       <a href="/" title="{{ __('Back to site') }}"><x-header class="text-lg m-0" title="{{ __('Test page') }}" shadow separator progress-indicator /></a>
 
@@ -9222,7 +9225,7 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
     </div>
   ```
 
-### Back-End-End \<!-- markmap: fold -->
+### Back-End-End <!-- markmap: fold -->
 
 #### Ajout d'un lien Front-End & bouton Annuler (BLADE) <!-- markmap: fold -->
 
@@ -9231,24 +9234,32 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
 * Créer views/components/helpers/**header-lk.blade.php** :
 
   ```html
-  @props(['title', 'dashboardBtn' => true, 'search' => false])
-  
-  <div>
-      <x-header separator progress-indicator>
-          <x-slot:title><a href="{{ route('home') }}" title="{{ __('Go to site') }}">{{ $title }}</a></x-slot:title>
-          <x-slot:actions>
-              @if ($search)
-                  <x-slot:middle class="!justify-end">
-                      <x-input placeholder="{{ __('Search') }}..." wire:model.live.debounce="search" clearable icon="o-magnifying-glass" />
-                  </x-slot:middle>
-              @endif
-              @if ($dashboardBtn)
-                  <x-button icon="s-building-office-2" :label="__('Dashboard')" class="btn-outline lg:hidden"
-                      link="{{ route('admin') }}" />
-              @endif
-          </x-slot:actions>
-      </x-header>
-  </div>
+  @props([
+      'title'        => '',
+      'dashboardBtn' => true,
+      'addBtn'       => null,
+      'noHeader'     => false,
+    'forceHeader'    => false,
+  ])
+
+  @if (!$noHeader || $forceHeader)
+      <div>
+          <x-header separator progress-indicator>
+              <x-slot:title><a href="{{ route('home') }}"
+                      title="{{ __('Go to site') }}">{{ $title }}</a></x-slot:title>
+              <x-slot:actions>
+                 @if($addBtn)
+                    <x-button icon="c-document-plus" label="{{ $addBtn['label'] }}" class="btn-outline lg:hidden"
+                    link="{{ $addBtn['link'] }}" />
+                  @endif
+                  @if ($dashboardBtn)
+                      <x-button icon="s-building-office-2" :label="__('Dashboard')" class="btn-outline lg:hidden"
+                          link="{{ route('admin') }}" />
+                  @endif
+              </x-slot:actions>
+          </x-header>
+      </div>
+  @endif
   ```
 
 * Et views/components/helpers/**progress-bar.blade.php** :
@@ -9260,7 +9271,7 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
 * Et views/components/helpers/**cancel-btn.blade.php** :
 
   ```html
-  @props(['lk'])
+  @props(['lk'=>'#'])
 
   <x-button label="{{ __('Cancel') }}" icon="o-hand-thumb-down" class="btn-outline" link="{{ $lk }}" />
   ```
@@ -9271,24 +9282,85 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
   <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit" class="btn-primary" />
   ```
 
+* Et views/components/helpers/**cancel-save-btns.blade.php** :
+
+  ```html
+  @props(['lk' => '#'])
+  
+  <x-helpers.cancel-btn lk="{{ $lk }}" />
+  <x-helpers.save-btn />
+  ```
+
+##### Nos layouts (admin & test) <!-- markmap: fold -->
+
+  ```html
+    <x-helpers.header-lk :title="trim($__env->yieldContent('title'))" />
+
+    {{ $slot }}
+  ```
+
+##### admin.index <!-- markmap: fold -->
+
+* *Le tableau de bord n'a pas besoin du bouton... 'Tableau de bord' !"* ;-) :
+<br>
+  ```php
+  public function mount(): void {
+    View::share([
+      'dashboardBtn' => 0,
+      // 'search'    => 0,
+      // 'noHeader'  => 1,
+    ]);
+    ...
+  ```
+  *→ Noter qu'une variable **noHeader** est prévue, car notre composant
+  header est maintenant appelé systématiquement dans nos layouts...
+  Elle sert donc lorsqu'on ne souhaite pas du tout de header.*
+  <br>
+  Pour la Vue :
+  ```html
+  @section('title', __('Dashboard'))
+  <div>
+    <x-collapse wire:model="openGlance"...
+  ```
+
 ##### admin.posts <!-- markmap: fold -->
 
+* \- index :
+  <br>
+
+  ```php
+  public function mount(): void {
+    View::share('noHeader',true);
+    ...
+  ```
+
+  ```html
+  @section('title', __('Post'))
+  <div>
+    <x-helpers.header-lk title="{{ trim(
+        $__env->yieldContent('title')
+      ) }}"
+      forceHeader = true
+      search      = 'true'
+      :addBtn     ="[
+        'link'  => route('posts.create'),
+        'label' => __('Add a post')
+      ]"
+    />
+    ...
+  ```
+
 * \- edit :
-<br>
+  <br>
+
   ```html
   @section('title', __('Edit a post'))
   <div>
-    <x-helpers.header-lk title="{{ __('Edit a post') }}" />
-    ...
-      <x-helpers.cancel-btn :lk="route('posts.index')" />
-      <x-button label="{{ __('Preview') }}" icon="m-sun" :link="route('posts.show', $post->slug)"
-        external class="btn-outline" />
-      <x-helpers.save-btn />
-    </x-slot:actions>
+    <x-card>
     ...
     </x-card>
-  <x-helpers.progress-bar />
-  ...
+    <x-helpers.progress-bar />
+  </div>
   ```
 
 * \- create :
@@ -9296,14 +9368,14 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
   ```htm
   @section('title', __('Add a post'))
   <div>
-    <x-helpers.header-lk title="{{ __('Add a post') }}" />
+    <x-card>
     ...
-    <x-slot:actions>
-      <x-helpers.cancel-btn :lk="route('posts.index')" />
-      <x-helpers.save-btn />
-    ...
+          <x-helpers.cancel-save-btns :lk="route('posts.index')" />
+        </x-slot:actions>
+      </x-form>
     </x-card>
     <x-helpers.progress-bar />
+  </div>
   ```
 
 ##### admin.categories <!-- markmap: fold -->
@@ -9313,8 +9385,9 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
   ```html
   @section('title', __('Categories'))
   <div>
-    <x-helpers.header-lk title="{{ __('Categories') }}" />
+    <x-card>
     ...
+    </x-card>
     <x-helpers.progress-bar />
   </div>
   ```
@@ -9323,8 +9396,7 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
 <br>
   ```html
     <x-slot:actions>
-      <x-helpers.cancel-btn lk="{{ route('categories.index') }}"/>
-      <x-helpers.save-btn />
+      <x-helpers.cancel-save-btns :lk="route('comments.index')" />
     </x-slot:actions>
   </x-form>
   ```
@@ -9334,7 +9406,7 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
   ```html
   @section('title', __('Edit a category'))
   <div>
-    <x-helpers.header-lk title="{{ __('Edit a category') }}" />
+    <x-card>
     ...
     <x-helpers.progress-bar />
   </div>
@@ -9343,66 +9415,69 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
 ##### admin.pages <!-- markmap: fold -->
 
 * \- index :
-
-* Supprimer l'attribut *Title* de la classe pour *n*'avoir *que* :
+  Supprimer l'attribut *title** de la classe pour *n*'avoir *que* :
   <br>
-
-  ```php
-  new #[Layout('components.layouts.admin')] class extends Component {
+  ```html
+  use Livewire\Attributes\Layout;
+  ...
+  new #[Layout('components.layouts.admin')]
+  class extends Component {
+  ...
+    public function mount(): void {
+        View::share([
+            'addBtn' => [
+                'link'=>route('pages.create'),
+                'label' => __('Add a page')
+            ]
+        ]);
+    }
+  ...
   ```
-  (*Penser à faire pareil pour toutes les pages suivantes*...
-  ...Car si pour anglais & français, c'est '*kif-kif*', en allemand, par exemple, c'est '*Seite*'...)
 
+  (*: *Penser à faire pareil (Suppression de l'attribut title) pour toutes les pages suivantes*...
+  ...Car si pour anglais & français, 'pages', c'est '*kif-kif*', en allemand, par exemple, c'est '*Seite*'...)
   <br>
-
   ```html
   @section('title', __('Pages'))
   <div>
-  <x-header separator progress-indicator>
-    <x-slot:title>
-      <a href="{{ route('home') }}" title="{{ __('Go to site') }}">{{ __('Pages') }}</a>
-    </x-slot:title>
-    <x-slot:actions>
-      <x-button icon="c-document-plus" label="{{ __('Add a page') }}" class="btn-outline lg:hidden"
-          link="{{ route('pages.create') }}" />
-      <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline lg:hidden"
-          link="{{ route('admin') }}" />
-    </x-slot:actions>
-  </x-header>
+    <x-card>
+    ...
   ```
 
-* \- create (Penser à l'attribut'title' de la classe...):
+* \- create *(Penser à retirer l'attribut 'title' de la classe (Et son 'use')...*):
 <br>
   ```html
   @section('title', __('Add a page'))
   <div>
-      <x-helpers.header-lk title="{{ __('Add a page') }}" />
+    @include('livewire.admin.pages.page-form')
+  </div>
   ```
 
 * \- page-form :
 <br>
-
   ```html
   </x-card>
   <x-helpers.progress-bar/>
   ```
 
 * \- edit :
-Supp. dans les attributs de la classe: **Title('Edit Page')** (*Dernier rappel...*),
+  *Supp. dans les attributs de la classe: **title('Edit Page')*** (*Dernier rappel...*),
   <br>
   ```html
-  <x-helpers.header-lk title="{{ __('Edit a page') }}" />
+  @section('title', __('Edit a page'))
+  <div>
+    @include('livewire.admin.pages.page-form')
+  </div>
   ```
 
 ##### admin.contact <!-- markmap: fold -->
 
 * \- index :
-(*Est-ce utile...: La Classe, l'attribut "title"...?*)
+(*Est-ce encore utile...: La Classe, l'attribut "title"...?*)
 <br>
   ```html
   @section('title', __('Contacts'))
   <div>
-    <x-helpers.header-lk title="{{ __('Contacts') }}" />
     <x-card>
   ```
 
@@ -9410,28 +9485,49 @@ Supp. dans les attributs de la classe: **Title('Edit Page')** (*Dernier rappel..
 
 * \- index :
 <br>
+  ```php
+  public function mount(): void {
+    View::share('noHeader', true);
+  }
+  ```
+  <br>
+
   ```html
   @section('title', __('Users'))
   <div>
-    <x-helpers.header-lk title="{{ __('Users') }}" search='true' />
+    <x-helpers.header-lk title="{{ trim($__env->yieldContent('title')) }}" forceHeader=true search='true' />
+    <x-radio inline...
   ```
 
 * \- edit :
 <br>
   ```html
+  @section('title', __('Edit an account'))
   <div>
-    <x-helpers.header-lk title="{{ __('Edit an account') }}" />
     <x-card>
+    ...
+          <x-helpers.cancel-save-btns :lk="route('users.index')" />
+        </x-slot:actions>
+    </x-form>
+    </x-card>
+  </div>
   ```
 
 ##### admin.comments <!-- markmap: fold -->
 
 * \- index :
 <br>
+  ```php
+  public function mount(): void {
+    View::share('noHeader', true);
+  }
+  ```
+  <br>
+
   ```html
   @section('title', __('Comments'))
   <div>
-    <x-helpers.header-lk title="{{ __('Comments') }}" search='true' />
+    <x-helpers.header-lk title="{{ trim($__env->yieldContent('title')) }}" forceHeader=true search='true' />
     <x-card>
   ```
 
@@ -9440,8 +9536,13 @@ Supp. dans les attributs de la classe: **Title('Edit Page')** (*Dernier rappel..
   ```html
   @section('title', __('Edit a comment'))
   <div>
-    <x-helpers.header-lk title="{{ __('Edit a comment') }}" />
     <x-card>
+    ...
+    <x-slot:actions>
+        <x-helpers.cancel-save-btns :lk="route('comments.index')" />
+    ...
+    <x-slot:actions>
+      <x-helpers.cancel-save-btns :lk="route('comments.index')" />
     ...
     </x-card>
     <x-helpers.progress-bar />
@@ -9455,15 +9556,14 @@ Supp. dans les attributs de la classe: **Title('Edit Page')** (*Dernier rappel..
   ```html
   @section('title', __('Navbar'))
   <div>
-    <x-helpers.header-lk title="{{ __('Navbar') }}" />
+    <x-card>
     ...
+          <x-helpers.cancel-save-btns :lk="route('menus.index')" />
+        </x-slot:actions>
+      </x-form>
     </x-card>
     <x-helpers.progress-bar />
   </div>
-  ...
-  <x-slot:actions>
-      <x-helpers.cancel-btn :lk="route('menus.index')" />
-      <x-helpers.save-btn />
   ```
 
 * \- edit :
@@ -9474,9 +9574,20 @@ Supp. dans les attributs de la classe: **Title('Edit Page')** (*Dernier rappel..
     <x-helpers.header-lk title="{{ __('Edit a menu') }}" />
     <x-card>
     ...
-    <x-slot:actions>
-      <x-helpers.cancel-btn :lk="route('menus.index')" />
-      <x-helpers.save-btn />
+          <x-helpers.cancel-save-btns :lk="route('menus.index')" />
+        </x-slot:actions>
+      </x-form>
+    </x-card>
+    <x-helpers.progress-bar />
+  </div>
+  ```
+
+* \- editsub :
+<br>
+  ```html
+  @section('title', __('Edit a submenu'))
+    <div>
+      <x-card>
   ```
 
 * \- submenu-form :
@@ -9490,22 +9601,16 @@ Supp. dans les attributs de la classe: **Title('Edit Page')** (*Dernier rappel..
   <x-helpers.progress-bar />
   ```
 
-* \- editsub :
-<br>
-  ```html
-  @section('title', __('Edit a submenu'))
-    <div>
-      <x-helpers.header-lk title="{{ __('Edit a submenu') }}" />
-  ```
-
 * \- footers :
 <br>
   ```html
   @section('title', __('Footer'))
   <div>
-    <x-helpers.header-lk title="{{ __('Footer') }}" />
     <x-card>
     ...
+          <x-helpers.cancel-save-btns :lk="route('menus.footers')" />
+        </x-slot:actions>
+      </x-form>
     </x-card>
     <x-helpers.progress-bar />
   </div>
@@ -9514,32 +9619,38 @@ Supp. dans les attributs de la classe: **Title('Edit Page')** (*Dernier rappel..
 * \- editfooter :
 <br>
   ```html
-  @section('title', __('Footer'))
+  @section('title', __('Edit a footer'))
   <div>
-    <x-helpers.header-lk title="{{ __('Footer') }}" />
+    <x-card>
     ...
-    uuu cc
-    ...
+          <x-helpers.cancel-save-btns :lk="route('menus.footers')" />
+        </x-slot:actions>
+      </x-form>
+    </x-card>
+  </div>
   ```
 
 ##### admin.images <!-- markmap: fold -->
 
 * \- index :
-  <br>
-
+<br>
   ```html
   @section('title', __('Images'))
   <div>
-    <x-helpers.header-lk title="{{ __('Images') }}" />
+    <x-card ...>
+    ...
+    </x-card>
+    <x-helpers.progress-bar />
   ```
 
 * \- edit :
 <br>
-
   ```html
   @section('title', __('Manage an image'))
-  <div class="flex flex-col h-full lg:flex-row">
-    <x-helpers.header-lk title="{{ __('Manage an image') }}" />
+  <div ...
+    <x-helpers.cancel-btn :lk="route('images.index')" />
+        <x-button wire:click="keepVersion" class="mt-2 btn-sm">
+        @lang('Finish and keep this version')</x-button><br>
     ...
     </script>
     <x-helpers.progress-bar />
@@ -9552,30 +9663,32 @@ Supp. dans les attributs de la classe: **Title('Edit Page')** (*Dernier rappel..
 <br>
   ```html
   @section('title', __('Settings'))
-  <div>
-    <x-helpers.header-lk title="{{ __('Settings') }}" />
+  <div>  
+    <x-card>
     ...
-      <x-helpers.progress-bar />
-  </div>
+          <x-helpers.cancel-save-btns :lk="route('settings')" />
+        </x-slot:actions>
+      </x-form>
+    </x-card>
+  <x-helpers.progress-bar />
+</div>
   ```
 
-##### various/**test1.blade.php** <!-- markmap: fold -->
+##### various/**test.blade.php** <!-- markmap: fold -->
 
 * &nbsp; <small>*Du coup, on peut aussi changer nos pages de test... :
-   &nbsp; (Et n'oublions pas l'attribut de la classe à supprimer...)*</small>
+   &nbsp; (Et n'oublions pas l'attribut de la classe et son 'use' à supprimer...)*</small>
   <br>
 
   ```html
   @section('title', __('Test page').' 1')
   <div>
-    <x-helpers.header-lk title="{{ __('Test page') }} 1"/>
+    <p class...
   ```
-
-### //2do cf si meilleur icône pour tests
 
 ### //2do admin.menus.editsub : manquent translations dans 1er champs et en cas d'erreur pour Page et article si recherche
 
-### //2do admin.posts.index → paginate selon config <!-- markmap: fold -->
+### //2do admin.posts.index → paginate selon config
 
 ### //2fix link ie category-2 in FE
 

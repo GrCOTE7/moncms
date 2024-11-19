@@ -55,19 +55,19 @@ new #[Layout('components.layouts.admin')] class extends Component {
         }
     }
 }; ?>
+
 @section('title', __('Edit a comment'))
 <div>
-    <x-helpers.header-lk title="{{ __('Edit a comment') }}" />
     <x-card>
         <x-form wire:submit="save">
             <x-textarea wire:model="body" label="{{ __('Content') }}" hint="{{ __('Max 10000 chars') }}" rows="5"
                 inline />
+
             <x-slot:actions>
-                <x-button label="{{ __('Cancel') }}" icon="o-hand-thumb-down" class="btn-outline"
-                    link="/admin/comments/index" />
-                <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit"
-                    class="btn-primary" />
+                <x-helpers.cancel-save-btns :lk="route('comments.index')" />
             </x-slot:actions>
+
+
         </x-form>
 
         @if ($depth < 3)
@@ -75,8 +75,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
                 <x-form wire:submit="saveAnswer">
                     <x-editor wire:model="body_answer" label="{{ __('Content') }}" :config="config('tinymce.config_comment')" folder="photos" />
                     <x-slot:actions>
-                        <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit"
-                            class="btn-primary" />
+                        <x-helpers.cancel-save-btns :lk="route('comments.index')" />
                     </x-slot:actions>
                 </x-form>
             </x-card>

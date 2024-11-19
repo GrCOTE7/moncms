@@ -9,7 +9,6 @@ use Livewire\Volt\Component;
 use Livewire\WithPagination;
 
 new
-#[Title('Test 2')]
 #[Layout('components.layouts.test')]
 class extends Component {
 	use WithPagination;

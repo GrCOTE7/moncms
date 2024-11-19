@@ -2,19 +2,10 @@
 include_once 'index_posts.php';
 ?>
 
+@section('title', __('Posts'))
 <div>
-
-    <x-header separator progress-indicator>
-        <x-slot:title><a href="{{ route('home') }}" title="{{ __('Go to site') }}">{{ __('Posts') }}</a></x-slot:title>
-        <x-slot:actions>
-            <x-input placeholder="{{ __('Search...') }}" wire:model.live.debounce="search" clearable
-                icon="o-magnifying-glass" />
-            <x-button label="{{ __('Add a post') }}" class="btn-outline lg:hidden"
-                link="{{ route('posts.create') }}" />
-            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline lg:hidden"
-                link="{{ route('admin') }}" />
-        </x-slot:actions>
-    </x-header>
+    <x-helpers.header-lk title="{{ trim($__env->yieldContent('title')) }}" forceHeader=true search='true'
+        :addBtn="['link' => route('posts.create'), 'label' => __('Add a post')]" />
 
     <x-collapse>
         <x-slot:heading>

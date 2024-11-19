@@ -4,9 +4,6 @@ include_once 'create.php';
 
 <div>
     @section('title', __('Add a post'))
-
-    <x-helpers.header-lk title="{{ __('Add a post') }}" />
-
     <x-card>
         <x-form wire:submit="save">
             <x-select label="{{ __('Category') }}" option-label="title" :options="$categories" wire:model="category_id"
@@ -35,8 +32,7 @@ include_once 'create.php';
                 <img src="{{ $photo == '' ? '/storage/ask.jpg' : $photo }}" class="h-40" />
             </x-file>
             <x-slot:actions>
-                <x-helpers.cancel-btn :lk="route('posts.index')" />
-                <x-helpers.save-btn />
+                <x-helpers.cancel-save-btns :lk="route('posts.index')" />
             </x-slot:actions>
         </x-form>
     </x-card>

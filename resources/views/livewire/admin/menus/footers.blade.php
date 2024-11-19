@@ -84,7 +84,6 @@ new #[Layout('components.layouts.admin')] class extends Component {
 
 @section('title', __('Footer'))
 <div>
-    <x-helpers.header-lk title="{{ __('Footer') }}" />
     <x-card>
 
         @foreach ($footers as $footer)
@@ -150,8 +149,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
             <x-input type="text" wire:model="link"
                 label="{{ __('Link') }} ({{ __('i.e.') }}: /{{ __('my_page') }}, /pages/slug {{ __('or') }} /pages/{{ strtolower(__('Folder')) }}/{{ __('my_page') }}-1)" />
             <x-slot:actions>
-                <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit"
-                    class="btn-primary" />
+                <x-helpers.cancel-save-btns :lk="route('menus.footers')" />
             </x-slot:actions>
         </x-form>
     </x-card>

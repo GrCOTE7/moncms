@@ -165,7 +165,6 @@ new #[Layout('components.layouts.admin')] class extends Component {
 
 @section('title', __('Navbar'))
 <div>
-    <x-helpers.header-lk title="{{ __('Navbar') }}" />
     <x-card>
         @foreach ($menus as $menu)
             <x-list-item :item="$menu" no-separator no-hover>
@@ -303,8 +302,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
             <x-input label="{{ __('Title') }}" wire:model="label" />
             <x-input type="text" wire:model="link" label="{{ __('Link') }}" />
             <x-slot:actions>
-                <x-helpers.cancel-btn :lk="route('menus.index')" />
-                <x-helpers.save-btn />
+                <x-helpers.cancel-save-btns :lk="route('menus.index')" />
             </x-slot:actions>
         </x-form>
 

@@ -16,8 +16,7 @@
                 hint="{{ __('Keywords separated by comma') }}" rows="1" inline />
         </x-card>
         <x-slot:actions>
-            <x-helpers.cancel-btn :lk="route('pages.index')" />
-            <x-helpers.save-btn />
+            <x-helpers.cancel-save-btns :lk="route('pages.index')" />
         </x-slot:actions>
     </x-form>
 </x-card>

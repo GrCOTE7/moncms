@@ -55,8 +55,6 @@ new #[Layout('components.layouts.admin')] class extends Component {
 
 @section('title', __('Categories'))
 <div>
-    <x-helpers.header-lk title="{{ __('Categories') }}" />
-
     <x-card>
         <x-table striped :headers="$headers" :rows="$categories" :sort-by="$sortBy" link="/admin/categories/{id}/edit"
             with-pagination>

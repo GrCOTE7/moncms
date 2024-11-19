@@ -24,6 +24,8 @@
     <x-main full-width>
 
         <x-slot:content>
+            <x-helpers.header-lk :title="trim($__env->yieldContent('title'))" />
+
             {{ $slot }}
         </x-slot:content>
 

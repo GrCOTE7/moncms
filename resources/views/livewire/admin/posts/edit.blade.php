@@ -5,7 +5,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use illuminate\Support\Str;
 use Illuminate\Validation\Rule;
-use Livewire\Attributes\{Layout, Title};
+use Livewire\Attributes\Layout;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\Volt\Component;
 use Livewire\WithFileUploads;
@@ -78,10 +78,8 @@ new #[Layout('components.layouts.admin')] class extends Component {
     }
 }; ?>
 
+@section('title', __('Edit a post'))
 <div>
-    @section('title', __('Edit a post'))
-    <x-helpers.header-lk title="{{ __('Edit a post') }}" />
-
     <x-card>
         <x-form wire:submit="save">
             <x-select label="{{ __('Category') }}" option-label="title" :options="$categories" wire:model="category_id"

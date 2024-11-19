@@ -53,7 +53,5 @@ new #[Layout('components.layouts.admin')] class extends Component {
 
 @section('title', __('Add a page'))
 <div>
-    <x-helpers.header-lk title="{{ __('Add a page') }}" />
-
     @include('livewire.admin.pages.page-form')
 </div>

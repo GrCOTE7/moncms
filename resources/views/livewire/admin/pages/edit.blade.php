@@ -3,7 +3,7 @@
 use App\Models\Page;
 use illuminate\Support\Str;
 use Illuminate\Validation\Rule;
-use Livewire\Attributes\{Layout, Title};
+use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 use Mary\Traits\Toast;
 
@@ -55,7 +55,5 @@ new #[Layout('components.layouts.admin')] class extends Component {
 
 @section('title', __('Edit a page'))
 <div>
-    <x-helpers.header-lk title="{{ __('Edit a page') }}" />
-    
     @include('livewire.admin.pages.page-form')
 </div>

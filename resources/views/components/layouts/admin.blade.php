@@ -30,6 +30,11 @@
             <label for="main-drawer" class="mr-3 lg:hidden">
                 <x-icon name="o-bars-3" class="cursor-pointer" />
             </label>
+
+            <x-helpers.header-lk 
+                :title="trim($__env->yieldContent('title'))"
+            />
+
             {{ $slot }}
         </x-slot:content>
 

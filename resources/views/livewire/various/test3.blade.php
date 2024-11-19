@@ -2,10 +2,9 @@
 include_once 'test3.php';
 ?>
 
+@section('title', __('Test page').' 3')
 <div>
-    <a href="/" title="{{ __('Back to site') }}">
-        <x-header class="text-lg m-0" title="{{ __('Test page') }} 3" shadow separator progress-indicator />
-    </a>
+    <x-helpers.header-lk title="{{ __('Test page') }} 3"/>
 
 
     @if($k<2)

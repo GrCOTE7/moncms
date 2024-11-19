@@ -3,16 +3,20 @@ use Mary\Traits\Toast;
 use App\Models\Comment;
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
-use Livewire\Attributes\{Layout, Title};
+use Livewire\Attributes\Layout;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-new #[Layout('components.layouts.admin')]
-class extends Component {
+new #[Layout('components.layouts.admin')] class extends Component {
     use Toast, WithPagination;
 
     public string $search = '';
     public array $sortBy = ['column' => 'created_at', 'direction' => 'desc'];
     public $role = 'all';
+
+    public function mount(): void
+    {
+        View::share('noHeader', true);
+    }
 
     public function deleteComment(Comment $comment): void
     {
@@ -55,7 +59,7 @@ class extends Component {
 
 @section('title', __('Comments'))
 <div>
-    <x-helpers.header-lk title="{{ __('Comments') }}" search='true' />
+    <x-helpers.header-lk title="{{ trim($__env->yieldContent('title')) }}" forceHeader=true search='true' />
     <x-card>
         <x-table striped :headers="$headers" :rows="$comments" link="/admin/comments/{id}/edit" :sort-by="$sortBy"
             with-pagination>
@@ -90,7 +94,7 @@ class extends Component {
                             </x-slot:content>
                         </x-popover>
                     @endif
-                    
+
                     <x-popover>
                         <x-slot:trigger>
                             <x-button icon="s-document-text" link="{{ route('posts.show', $comment->post->slug) }}" spinner
@@ -100,7 +104,7 @@ class extends Component {
                             @lang('Show post')
                         </x-slot:content>
                     </x-popover>
-                    
+
                     <x-popover>
                         <x-slot:trigger>
                             <x-button icon="o-trash" wire:click="deleteComment({{ $comment->id }})"
@@ -111,7 +115,7 @@ class extends Component {
                             @lang('Delete')
                         </x-slot:content>
                     </x-popover>
-                    
+
                 </div>
             @endscope
         </x-table>

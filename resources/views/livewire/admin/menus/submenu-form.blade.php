@@ -16,8 +16,7 @@
     <x-input label="{{ __('Title') }}" wire:model="sublabel" />
     <x-input type="text" wire:model="sublink" label="{{ __('Link') }}" />
     <x-slot:actions>
-        <x-helpers.cancel-btn :lk="route('menus.index')" />
-        <x-helpers.save-btn />
+        <x-helpers.cancel-save-btns :lk="route('menus.index')" />
     </x-slot:actions>
 </x-form>
 <br>

@@ -3,9 +3,9 @@ use Mary\Traits\Toast;
 use App\Models\Submenu;
 use App\Traits\ManageMenus;
 use Livewire\Volt\Component;
-use Livewire\Attributes\{Layout, Title};
+use Livewire\Attributes\Layout;
 
-new #[Title('Edit Submenu'), Layout('components.layouts.admin')]
+new #[Layout('components.layouts.admin')]
 class extends Component {
     use Toast, ManageMenus;
 
@@ -43,8 +43,6 @@ class extends Component {
 
 @section('title', __('Edit a submenu'))
   <div>
-    <x-helpers.header-lk title="{{ __('Edit a submenu') }}" />
-
     <x-card>
         @include('livewire.admin.menus.submenu-form')
     </x-card>

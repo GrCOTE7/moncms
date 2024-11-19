@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Page;
-use Livewire\Attributes\{Layout, Title};
+use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
 use Mary\Traits\Toast;
@@ -10,6 +10,16 @@ new #[Layout('components.layouts.admin')] class extends Component {
     use Toast, WithPagination;
 
     public array $sortBy = ['column' => 'title', 'direction' => 'asc'];
+    
+    public function mount(): void
+    {
+        View::share([
+            'addBtn' => [
+                'link'=>route('pages.create'),
+                'label' => __('Add a page')
+            ]
+        ]);
+    }
 
     public function headers(): array
     {
@@ -34,18 +44,6 @@ new #[Layout('components.layouts.admin')] class extends Component {
 }; ?>
 @section('title', __('Pages'))
 <div>
-    <x-header separator progress-indicator>
-        <x-slot:title>
-            <a href="{{ route('home') }}" title="{{ __('Go to site') }}">{{ __('Pages') }}</a>
-        </x-slot:title>
-        <x-slot:actions>
-            <x-button icon="c-document-plus" label="{{ __('Add a page') }}" class="btn-outline lg:hidden"
-                link="{{ route('pages.create') }}" />
-            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline lg:hidden"
-                link="{{ route('admin') }}" />
-        </x-slot:actions>
-    </x-header>
-
     <x-card>
         <x-table striped :headers="$headers" :rows="$pages" :sort-by="$sortBy" link="/admin/pages/{slug}/edit">
             @scope('cell_active', $page)

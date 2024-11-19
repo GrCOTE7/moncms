@@ -2,8 +2,10 @@
 include_once 'test2.php';
 ?>
 
+@section('title', __('Test page').' 2')
 <div>
-    <a href="/" title="{{ __('Back to site') }}"><x-header class="text-lg m-0" title="{{ __('Test page') }} 2" shadow separator progress-indicator /></a>
+    <x-helpers.header-lk title="{{ __('Test page') }} 2"/>
+    
     <p class="text-2xl mb-5">{{ __('Study') }} {{ __('of') }} <b>Lien mailto</b></p>
 
     <div class="w-full text-justify">

@@ -50,8 +50,6 @@ new #[Layout('components.layouts.admin')] class extends Component {
 
 @section('title', __('Edit an account'))
 <div>
-    <x-helpers.header-lk title="{{ __('Edit an account') }}" />
-
     <x-card>
         <x-form wire:submit="save">
             <x-input label="{{ __('Name') }}" wire:model="name" icon="o-user" inline />
@@ -62,10 +60,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
             <br>
             <x-toggle label="{{ __('Valid user') }}" inline wire:model="valid" />
             <x-slot:actions>
-                <div class="text-right">
-                    <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit"
-                        class="btn-primary" />
-                </div>
+                <x-helpers.cancel-save-btns :lk="route('users.index')" />
             </x-slot:actions>
         </x-form>
     </x-card>

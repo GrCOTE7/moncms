@@ -48,7 +48,6 @@ new #[Layout('components.layouts.admin')] class extends Component {
 
 @section('title', __('Edit a category'))
 <div>
-    <x-helpers.header-lk title="{{ __('Edit a category') }}" />
     <x-card>
         @include('livewire.admin.categories.category-form')
     </x-card>

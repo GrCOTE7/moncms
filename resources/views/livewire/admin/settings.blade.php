@@ -69,7 +69,6 @@ new #[Title('Settings')] #[Layout('components.layouts.admin')] class extends Com
 
 @section('title', __('Settings'))
 <div>
-    <x-helpers.header-lk title="{{ __('Settings') }}" />
     <x-card>
         <x-card separator class="mb-6 border-4 {{ $maintenance ? 'bg-red-300' : 'bg-zinc-100' }} border-zinc-950">
             <div class="flex items-center justify-between">
@@ -103,10 +102,9 @@ new #[Title('Settings')] #[Layout('components.layouts.admin')] class extends Com
                 <x-badge value="{{ $newPost }}" class="my-2 badge-neutral" />
             </x-card>
             <x-slot:actions>
-                <x-button label="{{ __('Save') }}" icon="o-paper-airplane" spinner="save" type="submit"
-                    class="btn-primary" />
+                <x-helpers.cancel-save-btns :lk="route('settings')" />
             </x-slot:actions>
         </x-form>
     </x-card>
-    <x-header separator progress-indicator />
+    <x-helpers.progress-bar />
 </div>

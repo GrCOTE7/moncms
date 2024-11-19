@@ -6,7 +6,7 @@
 
 use App\Models\User;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Livewire\Attributes\{Layout, Title};
+use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
 use Mary\Traits\Toast;
@@ -19,6 +19,11 @@ new #[Layout('components.layouts.admin')] class extends Component {
 	public array $sortBy  = ['column' => 'name', 'direction' => 'asc'];
 	public string $role   = 'all';
 	public array $roles   = [];
+
+    public function mount(): void
+    {
+        View::share('noHeader', true);
+    }
 
 	public function deleteUser(User $user): void
 	{
