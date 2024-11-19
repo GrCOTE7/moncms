@@ -38,6 +38,9 @@ include_once 'test4.php';
     <div class="w-full text-justify">
 
         Ready.
+        <x-heroicon-o-cog class="h-6 w-6 text-gray-500" />
 
+<x-icon name="c-cog-6-tooth" />
     </div>
 </div>
+{{-- <x-icon name="eye-dropper" class="text-gray-500" /> --}}

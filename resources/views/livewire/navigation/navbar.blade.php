@@ -70,9 +70,6 @@ new class extends Component {
 
                     <x-menu-item title="{{ __('Logout') }}" wire:click="logout" />
                 </x-dropdown>
-                @if ($user->isAdmin())
-                    <a href="{{ route('various.test4') }}" title=" {{ __('Test page') }} "><x-icon name="c-cog-6-tooth" /></a>
-                @endif
             @else
                 <x-button label="{{ __('Login') }}" link="/login" class="btn-ghost" />
             @endif
@@ -85,6 +82,9 @@ new class extends Component {
             @endif
         @endauth
 
+        @if ($user->isAdmin())
+            <a href="{{ route('various.test') }}" title=" {{ __('Test page') }} "><x-icon name="c-cog" /></a>
+        @endif
 
         <x-theme-toggle title="{{ __('Toggle theme') }}" class="w-4 h-8" />
         <livewire:search />
