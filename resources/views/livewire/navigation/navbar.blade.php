@@ -83,7 +83,7 @@ new class extends Component {
         @endauth
 
         @if (auth()->user() && $user->isAdmin())
-            <a href="{{ route('various.test') }}" title=" {{ __('Test page') }} "><x-icon name="c-cog" /></a>
+            <a href="{{ route('various.test5') }}" title=" {{ __('Test page') }} "><x-icon name="c-cog" /></a>
         @endif
 
         <x-theme-toggle title="{{ __('Toggle theme') }}" class="w-4 h-8" />

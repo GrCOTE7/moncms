@@ -15,7 +15,7 @@ class extends Component {
     public int $subPost = 0;
     public int $subPage = 0;
     public int $subCategory = 0;
-    public int $subOption = 1;
+    public int $subOption = 4;
 
     public function mount(Submenu $submenu): void
     {

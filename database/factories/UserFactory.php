@@ -13,8 +13,9 @@ use Illuminate\Support\Str;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
  */
-class UserFactory extends Factory
-{
+class UserFactory extends Factory {
+	public static $users = [];
+
 	/**
 	 * The current password being used by the factory.
 	 */
@@ -25,13 +26,13 @@ class UserFactory extends Factory
 	 *
 	 * @return array<string, mixed>
 	 */
-	public function definition(): array
-	{
-		$name = fake('fr_FR')->lastname();
+	public function definition(): array {
+		// [$name, $email] = $this->uniqueUsersEmail();
+		[$name, $email] = $this->uniqueUsersEmail();
 
 		return [
 			'name'           => $name,
-			'email'          => strtolower($name) . '@example.com',
+			'email'          => $email,
 			'password'       => static::$password ??= Hash::make('password'),
 			'remember_token' => Str::random(10),
 			'valid'          => true,
@@ -41,36 +42,35 @@ class UserFactory extends Factory
 	/**
 	 * Indicate that the model's email address should be unverified.
 	 */
-	public function unverified(): static
-	{
+	public function unverified(): static {
 		return $this->state(fn (array $attributes) => [
 			'email_verified_at' => null,
 		]);
 	}
 
-	public function uniqueNames()
-	{
-		$names      = [];
-		$nameCounts = []; // Un tableau pour suivre le nombre de duplications
+	public function uniqueUsersEmail() {
+		static $names;
 
-		for ($i = 0; $i < 10000; ++$i) {
-			$name = fake('fr_FR')->lastname();
+		$name = fake('fr_FR')->lastname();
+		// $name = $this->fakeFakes();
+		if (!isset($names[$name])) {
+			$names[$name] = 1;
 
-			// Vérifie si le nom existe déjà dans le tableau $nameCounts
-			if (isset($nameCounts[$name])) {
-				// Augmente le compteur et ajoute-le au nom
-				++$nameCounts[$name];
-				$nameWithOrder = $name . $nameCounts[$name];
-				$names[]       = $nameWithOrder;
-			} else {
-				// Ajoute le nom original au tableau $names et initialise son compteur
-				$names[]           = $name;
-				$nameCounts[$name] = 0;
-			}
+			self::$users[] = $pseudo = $name;
+		} else {
+			$names[$name]++;
+			$pseudo = self::$users[] = $name . '-' . ($names[$name] - 1);
 		}
-		// sort($names);
-		echo '<pre>';
-		print_r($names);
-		echo '</pre>';
+
+		$email = strtolower(str_replace(' ', '_', $pseudo) ) . '@example.com';
+
+		return [$name, $email];
 	}
+
+	// private function fakeFakes() {
+	// 	static $n  = 0;
+	// 	$fakeFakes = ['a', 'b', 'a', 'b', 'd', 'a', 'e'];
+
+	// 	return $fakeFakes[$n++ % count($fakeFakes)];
+	// }
 }

@@ -75,6 +75,7 @@ Route::middleware('auth')->group(function () {
 			Volt::route('/test2', 'various.test2')->name('various.test2'); // Simple members list
 			Volt::route('/test3', 'various.test3')->name('various.test3'); // Members list with birthday
 			Volt::route('/test4', 'various.test4')->name('various.test4'); // Members list with birthday
+			Volt::route('/test5', 'various.test5')->name('various.test5'); // Members list with birthday
 			Volt::route('/users', 'users.index');
 		});
 	});

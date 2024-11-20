@@ -364,7 +364,7 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
     public function up(): void {
       Schema::create('users', function (Blueprint $table) {
         $table->id();
-        $table->string('name')->unique();
+        $table->string('name');
         $table->string('email')->unique();
         $table->string('password');
         $table->enum('role', ['user', 'redac', 'admin'])->default('user');
@@ -379,15 +379,52 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
 ##### database/factories/**UserFactory.php** <!-- markmap: fold -->
 
   ```php
-  public function definition(): array {
+  class UserFactory extends Factory {
+    protected static ?string $password;
+  
+    public function definition(): array {
+    [$name, $email] = $this->uniqueUsersEmail();
+        return [
+            'name'           => $name,
+            'email'          => $email,
+            'password'       => static::$password ??= Hash::make('password'),
+            'remember_token' => Str::random(10),
+            'valid'          => true,
+        ];
+    }
+    
+    /**
+     * Indicate that the model's email address should be unverified.
+     */
+    public function unverified(): static {
+        return $this->state(fn (array $attributes) => [
+            'email_verified_at' => null,
+        ]);
+    }
+    
+    public function uniqueUsersEmail() {
+      static $names;
+  
       $name = fake('fr_FR')->lastname();
-      return [
-          'name'           => $name,
-          'email'          => strtolower($name).'@example.com',
-          'password'       => static::$password ??= Hash::make('password'),
-          'remember_token' => Str::random(10),
-          'valid'          => true,
-      ];
+      // $name = $this->fakeFakes();
+      if (!isset($names[$name])) {
+        $names[$name] = 1;
+        self::$users[] = $pseudo = $name;
+      } else {
+        $names[$name]++;
+        $pseudo = self::$users[] = $name . '-' . ($names[$name] - 1);
+      }
+      $email = strtolower(str_replace(' ', '_', $pseudo) ) . '@example.com';
+  
+      return [$name, $email];
+    }
+  
+  // private function fakeFakes() {
+  //   static $n  = 0;
+  //   $fakeFakes = ['a', 'b', 'a', 'b', 'd', 'a', 'e'];
+  
+  //   return $fakeFakes[$n++ % count($fakeFakes)];
+  // }
   }
   ```
 
@@ -6104,11 +6141,17 @@ php artisan make:volt pages/contact --class
 #### Traductions Index Contact <!-- markmap: fold -->
 
   ```json
-    ... "Use this form to contact me": "Utilisez ce formulaire pour me contacter",
-    "Contact to handle from ": "Contact à traiter de ",
-    "Show the contacts": "Voir les contacts",
-    "Contact deleted": "Contact supprimé",
-    "Are you sure to delete this contact?": "Êtes-vous sûr de vouloir supprimer ce contact ?",
+  ... "Use this form to contact me": "Utilisez ce formulaire pour me contacter",
+  "Contact to handle from ": "Contact à traiter de ",
+  "Show the contacts": "Voir les contacts",
+  "Handled": "Traité",
+  "Contact marked as handled": "Contact marqué comme traité",
+  "Contact marked as unhandled": "Contact marqué comme non traité",
+  "Mark as unhandled": "Marquer comme non traité",
+  "Contact unhandled": "Contact non traité",
+  "Mark as handled": "Marquer comme traité",
+  "Are you sure to delete this contact?": "Êtes-vous sûr de vouloir supprimer ce contact ?",
+  "Contact deleted": "Contact supprimé",
   ```
 
 ## - Les Comptes (Users) <!-- markmap: fold -->
@@ -6936,7 +6979,7 @@ Route::middleware('auth')->group(function () {
       $this->subPost     = 0;
       $this->subPage     = 0;
       $this->subCategory = 0;
-      $this->subOption   = 1;  
+      $this->subOption   = 4;  
     }
   }
 
@@ -7009,7 +7052,7 @@ Route::middleware('auth')->group(function () {
     public int $subPost     = 0;
     public int $subPage     = 0;
     public int $subCategory = 0;
-    public int $subOption   = 1;
+    public int $subOption   = 4;
     
     // Méthode appelée lors de l'initialisation du composant.
     public function mount(): void {
@@ -7294,6 +7337,8 @@ Route::middleware('auth')->group(function () {
   "Menu updated with success.": "Menu mis à jour avec succès.",
   "Edit a menu": "Modifier un menu",
   "Create a new submenu": "Créer un nouveau sous-menu",
+  "Submenu created with success.": "Sous-menu créé avec succès.",
+  "Other": "Autre",
   "Are you sure to delete this submenu?": "Êtes-vous sûr de vouloir supprimer ce sous-menu ?",
   " deleted with success.": " supprimé avec succès.",
   "Select a page": "Sélectionner une page",
@@ -9220,7 +9265,7 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
     </div>
   ```
 
-### Back-End-End <!-- markmap: fold -->
+### Back-End-End \<!-- markmap: fold -->
 
 #### Ajout d'un lien Front-End & bouton Annuler (BLADE) <!-- markmap: fold -->
 
@@ -9683,19 +9728,34 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
     <p class...
   ```
 
-### //2fix link ie category-2 in FE
+#### Ajout d'un choix 'Autre' pour création & édition d'un submenu <!-- markmap: fold -->
 
-### //2fix faker email fr parfois avec espace, filtrer avec preg_replace space → \_
+* Traits ManageMenus (./app/):
 
-### //2fix Edit menu si 'Autre' : Pas besoin du 1er champs (Article, Page, Category)
+  ```php
+  public function with(): array {
+    'subOptions' => [
+    ...
+      ['id' => 4, 'name' => __('Other')]
+    ]
+  ...
+  private function resetSubProperties(): void {
+    ...
+    $this->subOption   = 4;
+  ...
+  ```
 
-### //2do admin contact cf Sillo
+* admin.menu.editsub :
 
-### //2do Dans optimisation Sub-Menus 'Autre' → Vu Ajouté dans Traits/ManageMenus.php + traduction
+  ```php
+  class ...
+    public int $subOption = 4;
+  ```
 
-### //2do Lien menus list (admin.menu.index) dans header de editsub
-
-### //2do translation submenu created with success
+* ```json
+  "Root menu": "Menu racine",
+  "Other": "Autre"
+  ```
 
 ### //2do tester sidebar // categories & new captures
 
