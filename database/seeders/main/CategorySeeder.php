@@ -10,13 +10,11 @@ use App\Models\Category;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
-class CategorySeeder extends Seeder
-{
+class CategorySeeder extends Seeder {
 	/**
 	 * Run the database seeds.
 	 */
-	public function run(): void
-	{
+	public function run(): void {
 		// $categories = [
 		// 	[
 		// 		'title' => 'Categorie 1',
@@ -39,8 +37,9 @@ class CategorySeeder extends Seeder
 		$nbCategories = 3;
 
 		for ($i = 1; $i <= $nbCategories; ++$i) {
-			$title = "Catégorie {$i}";
-			$slug  = Str::slug($title);
+			$title        = "Catégorie {$i}";
+			$titleForSlug = str_replace('ie', 'y', $title);
+			$slug         = Str::slug($titleForSlug);
 
 			Category::create(['title' => $title, 'slug' => $slug]);
 		}

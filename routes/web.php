@@ -10,7 +10,7 @@ use Livewire\Volt\Volt;
 
 // À chaque changement: php artisan view:clear & php artisan route:clear
 
-Volt::route('/', 'index')->name('home');
+Volt::route('/', 'index');
 
 Route::get('/memo', function () {
 	return view('memo');

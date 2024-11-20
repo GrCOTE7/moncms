@@ -624,34 +624,16 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
 ##### Code du seeder des fake categories
 
   ```php
-    <?php
-    namespace Database\Seeders;
-    
-    use Illuminate\Database\Seeder;
-    use App\Models\Category;
-    
-    class CategorySeeder extends Seeder {
-      public function run() {
-        $categories = [
-          [
-            'title' => 'Categorie 1',
-            'slug'  => 'category-1',
-          ],
-          [
-            'title' => 'Categorie 2',
-            'slug'  => 'category-2',
-          ],
-          [
-            'title' => 'Categorie 3',
-            'slug'  => 'category-3',
-          ],
-        ];
-    
-        foreach ($categories as $categoryData) {
-          Category::create($categoryData);
-        }
+  ...
+  public function run(): void {
+      $nbCategories = 3;
+      for ($i = 1; $i <= $nbCategories; ++$i) {
+        $title        = "Catégorie {$i}";
+        $titleForSlug = str_replace('ie', 'y', $title);
+        $slug         = Str::slug($titleForSlug);
+        Category::create(['title' => $title, 'slug' => $slug]);
       }
-    }
+  }
   ```
 
 #### Population de posts <!-- markmap: fold -->
@@ -1927,7 +1909,7 @@ php artisan   make:volt auth/forgot-password --class
     use Illuminate\Pagination\LengthAwarePaginator;
     
     new 
-    #[Title(__('Contact')]
+    #[Title('Contact']
     class extends Component {
       ...
     }
@@ -1951,7 +1933,7 @@ php artisan   make:volt auth/forgot-password --class
     @section('keywords', $post->meta_keywords
   ```
 
-* À noter que ces méthodes permettent par exemple
+* À noter que ces dernières méthodes permettent par exemple
 de traduire le titre dans l'onglet :
 
 * ```html
@@ -4645,7 +4627,7 @@ php artisan make:volt pages/contact --class
   @section('title', __('Posts'))
   <div>
     <x-header separator progress-indicator>
-        <x-slot:title><a href="{{ route('home') }}" title="{{ __('Go to site') }}">{{ __('Posts') }}</a></x-slot:title>
+        <x-slot:title><a href="/" title="{{ __('Go to site') }}">{{ __('Posts') }}</a></x-slot:title>
         <x-slot:actions>
             <x-input placeholder="{{ __('Search...') }}" wire:model.live.debounce="search" clearable
                 icon="o-magnifying-glass" />
@@ -9258,7 +9240,7 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
   @if (!$noHeader || $forceHeader)
       <div>
           <x-header separator progress-indicator>
-              <x-slot:title><a href="{{ route('home') }}"
+              <x-slot:title><a href="/"
                       title="{{ __('Go to site') }}">{{ $title }}</a></x-slot:title>
               <x-slot:actions>
                  @if($addBtn)
