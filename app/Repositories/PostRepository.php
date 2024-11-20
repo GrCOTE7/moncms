@@ -6,8 +6,7 @@
 
 namespace App\Repositories;
 
-use App\Models\User;
-use App\Models\{Category, Post};
+use App\Models\{Category, Post, User};
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;

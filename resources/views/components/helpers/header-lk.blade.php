@@ -10,7 +10,7 @@
 @if (!$noHeader || $forceHeader)
     <div>
         <x-header separator progress-indicator>
-            <x-slot:title><a href="{{ route('home') }}"
+            <x-slot:title><a href="/"
                     title="{{ __('Go to site') }}">{{ $title }}</a></x-slot:title>
             <x-slot:actions>
                 @if ($search)
