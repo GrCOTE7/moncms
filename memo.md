@@ -8903,7 +8903,7 @@ Route::middleware('auth')->group(function () {
 
 * \- <a href="https://prnt.sc/2xoEMOFJF-ZT" title="Voir... Ce qu'ils voient !" target="_blank">Pour les 'Redac'</a>
 
-## - Et après ? Optimisations diverses \<!-- markmap: fold -->
+## - Et après ? Optimisations diverses <!-- markmap: fold -->
 
 ### Bien évidemment, ce qui suit n'est en rien exhaustif ! <!-- markmap: fold -->
 
@@ -9265,7 +9265,7 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
     </div>
   ```
 
-### Back-End-End \<!-- markmap: fold -->
+### Back-End-End <!-- markmap: fold -->
 
 #### Ajout d'un lien Front-End & bouton Annuler (BLADE) <!-- markmap: fold -->
 
@@ -9757,16 +9757,225 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
   "Other": "Autre"
   ```
 
-### //2do tester sidebar // categories & new captures
+### Pour aller + loin <!-- markmap: fold -->
 
-### //2do Pour aller + loin <!-- markmap: fold -->
+#### En premier chef, le <a href="https://github.com/bestmomo/sillo/blob/master/doc/installation.md" title="' Fork & Clone THE ' dépôt !" target="_blank">dépôt officiel</a>
 
-* //2do txt (Quelques mots pour présenter Academy...)
-* //2do txt (Quelques mots pour présenter start & reset.bat.& ss.bat ('Server Side')..)
-* //2do Pour ce Mémo, settings markdown linter 2 règles à ignorer... et pour ex. vsc code dans optimisation (au début) ?
-* //2do txt (Quelques mots pour Git Sillo)
-* //2do txt (Quelques mots pour LaDoc) → Contribuez !
-* //2do Réc dans tablo users icone non 'valid'
+* Dans ce site, vous y trouverez aussi ce qu'on appelle l'*Academy*...:
+  → Ni +, ni -, un espace dans lequel vous pouvez y coder vos <a href="https://prnt.sc/AvfssfFpHuvN" title="' Fork & Clone THE ' dépôt !" target="_blank">essais des composant natifs</a>
+
+#### Pour les codeurs sous Windows*, des *Starters*
+
+##### Pour être opérationnel, juste en tapant un SEUL mot en CLI, poser à la racine
+
+##### \- ./**start.bat**, un script *batch* qui démarre tous les serveurs de base <!-- markmap: fold -->
+
+* Auparavant, il nettoie quelques dossiers et fichiers, et surtout, vide divers fichiers de cache
+
+* ```bat
+  @REM Voir début fichier reset.bat pour infos dont l'encodage de fin de ligne...
+
+
+  @echo off
+  chcp 65001 > nul
+  
+  echo Nettoyage des fichiers log debugbar...
+  if exist storage\debugbar (
+      cd storage\debugbar
+      for %%i in (*) do if not "%%i"==".gitignore" del /f /q "%%i"
+      for /d %%i in (*) do rmdir /s /q "%%i"
+      cd ..\..
+      echo Fichiers log debugbar nettoyés.
+  ) else (
+      echo Le dossier storage\debugbar n'existe pas.
+  )
+  
+  if exist storage\logs\laravel.log (
+      del /f storage\logs\laravel.log
+      echo storage\logs\laravel.log supprimé.
+  ) else (
+      echo storage\logs\laravel.log n'existe pas.
+  )
+  
+  echo.
+  echo Nettoyage des divers fichiers cache...
+  call php artisan optimize
+  call php artisan cache:clear
+  call php artisan view:clear
+  call php artisan config:clear
+  
+  echo.
+  echo Démarrage des serveurs.
+  
+  start /b npm run dev
+  start /b php artisan reverb:start
+  start /b php artisan serve
+  
+  
+  @REM Start serveur de Mail
+  @REM → http://localhost:8025/#
+  start /b config/MailHog_windows_amd64.exe
+  
+  REM Envoi de l'email de Test
+  @REM powershell.exe -ExecutionPolicy Bypass -File "testMailServer.ps1"
+  @REM php send_email.php
+  
+  echo.
+  echo Les serveurs MonCMS sont démarrés.
+  echo.
+  
+  pause
+
+  ```
+
+##### \- ./**reset.bat**, qui re-initialise tout votre projet, puis appelle **start.bat** <!-- markmap: fold -->
+
+  ```bat
+  @REM ATTENTION:  Windows & Sqlite UNIQUEMENT
+  @REM (Et ne le lancer que tous serveurs arrêtés)
+  
+  @REM              UNIQUEMENT pour pur Développement !!!
+  
+  @REM ACTIONS :
+  
+  @REM 1 / Ce script re-initialise complètement le projet:
+  @REM     - Efface les fichiers lock,
+  @REM     - Efface la base de données,
+  @REM     - Vide les dossiers des librairies PHP et des dépendances JS,
+  @REM     - Supprime tous les fichiers cache (De vues, de config),
+  @REM     - Et enfin, les fichiers log (De Laravel et de Debugbar).
+  
+  @REM 2 / Restaure ensuite librairies, dépendances et base de données (Avec seed).
+  
+  @REM 3 / Démarre les serveurs (PHP, ViteJS et Reverb [Si utilisé]).
+  
+  @REM Enfin, il doit être encodé UTF-8 et avoir CRLF comme fin de ligne.
+  @REM Note: For that, in settings.json (parameters) in VSCode:
+  @REM "[bat]": {
+  @REM     "files.eol": "\r\n"
+  @REM }
+  @REM and and set \r\n in the end of each line in files.eos in parameters.
+  @REM Pour vérifier, dans VSCode, vous pouvez faire CTRL + MAJ + P, et vérifier que le fichier est bien en CRLF en cherchant "seq" (Changer la SEQuence de fin, de ligne).
+  
+  @REM Pour l'heure, ne peut vous être utile que si vous êtes sous windows, et utilisez sqlite. (Cependant, aisé à adapter pour autres configurations)
+  
+  
+  @echo off
+  chcp 65001 > nul
+  
+  echo.
+  echo Nettoyage des fichiers et dossiers...
+  echo.
+  
+  if exist package-lock.json (
+      del /f package-lock.json
+      echo package-lock.json supprimé.
+  ) else (
+      echo package-lock.json n'existe pas.
+  )
+  
+  if exist composer.lock (
+      del /f composer.lock
+      echo composer.lock supprimé.
+  ) else (
+      echo composer.lock n'existe pas.
+  )
+  
+  if exist database\database.sqlite (
+      del /f database\database.sqlite
+      echo database\database.sqlite supprimé.
+  ) else (
+      echo database\database.sqlite n'existe pas.
+  )
+  
+  if exist node_modules (
+      rmdir /s /q node_modules
+      echo Dossier node_modules supprimé.
+  ) else (
+      echo Le dossier node_modules n'existe pas.
+  )
+  
+  if exist vendor (
+      rmdir /s /q vendor
+      echo Dossier vendor supprimé.
+  ) else (
+      echo Le dossier vendor n'existe pas.
+  )
+  
+  if exist .php-cs-fixer.cache (
+      del /f .php-cs-fixer.cache
+      echo .php-cs-fixer.cache supprimé.
+  ) else (
+      echo .php-cs-fixer.cache n'existe pas.
+  )
+  
+  echo Nettoyage des vues compilées...
+  if exist storage\framework\views (
+      cd storage\framework\views
+      for %%i in (*) do if not "%%i"==".gitignore" del /f /q "%%i"
+      for /d %%i in (*) do rmdir /s /q "%%i"
+      cd ..\..\..
+      echo Vues nettoyées.
+  ) else (
+      echo Le dossier storage\framework\views n'existe pas.
+  )
+  
+  
+  @REM exit 1
+  
+  
+  echo.
+  echo Restauration...
+  
+  echo.
+  echo Installation des dependances JS
+  call npm install
+  
+  echo.
+  echo Lancement de composer update...
+  @REM set COMPOSER=config\reset\composer_dev.json
+  call composer update
+  @REM set COMPOSER=composer.json
+  
+  
+  echo.
+  echo Migration et seed de la base de données...
+  if exist database\database.sqlite (
+      call php artisan migrate:refresh --seed
+  ) else (
+      call php artisan migrate --force --seed
+  )
+  echo Tables restaurées avec données.
+  
+  call start.bat
+  ```
+
+##### \- ./**ss.bat** ('***S**erver **S**ide*') <!-- markmap: fold -->
+
+* À l'issue, votre CLI est alors dans le dossier sillo/ de votre serveur local...
+Les serveurs locaux y étant lancés, votre navigateur affichera le site...: **Sillo** :-) !
+  → Et pas grave, pour 'revenir', il y a aussi un '**ss.bat**' à sa racine qui relance
+  &nbsp; &nbsp; &nbsp;pour vous, et vous ramène dans, **MonCMS** !
+
+* ```bat
+  @REM Start servers
+  
+  @echo off
+  @REM call start.bat
+  
+  cd ../sillo/
+  echo.
+  echo Passe sur Sillo
+  echo.
+  
+  call start.bat
+  ```
+
+#### \*: *Noter qu'il est aisé de les adapter pour les utilisateurs **Linux**...*
+
+## //2do txt (Quelques mots pour LaDoc) → **Contribuez !**
+
+## //2do Réc dans tablo users icone non 'valid' au bon endroit
 
 ## III &nbsp;/ &nbsp; **A I D E &nbsp; & &nbsp; C O N T A C T** <!-- markmap: fold -->
 
@@ -9792,7 +10001,9 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
 
 ### 4 / **<a href="https://laravel.sillo.org/contact" title="Communiquer plus discrètement..." target="_blank">Un message personnel</a>**
 
+### //2do tester sidebar // categories & new captures
 ## //2do refaire suivi de l’enchaînement des liens (sidebar + admin.index)
+
 
 ## //2do PR dès que Complete & plus d'autres 2dos ou 2fix <!-- markmap: fold -->
 
