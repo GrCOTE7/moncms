@@ -10100,18 +10100,3 @@ nous pouvons élargir ensemble cette approche à d'autres thématiques...
 * Pour discuter en LIVE
 
 ### 4 / **<a href="https://laravel.sillo.org/contact" title="Communiquer plus discrètement..." target="_blank">Un message personnel</a>**
-
-## //2do PR dès que Complete & plus d'autres 2dos ou 2fix <!-- markmap: fold -->
-
-* Feat: Upgrade Memo
-
-* \- Complete overhaul of the design
-
-* \- All the tutorial's code is now included
-
-* \- Fix all external links in a new window if necessary
-
-* \- Added 'Manuel', 'Et après ?' & 'AIDE & CONTACT' mindmap 's branches
-
-* \- Intended to become, in the future, just a module of a larger Tool: LaDoc (TheTool)
-(Will be at: (After this merge, push to master branch (Means sended on server...? ;-) )) : https://laravel.sillo.org/doc/ladoc)
