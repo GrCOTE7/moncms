@@ -5660,7 +5660,7 @@ php artisan make:volt pages/contact --class
 * Lien Pages dans admin.sidebar :
 
   ```html
-  ...</x-menu-sub>
+  ...(Posts)
   @if (Auth::user()->isAdmin())
       <x-menu-sub title="{{ __('Pages') }}" icon="s-document">
           <x-menu-item title="{{ __('All pages') }}" link="{{ route('pages.index') }}" />
@@ -6897,12 +6897,10 @@ Route::middleware('auth')->group(function () {
 #### Lien Menus dans admin.sidebar <!-- markmap: fold -->
 
   ```html
-  ... Lien de comments.index
-  @if (Auth::user()->isAdmin())
+  ... (Pages))
     <x-menu-sub title="{{ __('Menus') }}" icon="m-list-bullet">
       <x-menu-item title="{{ __('Navbar') }}" link="{{ route('menus.index') }}" />
     </x-menu-sub>
-    ... Lien 'Allez sur le site'
   @endif
   ```
 
@@ -7560,6 +7558,7 @@ Route::middleware('auth')->group(function () {
 
   ```html
   @if (Auth::user()->isAdmin())
+    ...
     <x-menu-sub title="{{ __('Menus') }}" icon="m-list-bullet">
       ...
       <x-menu-item title="{{ __('Footer') }}" link="{{ route('menus.footers') }}" />
@@ -7866,8 +7865,8 @@ Route::middleware('auth')->group(function () {
       ...  
     </x-menu-sub>
     @if (Auth::user()->isAdmin())
-      ... (Pages)
       <x-menu-item icon="c-photo" title="{{ __('Images') }}" link="{{ route('images.index') }}" />
+      ... (Accounts)
     @endif
   @endif
   ```
@@ -8899,13 +8898,13 @@ Route::middleware('auth')->group(function () {
 
 ### Réf.: ***<a href="https://laravel.sillo.org/posts/mon-cms-les-parametres" title="Voir les détails" target="_blank">https://laravel.sillo.org/posts/mon-cms-les-parametres</a>***
 
-### Fin du tutoriel - Vérifications <!-- markmap: fold -->
+### Fin du tutoriel : Vérifications de la *sidebar* <!-- markmap: fold -->
 
 * Si tout s'est bien passé, voilà l'admin sidebar obtenue :
 
-* \- <a href="https://prnt.sc/eiWO3i8mkUwz" title="Voir... Ce qu'ils voient !" target="_blank">Pour les'Admin'</a>
+* \- <a href="https://prnt.sc/hRJ5vlR_fIv0" title="Voir... Ce qu'ils voient !" target="_blank">Pour les'Admin'</a>
 
-* \- <a href="https://prnt.sc/2xoEMOFJF-ZT" title="Voir... Ce qu'ils voient !" target="_blank">Pour les 'Redac'</a>
+* \- <a href="https://prnt.sc/CF0xu6jK6NUc" title="Voir... Ce qu'ils voient !" target="_blank">Pour les 'Redac'</a>
 
 ## - Et après ? Optimisations diverses <!-- markmap: fold -->
 
@@ -10101,10 +10100,6 @@ nous pouvons élargir ensemble cette approche à d'autres thématiques...
 * Pour discuter en LIVE
 
 ### 4 / **<a href="https://laravel.sillo.org/contact" title="Communiquer plus discrètement..." target="_blank">Un message personnel</a>**
-
-## //2do tester sidebar // categories & new captures
-
-## //2do refaire suivi de l’enchaînement des liens (sidebar + admin.index)
 
 ## //2do PR dès que Complete & plus d'autres 2dos ou 2fix <!-- markmap: fold -->
 
