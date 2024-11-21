@@ -13,8 +13,8 @@ use Livewire\Volt\Volt;
 Volt::route('/', 'index');
 
 Route::get('/memo', function () {
-	return view('memo');
-})->name('memo');
+	return view('docs.memo');
+})->name('docs.memo');
 
 Volt::route('/category/{slug}', 'index');
 

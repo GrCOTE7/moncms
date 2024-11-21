@@ -8907,7 +8907,7 @@ Route::middleware('auth')->group(function () {
 
 * \- <a href="https://prnt.sc/2xoEMOFJF-ZT" title="Voir... Ce qu'ils voient !" target="_blank">Pour les 'Redac'</a>
 
-## - Et après ? Optimisations diverses \<!-- markmap: fold -->
+## - Et après ? Optimisations diverses <!-- markmap: fold -->
 
 ### Bien évidemment, ce qui suit n'est en rien exhaustif ! <!-- markmap: fold -->
 
@@ -9853,9 +9853,7 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
     @endscope
   ```
 
-* //2do appliquer dans monCMS2 
-
-### Pour aller + loin \<!-- markmap: fold -->
+### Pour aller + loin <!-- markmap: fold -->
 
 #### En premier chef, le <a href="https://github.com/bestmomo/sillo/blob/master/doc/installation.md" title="' Fork & Clone THE ' dépôt !" target="_blank">dépôt officiel</a>
 
@@ -10048,7 +10046,7 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
   call start.bat
   ```
 
-##### \- ./**sillo.bat**, pour 'lancer' le site **Sillo** en local \<!-- markmap: fold -->
+##### \- ./**sillo.bat**, pour 'lancer' le site **Sillo** en local <!-- markmap: fold -->
 
 * À l'issue, votre CLI est alors dans le dossier sillo/ de votre serveur local...
 Les serveurs locaux y étant lancés, votre navigateur affichera le site...: **Sillo** :-) !
