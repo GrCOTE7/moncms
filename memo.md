@@ -646,6 +646,10 @@ pour entre autre, y naviguer aisément et grâce à la molette, zoomer/dé-zoome
           User::factory()->create($userData);
         }
         User::factory(3)->create();
+
+        $u = User::find(6);
+        $u->valid = false;
+        $u->save()
       }
     }
   ```
@@ -8903,7 +8907,7 @@ Route::middleware('auth')->group(function () {
 
 * \- <a href="https://prnt.sc/2xoEMOFJF-ZT" title="Voir... Ce qu'ils voient !" target="_blank">Pour les 'Redac'</a>
 
-## - Et après ? Optimisations diverses <!-- markmap: fold -->
+## - Et après ? Optimisations diverses \<!-- markmap: fold -->
 
 ### Bien évidemment, ce qui suit n'est en rien exhaustif ! <!-- markmap: fold -->
 
@@ -9757,7 +9761,101 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
   "Other": "Autre"
   ```
 
-### Pour aller + loin <!-- markmap: fold -->
+#### De + beaux icônes pour notre liste d'users <!-- markmap: fold -->
+
+##### Sourcer les icônes  <!-- markmap: fold -->
+
+* Le choix est immense: Voir <a href="https://github.com/blade-ui-kit/blade-icons?tab=readme-ov-file" title="Aller sur le site de blade-ui-kit" target="_blank">Blade-UI-Kit</a> parmi tant d'autres...
+
+* <a href="https://www.svgrepo.com" title="Aller sur le site de SVGrepo" target="_blank">SVGrepo</a> : Permet d'éditer l'icône choisi :-)
+
+* → Créer resources/images/icons/**check.svg** :
+
+  ```svg
+  <?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+  <svg version="1.1" id="Layer_1"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" enable-background="new 0 0 32 32" xml:space="preserve" width="28px" height="28px" fill="green">
+    <g id="SVGRepo_bgCarrier" stroke-width="0"/>
+    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+    <g id="SVGRepo_iconCarrier">
+      <polyline fill="none" stroke="greenyellow" stroke-width="2" stroke-miterlimit="10" points="28,8 16,20 11,15 "/>
+      <path d="M26.7,13.5c0.2,0.8,0.3,1.6,0.3,2.5c0,6.1-4.9,11-11,11S5,22.1,5,16S9.9,5,16,5c3,0,5.7,1.2,7.6,3.1l1.4-1.4 C22.7,4.4,19.5,3,16,3C8.8,3,3,8.8,3,16s5.8,13,13,13s13-5.8,13-13c0-1.4-0.2-2.8-0.7-4.1L26.7,13.5z"/>
+    </g>
+  </svg>
+  ```
+
+* → Créer resources/images/icons/**invalid.svg** :
+
+  ```svg
+  <?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+  <svg fill="red" height="28px" width="28px" version="1.1" id="Capa_1"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 319.253 319.253" xml:space="preserve">
+    <g>
+      <path d="M317.361,282.335L172.735,22.335c-2.646-4.758-7.664-7.708-13.108-7.708c-5.444,0-10.462,2.95-13.108,7.708L1.891,282.335
+  		c-2.584,4.647-2.517,10.313,0.179,14.896c2.694,4.583,7.613,7.397,12.93,7.397h289.254c5.316,0,10.235-2.814,12.93-7.397
+  		C319.879,292.647,319.945,286.981,317.361,282.335z M40.508,274.627L159.627,60.483l119.118,214.143H40.508z" fill="#972023"/>
+      <polygon points="132.405,164.598 116.849,180.155 144.07,207.377 116.849,234.598 132.405,250.155 159.627,222.933 
+  		186.849,250.155 202.405,234.598 175.183,207.377 202.405,180.155 186.849,164.598 159.627,191.82 	"/>
+    </g>
+  </svg>
+  ```
+
+##### Installer les librairies
+
+###### Ajout des librairies Blade-UI-Kit <!-- markmap: fold -->
+
+* ```batch
+  composer require blade-ui-kit/blade-ui-kit
+  ```
+  
+* ```batch
+  composer require blade-ui-kit/blade-icons
+  ```
+
+###### Configuration & publication de **Blade-UI-Kit** <!-- markmap: fold -->
+
+* Créer config/**blade-icons.php** :
+
+* ```php
+  <?php
+  // Src: https://github.com/blade-ui-kit/blade-icons (Beaucoup plus complet...)
+  return [
+    'sets' => [
+      'default' => [
+      'path'   => 'resources/images/icons',
+      'prefix' => 'icon',
+      ],
+    ],
+  ];
+  
+  ```
+  
+* ```batch
+  php artisan vendor:publish --tag=blade-icons-config
+  ```
+  
+* ```batch
+  php artisan icons:clear
+  ```
+
+##### Les afficher dans notre vue  <!-- markmap: fold -->
+
+* Modifier admin.users.index :
+
+  ```html
+    @scope('cell_valid', $user)
+      @if ($user->valid)
+        <x-icon-check />
+      @else
+        <x-icon-invalid />
+      @endif
+    @endscope
+  ```
+
+* //2do appliquer dans monCMS2 
+
+### Pour aller + loin \<!-- markmap: fold -->
 
 #### En premier chef, le <a href="https://github.com/bestmomo/sillo/blob/master/doc/installation.md" title="' Fork & Clone THE ' dépôt !" target="_blank">dépôt officiel</a>
 
@@ -9766,7 +9864,7 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
 
 #### Pour les codeurs sous Windows*, des *Starters*
 
-##### Pour être opérationnel, juste en tapant un SEUL mot en CLI, poser à la racine
+##### Pour être opérationnel, en tapant JUSTE UN SEUL MOT en CLI, poser à la racine
 
 ##### \- ./**start.bat**, un script *batch* qui démarre tous les serveurs de base <!-- markmap: fold -->
 
@@ -9950,12 +10048,12 @@ Une fois au point, plus qu'à copier/coller le code dans le fichier ad'hoc :-) !
   call start.bat
   ```
 
-##### \- ./**ss.bat** ('***S**erver **S**ide*') <!-- markmap: fold -->
+##### \- ./**sillo.bat**, pour 'lancer' le site **Sillo** en local \<!-- markmap: fold -->
 
 * À l'issue, votre CLI est alors dans le dossier sillo/ de votre serveur local...
 Les serveurs locaux y étant lancés, votre navigateur affichera le site...: **Sillo** :-) !
-  → Et pas grave, pour 'revenir', il y a aussi un '**ss.bat**' à sa racine qui relance
-  &nbsp; &nbsp; &nbsp;pour vous, et vous ramène dans, **MonCMS** !
+  → Et pas grave, pour 'revenir', il y a aussi un '**moncms.bat**' à sa racine qui relance
+  &nbsp; &nbsp; &nbsp;pour vous, et vous ramène dans votre projet local **MonCMS** !
 
 * ```bat
   @REM Start servers
@@ -9971,11 +10069,16 @@ Les serveurs locaux y étant lancés, votre navigateur affichera le site...: **S
   call start.bat
   ```
 
-#### \*: *Noter qu'il est aisé de les adapter pour les utilisateurs **Linux**...*
+##### \*: *Noter qu'il est aisé de les adapter pour les utilisateurs **Linux**...*
 
-## //2do txt (Quelques mots pour LaDoc) → **Contribuez !**
+#### <a href="https://laravel.sillo.org/doc/ladoc" title="LaDoc" target="_blank">**LaDoc**</a>
 
-## //2do Réc dans tablo users icone non 'valid' au bon endroit
+* Cette MindMap est un premier jet...
+Mais si vous en voyez l'intérêt, et surtout l'utilité,
+nous pouvons élargir ensemble cette approche à d'autres thématiques...
+* → Contribuez *ad libitum* !
+
+## ss → sillo et ds sillo: ss → moncms
 
 ## III &nbsp;/ &nbsp; **A I D E &nbsp; & &nbsp; C O N T A C T** <!-- markmap: fold -->
 
@@ -10001,9 +10104,9 @@ Les serveurs locaux y étant lancés, votre navigateur affichera le site...: **S
 
 ### 4 / **<a href="https://laravel.sillo.org/contact" title="Communiquer plus discrètement..." target="_blank">Un message personnel</a>**
 
-### //2do tester sidebar // categories & new captures
-## //2do refaire suivi de l’enchaînement des liens (sidebar + admin.index)
+## //2do tester sidebar // categories & new captures
 
+## //2do refaire suivi de l’enchaînement des liens (sidebar + admin.index)
 
 ## //2do PR dès que Complete & plus d'autres 2dos ou 2fix <!-- markmap: fold -->
 

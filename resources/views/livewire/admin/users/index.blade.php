@@ -24,7 +24,9 @@ include_once 'index_users.php';
                 @endscope
                 @scope('cell_valid', $user)
                     @if ($user->valid)
-                        <x-icon name="o-check-circle" />
+                        <x-icon-check />
+                    @else
+                        <x-icon-invalid />
                     @endif
                 @endscope
                 @scope('cell_role', $user)

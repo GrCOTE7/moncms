@@ -53,5 +53,9 @@ class UserSeeder extends Seeder
 		}
 
 		User::factory(3)->create();
+
+        $u = User::find(6);
+        $u->valid       = false;
+        $u->save();
 	}
 }
