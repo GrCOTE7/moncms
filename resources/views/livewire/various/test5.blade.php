@@ -11,7 +11,7 @@ include_once 'test5.php';
     <div class="w-full text-justify">
 
         <pre>
-{{ print_r($data ?? 'No data ') }}
+{{ print_r($data ?? 'No data ', 1) }}
         </pre>
 
     </div>

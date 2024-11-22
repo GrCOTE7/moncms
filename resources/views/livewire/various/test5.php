@@ -4,6 +4,7 @@
  * (ɔ) Mon CMS - 2024-2024
  */
 
+use App\Models\Post;
 use Livewire\Attributes\{Layout};
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
@@ -15,11 +16,15 @@ class extends Component {
 
 	public $data;
 
-	// public function mount() {
-	// }
+	public function mount() {
+		$this->data = $this->getUser();
+	}
+
+	public function getUser() {
+		return Post::pluck('title', 'slug');
+	}
 
 	public function with(): array {
 		return [];
 	}
-
 };
