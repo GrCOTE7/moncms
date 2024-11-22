@@ -28,7 +28,7 @@ class UserFactory extends Factory {
 	 */
 	public function definition(): array {
 		// [$name, $email] = $this->uniqueUsersEmail();
-		[$name, $email] = $this->uniqueUsersEmail();
+		[$name, $email] = $this->uniqueUserNameAndEmail();
 
 		return [
 			'name'           => $name,
@@ -48,7 +48,7 @@ class UserFactory extends Factory {
 		]);
 	}
 
-	public function uniqueUsersEmail() {
+	public function uniqueUserNameAndEmail() {
 		static $names;
 
 		$name = fake('fr_FR')->lastname();

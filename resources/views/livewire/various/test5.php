@@ -21,7 +21,8 @@ class extends Component {
 	}
 
 	public function getUser() {
-		return Post::pluck('title', 'slug');
+		return Post::findOrFail(7)->user->name;
+		// dd($post);
 	}
 
 	public function with(): array {
