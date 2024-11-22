@@ -4,11 +4,21 @@
  * (ɔ) Mon CMS - 2024-2024
  */
 
-use App\Http\Middleware\{IsAdmin, IsAdminOrRedac};
-use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\{IsAdmin, IsAdminOrRedac};
 
 // À chaque changement: php artisan view:clear & php artisan route:clear
+
+Route::get('/ga', function (Request $request) {
+	return [
+		'name' => $request->url(),
+		'age' => 31,
+		1,
+		2,
+	];
+});
 
 Volt::route('/', 'index');
 
