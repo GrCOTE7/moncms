@@ -1,7 +1,7 @@
 @REM ATTENTION:  Windows & Sqlite UNIQUEMENT
 @REM (Et ne le lancer que tous serveurs arrêtés)
 
-@REM              UNIQUEMENT pour pur Developpement !!!
+@REM UNIQUEMENT pour pur Développement !!!
 
 @REM ACTIONS :
 
@@ -24,8 +24,10 @@
 @REM and and set \r\n in the end of each line in files.eos in parameters.
 @REM Pour vérifier, dans VSCode, vous pouvez faire CTRL + MAJ + P, et vérifier que le fichier est bien en CRLF en cherchant "seq" (Changer la SEQuence de fin, de ligne).
 
-@REM Pour l'heure, ne peut vous être utile que si vous êtes sous windows, et utilisez sqlite. (Cependant, aisé à adapter pour autres configurations)
+@REM NEW - 2024-11-21 : Une solution efficace et assez simple (Très mnémonique) est de faire en CLI : unix2dos nom_du_chier.son_extension
+@REM (Car avec VSC, pour peu qu'on aie une autre extension qui intervienne en fin de vie (Lifecycle), et généralise 'LF'... Galère !)
 
+@REM Pour l'heure, ne peut vous être utile que si vous êtes sous windows, et utilisez sqlite. (Cependant, aisé à adapter pour autres configurations)
 
 @echo off
 chcp 65001 > nul
@@ -95,7 +97,7 @@ echo.
 echo Restauration...
 
 echo.
-echo Installation des dependances JS
+echo Installation des dépendances JS
 call npm install
 
 echo.
