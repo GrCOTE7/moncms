@@ -1,56 +1,52 @@
 <?php
 
-use Mary\Traits\Toast;
 use App\Models\Category;
 use Illuminate\Support\Str;
+use Livewire\Attributes\{Layout, Validate};
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
-use Livewire\Attributes\{Layout, Validate};
+use Mary\Traits\Toast;
 
 new #[Layout('components.layouts.admin')] class extends Component {
-    use Toast, WithPagination;
+	use Toast, WithPagination;
 
-    #[Validate('required|max:255|unique:categories,title')]
-    public string $title = '';
+	#[Validate('required|max:255|unique:categories,title')]
+	public string $title = '';
 
-    #[Validate('required|max:255|unique:posts,slug|regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/')]
-    public string $slug = '';
+	#[Validate('required|max:255|unique:posts,slug|regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/')]
+	public string $slug = '';
 
-    public function updatedTitle($value): void
-    {
-        $this->generateSlug($value);
-    }
+	public array $sortBy = ['column' => 'title', 'direction' => 'asc'];
 
-    private function generateSlug(string $title): void
-    {
-        $this->slug = Str::of($title)->slug('-');
-    }
+	public function updatedTitle($value): void {
+		$this->generateSlug($value);
+	}
 
-    public function save(): void
-    {
-        $data = $this->validate();
-        Category::create($data);
-        $this->success(__('Category created with success.'));
-    }
+	public function save(): void {
+		$data = $this->validate();
+		Category::create($data);
+		$this->success(__('Category created with success.'));
+	}
 
-    public array $sortBy = ['column' => 'title', 'direction' => 'asc'];
+	public function headers(): array {
+		return [['key' => 'title', 'label' => __('Title')], ['key' => 'slug', 'label' => 'Slug']];
+	}
 
-    public function headers(): array
-    {
-        return [['key' => 'title', 'label' => __('Title')], ['key' => 'slug', 'label' => 'Slug']];
-    }
-    public function delete(Category $category): void
-    {
-        $category->delete();
-        $this->success(__('Category deleted with success.'));
-    }
-    public function with(): array
-    {
-        return [
-            'categories' => Category::orderBy(...array_values($this->sortBy))->paginate(10),
-            'headers' => $this->headers(),
-        ];
-    }
+	public function delete(Category $category): void {
+		$category->delete();
+		$this->success(__('Category deleted with success.'));
+	}
+
+	public function with(): array {
+		return [
+			'categories' => Category::orderBy(...array_values($this->sortBy))->paginate(10),
+			'headers'    => $this->headers(),
+		];
+	}
+
+	private function generateSlug(string $title): void {
+		$this->slug = Str::of($title)->slug('-');
+	}
 }; ?>
 
 @section('title', __('Categories'))

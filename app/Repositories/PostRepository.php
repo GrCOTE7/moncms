@@ -11,10 +11,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 
-class PostRepository
-{
-	public function getPostBySlug(string $slug): Post
-	{
+class PostRepository {
+	public function getPostBySlug(string $slug): Post {
 		$userId = auth()->id();
 
 		return Post::with('user:id,name', 'category')
@@ -28,8 +26,7 @@ class PostRepository
 			->firstOrFail();
 	}
 
-	public function getPostsPaginate(?Category $category): LengthAwarePaginator
-	{
+	public function getPostsPaginate(?Category $category): LengthAwarePaginator {
 		$query = $this->getBaseQuery()->orderBy('pinned', 'desc')->latest();
 
 		if ($category) {
@@ -39,8 +36,7 @@ class PostRepository
 		return $query->paginate(config('app.pagination'));
 	}
 
-	public function search(string $search): LengthAwarePaginator
-	{
+	public function search(string $search): LengthAwarePaginator {
 		return $this->getBaseQuery()
 			->latest()
 			->where(function ($query) use ($search) {
@@ -50,8 +46,7 @@ class PostRepository
 			->paginate(config('app.pagination'));
 	}
 
-	public function getFavoritePosts(User $user): LengthAwarePaginator
-	{
+	public function getFavoritePosts(User $user): LengthAwarePaginator {
 		return $this->getBaseQuery()
 			->whereHas('favoritedByUsers', function (Builder $query) {
 				$query->where('user_id', auth()->id());
@@ -60,8 +55,7 @@ class PostRepository
 			->paginate(config('app.pagination'));
 	}
 
-	public function generateUniqueSlug(string $slug): string
-	{
+	public function generateUniqueSlug(string $slug): string {
 		$newSlug = $slug;
 		$counter = 1;
 		while (Post::where('slug', $newSlug)->exists()) {
@@ -72,8 +66,7 @@ class PostRepository
 		return $newSlug;
 	}
 
-	protected function getBaseQuery(): Builder
-	{
+	protected function getBaseQuery(): Builder {
 		$specificReqs = [
 			'mysql'  => "LEFT(body, LOCATE(' ', body, 700))",
 			'sqlite' => 'substr(body, 1, 700)',

@@ -1,34 +1,32 @@
 <?php
 use App\Models\Menu;
 use Illuminate\Validation\Rule;
-use Livewire\Attributes\{Layout, Title};
+use Livewire\Attributes\{Layout};
 use Livewire\Volt\Component;
 use Mary\Traits\Toast;
 
 new #[Layout('components.layouts.admin')] class extends Component {
-    use Toast;
+	use Toast;
 
-    public Menu $menu;
-    public string $label = '';
-    public ?string $link = null;
+	public Menu $menu;
+	public string $label = '';
+	public ?string $link = null;
 
-    public function mount(Menu $menu): void
-    {
-        $this->menu = $menu;
-        $this->fill($this->menu);
-    }
+	public function mount(Menu $menu): void {
+		$this->menu = $menu;
+		$this->fill($this->menu);
+	}
 
-    public function save(): void
-    {
-        $data = $this->validate([
-            'label' => ['required', 'string', 'max:255', Rule::unique('menus')->ignore($this->menu->id)],
-            'link' => 'nullable|regex:/\/([a-z0-9_-]\/*)*[a-z0-9_-]*/',
-        ]);
+	public function save(): void {
+		$data = $this->validate([
+			'label' => ['required', 'string', 'max:255', Rule::unique('menus')->ignore($this->menu->id)],
+			'link'  => 'nullable|regex:/\/([a-z0-9_-]\/*)*[a-z0-9_-]*/',
+		]);
 
-        $this->menu->update($data);
+		$this->menu->update($data);
 
-        $this->success(__('Menu updated with success.'), redirectTo: '/admin/menus/index');
-    }
+		$this->success(__('Menu updated with success.'), redirectTo: '/admin/menus/index');
+	}
 }; ?>
 
 @section('title', __('Edit a menu'))

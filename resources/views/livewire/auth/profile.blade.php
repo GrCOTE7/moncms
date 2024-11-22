@@ -9,45 +9,41 @@ use Livewire\Volt\Component;
 use Mary\Traits\Toast;
 
 new #[Title('Profile')] #[Layout('components.layouts.auth')] class extends Component {
-    use Toast;
+	use Toast;
 
-    public User $user;
-    public string $email = '';
-    public string $password = '';
-    public string $password_confirmation = '';
+	public User $user;
+	public string $email                 = '';
+	public string $password              = '';
+	public string $password_confirmation = '';
 
-    public function mount(): void
-    {
-        $this->user = Auth::user();
-        $this->email = $this->user->email;
-    }
+	public function mount(): void {
+		$this->user  = Auth::user();
+		$this->email = $this->user->email;
+	}
 
-    public function save(): void
-    {
-        $data = $this->validate([
-            'email' => ['required', 'email', Rule::unique('users')->ignore($this->user->id)],
-            'password' => 'confirmed',
-        ]);
+	public function save(): void {
+		$data = $this->validate([
+			'email'    => ['required', 'email', Rule::unique('users')->ignore($this->user->id)],
+			'password' => 'confirmed',
+		]);
 
-        if (!empty($data['password'])) {
-            $data['password'] = Hash::make($data['password']);
-        }
+		if (!empty($data['password'])) {
+			$data['password'] = Hash::make($data['password']);
+		}
 
-        $this->user->update($data);
-        $this->success(__('Profile updated with success.'), redirectTo: '/profile');
-    }
+		$this->user->update($data);
+		$this->success(__('Profile updated with success.'), redirectTo: '/profile');
+	}
 
-    public function deleteAccount(): void
-    {
-        $this->user->delete();
-        $this->success(__('Account deleted with success.'), redirectTo: '/');
-    }
+	public function deleteAccount(): void {
+		$this->user->delete();
+		$this->success(__('Account deleted with success.'), redirectTo: '/');
+	}
 
-    public function generatePassword($length = 16): void
-    {
-        $this->password = Str::random($length);
-        $this->password_confirmation = $this->password;
-    }
+	public function generatePassword($length = 16): void {
+		$this->password              = Str::random($length);
+		$this->password_confirmation = $this->password;
+	}
 }; ?>
 
 <div>

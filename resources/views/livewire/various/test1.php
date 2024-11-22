@@ -7,7 +7,7 @@
 
 use App\Models\{Comment, Post};
 use App\Notifications\CommentCreated;
-use Livewire\Attributes\{Layout, Title};
+use Livewire\Attributes\{Layout};
 use Livewire\Volt\Component;
 
 new

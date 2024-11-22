@@ -7,7 +7,7 @@
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
-use Livewire\Attributes\{Layout, Title};
+use Livewire\Attributes\{Layout};
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
 use Mary\Traits\Toast;
@@ -27,8 +27,7 @@ class extends Component {
 	public $myDirectory;
 
 	// Définir les en-têtes de table.
-	public function headers(): array
-	{
+	public function headers(): array {
 		return [
 			['key' => 'image', 'label' => 'Image'], // Colonne ne correspondant pas à un champs de la BdD
 			['key' => 'path', 'label' => __('Path') . ' (/photos/)'],
@@ -36,22 +35,19 @@ class extends Component {
 		];
 	}
 
-	public function mount(): void
-	{
+	public function mount(): void {
 		$this->years  = $this->getYears();
 		$this->months = $this->getMonths($this->selectedYear);
 		$this->getImages();
 	}
 
-	public function updating($property, $value): void
-	{
+	public function updating($property, $value): void {
 		if ('selectedYear' == $property) {
 			$this->months = $this->getMonths($value);
 		}
 	}
 
-	public function getImages(): LengthAwarePaginator
-	{
+	public function getImages(): LengthAwarePaginator {
 		$imagesPath = "photos/{$this->selectedYear}/{$this->selectedMonth}";
 		$allFiles   = Storage::disk('public')->files($imagesPath);
 
@@ -75,8 +71,7 @@ class extends Component {
 		]);
 	}
 
-	public function deleteImage($index): void
-	{
+	public function deleteImage($index): void {
 		$url = $this->allImages[$index]['url'];
 
 		// Trouver la position de '/storage'
@@ -93,8 +88,7 @@ class extends Component {
 		$this->deleteDirectoryIfEmpty();
 	}
 
-	public function deleteDirectoryIfEmpty()
-	{
+	public function deleteDirectoryIfEmpty() {
 		$directory = "photos/{$this->selectedYear}/{$this->selectedMonth}";
 		$files     = Storage::disk('public')->files($directory);
 
@@ -109,16 +103,14 @@ class extends Component {
 		}
 	}
 
-	public function with(): array
-	{
+	public function with(): array {
 		return [
 			'headers' => $this->headers(),
 			'images'  => $this->getImages(),
 		];
 	}
 
-	private function getYears(): Collection
-	{
+	private function getYears(): Collection {
 		return $this->getDirectories('photos', function ($years) {
 			$this->selectedYear = $years->first()['id'] ?? null;
 
@@ -126,8 +118,7 @@ class extends Component {
 		});
 	}
 
-	private function getMonths($year): Collection
-	{
+	private function getMonths($year): Collection {
 		return $this->getDirectories("photos/{$year}", function ($months) {
 			$this->selectedMonth = $months->first()['id'] ?? null;
 			// À activer avec l'exemple de débogage à dé-commenter aussi (en fin de ce code)
@@ -138,8 +129,7 @@ class extends Component {
 		});
 	}
 
-	private function getDirectories(string $basePath, Closure $callback): Collection
-	{
+	private function getDirectories(string $basePath, Closure $callback): Collection {
 		$directories = Storage::disk('public')->directories($basePath);
 
 		$items = collect($directories)->map(function ($path) {

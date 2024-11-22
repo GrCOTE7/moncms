@@ -17,15 +17,13 @@ class extends Component {
 	public string $password              = '';
 	public string $password_confirmation = '';
 
-	public function mount(string $token): void
-	{
+	public function mount(string $token): void {
 		$this->token = $token;
 
 		$this->email = request()->input('email');
 	}
 
-	public function resetPassword(): void
-	{
+	public function resetPassword(): void {
 		$this->validate([
 			'token'    => ['required'],
 			'email'    => ['required', 'string', 'email'],

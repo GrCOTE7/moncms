@@ -52,7 +52,6 @@ new class extends Component {
 	}
 
 	protected function getCategoryBySlug(string $slug): ?Category {
-
 		return 'category' === request()->segment(1) ? Category::whereSlug($slug)->firstOrFail() : null;
 	}
 };

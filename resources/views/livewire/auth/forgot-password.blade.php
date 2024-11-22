@@ -1,32 +1,31 @@
 <?php
 
 use Illuminate\Support\Facades\Password;
-use Livewire\Attributes\{Layout, Title};
+use Livewire\Attributes\{Layout};
 use Livewire\Volt\Component;
 
 new
 #[Layout('components.layouts.auth')]
 class extends Component {
-    public string $email = '';
+	public string $email = '';
 
-    public function sendPasswordResetLink(): void
-    {
-        $this->validate([
-            'email' => ['required', 'string', 'email'],
-        ]);
+	public function sendPasswordResetLink(): void {
+		$this->validate([
+			'email' => ['required', 'string', 'email'],
+		]);
 
-        $status = Password::sendResetLink($this->only('email'));
+		$status = Password::sendResetLink($this->only('email'));
 
-        if (Password::RESET_LINK_SENT != $status) {
-            $this->addError('email', __($status));
+		if (Password::RESET_LINK_SENT != $status) {
+			$this->addError('email', __($status));
 
-            return;
-        }
+			return;
+		}
 
-        $this->reset('email');
+		$this->reset('email');
 
-        session()->flash('status', __($status));
-    }
+		session()->flash('status', __($status));
+	}
 }; ?>
 
 @section('title', __('Password renewal'))

@@ -28,7 +28,7 @@ class UserFactory extends Factory {
 	 */
 	public function definition(): array {
 		// [$name, $email] = $this->uniqueUsersEmail();
-		[$name, $email] = $this->uniqueUserNameAndEmail();
+		list($name, $email) = $this->uniqueUserNameAndEmail();
 
 		return [
 			'name'           => $name,

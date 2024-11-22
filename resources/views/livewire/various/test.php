@@ -5,7 +5,7 @@
  */
 
 use App\Http\Tools\Fakers;
-use Livewire\Attributes\{Layout, Title};
+use Livewire\Attributes\{Layout};
 use Livewire\Volt\Component;
 
 new

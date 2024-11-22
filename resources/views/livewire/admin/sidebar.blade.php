@@ -4,15 +4,14 @@ use Illuminate\Support\Facades\{Auth, Session};
 use Livewire\Volt\Component;
 
 new class extends Component {
-    public function logout(): void
-    {
-        Auth::guard('web')->logout();
+	public function logout(): void {
+		Auth::guard('web')->logout();
 
-        Session::invalidate();
-        Session::regenerateToken();
+		Session::invalidate();
+		Session::regenerateToken();
 
-        $this->redirect('/');
-    }
+		$this->redirect('/');
+	}
 }; ?>
 
 <div>

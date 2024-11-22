@@ -12,8 +12,7 @@ use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
 use Illuminate\Notifications\Notifiable;
 use Mews\Purifier\Casts\CleanHtmlInput;
 
-class Comment extends Model
-{
+class Comment extends Model {
 	use HasFactory;
 	use Notifiable;
 
@@ -27,28 +26,23 @@ class Comment extends Model
 		'body' => CleanHtmlInput::class,
 	];
 
-	public function user(): BelongsTo
-	{
+	public function user(): BelongsTo {
 		return $this->belongsTo(User::class);
 	}
 
-	public function getDepth(): int
-	{
+	public function getDepth(): int {
 		return $this->parent ? $this->parent->getDepth() + 1 : 0;
 	}
 
-	public function post(): BelongsTo
-	{
+	public function post(): BelongsTo {
 		return $this->belongsTo(Post::class);
 	}
 
-	public function parent(): BelongsTo
-	{
+	public function parent(): BelongsTo {
 		return $this->belongsTo(Comment::class, 'parent_id');
 	}
 
-	public function children(): HasMany
-	{
+	public function children(): HasMany {
 		return $this->hasMany(Comment::class, 'parent_id');
 	}
 }

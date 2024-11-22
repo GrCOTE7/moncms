@@ -9,23 +9,20 @@ namespace App\View\Components;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class AppBrand extends Component
-{
+class AppBrand extends Component {
 	public $appName;
 
 	/**
 	 * Create a new component instance.
 	 */
-	public function __construct()
-	{
+	public function __construct() {
 		$this->appName = config('app.name');
 	}
 
 	/**
 	 * Get the view / contents that represent the component.
 	 */
-	public function render(): View|\Closure|string
-	{
+	public function render(): View|\Closure|string {
 		return <<<'HTML'
 			    <a href="/" wire:navigate>
 			        <!-- Hidden when collapsed -->

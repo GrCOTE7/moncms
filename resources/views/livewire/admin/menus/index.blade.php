@@ -1,166 +1,152 @@
 <?php
-use Mary\Traits\Toast;
-use App\Traits\ManageMenus;
-use Livewire\Volt\Component;
 use App\Models\{Menu, Submenu};
+use App\Traits\ManageMenus;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\{Layout, Validate};
-use Illuminate\Contracts\Database\Eloquent\Builder;
+use Livewire\Volt\Component;
+use Mary\Traits\Toast;
 
 new #[Layout('components.layouts.admin')] class extends Component {
-    use Toast;
-    use ManageMenus;
+	use Toast;
+	use ManageMenus;
 
-    public Collection $menus;
+	public Collection $menus;
 
-    #[Validate('required|max:255|unique:menus,label')]
-    public string $label = '';
+	#[Validate('required|max:255|unique:menus,label')]
+	public string $label = '';
 
-    #[Validate('nullable|regex:/\/([a-z0-9_-]\/*)*[a-z0-9_-]*/')]
-    public string $link = '';
+	#[Validate('nullable|regex:/\/([a-z0-9_-]\/*)*[a-z0-9_-]*/')]
+	public string $link = '';
 
-    public string $sublabel = '';
-    public string $sublink = '';
-    public int $subPost = 0;
-    public int $subPage = 0;
-    public int $subCategory = 0;
-    public int $subOption = 4;
+	public string $sublabel = '';
+	public string $sublink  = '';
+	public int $subPost     = 0;
+	public int $subPage     = 0;
+	public int $subCategory = 0;
+	public int $subOption   = 4;
 
-    // Méthode appelée lors de l'initialisation du composant.
-    public function mount(): void
-    {
-        $this->getMenus();
-        $this->search();
-    }
+	// Méthode appelée lors de l'initialisation du composant.
+	public function mount(): void {
+		$this->getMenus();
+		$this->search();
+	}
 
-    // Récupérer les menus avec leurs sous-menus triés par ordre.
-    public function getMenus(): void
-    {
-        $this->menus = Menu::with([
-            'submenus' => function (Builder $query) {
-                $query->orderBy('order');
-            },
-        ])
-            ->orderBy('order')
-            ->get();
-    }
+	// Récupérer les menus avec leurs sous-menus triés par ordre.
+	public function getMenus(): void {
+		$this->menus = Menu::with([
+			'submenus' => function (Builder $query) {
+				$query->orderBy('order');
+			},
+		])
+			->orderBy('order')
+			->get();
+	}
 
-    public function up(Menu $menu): void
-    {
-        $this->move($menu, 'up');
-    }
+	public function up(Menu $menu): void {
+		$this->move($menu, 'up');
+	}
 
-    public function upSub(Submenu $submenu): void
-    {
-        $this->move($submenu, 'up', true);
-    }
+	public function upSub(Submenu $submenu): void {
+		$this->move($submenu, 'up', true);
+	}
 
-    public function down(Menu $menu): void
-    {
-        $this->move($menu, 'down');
-    }
+	public function down(Menu $menu): void {
+		$this->move($menu, 'down');
+	}
 
-    public function downSub(Submenu $submenu): void
-    {
-        $this->move($submenu, 'down', true);
-    }
+	public function downSub(Submenu $submenu): void {
+		$this->move($submenu, 'down', true);
+	}
 
-    public function deleteMenu(Menu $menu): void
-    {
-        $this->deleteItem($menu);
-    }
+	public function deleteMenu(Menu $menu): void {
+		$this->deleteItem($menu);
+	}
 
-    public function deleteSubmenu(Menu $menu, Submenu $submenu): void
-    {
-        $this->deleteItem($submenu, $menu);
-    }
+	public function deleteSubmenu(Menu $menu, Submenu $submenu): void {
+		$this->deleteItem($submenu, $menu);
+	}
 
-    // Enregistrer un nouveau menu.
-    public function saveMenu(): void
-    {
-        $data = $this->validate();
-        $data['order'] = $this->menus->count() + 1;
-        Menu::create($data);
+	// Enregistrer un nouveau menu.
+	public function saveMenu(): void {
+		$data          = $this->validate();
+		$data['order'] = $this->menus->count() + 1;
+		Menu::create($data);
 
-        $this->success(__('Menu created with success.'), redirectTo: '/admin/menus/index');
-    }
+		$this->success(__('Menu created with success.'), redirectTo: '/admin/menus/index');
+	}
 
-    // Enregistrer un nouveau sous-menu.
-    public function saveSubmenu(Menu $menu): void
-    {
-        $data = $this->validate([
-            'sublabel' => ['required', 'string', 'max:255'],
-            'sublink' => 'required|regex:/\/([a-z0-9_-]\/*)*[a-z0-9_-]*/',
-        ]);
+	// Enregistrer un nouveau sous-menu.
+	public function saveSubmenu(Menu $menu): void {
+		$data = $this->validate([
+			'sublabel' => ['required', 'string', 'max:255'],
+			'sublink'  => 'required|regex:/\/([a-z0-9_-]\/*)*[a-z0-9_-]*/',
+		]);
 
-        $data['order'] = $menu->submenus->count() + 1;
-        $data['label'] = $this->sublabel;
-        $data['link'] = $this->sublink;
+		$data['order'] = $menu->submenus->count() + 1;
+		$data['label'] = $this->sublabel;
+		$data['link']  = $this->sublink;
 
-        $menu->submenus()->save(new Submenu($data));
+		$menu->submenus()->save(new Submenu($data));
 
-        $this->sublabel = '';
-        $this->sublink = '';
+		$this->sublabel = '';
+		$this->sublink  = '';
 
-        $this->success(__('Submenu created with success.'));
-    }
+		$this->success(__('Submenu created with success.'));
+	}
 
-    // Méthode générique pour déplacer un élément (menu ou sous-menu)
-    private function move($item, $direction, $isSubmenu = false): void
-    {
-        $operator = 'up' === $direction ? '<' : '>';
-        $orderDirection = 'up' === $direction ? 'desc' : 'asc';
+	// Méthode générique pour déplacer un élément (menu ou sous-menu)
+	private function move($item, $direction, $isSubmenu = false): void {
+		$operator       = 'up' === $direction ? '<' : '>';
+		$orderDirection = 'up' === $direction ? 'desc' : 'asc';
 
-        $query = $isSubmenu ? Submenu::where('menu_id', $item->menu_id) : Menu::query();
+		$query = $isSubmenu ? Submenu::where('menu_id', $item->menu_id) : Menu::query();
 
-        $adjacentItem = $query
-            ->where('order', $operator, $item->order)
-            ->orderBy('order', $orderDirection)
-            ->first();
+		$adjacentItem = $query
+			->where('order', $operator, $item->order)
+			->orderBy('order', $orderDirection)
+			->first();
 
-        if ($adjacentItem) {
-            $this->swap($item, $adjacentItem);
-        }
-    }
+		if ($adjacentItem) {
+			$this->swap($item, $adjacentItem);
+		}
+	}
 
-    private function swap($item1, $item2): void
-    {
-        $tempOrder = $item1->order;
-        $item1->order = $item2->order;
-        $item2->order = $tempOrder;
+	private function swap($item1, $item2): void {
+		$tempOrder    = $item1->order;
+		$item1->order = $item2->order;
+		$item2->order = $tempOrder;
 
-        $item1->save();
-        $item2->save();
+		$item1->save();
+		$item2->save();
 
-        $this->getMenus();
-    }
+		$this->getMenus();
+	}
 
-    // Méthode générique pour supprimer un élément (menu ou sous-menu)
-    private function deleteItem($item, $parent = null): void
-    {
-        $isSubmenu = null !== $parent;
+	// Méthode générique pour supprimer un élément (menu ou sous-menu)
+	private function deleteItem($item, $parent = null): void {
+		$isSubmenu = null !== $parent;
 
-        $item->delete();
+		$item->delete();
 
-        if ($isSubmenu) {
-            $this->reorderItems($parent->submenus());
-        } else {
-            $this->reorderItems(Menu::query());
-        }
+		if ($isSubmenu) {
+			$this->reorderItems($parent->submenus());
+		} else {
+			$this->reorderItems(Menu::query());
+		}
 
-        $this->getMenus();
-        $this->success(__($isSubmenu ? 'Submenu' : 'Menu') . __(' deleted with success.'));
-    }
+		$this->getMenus();
+		$this->success(__($isSubmenu ? 'Submenu' : 'Menu') . __(' deleted with success.'));
+	}
 
-    // Méthode générique pour réordonner les éléments
-    private function reorderItems($query): void
-    {
-        $items = $query->orderBy('order')->get();
-        foreach ($items as $index => $item) {
-            $item->order = $index + 1;
-            $item->save();
-        }
-    }
+	// Méthode générique pour réordonner les éléments
+	private function reorderItems($query): void {
+		$items = $query->orderBy('order')->get();
+		foreach ($items as $index => $item) {
+			$item->order = $index + 1;
+			$item->save();
+		}
+	}
 }; ?>
 
 @section('title', __('Navbar'))

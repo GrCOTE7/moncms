@@ -20,20 +20,17 @@ new #[Layout('components.layouts.admin')] class extends Component {
 	public string $role   = 'all';
 	public array $roles   = [];
 
-    public function mount(): void
-    {
-        View::share('noHeader', true);
-    }
+	public function mount(): void {
+		View::share('noHeader', true);
+	}
 
-	public function deleteUser(User $user): void
-	{
+	public function deleteUser(User $user): void {
 		$user->delete();
 		$this->success($user->name . ' ' . __('deleted'));
 	}
 
 	// Définir les en-têtes de table.
-	public function headers(): array
-	{
+	public function headers(): array {
 		$headers = [
 			['key' => 'name',  'label' => __('Name')],
 			['key' => 'email', 'label' => 'E-mail'],
@@ -53,8 +50,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
 		]);
 	}
 
-	public function users(): LengthAwarePaginator
-	{
+	public function users(): LengthAwarePaginator {
 		$query = User::query()
 			->when($this->search, fn ($q) => $q
 				->where('name', 'like', "%{$this->search}%")
@@ -92,8 +88,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
 		return $users;
 	}
 
-	public function with(): array
-	{
+	public function with(): array {
 		return [
 			'users'   => $this->users(),
 			'headers' => $this->headers(),

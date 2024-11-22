@@ -4,11 +4,10 @@
  * (ɔ) Mon CMS - 2024-2024
  */
 
-use Livewire\Volt\Volt;
-use Illuminate\Http\Request;
 use App\Http\Controllers\GaController;
 use App\Http\Middleware\{IsAdmin, IsAdminOrRedac};
-use Illuminate\Support\Facades\{Route, Validator};
+use Illuminate\Support\Facades\{Route};
+use Livewire\Volt\Volt;
 
 // À chaque changement: php artisan view:clear & php artisan route:clear
 
@@ -82,7 +81,7 @@ Route::middleware('auth')->group(function () {
 	Volt::route('/test', 'various.test')->name('various.test'); // Simple component
 
 	for ($i = 1; $i <= 5; $i++) {
-		Volt::route("/test$i", "various.test$i")->name("various.test$i");
+		Volt::route("/test{$i}", "various.test{$i}")->name("various.test{$i}");
 	}
 
 	Volt::route('/users', 'users.index');

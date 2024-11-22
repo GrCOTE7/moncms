@@ -9,10 +9,8 @@ namespace Database\Seeders\Main;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class FooterSeeder extends Seeder
-{
-	public function run()
-	{
+class FooterSeeder extends Seeder {
+	public function run() {
 		// Données des éléments du pied de page
 		$footers = [
 			['label' => 'Accueil', 'order' => 1, 'link' => '/'],

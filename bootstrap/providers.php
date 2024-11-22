@@ -1,6 +1,10 @@
 <?php
 
+/**
+ * (ɔ) Mon CMS - 2024-2024
+ */
+
 return [
-    App\Providers\AppServiceProvider::class,
-    App\Providers\VoltServiceProvider::class,
+	App\Providers\AppServiceProvider::class,
+	App\Providers\VoltServiceProvider::class,
 ];

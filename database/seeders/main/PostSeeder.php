@@ -10,13 +10,11 @@ use App\Models\Post;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
-class PostSeeder extends Seeder
-{
+class PostSeeder extends Seeder {
 	/**
 	 * Run the database seeds.
 	 */
-	public function run(): void
-	{
+	public function run(): void {
 		$nbrCategories = 3;
 
 		$this->createPost(1, 1);
@@ -30,8 +28,7 @@ class PostSeeder extends Seeder
 		$this->createPost(9, rand(1, $nbrCategories));
 	}
 
-	protected function createPost($id, $category_id)
-	{
+	protected function createPost($id, $category_id) {
 		$months = ['03', '03', '03', '04', '04', '06', '06', '06', '06'];
 
 		$date = generateRandomDateInRange('2022-01-01', '2024-11-07');

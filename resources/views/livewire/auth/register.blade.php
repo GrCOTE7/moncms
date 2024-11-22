@@ -2,55 +2,51 @@
 
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use Livewire\Attributes\{Layout, Validate, Title};
+use Livewire\Attributes\{Layout, Validate};
 use Livewire\Volt\Component;
-use App\Notifications\UserRegistered;
 use Mary\Traits\Toast;
 
 new
 #[Layout('components.layouts.auth')]
 class extends Component {
+	use Toast;
 
-    use Toast;
+	#[Validate('required|string|max:255|unique:users')]
+	public string $name = '';
 
-    #[Validate('required|string|max:255|unique:users')]
-    public string $name = '';
+	#[Validate('required|email|unique:users')]
+	public string $email = '';
 
-    #[Validate('required|email|unique:users')]
-    public string $email = '';
+	#[Validate('required|confirmed')]
+	public string $password = '';
 
-    #[Validate('required|confirmed')]
-    public string $password = '';
+	#[Validate('required')]
+	public string $password_confirmation = '';
 
-    #[Validate('required')]
-    public string $password_confirmation = '';
+	#[Validate('sometimes|nullable')]
+	public ?string $gender = null;
 
-    #[Validate('sometimes|nullable')]
-    public ?string $gender = null;
+	public function register() {
+		if ($this->gender) {
+			abort(403);
+		}
 
-    public function register()
-    {
-        if ($this->gender) {
-            abort(403);
-        }
+		$data = $this->validate();
 
-        $data = $this->validate();
+		$user = $this->createUser($data);
 
-        $user = $this->createUser($data);
+		auth()->login($user);
 
-        auth()->login($user);
+		request()->session()->regenerate();
 
-        request()->session()->regenerate();
+		$this->success(__('Registration successful!'), redirectTo: '/');
+	}
 
-        $this->success(__('Registration successful!'), redirectTo: '/');
-    }
+	protected function createUser(array $data): User {
+		$data['password'] = Hash::make($data['password']);
 
-    protected function createUser(array $data): User
-    {
-        $data['password'] = Hash::make($data['password']);
-        return User::create($data);
-    }
-
+		return User::create($data);
+	}
 }; ?>
 
 @section('title', __('Register'))

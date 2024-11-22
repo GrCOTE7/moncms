@@ -2,71 +2,64 @@
 
 use App\Models\{Comment, Post};
 use App\Notifications\CommentCreated;
-use Illuminate\Contracts\Database\Eloquent\Builder;
 use Livewire\Attributes\Validate;
 use Livewire\Volt\Component;
 
 new class extends Component {
-    
-    public int $postId;
-    public ?Comment $comment = null;
-    public bool $showCreateForm = true;
-    public bool $showModifyForm = false;
-    public bool $alert = false;
+	public int $postId;
+	public ?Comment $comment    = null;
+	public bool $showCreateForm = true;
+	public bool $showModifyForm = false;
+	public bool $alert          = false;
 
-    #[Validate('required|max:10000')]
-    public string $message = '';
+	#[Validate('required|max:10000')]
+	public string $message = '';
 
-    public function mount($postId): void
-    {
-        $this->postId = $postId;
-    }
+	public function mount($postId): void {
+		$this->postId = $postId;
+	}
 
-    public function createComment(): void
-    {
-        $data = $this->validate();
+	public function createComment(): void {
+		$data = $this->validate();
 
-        if (!Auth::user()->valid) {
-            $this->alert = true;
-        }
+		if (!Auth::user()->valid) {
+			$this->alert = true;
+		}
 
-        $post = Post::select('id', 'title', 'user_id')
-            ->with('user')
-            ->findOrFail($this->postId);
+		$post = Post::select('id', 'title', 'user_id')
+			->with('user')
+			->findOrFail($this->postId);
 
-        $this->comment = Comment::create([
-            'user_id' => Auth::id(),
-            'post_id' => $this->postId,
-            'body' => $this->message,
-        ]);
+		$this->comment = Comment::create([
+			'user_id' => Auth::id(),
+			'post_id' => $this->postId,
+			'body'    => $this->message,
+		]);
 
-        $post->user->notify(new CommentCreated($this->comment));
+		$post->user->notify(new CommentCreated($this->comment));
 
-        $this->message = $data['message'];
-    }
+		$this->message = $data['message'];
+	}
 
-    public function updateComment(): void
-    {
-        $data = $this->validate();
+	public function updateComment(): void {
+		$data = $this->validate();
 
-        $this->comment->body = $data['message'];
-        $this->comment->save();
+		$this->comment->body = $data['message'];
+		$this->comment->save();
 
-        $this->toggleModifyForm(false);
-    }
+		$this->toggleModifyForm(false);
+	}
 
-    public function toggleModifyForm(bool $state): void
-    {
-        $this->showModifyForm = $state;
-    }
+	public function toggleModifyForm(bool $state): void {
+		$this->showModifyForm = $state;
+	}
 
-    public function deleteComment(): void
-    {
-        $this->comment->delete();
+	public function deleteComment(): void {
+		$this->comment->delete();
 
-        $this->comment = null;
-        $this->message = '';
-    }
+		$this->comment = null;
+		$this->message = '';
+	}
 }; ?>
 
 <div class="flex flex-col mt-4">

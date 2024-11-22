@@ -1,60 +1,54 @@
 <?php
-use Mary\Traits\Toast;
 use App\Models\Comment;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
-use Livewire\Attributes\Layout;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Mary\Traits\Toast;
 
 new #[Layout('components.layouts.admin')] class extends Component {
-    use Toast, WithPagination;
+	use Toast, WithPagination;
 
-    public string $search = '';
-    public array $sortBy = ['column' => 'created_at', 'direction' => 'desc'];
-    public $role = 'all';
+	public string $search = '';
+	public array $sortBy  = ['column' => 'created_at', 'direction' => 'desc'];
+	public $role          = 'all';
 
-    public function mount(): void
-    {
-        View::share('noHeader', true);
-    }
+	public function mount(): void {
+		View::share('noHeader', true);
+	}
 
-    public function deleteComment(Comment $comment): void
-    {
-        $comment->delete();
-        $this->success(__('Comment deleted'));
-    }
+	public function deleteComment(Comment $comment): void {
+		$comment->delete();
+		$this->success(__('Comment deleted'));
+	}
 
-    public function validComment(Comment $comment): void
-    {
-        $comment->user->valid = true;
-        $comment->user->save();
+	public function validComment(Comment $comment): void {
+		$comment->user->valid = true;
+		$comment->user->save();
 
-        $this->success(__('Comment validated'));
-    }
+		$this->success(__('Comment validated'));
+	}
 
-    public function headers(): array
-    {
-        return [['key' => 'user_name', 'label' => __('Author')], ['key' => 'body', 'label' => __('Comment'), 'sortable' => false], ['key' => 'post_title', 'label' => __('Post')], ['key' => 'created_at', 'label' => __('Sent on')]];
-    }
+	public function headers(): array {
+		return [['key' => 'user_name', 'label' => __('Author')], ['key' => 'body', 'label' => __('Comment'), 'sortable' => false], ['key' => 'post_title', 'label' => __('Post')], ['key' => 'created_at', 'label' => __('Sent on')]];
+	}
 
-    public function comments(): LengthAwarePaginator
-    {
-        return Comment::query()
-            ->when($this->search, fn($q) => $q->where('body', 'like', "%{$this->search}%"))
-            ->when('post_title' === $this->sortBy['column'], fn($q) => $q->join('posts', 'comments.post_id', '=', 'posts.id')->orderBy('posts.title', $this->sortBy['direction']), fn($q) => $q->orderBy($this->sortBy['column'], $this->sortBy['direction']))
-            ->when(Auth::user()->isRedac(), fn($q) => $q->whereRelation('post', 'user_id', Auth::id()))
-            ->with(['user:id,name,email,valid', 'post:id,title,slug,user_id'])
-            ->withAggregate('user', 'name')
-            ->paginate(10);
-    }
+	public function comments(): LengthAwarePaginator {
+		return Comment::query()
+			->when($this->search, fn($q) => $q->where('body', 'like', "%{$this->search}%"))
+			->when('post_title' === $this->sortBy['column'], fn($q) => $q->join('posts', 'comments.post_id', '=', 'posts.id')->orderBy('posts.title', $this->sortBy['direction']), fn($q) => $q->orderBy($this->sortBy['column'], $this->sortBy['direction']))
+			->when(Auth::user()->isRedac(), fn($q) => $q->whereRelation('post', 'user_id', Auth::id()))
+			->with(['user:id,name,email,valid', 'post:id,title,slug,user_id'])
+			->withAggregate('user', 'name')
+			->paginate(10);
+	}
 
-    public function with(): array
-    {
-        return [
-            'headers' => $this->headers(),
-            'comments' => $this->comments(),
-        ];
-    }
+	public function with(): array {
+		return [
+			'headers'  => $this->headers(),
+			'comments' => $this->comments(),
+		];
+	}
 }; ?>
 
 @section('title', __('Comments'))

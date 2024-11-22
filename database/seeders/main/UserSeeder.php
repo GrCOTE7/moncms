@@ -10,13 +10,11 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
-class UserSeeder extends Seeder
-{
+class UserSeeder extends Seeder {
 	/**
 	 * Run the database seeds.
 	 */
-	public function run(): void
-	{
+	public function run(): void {
 		$users = [
 			[
 				'name'       => 'Admin',
@@ -54,8 +52,8 @@ class UserSeeder extends Seeder
 
 		User::factory(3)->create();
 
-        $u = User::find(6);
-        $u->valid       = false;
-        $u->save();
+		$u        = User::find(6);
+		$u->valid = false;
+		$u->save();
 	}
 }

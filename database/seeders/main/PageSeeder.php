@@ -9,13 +9,11 @@ namespace Database\Seeders\Main;
 use App\Models\Page;
 use Illuminate\Database\Seeder;
 
-class PageSeeder extends Seeder
-{
+class PageSeeder extends Seeder {
 	/**
 	 * Run the database seeds.
 	 */
-	public function run(): void
-	{
+	public function run(): void {
 		$items = [
 			['slug' => 'terms', 'title' => 'Terms'],
 			['slug' => 'privacy-policy', 'title' => 'Privacy Policy'],

@@ -9,10 +9,8 @@ namespace Database\Seeders\Main;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class SettingSeeder extends Seeder
-{
-	public function run()
-	{
+class SettingSeeder extends Seeder {
+	public function run() {
 		$settings = [
 			['key' => 'pagination', 'value' => 6],
 			['key' => 'excerptSize', 'value' => 30],

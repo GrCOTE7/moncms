@@ -1,33 +1,32 @@
 <?php
 
-use Livewire\Attributes\{Layout, Validate, Title};
+use Livewire\Attributes\{Layout, Validate};
 use Livewire\Volt\Component;
 
 new
 #[Layout('components.layouts.auth')]
 class extends Component {
-    #[Validate('required|email')]
-    public string $email = '';
+	#[Validate('required|email')]
+	public string $email = '';
 
-    #[Validate('required')]
-    public string $password = '';
+	#[Validate('required')]
+	public string $password = '';
 
-    public function login()
-    {
-        $credentials = $this->validate();
+	public function login() {
+		$credentials = $this->validate();
 
-        if (auth()->attempt($credentials)) {
-            request()->session()->regenerate();
+		if (auth()->attempt($credentials)) {
+			request()->session()->regenerate();
 
-            if (auth()->user()->isAdmin()) {
-                return redirect()->intended('/admin/dashboard');
-            }
+			if (auth()->user()->isAdmin()) {
+				return redirect()->intended('/admin/dashboard');
+			}
 
-            return redirect()->intended('/');
-        }
+			return redirect()->intended('/');
+		}
 
-        $this->addError('email', __('The provided credentials do not match our records.'));
-    }
+		$this->addError('email', __('The provided credentials do not match our records.'));
+	}
 }; ?>
 
 @section('title', __('Login'))

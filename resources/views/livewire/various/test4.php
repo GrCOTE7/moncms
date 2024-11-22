@@ -4,7 +4,7 @@
  * (ɔ) Mon CMS - 2024-2024
  */
 
-use Livewire\Attributes\{Layout, Title};
+use Livewire\Attributes\{Layout};
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
 

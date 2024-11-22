@@ -12,8 +12,7 @@ use Illuminate\Database\Eloquent\Relations\{BelongsToMany, HasMany};
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
-{
+class User extends Authenticatable {
 	use HasFactory;
 	use Notifiable;
 
@@ -40,13 +39,11 @@ class User extends Authenticatable
 		'remember_token',
 	];
 
-	public function comments(): HasMany
-	{
+	public function comments(): HasMany {
 		return $this->hasMany(Comment::class);
 	}
 
-	public function validComments(): HasMany
-	{
+	public function validComments(): HasMany {
 		return $this->comments()->whereHas('user', function ($query) {
 			$query->whereValid(true);
 		});
@@ -55,31 +52,26 @@ class User extends Authenticatable
 	/**
 	 * Get the favorite posts of the user.
 	 */
-	public function favoritePosts(): BelongsToMany
-	{
+	public function favoritePosts(): BelongsToMany {
 		return $this->belongsToMany(Post::class, 'favorites');
 	}
 
-	public function isAdmin(): bool
-	{
+	public function isAdmin(): bool {
 		return 'admin' === $this->role;
 	}
 
-	public function isRedac(): bool
-	{
+	public function isRedac(): bool {
 		return 'redac' === $this->role;
 	}
 
-	public function isAdminOrRedac(): bool
-	{
+	public function isAdminOrRedac(): bool {
 		return 'admin' === $this->role || 'redac' === $this->role;
 	}
 
 	/**
 	 * Get the posts for the User.
 	 */
-	public function posts(): HasMany
-	{
+	public function posts(): HasMany {
 		return $this->hasMany(Post::class);
 	}
 
@@ -88,8 +80,7 @@ class User extends Authenticatable
 	 *
 	 * @return array<string, string>
 	 */
-	protected function casts(): array
-	{
+	protected function casts(): array {
 		return [
 			'email_verified_at' => 'datetime',
 			'password'          => 'hashed',

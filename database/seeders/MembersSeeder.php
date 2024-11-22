@@ -10,13 +10,11 @@ use App\Models\{Member, Project};
 use Database\Factories\MemberFactory;
 use Illuminate\Database\Seeder;
 
-class MembersSeeder extends Seeder
-{
+class MembersSeeder extends Seeder {
 	/**
 	 * Run the database seeds.
 	 */
-	public function run(): void
-	{
+	public function run(): void {
 		$totalUser = 1e2; // 1e5
 		echo "\n";
 		MemberFactory::setTotal($totalUser);

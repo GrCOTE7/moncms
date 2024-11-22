@@ -1,78 +1,73 @@
 <?php
 
 use App\Models\Post;
-use Livewire\Volt\Component;
-use Livewire\Attributes\Title;
-use Illuminate\Support\Collection;
 use App\Repositories\PostRepository;
+use Illuminate\Support\Collection;
+use Livewire\Volt\Component;
 
 new class extends Component {
-    public Post $post;
-    public int $commentsCount;
-    public Collection $comments;
-    public bool $listComments = false;
+	public Post $post;
+	public int $commentsCount;
+	public Collection $comments;
+	public bool $listComments = false;
 
-    public function mount($slug): void
-    {
-        $postRepository = new PostRepository();
-        $this->post = $postRepository->getPostBySlug($slug);
-        $this->commentsCount = $this->post->valid_comments_count;
-    }
+	public function mount($slug): void {
+		$postRepository      = new PostRepository();
+		$this->post          = $postRepository->getPostBySlug($slug);
+		$this->commentsCount = $this->post->valid_comments_count;
+	}
 
-    public function showComments(): void
-    {
-        $this->listComments = true;
+	public function showComments(): void {
+		$this->listComments = true;
 
-        $this->comments = $this->post
-            ->validComments()
-            ->where('parent_id', null)
-            ->withCount([
-                'children' => function ($query) {
-                    $query->whereHas('user', function ($q) {
-                        $q->where('valid', true);
-                    });
-                },
-            ])
-            ->with([
-                'user' => function ($query) {
-                    $query->select('id', 'name', 'email', 'role')->withCount('comments');
-                },
-            ])
-            ->latest()
-            ->get();
-        // dd ($this->comments);
-    }
-    public function favoritePost(): void
-    {
-        $user = auth()->user();
+		$this->comments = $this->post
+			->validComments()
+			->where('parent_id', null)
+			->withCount([
+				'children' => function ($query) {
+					$query->whereHas('user', function ($q) {
+						$q->where('valid', true);
+					});
+				},
+			])
+			->with([
+				'user' => function ($query) {
+					$query->select('id', 'name', 'email', 'role')->withCount('comments');
+				},
+			])
+			->latest()
+			->get();
+		// dd ($this->comments);
+	}
 
-        if ($user) {
-            $user->favoritePosts()->attach($this->post->id);
-            $this->post->is_favorited = true;
-        }
-    }
+	public function favoritePost(): void {
+		$user = auth()->user();
 
-    public function unfavoritePost(): void
-    {
-        $user = auth()->user();
+		if ($user) {
+			$user->favoritePosts()->attach($this->post->id);
+			$this->post->is_favorited = true;
+		}
+	}
 
-        if ($user) {
-            $user->favoritePosts()->detach($this->post->id);
-            $this->post->is_favorited = false;
-        }
-    }
+	public function unfavoritePost(): void {
+		$user = auth()->user();
 
-    public function clonePost(int $postId): void
-    {
-        $originalPost = Post::findOrFail($postId);
-        $clonedPost = $originalPost->replicate();
-        $postRepository = new PostRepository();
-        $clonedPost->slug = $postRepository->generateUniqueSlug($originalPost->slug);
-        $clonedPost->active = false;
-        $clonedPost->save();
+		if ($user) {
+			$user->favoritePosts()->detach($this->post->id);
+			$this->post->is_favorited = false;
+		}
+	}
 
-        redirect()->route('posts.edit', $clonedPost->slug);
-    }
+	public function clonePost(int $postId): void {
+		$originalPost       = Post::findOrFail($postId);
+		$clonedPost         = $originalPost->replicate();
+		$postRepository     = new PostRepository();
+		$clonedPost->slug   = $postRepository->generateUniqueSlug($originalPost->slug);
+		$clonedPost->active = false;
+		$clonedPost->save();
+
+		redirect()->route('posts.edit', $clonedPost->slug);
+	}
 }; ?>
 
 <div>

@@ -9,10 +9,8 @@ namespace Database\Seeders\Main;
 use App\Models\Comment;
 use Illuminate\Database\Seeder;
 
-class CommentSeeder extends Seeder
-{
-	public function run()
-	{
+class CommentSeeder extends Seeder {
+	public function run() {
 		$nbrPosts = 9;
 		$nbrUsers = 3;
 
@@ -38,8 +36,7 @@ class CommentSeeder extends Seeder
 		$this->createComment(4, 1, $comment->id);
 	}
 
-	protected function createComment($post_id, $user_id, $id = null)
-	{
+	protected function createComment($post_id, $user_id, $id = null) {
 		return Comment::factory()->create([
 			'post_id'   => $post_id,
 			'user_id'   => $user_id,

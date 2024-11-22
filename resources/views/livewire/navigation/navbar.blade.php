@@ -1,26 +1,24 @@
 <?php
 
-use Livewire\Volt\Component;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\{Auth, Session};
+use Livewire\Volt\Component;
 
 new class extends Component {
-    public Collection $menus;
+	public Collection $menus;
 
-    public function mount(Collection $menus): void
-    {
-        $this->menus = $menus;
-    }
+	public function mount(Collection $menus): void {
+		$this->menus = $menus;
+	}
 
-    public function logout(): void
-    {
-        Auth::guard('web')->logout();
+	public function logout(): void {
+		Auth::guard('web')->logout();
 
-        Session::invalidate();
-        Session::regenerateToken();
+		Session::invalidate();
+		Session::regenerateToken();
 
-        $this->redirect('/');
-    }
+		$this->redirect('/');
+	}
 };
 ?>
 

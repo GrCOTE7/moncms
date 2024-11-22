@@ -1,19 +1,18 @@
 <?php
 
+/**
+ * (ɔ) Mon CMS - 2024-2024
+ */
+
 namespace App\Models;
 
-use App\Models\Submenu;
 use Illuminate\Database\Eloquent\Model;
 
-class Menu extends Model
-{
-public $timestamps = false;
+class Menu extends Model {
+	public $timestamps  = false;
+	protected $fillable = ['label', 'link', 'order'];
 
-protected $fillable = ['label', 'link', 'order'];
-
-public function submenus(){
-
-    return $this->hasMany(Submenu::class);
-}
-
+	public function submenus() {
+		return $this->hasMany(Submenu::class);
+	}
 }

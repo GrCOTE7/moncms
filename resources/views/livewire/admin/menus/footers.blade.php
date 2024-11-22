@@ -1,85 +1,77 @@
 <?php
-use Mary\Traits\Toast;
 use App\Models\{Footer};
-use Livewire\Volt\Component;
 use Illuminate\Support\Collection;
-use Livewire\Attributes\{Layout, Validate, Title};
+use Livewire\Attributes\{Layout, Validate};
+use Livewire\Volt\Component;
+use Mary\Traits\Toast;
 
 new #[Layout('components.layouts.admin')] class extends Component {
-    use Toast;
+	use Toast;
 
-    public Collection $footers;
+	public Collection $footers;
 
-    #[Validate('required|max:255|unique:footers,label')]
-    public string $label = '';
+	#[Validate('required|max:255|unique:footers,label')]
+	public string $label = '';
 
-    #[Validate('nullable|regex:/\/([a-z0-9_-]\/*)*[a-z0-9_-]*/')]
-    public string $link = '';
+	#[Validate('nullable|regex:/\/([a-z0-9_-]\/*)*[a-z0-9_-]*/')]
+	public string $link = '';
 
-    public function mount(): void
-    {
-        $this->getFooters();
-    }
+	public function mount(): void {
+		$this->getFooters();
+	}
 
-    public function getFooters(): void
-    {
-        $this->footers = Footer::orderBy('order')->get();
-    }
+	public function getFooters(): void {
+		$this->footers = Footer::orderBy('order')->get();
+	}
 
-    public function up(Footer $footer): void
-    {
-        $previousFooter = Footer::where('order', '<', $footer->order)
-            ->orderBy('order', 'desc')
-            ->first();
+	public function up(Footer $footer): void {
+		$previousFooter = Footer::where('order', '<', $footer->order)
+			->orderBy('order', 'desc')
+			->first();
 
-        $this->swap($footer, $previousFooter);
-    }
+		$this->swap($footer, $previousFooter);
+	}
 
-    public function down(Footer $footer): void
-    {
-        $previousFooter = Footer::where('order', '>', $footer->order)
-            ->orderBy('order', 'asc')
-            ->first();
+	public function down(Footer $footer): void {
+		$previousFooter = Footer::where('order', '>', $footer->order)
+			->orderBy('order', 'asc')
+			->first();
 
-        $this->swap($footer, $previousFooter);
-    }
+		$this->swap($footer, $previousFooter);
+	}
 
-    public function deleteFooter(Footer $footer): void
-    {
-        $footer->delete();
-        $this->reorderFooters();
-        $this->getFooters();
-        $this->success(__('Footer deleted with success.'));
-    }
+	public function deleteFooter(Footer $footer): void {
+		$footer->delete();
+		$this->reorderFooters();
+		$this->getFooters();
+		$this->success(__('Footer deleted with success.'));
+	}
 
-    public function saveFooter(): void
-    {
-        $data = $this->validate();
-        $data['order'] = $this->footers->count() + 1;
-        $newFooter = Footer::create($data);
-        $this->footers->push($newFooter);
-        $this->success(__('Footer created with success.'));
-    }
+	public function saveFooter(): void {
+		$data          = $this->validate();
+		$data['order'] = $this->footers->count() + 1;
+		$newFooter     = Footer::create($data);
+		$this->footers->push($newFooter);
+		$this->success(__('Footer created with success.'));
+	}
 
-    private function swap(Footer $footer, Footer $previousFooter): void
-    {
-        $tempOrder = $footer->order;
-        $footer->order = $previousFooter->order;
-        $previousFooter->order = $tempOrder;
+	private function swap(Footer $footer, Footer $previousFooter): void {
+		$tempOrder             = $footer->order;
+		$footer->order         = $previousFooter->order;
+		$previousFooter->order = $tempOrder;
 
-        $footer->save();
-        $previousFooter->save();
-        $this->getFooters();
-    }
+		$footer->save();
+		$previousFooter->save();
+		$this->getFooters();
+	}
 
-    private function reorderFooters(): void
-    {
-        $footers = Footer::orderBy('order')->get();
-        foreach ($footers as $index => $footer) {
-            $footer->order = $index + 1;
-            $footer->save();
-        }
-    }
+	private function reorderFooters(): void {
+		$footers = Footer::orderBy('order')->get();
+		foreach ($footers as $index => $footer) {
+			$footer->order = $index + 1;
+			$footer->save();
+		}
+	}
 }; ?>
 
 @section('title', __('Footer'))

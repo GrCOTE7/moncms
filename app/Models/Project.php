@@ -10,8 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Project extends Model
-{
+class Project extends Model {
 	use HasFactory;
 
 	/**
@@ -24,8 +23,7 @@ class Project extends Model
 	// 	'start_at',
 	// ];
 
-	public function members(): HasMany
-	{
+	public function members(): HasMany {
 		return $this->hasMany(Member::class, 'project_id');
 	}
 
@@ -34,8 +32,7 @@ class Project extends Model
 	 *
 	 * @return array<string, string>
 	 */
-	protected function casts(): array
-	{
+	protected function casts(): array {
 		return [
 			'start_at' => 'date',
 		];

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * (ɔ) LARAVEL.Sillo.org - 2012-2024
+ * (ɔ) Mon CMS - 2024-2024
  */
 
 // Src: https://github.com/blade-ui-kit/blade-icons

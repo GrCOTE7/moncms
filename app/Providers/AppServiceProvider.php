@@ -10,20 +10,17 @@ use App\Models\{Menu, Setting};
 use Illuminate\Support\{Facades, ServiceProvider};
 use Illuminate\View\View;
 
-class AppServiceProvider extends ServiceProvider
-{
+class AppServiceProvider extends ServiceProvider {
 	/**
 	 * Register any application services.
 	 */
-	public function register(): void
-	{
+	public function register(): void {
 	}
 
 	/**
 	 * Bootstrap any application services.
 	 */
-	public function boot(): void
-	{
+	public function boot(): void {
 		if (!$this->app->runningInConsole()) {
 			$settings = Setting::all();
 			foreach ($settings as $setting) {

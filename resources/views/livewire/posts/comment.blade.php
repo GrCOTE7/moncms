@@ -1,98 +1,91 @@
 <?php
 
-use App\Models\{Comment, Reaction};
+use App\Models\{Comment};
 use App\Notifications\{CommentAnswerCreated, CommentCreated};
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Validate;
 use Livewire\Volt\Component;
 
 new class extends Component {
-    public ?Comment $comment;
-    public ?Collection $children;
-    public bool $showAnswerForm = false;
-    public bool $showModifyForm = false;
-    public int $depth;
-    public bool $alert = false;
-    public int $children_count = 0;
+	public ?Comment $comment;
+	public ?Collection $children;
+	public bool $showAnswerForm = false;
+	public bool $showModifyForm = false;
+	public int $depth;
+	public bool $alert         = false;
+	public int $children_count = 0;
 
-    #[Validate('required|max:10000')]
-    public string $message = '';
+	#[Validate('required|max:10000')]
+	public string $message = '';
 
-    public function mount($comment, $depth): void
-    {
-        $this->comment = $comment;
-        $this->depth = $depth;
-        $this->message = strip_tags($comment->body);
-        $this->children_count = $comment->children_count;
-    }
+	public function mount($comment, $depth): void {
+		$this->comment        = $comment;
+		$this->depth          = $depth;
+		$this->message        = strip_tags($comment->body);
+		$this->children_count = $comment->children_count;
+	}
 
-    public function showAnswers(): void
-    {
-        $this->children = Comment::where('parent_id', $this->comment->id)
-            ->with([
-                'user' => function ($query) {
-                    $query->select('id', 'name', 'email', 'role')->withCount('comments');
-                },
-            ])
-            ->withCount([
-                'children' => function ($query) {
-                    $query->whereHas('user', function ($q) {
-                        $q->where('valid', true);
-                    });
-                },
-            ])
-            ->get();
+	public function showAnswers(): void {
+		$this->children = Comment::where('parent_id', $this->comment->id)
+			->with([
+				'user' => function ($query) {
+					$query->select('id', 'name', 'email', 'role')->withCount('comments');
+				},
+			])
+			->withCount([
+				'children' => function ($query) {
+					$query->whereHas('user', function ($q) {
+						$q->where('valid', true);
+					});
+				},
+			])
+			->get();
 
-        $this->children_count = 0;
-    }
+		$this->children_count = 0;
+	}
 
-    public function toggleAnswerForm(bool $state): void
-    {
-        $this->showAnswerForm = $state;
-        $this->message = '';
-    }
+	public function toggleAnswerForm(bool $state): void {
+		$this->showAnswerForm = $state;
+		$this->message        = '';
+	}
 
-    public function toggleModifyForm(bool $state): void
-    {
-        $this->showModifyForm = $state;
-    }
+	public function toggleModifyForm(bool $state): void {
+		$this->showModifyForm = $state;
+	}
 
-    public function createAnswer(): void
-    {
-        $data = $this->validate();
-        $data['parent_id'] = $this->comment->id;
-        $data['user_id'] = Auth::id();
-        $data['post_id'] = $this->comment->post_id;
-        $data['body'] = $this->message;
+	public function createAnswer(): void {
+		$data              = $this->validate();
+		$data['parent_id'] = $this->comment->id;
+		$data['user_id']   = Auth::id();
+		$data['post_id']   = $this->comment->post_id;
+		$data['body']      = $this->message;
 
-        $item = Comment::create($data);
+		$item = Comment::create($data);
 
-        $item->save();
+		$item->save();
 
-        $item->post->user->notify(new CommentCreated($item));
-        $item->post->user->notify(new CommentAnswerCreated($item));
+		$item->post->user->notify(new CommentCreated($item));
+		$item->post->user->notify(new CommentAnswerCreated($item));
 
-        $this->toggleAnswerForm(false);
+		$this->toggleAnswerForm(false);
 
-        $this->showAnswers();
-    }
+		$this->showAnswers();
+	}
 
-    public function updateAnswer(): void
-    {
-        $data = $this->validate();
+	public function updateAnswer(): void {
+		$data = $this->validate();
 
-        $this->comment->body = $data['message'];
-        $this->comment->save();
+		$this->comment->body = $data['message'];
+		$this->comment->save();
 
-        $this->toggleModifyForm(false);
-    }
+		$this->toggleModifyForm(false);
+	}
 
-    public function deleteComment(): void
-    {
-        $this->comment->delete();
-        $this->childs = null;
-        $this->comment = null;
-    }
+	public function deleteComment(): void {
+		$this->comment->delete();
+		$this->childs  = null;
+		$this->comment = null;
+	}
 }; ?>
 
 <div>

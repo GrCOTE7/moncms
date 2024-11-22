@@ -7,40 +7,36 @@ use Livewire\WithPagination;
 use Mary\Traits\Toast;
 
 new #[Layout('components.layouts.admin')] class extends Component {
-    use Toast, WithPagination;
+	use Toast, WithPagination;
 
-    public array $sortBy = ['column' => 'title', 'direction' => 'asc'];
-    
-    public function mount(): void
-    {
-        View::share([
-            'addBtn' => [
-                'link'=>route('pages.create'),
-                'label' => __('Add a page')
-            ]
-        ]);
-    }
+	public array $sortBy = ['column' => 'title', 'direction' => 'asc'];
 
-    public function headers(): array
-    {
-        return [['key' => 'title', 'label' => __('Title')], ['key' => 'slug', 'label' => 'Slug'], ['key' => 'active', 'label' => __('Published')]];
-    }
+	public function mount(): void {
+		View::share([
+			'addBtn' => [
+				'link'  => route('pages.create'),
+				'label' => __('Add a page'),
+			],
+		]);
+	}
 
-    public function deletePage(Page $page): void
-    {
-        $page->delete();
-        $this->success(__('Page deleted'));
-    }
+	public function headers(): array {
+		return [['key' => 'title', 'label' => __('Title')], ['key' => 'slug', 'label' => 'Slug'], ['key' => 'active', 'label' => __('Published')]];
+	}
 
-    public function with(): array
-    {
-        return [
-            'pages' => Page::select('id', 'title', 'slug', 'active')
-                ->orderBy($this->sortBy['column'], $this->sortBy['direction'])
-                ->get(),
-            'headers' => $this->headers(),
-        ];
-    }
+	public function deletePage(Page $page): void {
+		$page->delete();
+		$this->success(__('Page deleted'));
+	}
+
+	public function with(): array {
+		return [
+			'pages' => Page::select('id', 'title', 'slug', 'active')
+				->orderBy($this->sortBy['column'], $this->sortBy['direction'])
+				->get(),
+			'headers' => $this->headers(),
+		];
+	}
 }; ?>
 @section('title', __('Pages'))
 <div>

@@ -8,7 +8,7 @@ use App\Models\{Page, Post};
 use Illuminate\Support\Facades\{File, Storage};
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
-use Livewire\Attributes\{Layout, Title};
+use Livewire\Attributes\{Layout};
 use Livewire\Volt\Component;
 use Mary\Traits\Toast;
 
@@ -42,8 +42,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
 	public int $clipW = 0;
 	public int $clipH = 0;
 
-	public function mount($year, $month, $id): void
-	{
+	public function mount($year, $month, $id): void {
 		$this->year  = $year;
 		$this->month = $month;
 		$this->id    = $id;
@@ -53,8 +52,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
 		$this->getImageInfos();
 	}
 
-	public function saveImageToTemp($viewToast): void
-	{
+	public function saveImageToTemp($viewToast): void {
 		$tempDir        = Storage::disk('public')->path('temp');
 		$this->tempPath = "{$tempDir}/{$this->fileName}";
 
@@ -73,8 +71,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
 		$this->image = Storage::disk('public')->url('temp/' . $this->fileName);
 	}
 
-	public function restoreImage($cancel): void
-	{
+	public function restoreImage($cancel): void {
 		if (File::exists($this->imagePath)) {
 			File::copy($this->imagePath, $this->tempPath);
 			$this->refreshImageUrl();
@@ -92,8 +89,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
 		}
 	}
 
-	public function updated($property, $value)
-	{
+	public function updated($property, $value) {
 		if ('group' === $property) {
 			return;
 		}
@@ -182,8 +178,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
 		$this->refreshImageUrl();
 	}
 
-	public function invert(): void
-	{
+	public function invert(): void {
 		$manager = new ImageManager(new Driver());
 		$image   = $manager->read($this->tempPath);
 		$image->invert();
@@ -193,8 +188,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
 		$this->refreshImageUrl();
 	}
 
-	public function getImage($year, $month, $id): void
-	{
+	public function getImage($year, $month, $id): void {
 		$imagesPath         = "photos/{$year}/{$month}";
 		$allFiles           = Storage::disk('public')->files($imagesPath);
 		$image              = $allFiles[$id];
@@ -205,8 +199,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
 		$this->refreshImageUrl();
 	}
 
-	public function keepVersion(): void
-	{
+	public function keepVersion(): void {
 		if (File::exists($this->tempPath)) {
 			File::copy($this->tempPath, $this->imagePath);
 		}
@@ -214,8 +207,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
 		$this->exit();
 	}
 
-	public function exit(): void
-	{
+	public function exit(): void {
 		if (File::exists($this->tempPath)) {
 			File::delete($this->tempPath);
 		}
@@ -223,8 +215,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
 		redirect()->route('images.index');
 	}
 
-	public function applyChanges(): void
-	{
+	public function applyChanges(): void {
 		if (File::exists($this->tempPath)) {
 			File::copy($this->tempPath, $this->imagePath);
 		}
@@ -234,16 +225,14 @@ new #[Layout('components.layouts.admin')] class extends Component {
 		$this->success(__('Image changes applied successfully'));
 	}
 
-	private function getImageInfos(): void
-	{
+	private function getImageInfos(): void {
 		$manager      = new ImageManager(new Driver());
 		$image        = $manager->read($this->tempPath);
 		$this->width  = $image->width();
 		$this->height = $image->height();
 	}
 
-	private function findUsage(): array
-	{
+	private function findUsage(): array {
 		$usage = [];
 
 		$name = $this->year . '/' . str_pad($this->month, 2, '0', STR_PAD_LEFT) . '/' . $this->fileName;
@@ -276,8 +265,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
 		return $usage;
 	}
 
-	private function refreshImageUrl(): void
-	{
+	private function refreshImageUrl(): void {
 		$this->image = Storage::disk('public')->url("temp/{$this->fileName}") . '?' . now()->timestamp;
 	}
 };

@@ -24,7 +24,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
 	public $category_id = 0;
 
 	public function mount(): void {
-		View::share('noHeader',true);
+		View::share('noHeader', true);
 		$this->categories = $this->getCategories();
 	}
 

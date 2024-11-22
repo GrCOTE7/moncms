@@ -4,12 +4,11 @@ use App\Models\Footer;
 use Livewire\Volt\Component;
 
 new class extends Component {
-    public function with(): array
-    {
-        return [
-            'footers' => Footer::orderBy('order')->get(),
-        ];
-    }
+	public function with(): array {
+		return [
+			'footers' => Footer::orderBy('order')->get(),
+		];
+	}
 };
 ?>
 

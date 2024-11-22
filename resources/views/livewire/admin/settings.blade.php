@@ -1,70 +1,67 @@
 <?php
-use Mary\Traits\Toast;
 use App\Models\Setting;
-use Livewire\Volt\Component;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Artisan;
 use Livewire\Attributes\{Layout, Validate};
-use Illuminate\Database\Eloquent\Collection;
+use Livewire\Volt\Component;
+use Mary\Traits\Toast;
 
 new #[Title('Settings')] #[Layout('components.layouts.admin')] class extends Component {
-    use Toast;
+	use Toast;
 
-    private const SETTINGS_KEYS = ['pagination', 'excerptSize', 'title', 'subTitle', 'newPost'];
+	private const SETTINGS_KEYS = ['pagination', 'excerptSize', 'title', 'subTitle', 'newPost'];
 
-    #[Validate('required|max:30')]
-    public string $title;
+	#[Validate('required|max:30')]
+	public string $title;
 
-    #[Validate('required|max:50')]
-    public string $subTitle;
+	#[Validate('required|max:50')]
+	public string $subTitle;
 
-    #[Validate('required|integer|between:2,12')]
-    public int $pagination;
+	#[Validate('required|integer|between:2,12')]
+	public int $pagination;
 
-    #[Validate('required|integer|between:10,60')]
-    public int $excerptSize;
+	#[Validate('required|integer|between:10,60')]
+	public int $excerptSize;
 
-    #[Validate('required|integer|between:1,12')]
-    public int $newPost;
+	#[Validate('required|integer|between:1,12')]
+	public int $newPost;
 
-    public bool $maintenance = false;
-    public Collection $settings;
+	public bool $maintenance = false;
+	public Collection $settings;
 
-    public function mount(): void
-    {
-        $this->settings = Setting::all();
+	public function mount(): void {
+		$this->settings = Setting::all();
 
-        $this->maintenance = App::isDownForMaintenance();
+		$this->maintenance = App::isDownForMaintenance();
 
-        foreach (self::SETTINGS_KEYS as $key) {
-            $this->{$key} = $this->settings->where('key', $key)->first()->value ?? null;
-        }
-    }
+		foreach (self::SETTINGS_KEYS as $key) {
+			$this->{$key} = $this->settings->where('key', $key)->first()->value ?? null;
+		}
+	}
 
-    public function updatedMaintenance(): void
-    {
-        if ($this->maintenance) {
-            Artisan::call('down', ['--secret' => env('APP_MAINTENANCE_SECRET')]);
-        } else {
-            Artisan::call('up'); // → php artisan up
-        }
-    }
+	public function updatedMaintenance(): void {
+		if ($this->maintenance) {
+			Artisan::call('down', ['--secret' => env('APP_MAINTENANCE_SECRET')]);
+		} else {
+			Artisan::call('up'); // → php artisan up
+		}
+	}
 
-    public function save()
-    {
-        $data = $this->validate();
+	public function save() {
+		$data = $this->validate();
 
-        DB::transaction(function () use ($data) {
-            foreach (self::SETTINGS_KEYS as $key) {
-                $setting = $this->settings->where('key', $key)->first();
-                if ($setting) {
-                    $setting->value = $data[$key];
-                    $setting->save();
-                }
-            }
-        });
+		DB::transaction(function () use ($data) {
+			foreach (self::SETTINGS_KEYS as $key) {
+				$setting = $this->settings->where('key', $key)->first();
+				if ($setting) {
+					$setting->value = $data[$key];
+					$setting->save();
+				}
+			}
+		});
 
-        $this->success(__('Settings updated successfully!'));
-    }
+		$this->success(__('Settings updated successfully!'));
+	}
 }; ?>
 
 @section('title', __('Settings'))
