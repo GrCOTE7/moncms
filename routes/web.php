@@ -4,21 +4,39 @@
  * (ɔ) Mon CMS - 2024-2024
  */
 
-use Livewire\Volt\Volt;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\{IsAdmin, IsAdminOrRedac};
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\{Route, Validator};
+use Livewire\Volt\Volt;
 
 // À chaque changement: php artisan view:clear & php artisan route:clear
 
-Route::get('/ga', function (Request $request) {
+/**
+ * (ɔ) Mon CMS - 2024-2024
+ */
+http://127.0.0.1:8000/ga?age=7a&nom=Li@o
+
+Route::get('/ga/{slug?}', function (Request $request, $slug) {
+	$validator = Validator::make($request->all(), [ // Tests sur params
+		'nom' => 'required|regex:/^[a-z0-9\-]+$/i',
+		'age' => 'required|numeric',
+	]);
+
+	if ($validator->fails()) {
+		return response()->json([
+			'errors' => $validator->errors(),
+		], 400);
+	}
+
 	return [
-		'name' => $request->input('age', 77), //test with: http://127.0.0.1:8000/ga?name=John&age=55
-		'age' => 31,
-		1,
-		2,
+		'nom'  => $request->input('nom'),
+		'age'  => $request->input('age'),
+		'slug' => $slug,
 	];
-});
+})
+	->where([ // Test sur url
+		'slug' => '[a-z0-9\-]+',
+	]);
 
 Volt::route('/', 'index');
 
