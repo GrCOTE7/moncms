@@ -11,11 +11,7 @@ use Livewire\Volt\Volt;
 
 // À chaque changement: php artisan view:clear & php artisan route:clear
 
-/**
- * (ɔ) Mon CMS - 2024-2024
- */
-http://127.0.0.1:8000/ga?age=7a&nom=Li@o
-
+// http://127.0.0.1:8000/ga/lien?age=7a&nom=Li@o
 Route::get('/ga/{slug?}', function (Request $request, $slug) {
 	$validator = Validator::make($request->all(), [ // Tests sur params
 		'nom' => 'required|regex:/^[a-z0-9\-]+$/i',
