@@ -93,14 +93,16 @@ Route::middleware('auth')->group(function () {
 			Volt::route('/images/{year}/{month}/{id}/edit', 'admin.images.edit')->name('images.edit');
 
 			Volt::route('/settings', 'admin.settings')->name('settings');
-
-			Volt::route('/test', 'various.test')->name('various.test'); // Simple component
-			Volt::route('/test1', 'various.test1')->name('various.test1'); // Ready...
-			Volt::route('/test2', 'various.test2')->name('various.test2'); // Simple members list
-			Volt::route('/test3', 'various.test3')->name('various.test3'); // Members list with birthday
-			Volt::route('/test4', 'various.test4')->name('various.test4'); // Members list with birthday
-			Volt::route('/test5', 'various.test5')->name('various.test5'); // Members list with birthday
-			Volt::route('/users', 'users.index');
 		});
 	});
+});
+
+Route::middleware('auth')->group(function () {
+	Volt::route('/test', 'various.test')->name('various.test'); // Simple component
+
+	for ($i = 1; $i <= 5; $i++) {
+		Volt::route("/test$i", "various.test$i")->name("various.test$i");
+	}
+
+	Volt::route('/users', 'users.index');
 });
