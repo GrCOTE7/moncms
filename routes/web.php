@@ -16,9 +16,9 @@ Route::get('/ga', [GaController::class, 'index'])->name('ga');
 
 Volt::route('/', 'index');
 
-Route::get('/memo', function () {
-	return view('docs.memo');
-})->name('docs.memo');
+// Route::get('/memo', function () {
+// 	return view('docs.memo');
+// })->name('docs.memo');
 
 Volt::route('/category/{slug}', 'index');
 
