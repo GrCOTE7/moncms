@@ -13,7 +13,7 @@ use App\Http\Middleware\{IsAdmin, IsAdminOrRedac};
 
 Route::get('/ga', function (Request $request) {
 	return [
-		'name' => $request->all(), //test with: http://127.0.0.1:8000/ga?name=John&age=55
+		'name' => $request->input('age'), //test with: http://127.0.0.1:8000/ga?name=John&age=55
 		'age' => 31,
 		1,
 		2,
