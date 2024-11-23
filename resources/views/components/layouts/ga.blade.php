@@ -22,13 +22,12 @@
 <body class="h-[87vh] font-sans antialiased bg-base-200/50 dark:bg-base-200 my-3">
 
     <x-main full-width>
-
         <x-slot:content>
             <x-helpers.header-lk :title="trim($__env->yieldContent('title'))" />
-                {{-- @section('content')
-                {{ $slot }}
-                @endsection --}}
-                @yield('content')
+            {{-- @section('content')
+            {{ $slot }}
+            @endsection --}}
+            @yield('content')
         </x-slot:content>
 
     </x-main>
