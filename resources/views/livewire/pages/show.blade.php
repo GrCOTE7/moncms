@@ -4,7 +4,7 @@ use App\Models\Page;
 use Livewire\Volt\Component;
 
 // Création d'une nouvelle classe anonyme étendant Component
-new class extends Component {
+new class() extends Component {
 	// Propriété publique pour stocker la page
 	public Page $page;
 

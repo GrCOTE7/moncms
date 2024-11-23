@@ -5,7 +5,7 @@ use App\Repositories\PostRepository;
 use Illuminate\Support\Collection;
 use Livewire\Volt\Component;
 
-new class extends Component {
+new class() extends Component {
 	public Post $post;
 	public int $commentsCount;
 	public Collection $comments;

@@ -5,7 +5,7 @@ use App\Notifications\CommentCreated;
 use Livewire\Attributes\Validate;
 use Livewire\Volt\Component;
 
-new class extends Component {
+new class() extends Component {
 	public int $postId;
 	public ?Comment $comment    = null;
 	public bool $showCreateForm = true;

@@ -6,7 +6,7 @@ use Illuminate\Support\Collection;
 use Livewire\Attributes\Validate;
 use Livewire\Volt\Component;
 
-new class extends Component {
+new class() extends Component {
 	public ?Comment $comment;
 	public ?Collection $children;
 	public bool $showAnswerForm = false;

@@ -10,7 +10,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
 
-new class extends Component {
+new class() extends Component {
 	use WithPagination;
 
 	public ?Category $category = null;
