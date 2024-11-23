@@ -2,9 +2,6 @@
 
 @section('title', 'GA')
 
-@php
-    $routeName = request()->route()->getName();
-@endphp
 <style>
     p.red {
         color: red;
@@ -14,8 +11,8 @@
     <p class="text-4xl font-bold">Users list</p>
     <hr class="my-3">
 
-    <p @class(['text-color', 'red' => str_starts_with($routeName, 'ga')])>La route est {{ $routeName }}</p>
-    
+    @include('route')
+
     {{-- @dump($users) --}}
 
     request()->all() :

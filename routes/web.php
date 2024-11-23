@@ -13,6 +13,9 @@ use Livewire\Volt\Volt;
 
 // http://127.0.0.1:8000/ga/lien?age=7a&nom=Li@o
 Route::get('/ga', [GaController::class, 'index'])->name('ga');
+Route::get('/route', function () {
+	return View('route');
+})->name('ga');
 
 Volt::route('/', 'index');
 
