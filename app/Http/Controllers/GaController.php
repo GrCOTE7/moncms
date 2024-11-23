@@ -7,10 +7,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\View\View;
 
 class GaController extends Controller {
-	public function index() {
-		$users = User::paginate(2);
+	public function index(): View {
+		$users = [];
+		$users = User::select(['name', 'email'])->paginate(2);
 
 		return view('ga', compact('users'));
 	}
