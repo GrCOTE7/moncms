@@ -8,6 +8,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperSubmenu
+ */
 class Submenu extends Model {
 	public $timestamps  = false;
 	protected $fillable = [

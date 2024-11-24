@@ -8,6 +8,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperSetting
+ */
 class Setting extends Model {
 	public $timestamps  = false;
 	protected $fillable = ['key', 'value'];

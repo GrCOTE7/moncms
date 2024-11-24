@@ -15,7 +15,7 @@ use Livewire\Volt\Volt;
 Route::get('/ga', [GaController::class, 'index'])->name('ga');
 Route::get('/route', function () {
 	return View('route');
-})->name('ga');
+})->name('route');
 
 Volt::route('/', 'index');
 

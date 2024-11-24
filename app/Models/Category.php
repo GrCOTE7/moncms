@@ -9,6 +9,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @mixin IdeHelperCategory
+ */
 class Category extends Model {
 	public $timestamps  = false;
 	protected $fillable = ['title', 'slug'];

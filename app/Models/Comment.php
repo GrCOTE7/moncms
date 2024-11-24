@@ -12,6 +12,9 @@ use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
 use Illuminate\Notifications\Notifiable;
 use Mews\Purifier\Casts\CleanHtmlInput;
 
+/**
+ * @mixin IdeHelperComment
+ */
 class Comment extends Model {
 	use HasFactory;
 	use Notifiable;

@@ -11,6 +11,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Notifications\Notifiable;
 
+/**
+ * @mixin IdeHelperContact
+ */
 class Contact extends Model {
 	use HasFactory;
 	use Notifiable;
