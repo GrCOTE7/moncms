@@ -21,6 +21,9 @@ class extends Component {
 		// $user = (User::whereId(1))->get()->dd();
 		$user = User::find(1);
 
+        Log::info(User::where('name', 'admin')->toSql());
+
+
 		$this->data = $this->getUser($user);
 
 		// echo Benchmark::measure(fn () => Order::all())
