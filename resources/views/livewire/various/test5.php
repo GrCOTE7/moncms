@@ -19,7 +19,9 @@ class extends Component {
 
 	public function mount() {
 		// $user = (User::whereId(1))->get()->dd();
-		$user = User::find(1);
+		$user = User::find(2);
+
+        $qui = User::where('name', 'adminli')->get();
 
         Log::info(User::where('name', 'admin')->toSql());
 
