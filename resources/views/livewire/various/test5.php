@@ -21,10 +21,7 @@ class extends Component {
 		// $user = (User::whereId(1))->get()->dd();
 		$user = User::find(2);
 
-        $qui = User::where('name', 'adminli')->get();
-
         Log::info(User::where('name', 'admin')->toSql());
-
 
 		$this->data = $this->getUser($user);
 

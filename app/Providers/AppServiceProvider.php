@@ -30,12 +30,12 @@ class AppServiceProvider extends ServiceProvider {
 				config(['app.' . $setting->key => $setting->value]);
 			}
 		}
-        // lOG ALL SQL requests ( As Debugbar )
+        // Log all SQL requests ( As Debugbar )
         // if (App::environment('local')) {
-        // DB::listen(function ($query) {
+        //   DB::listen(function ($query) {
         //     logger(Str::replaceArray('?', $query->bindings, $query->sql));
-        // });
-    }
+        //   });
+        // }
 
 		Facades\View::composer(['components.layouts.app'], function (View $view) {
 			$view->with(
