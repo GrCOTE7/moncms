@@ -14,6 +14,7 @@ include_once 'test5.php';
 {{ print_r($data ?? 'No data ', 1) }}
         </pre>
 
+<x-button class="btn-primary" wire:click="confirm">Confirmer</x-button>
     </div>
 </div>
 {{-- <x-icon name="eye-dropper" class="text-gray-500" /> --}}

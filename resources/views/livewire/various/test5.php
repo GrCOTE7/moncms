@@ -14,12 +14,11 @@ use App\Models\{User};
 use Illuminate\Support\{Benchmark};
 use Livewire\Attributes\{Layout};
 use Livewire\Volt\Component;
-use Livewire\WithPagination;
 
 new
 #[Layout('components.layouts.test')]
 class extends Component {
-	use WithPagination;
+	public $data;
 
 	public function mount() {
 		// $user = (User::whereId(1))->get()->dd();
@@ -35,6 +34,9 @@ class extends Component {
 		// 	'Time getUser()' => Benchmark::measure(fn () => $this->getUser($user)),
 		// ]);
 
+	}
+
+	public function confirm() {
 		Log::info('Ready');
 	}
 
