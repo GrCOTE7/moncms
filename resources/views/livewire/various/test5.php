@@ -21,6 +21,7 @@ class extends Component {
 	public $data;
 
 	public function mount() {
+        View::share('noHeader', true);
 		// $user = (User::whereId(1))->get()->dd();
 		// $user = User::find(2);
 
@@ -37,6 +38,7 @@ class extends Component {
 	}
 
 	public function confirm() {
+        sleep(7);
 		Log::info('Ready');
 	}
 
