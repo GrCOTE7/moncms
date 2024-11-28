@@ -9,10 +9,10 @@
 
 <body>
   Ok
-  echo 2 + 3;
+  <hr>
   <?php
-        echo 2 + 3;
-        ?>
+		echo 2 + 3;
+    ?>
 </body>
 
 </html>
